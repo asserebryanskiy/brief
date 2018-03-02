@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>МОЗ | Панель админимстратора</title>
+    <link rel="stylesheet" th:href="@{/assets/css/app.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/administration/administartion.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/administration/index.css}">
+</head>
+<body>
+    <h1>This is admin panel</h1>
+    <div th:replace="administration/fragments :: user-pane"></div>
+</body>
+</html>

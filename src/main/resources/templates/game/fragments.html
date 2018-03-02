@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <div th:fragment="header (commandName)" class="header">
+        <img th:src="@{/assets/image/logo.png}" alt="logo">
+        <p th:text="'Команда ' + ${commandName}"></p>
+    </div>
+    <div th:fragment="message (message, svgName)" class="message-wrapper">
+        <h1 class="message" th:text="${message}"></h1>
+        <img th:src="@{|/assets/image/${svgName}|}">
+    </div>
+    <div th:fragment="stats"></div>
+    <div th:fragment="timer (heading)" class="timer">
+        <p class="heading" th:text="${heading}"></p>
+        <p class="timer">1:30</p>
+    </div>
+</body>
+</html>

@@ -1,0 +1,45 @@
+h1 {
+    font-size: 2em;
+}
+
+.container {
+    display: flex;
+
+}
+
+.main-content {
+    width: calc(100vw - 40px);
+}
+
+.header {
+    height: 80px;
+    display: block;
+    align-content: center;
+    text-align: center;
+    margin: 10px auto 0;
+}
+
+.header img {
+    height: 50px;
+}
+
+
+.message-wrapper {
+    text-align: center;
+    height: 100%;
+}
+
+.message {
+    font-size: 2em;
+}
+
+.message-wrapper img {
+    margin-top: 30px;
+    height: 100px;
+}
+
+.timer {
+    display: none;
+    font-size: 2em;
+    text-align: center;
+}

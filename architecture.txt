@@ -1,0 +1,64 @@
+|____Application.java
+|
+|___web
+|       |___controller
+|               |___IndexController.java
+|                       |___login(GamerCredentials gamer)
+|                       |___goToAdminLogin()
+|               |___BriefProjectorController.java - for the view that is shown on projector to players
+|                       |__ timer() - таймер на объйснение
+|               |___AdminPanelController.java
+|                       |__ login(Credentials credentials)
+|                       |__ createNewGameSession()
+|                       |__ getGameSession(String sessionId)
+|                       |__ deleteGameSession(String sessionId)
+|                       |__ getCurrentGameSessions()
+|                       |__ getPastGameSessions()
+|               |___BriefGameSessionController.java -
+|                       |__ changeSessionSettings() - changes simultaneously numberOfCommands, sessionUniqueId
+|                       |__ startExplanationTime()
+|                       |__ pauseExplanationTimer()
+|                       |__ addAdditionalTineInterval() !!!
+|                       |__ changeCommandNames() !!!
+|                       |__ getStageResults(int stageNumber)
+|                       |__ getTotalResults()
+|                       |__ startVoting() - should notify clients screens
+|                       |__ stopVoting()  - should notify clients screens
+|                       |__ startNewStage()
+|               |___BriefGamerController.java
+|                       |__ timer() !!!
+|                       |__
+|
+|___config
+|       |___SecurityConfig.java
+|       |___DataConfig.java
+|       |___TemplateConfig.java
+|
+|___dao
+|       |___CommandDao.java
+|       |___GameSessionDao.java
+|               |___getStageResults(int stageNumber) - returns list of Result objects.
+|               |___getTotalResults() - returns list of Result objects.
+|       |___StageDao.java
+|       |___DecisionDao.java
+|
+|___service
+|       |___CommandService.java
+|       |___GameSessionService.java
+|       |___StageService.java
+|       |___DecisionService.java
+|
+|___games
+|       |__ GameType.java - enum: BRIEF, ...
+|       |__ brief
+|               |___Round.java - enum numberOfRound, correctAnswer;
+|                       |___getCorrectAnswer(int numberOfRound)
+|               |___NoSuchRoundException.java - is thrown if no round with such number is found
+|               |__ Game.java
+|                       |__ getScore(Round round, String answer)
+|
+|___model
+|       |__ Command.java     - number of player, gameSessionId, decisions
+|       |__ GameSession.java - dates to be active, session unique identifier (String), list of players, stages, round sequence, current stage, is voting on
+|       |__ Stage.java       - gameSessionId, round, list of decisions
+|       |__ Decision.java    - commandId, Round.number, String answer
