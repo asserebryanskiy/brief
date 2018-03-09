@@ -59,6 +59,6 @@
 |
 |___model
 |       |__ Command.java     - number of player, gameSessionId, decisions
-|       |__ GameSession.java - dates to be active, session unique identifier (String), list of players, stages, round sequence, current stage, is voting on
+|       |__ GameSession.java - dates to be active, session unique identifier (String), list of players, rounds, round sequence, current round, is voting on
 |       |__ Stage.java       - gameSessionId, round, list of decisions
 |       |__ Decision.java    - commandId, Round.number, String answer

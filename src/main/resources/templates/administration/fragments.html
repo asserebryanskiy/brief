@@ -46,7 +46,7 @@
         </div>
         <div class="game-info">
             <div class="date-type">
-                <p class="bold" th:text="${gameSession.gameType.getRussianName()}">...</p>
+                <p class="bold" th:text="${gameSession.game.russianName}">...</p>
                 <p id="game-session-active-date" class="pale" th:text="${gameSession.activeDate}">...</p>
             </div>
             <h1 class="session-str-id" th:text="${gameSession.strId}"></h1>
@@ -57,14 +57,15 @@
         </div>
     </div>
 
-    <div th:fragment="stage-count-bar" class="stage-count-bar">
+    <div th:fragment="round-count-bar" class="round-count-bar">
         <h2 class="bold">Раунд</h2>
-        <div class="stages">
+        <div class="rounds">
             <div th:replace="administration/fragments :: confirmation-popup('Закончить раунд досрочно?', 'early-round-finish-popup', 'early-round-finish-btn')"></div>
-            <div th:each="stage,iter : ${gameSession.stages}" class="stage animated"
-                 th:classappend="(${stage.active}? 'active' : (${stage.next}? 'next' : (${stage.played}? 'played':(${stage.passed}? 'passed'))))"
-                 th:id="'stage-' + ${iter.index}">
-                <p th:text="${stage.numberOfStage}"></p>
+            <div th:each="round,iter : ${gameSession.rounds}" class="round animated"
+                 th:with="currentRound = ${gameSession.currentRoundIndex}"
+                 th:classappend="(${iter.index} == ${currentRound} ? 'active' : (${iter.index} == ${currentRound + 1}? 'next' : (${iter.index} < ${currentRound}? 'played')))"
+                 th:id="'round-' + ${iter.index}">
+                <p th:text="${iter.count}"></p>
             </div>
         </div>
         <button id="pass-round-btn">Пропустить раунд</button>

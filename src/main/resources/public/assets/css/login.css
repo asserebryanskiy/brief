@@ -1,9 +1,12 @@
 img {
     display: block;
-    width: 100%;
-    height: 100%;
+    height: 100px;
     padding: 2% 5px 0;
-    margin: auto;
+    margin: 0 auto;
+}
+
+.container {
+    align-content: center;
 }
 
 h1 {
@@ -99,7 +102,8 @@ a {
     }
 
     img {
-        width: 50%;
+        height: 200px;
+        margin: auto;
     }
 }
 

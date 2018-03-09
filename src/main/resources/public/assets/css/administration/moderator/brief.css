@@ -6,19 +6,15 @@ h2 {
     display: block;
 }
 
-.stage-count-bar {
+.round-count-bar {
     padding: 10px;
 }
 
-.stage-nav {
+.round-nav {
     display: none;
 }
 
 .players {
-    display: none;
-}
-
-.players-table {
     display: none;
 }
 
@@ -32,31 +28,76 @@ h2 {
     color: white;
 }
 
-/*.add-30-sec-box {
+.players-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.players-table th {
+    cursor: pointer;
+    border-bottom: #4E3549 solid 1px;
+}
+
+.players-table .connected-row {
+    background-color: #dfcadb;
+    color: #4E3549;
+    margin-bottom: 5px;
+    border-bottom: white solid 1px;
+}
+
+.players-table tr:nth-child(1) td:first-child {
+    border-radius: 10px 0 0 0;
+}
+
+.players-table tr:nth-child(1) td:last-child {
+    border-radius: 0 10px 0 0;
+}
+
+.players-table tr:last-child td:last-child {
+    border-radius: 0 0 10px 0;
+}
+
+.players-table tr:last-child td:first-child {
+    border-radius: 0 0 0 10px;
+}
+
+.received-answers {
+    background-color: #729d76 !important;
+    color: white !important;
+    fill: white !important;
+    border-bottom: white solid 1px;
+}
+
+/*.logout-td {
+    display: flex;
+    align-content: center;
+}*/
+
+.connected-row .player-logout-svg {
     display: block;
-    padding: 5px;
-    border-radius: 0 0 10px 10px;
-    border: #4E3549 1px solid;
-    text-align: right;
+    width: 15px;
+    max-height: 15px;
+    margin: auto 10px;
     cursor: pointer;
 }
 
-.add-30-sec-box:hover {
-    background-color: #dfcadb;
-}*/
+.players-table .player-logout-svg:hover {
+    fill: #4e3549;
+}
+
 
 @media (min-width: 769px) {
     .main-content {
         display: flex;
     }
 
-    .stage-nav-and-commands {
+    .round-nav-and-commands {
         flex-grow: 1;
         height: calc(100vh - 100px);
-        margin-left: 20px;
+        margin: 0 20px;
     }
 
-    .stage-nav {
+    .round-nav {
         display: flex;
         align-content: start;
         justify-content: start;
@@ -81,7 +122,7 @@ h2 {
         width: 200px;
     }
 
-    .stage-nav-and-commands h2 {
+    .round-nav-and-commands h2 {
         margin: 20px 0 10px 0;
     }
 
@@ -123,17 +164,20 @@ h2 {
         color: #4E3549;
     }
 
+    .player.connected {
+        cursor: pointer;
+    }
+
+    .player.connected:hover .player-logout-svg {
+        display: block;
+    }
+
     .player-info {
         text-align: center;
     }
 
     .command-name {
         font-size: 20px;
-    }
-
-    .player p {
-        color: #4E3549;
-        cursor: default;
     }
 
     .player svg {
@@ -146,5 +190,12 @@ h2 {
     .player-answer {
         opacity: 0.8;
         margin-top: 10px;
+    }
+
+    .players-table {
+        width: 100%;
+        border-spacing: 5px;
+        text-align: center;
+        margin-right: 10px;
     }
 }

@@ -166,25 +166,25 @@ svg {
 }
 
 /****************
-* STAGE-COUNT-BAR
+* round-COUNT-BAR
 ****************/
 
-.stage-count-bar {
+.round-count-bar {
     display: flex;
     justify-content: center;
 }
 
-.stage-count-bar h2 {
+.round-count-bar h2 {
     margin: auto;
 }
 
-.stages {
+.rounds {
     flex-grow: 1;
     display: flex;
     justify-content: center;
 }
 
-.stage {
+.round {
     display: flex;
     width: 30px;
     height: 30px;
@@ -198,7 +198,7 @@ svg {
     transition: all 0.4s;
 }
 
-.stage p {
+.round p {
     margin: auto;
 }
 
@@ -233,9 +233,6 @@ svg {
 
 .connected {
     background-color: #4158d0 !important;
-}
-
-.connected p {
     color: white !important;
 }
 
@@ -336,22 +333,22 @@ svg {
         display: block;
     }
 
-    .stage-count-bar {
+    .round-count-bar {
         display: block;
         width: 150px;
         text-align: center;
         margin: auto;
     }
 
-    .stage-count-bar > * {
+    .round-count-bar > * {
         margin: 5px auto;
     }
 
-    .stages {
+    .rounds {
         display: block;
     }
 
-    .stage {
+    .round {
         margin: 5px auto;
     }
 

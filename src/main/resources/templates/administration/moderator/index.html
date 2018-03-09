@@ -29,7 +29,7 @@
                         <input id="popup-date-input" class="popup-form-col2" type="date" th:field="*{activeDateStr}">
                         <label for="popup-gameType-input" class="popup-form-col1">Тип игры</label>
                         <select id="popup-gameType-input" class="popup-form-col2" th:field="*{gameType}">
-                            <option th:each="gameType : ${gameTypes}" th:value="${gameType}" th:text="${gameType.russianName}"></option>
+                            <option th:each="gameType : *{gameTypes}" th:value="${gameType}" th:text="${gameType}"></option>
                         </select>
                         <label for="popup-commandsNumber-input" class="popup-form-col1">Количество комманд</label>
                         <input id="popup-commandsNumber-input" class="popup-form-col2" type="number" th:field="*{numberOfCommands}">
