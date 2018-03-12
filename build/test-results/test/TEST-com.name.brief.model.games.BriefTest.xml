@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.name.brief.model.games.BriefTest" tests="6" skipped="0" failures="0" errors="0" timestamp="2018-03-12T19:32:52" hostname="MBP-Andrey" time="0.003">
+  <properties/>
+  <testcase name="getScore_returnsZeroOnEmptyInput" classname="com.name.brief.model.games.BriefTest" time="0.0"/>
+  <testcase name="getScore_returnsThreeOn1CorrectVariant" classname="com.name.brief.model.games.BriefTest" time="0.0"/>
+  <testcase name="getScore_returnsZeroOn4Variants" classname="com.name.brief.model.games.BriefTest" time="0.0"/>
+  <testcase name="getScore_returnsOneOn3VariantsWithCorrect" classname="com.name.brief.model.games.BriefTest" time="0.0"/>
+  <testcase name="getScore_returnsZeroOn1WrongVariant" classname="com.name.brief.model.games.BriefTest" time="0.001"/>
+  <testcase name="getScore_returnsTwoOn2VariantsWithCorrect" classname="com.name.brief.model.games.BriefTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

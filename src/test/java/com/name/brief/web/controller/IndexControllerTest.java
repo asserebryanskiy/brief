@@ -9,6 +9,9 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
@@ -17,18 +20,13 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(SpringRunner.class)
+@WebMvcTest(IndexController.class)
 public class IndexControllerTest {
     private MockMvc mockMvc;
 
-    @InjectMocks
+    @Autowired
     private IndexController controller;
-
-    @Mock
-    private PlayerValidator validator;
-
-    @Mock
-    private GameSessionService service;
 
     @Before
     public void setUp() throws Exception {
@@ -37,7 +35,6 @@ public class IndexControllerTest {
 
     @Test
     public void indexRequestReturnsIndexView() throws Exception {
-        when(validator.supports(Player.class)).thenReturn(true);
         mockMvc.perform(get("/"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("index"));

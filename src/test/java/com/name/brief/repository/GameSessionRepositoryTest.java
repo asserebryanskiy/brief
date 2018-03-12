@@ -102,10 +102,8 @@ public class GameSessionRepositoryTest {
 
     @Test
     public void findBuStrIdAndActiveDate_returnsNullIfSessionActiveDateExpired() {
-        GameSession session = new GameSession.GameSessionBuilder("id")
-                .withActiveDate(LocalDate.now().minusDays(1))
-                .withUser(new User())
-                .build();
+        GameSession session = createDefaultSession();
+        session.setActiveDate(LocalDate.now().minusDays(1));
         entityManager.persist(session);
         entityManager.flush();
 

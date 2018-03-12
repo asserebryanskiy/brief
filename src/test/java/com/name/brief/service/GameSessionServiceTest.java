@@ -61,35 +61,13 @@ public class GameSessionServiceTest {
     }
 
     @Test
-    public void incrementPhase_returnsNextPhaseNumberAndPersistsItToDb() {
-        GameSession session = new GameSession.GameSessionBuilder("id")
-                .withGame(new Brief())
-                .withUser(new User())
-                .build();
-        when(repository.findOne(0L)).thenReturn(session);
-
-        NextPhaseMessage message = new NextPhaseMessage(1, 30);
-        service.changePhase(0L, message.getPhaseNumber());
-
-        assertThat(session.getCurrentPhaseNumber(), is(1));
-        verify(repository, times(1)).save(session);
-    }
-
-    @Test
     public void incrementPhase_returnsZeroIfCurrentPhaseIsLast() {
-        Game game = new Brief();
-        GameSession session = new GameSession.GameSessionBuilder("id")
-                .withGame(game)
-                .withUser(new User())
-                .build();
-        session.setCurrentPhaseNumber(game.getPhases().size() - 1);
-        when(repository.findOne(0L)).thenReturn(session);
         NextPhaseMessage message = new NextPhaseMessage(0, 30);
 
         service.changePhase(0L, message.getPhaseNumber());
 
-        assertThat(session.getCurrentPhaseNumber(), is(0));
-        verify(repository, times(1)).save(session);
+        verify(repository, times(1))
+                .changePhase(0L, message.getPhaseNumber());
     }
 
     @Test

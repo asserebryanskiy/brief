@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>МОЗ Бриф</title>
+    <link rel="stylesheet" th:href="@{/assets/css/app.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/game/game.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/game/brief.css}">
+</head>
+<body>
+    <div class="container">
+        <div th:replace="game/fragments :: header (${commandName}, ${round})"></div>
+        <div class="phase-container hidden" id="phase-0">
+            <h2 th:text="#{brief.phase0.message}"></h2>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M18.513 7.119c.958-1.143 1.487-2.577 1.487-4.036v-3.083h-16v3.083c0 1.459.528 2.892 1.487 4.035l3.087 3.68c.566.677.57 1.625.009 2.306l-3.13 3.794c-.937 1.136-1.453 2.555-1.453 3.995v3.107h16v-3.107c0-1.44-.517-2.858-1.453-3.994l-3.13-3.794c-.562-.681-.558-1.629.009-2.306l3.087-3.68zm-.513-4.12c0 1.101-.363 2.05-1.02 2.834l-.978 1.167h-8.004l-.978-1.167c-.66-.785-1.02-1.736-1.02-2.834h12zm-.996 15.172c.652.791.996 1.725.996 2.829h-1.061c-1.939-2-4.939-2-4.939-2s-3 0-4.939 2h-1.061c0-1.104.344-2.039.996-2.829l3.129-3.793c.342-.415.571-.886.711-1.377h.164v1h2v-1h.163c.141.491.369.962.711 1.376l3.13 3.794zm-6.004-1.171h2v1h-2v-1zm0-2h2v1h-2v-1z"></path></svg>
+        </div>
+        <div class="phase-container hidden" id="phase-1">
+            <h2 th:text="#{brief.phase1.message}"></h2>
+            <h1 class="timer">00:00</h1>
+        </div>
+        <div class="phase-container hidden" id="phase-2">
+            <h2 th:text="#{brief.phase2.message}"></h2>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M11.362 2c4.156 0 2.638 6 2.638 6s6-1.65 6 2.457v11.543h-16v-20h7.362zm.827-2h-10.189v24h20v-14.386c0-2.391-6.648-9.614-9.811-9.614zm4.811 13h-3v-1h3v1zm0 2h-3v1h3v-1zm0 3h-10v1h10v-1zm-5-6h-5v4h5v-4z"></path></svg>
+        </div>
+        <div class="phase-container hidden" id="phase-3">
+            <h1 class="timer">00:00</h1>
+            <h2 th:text="#{brief.phase3.message}"></h2>
+            <p class="answer-calc-help">Как считаются баллы?</p>
+            <table class="choose-answer-table" th:fragment="playersTable">
+                <tr th:each="row, rowIter : ${answerTable}">
+                    <td th:each="cell, colIter : ${row}"
+                        th:classappend="${cell} ? 'answer-variant animated selected' : (${rowIter.index} > 0 and ${colIter.index} > 0 ? 'answer-variant animated':'')">
+                        <p th:if="${rowIter.index} > 0 and ${colIter.index} == 0" th:utext="'&#' + (65 + ${rowIter.index} - 1) + ';'"></p>
+                        <p th:if="${rowIter.index} == 0 and ${colIter.index} > 0" th:text="${colIter.index}"></p>
+                        <p th:if="${rowIter.index} > 0 and ${colIter.index} > 0"
+                           class="hidden answer-text"
+                           th:utext="'&#' + (65 + ${rowIter.index} - 1) + ';' + ${colIter.index}"></p>
+                    </td>
+                </tr>
+            </table>
+            <button id="send-responses-btn">Отправить ответы</button>
+        </div>
+        <div class="phase-container hidden" id="phase-4">
+            <h2 th:text="#{brief.phase4.message}"></h2>
+            <p class="answer-calc-help">Как считаются баллы?</p>
+            <table th:replace="this :: playersTable"></table>
+            <p class="score-text">Вы заработали 0 баллов</p>
+        </div>
+        <div class="phase-container hidden" id="phase-5">
+            <h2 th:text="#{brief.phase5.message}"></h2>
+            <div th:replace="game/fragments :: stats(${statsList})"></div>
+        </div>
+        <div class="phase-container hidden finish-game">
+            <h2 th:text="#{brief.finishGame.message}"></h2>
+            <svg height='200' width='200'  fill="#000000" xmlns="http://www.w3.org/2000/svg" version="1.1" x="0px" y="0px" viewBox="0 0 100 100" enable-background="new 0 0 100 100" xml:space="preserve"><g><path d="M79.708,51.334L66.149,29.065c-0.696-1.143-1.924-1.855-3.262-1.891l-0.062-0.002c-0.413-0.147-0.855-0.23-1.318-0.23   h-7.149l-7.617-0.208L26.158,9.893c-1.687-1.379-4.171-1.131-5.551,0.555c-1.379,1.687-1.131,4.171,0.555,5.551l21.626,17.695   c0.236,0.192,0.497,0.345,0.766,0.477v56.191c0,2.178,1.766,3.943,3.944,3.943c2.179,0,3.945-1.766,3.945-3.943v-28.49   c0.35,0.068,0.714,0.117,1.108,0.117h4.639c0.129,0,0.247-0.016,0.372-0.025v28.398c0,2.178,1.766,3.943,3.944,3.943   s3.943-1.766,3.943-3.943V43.086l7.521,12.349c0.742,1.221,2.042,1.895,3.372,1.895c0.7,0,1.408-0.186,2.049-0.576   C80.252,55.621,80.841,53.195,79.708,51.334z"></path><path d="M54.625,5.695c-5.082,0-9.216,4.135-9.216,9.216c0,5.082,4.134,9.217,9.216,9.217c5.083,0,9.217-4.135,9.217-9.217   C63.842,9.83,59.708,5.695,54.625,5.695z M60.512,18.361c-1.301,1.894-3.481,3.024-5.832,3.024c-2.352,0-4.532-1.13-5.833-3.024   c-0.128-0.186-0.142-0.427-0.036-0.626c0.104-0.2,0.311-0.324,0.537-0.324h10.665c0.226,0,0.432,0.125,0.536,0.324   C60.653,17.935,60.639,18.176,60.512,18.361z"></path></g></svg>
+        </div>
+    </div>
+
+    <div class="help-popup hidden">
+        <div class="help-popup-back"></div>
+        <div class="help-popup-content">
+            <button id="close-popup-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z"></path></svg>
+            </button>
+            <p>Только одна карточка является верной.</p>
+            <p>Баллы начисляются в соответсвии со следующими условиями:</p>
+            <ul>
+                <li>За 1 правильно отмеченный квадрат - 3 балла</li>
+                <li>За 1 правильно отмеченный квадрат и 1 неправильно отмеченный - 2 балла</li>
+                <li>За 1 правильно отмеченный квадрат и 2 неправильно отмеченных - 1 балл</li>
+                <li>Все остальные комбинации - 0 баллов</li>
+            </ul>
+        </div>
+    </div>
+
+    <p id="game-session-id" class="hidden" th:text="${gameSessionId}"></p>
+    <p id="current-phase-number" class="hidden" th:text="${currentPhaseNumber}"></p>
+    <p id="answers-submitted" th:if="${answersSubmitted}"></p>
+    <p id="correct-answer" th:if="${currentPhaseNumber} == 4" th:text="${correctAnswer}" class="hidden"></p>
+
+    <script th:src="@{/assets/js/jquery-3.3.1.min.js}"></script>
+    <script src="/webjars/sockjs-client/sockjs.min.js"></script>
+    <script src="/webjars/stomp-websocket/stomp.min.js"></script>
+    <script th:src="@{/assets/js/game/statsChart.js}"></script>
+    <script th:src="@{/assets/js/game/brief.js}"></script>
+</body>
+</html>

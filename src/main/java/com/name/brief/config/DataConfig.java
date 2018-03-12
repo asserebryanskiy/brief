@@ -4,11 +4,13 @@ import org.apache.tomcat.dbcp.dbcp2.BasicDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.repository.support.DomainClassConverter;
 import org.springframework.data.web.config.EnableSpringDataWebSupport;
+import org.springframework.jdbc.datasource.lookup.JndiDataSourceLookup;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 
@@ -17,7 +19,7 @@ import java.util.Properties;
 
 @Configuration
 @EnableJpaRepositories(basePackages = "com.name.brief.repository")
-@PropertySource("application.properties")
+@PropertySource("classpath:application.properties")
 public class DataConfig {
     private final Environment env;
 
@@ -41,6 +43,7 @@ public class DataConfig {
     }
 
     @Bean
+    @Profile("dev")
     public DataSource dataSource() {
         BasicDataSource ds = new BasicDataSource();
         ds.setDriverClassName(env.getProperty("brief.db.driver"));
@@ -48,6 +51,13 @@ public class DataConfig {
         ds.setUsername(env.getProperty("brief.db.username"));
         ds.setPassword(env.getProperty("brief.db.password"));
         return ds;
+    }
+
+    @Bean(name = "dataSource")
+    @Profile("prod")
+    // jndi - Java Naming and Directory Interface
+    public DataSource jndiDataSource() {
+        return new JndiDataSourceLookup().getDataSource(env.getProperty("brief.jndi"));
     }
 
     private Properties getHibernateProperties() {

@@ -1,0 +1,102 @@
+html{
+    min-height:100%;/* make sure it is at least as tall as the viewport */
+    position:relative;
+}
+body{
+    height:100%; /* force the BODY element to match the height of the HTML element */
+}
+
+#phase-3,
+#phase-4 {
+    margin: 80px auto auto;
+}
+
+/****************************************
+*          CHOOSE ANSWER TABLE         *
+****************************************/
+.choose-answer-table {
+    /*width: 100%;*/
+    max-width: 270px;
+    margin: auto;
+    border-spacing: 10px;
+}
+
+.answer-variant {
+    width: 48px;
+    /*width: calc(25% - 30px);*/
+    height: 48px;
+    border: #4E3549 1px solid;
+}
+
+.selected {
+    box-shadow: #4E3549 0 0 1px 1px;
+}
+
+.correct-answer {
+    background-color: #729d76;
+}
+
+#send-responses-btn {
+    margin: 10px 0;
+    font-size: 1em;
+    padding: 5px 10px;
+    border-radius: 10px;
+    background-color: #4a9d61;
+    color: white;
+    cursor: pointer;
+}
+
+#send-responses-btn:disabled {
+    background-color: #d7d7d7;
+    color: #959595;
+}
+
+.answer-calc-help {
+    font-family: 'Circe Light', serif;
+    text-decoration: #4E3549 underline;
+    cursor: pointer;
+}
+
+.help-popup-back {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #524f55;
+    opacity: 0.5;
+}
+
+.help-popup-content {
+    position: absolute;
+    top: 30px;
+    left: 0;
+    background-color: white;
+    padding: 20px;
+    margin: 30px;
+    z-index: 1;
+    border-radius: 10px;
+    text-align: left;
+}
+
+.help-popup-content * {
+    font-family: "Circe Light", serif;
+}
+
+#close-popup-btn {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    float: right;
+    margin: 0 0 10px 10px;
+}
+
+#close-popup-btn svg {
+    width: 20px;
+    height: 20px;
+    margin-top: 0;
+}
+
+.help-popup-content li {
+    margin-left: 20px;
+}
