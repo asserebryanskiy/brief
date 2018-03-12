@@ -26,6 +26,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.FilterChainProxy;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -59,6 +60,8 @@ public class SecurityConfig {
         protected void configure(AuthenticationManagerBuilder auth) throws Exception {
             auth.userDetailsService(userService).passwordEncoder(passwordEncoder);
         }
+
+
 
         @Override
         public void configure(WebSecurity web) throws Exception {

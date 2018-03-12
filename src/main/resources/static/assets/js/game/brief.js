@@ -144,7 +144,7 @@ stompClient.connect({}, function (frame) {
 
     stompClient.subscribe('/queue/' + username + '/logout', function () {
         stompClient.disconnect();
-        window.location = 'http://localhost:8080/';
+        window.location = 'https://localhost:8443/';
     }, {});
 
     stompClient.subscribe('/topic/' + gameSessionId + '/nextPhase', (message) => {
