@@ -15,6 +15,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
@@ -61,44 +62,12 @@ public class GameSessionServiceTest {
     }
 
     @Test
-    public void incrementPhase_returnsNextPhaseNumberAndPersistsItToDb() {
-        GameSession session = new GameSession.GameSessionBuilder("id")
-                .withGame(new Brief())
-                .withUser(new User())
-                .build();
-        when(repository.findOne(0L)).thenReturn(session);
-
-        NextPhaseMessage message = new NextPhaseMessage(1, 30);
-        service.changePhase(0L, message.getPhaseNumber());
-
-        assertThat(session.getCurrentPhaseNumber(), is(1));
-        verify(repository, times(1)).save(session);
-    }
-
-    @Test
-    public void incrementPhase_returnsZeroIfCurrentPhaseIsLast() {
-        Game game = new Brief();
-        GameSession session = new GameSession.GameSessionBuilder("id")
-                .withGame(game)
-                .withUser(new User())
-                .build();
-        session.setCurrentPhaseNumber(game.getPhases().size() - 1);
-        when(repository.findOne(0L)).thenReturn(session);
-        NextPhaseMessage message = new NextPhaseMessage(0, 30);
-
-        service.changePhase(0L, message.getPhaseNumber());
-
-        assertThat(session.getCurrentPhaseNumber(), is(0));
-        verify(repository, times(1)).save(session);
-    }
-
-    @Test
     public void getCorrectAnswerForCurrentRound_returnsProperValue() {
         GameSession session = new GameSession();
         session.setCurrentRoundIndex(2);
         Game game = new Brief();
         session.setGame(game);
-        when(repository.findOne(0L)).thenReturn(session);
+        when(repository.findById(0L)).thenReturn(Optional.of(session));
 
         String found = service.getCorrectAnswerForCurrentRound(0L);
 

@@ -16,7 +16,6 @@
         <h1 class="message" th:text="${message}"></h1>
         <img th:src="@{|/assets/image/${svgName}|}">
     </div>
-    <div th:fragment="stats"></div>
     <div th:fragment="timer (heading)" class="timer-wrapper">
         <p class="message" th:text="${heading}"></p>
         <p class="timer">00:00</p>

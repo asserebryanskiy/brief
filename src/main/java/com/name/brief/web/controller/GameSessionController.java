@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import java.security.Principal;
+
 @Controller
 public class GameSessionController {
 
@@ -20,10 +22,11 @@ public class GameSessionController {
     }
 
     @RequestMapping("/moderator/gameSession/{gameSessionId}")
-    public String getGameSession(@PathVariable Long gameSessionId, Model model) {
+    public String getGameSession(@PathVariable Long gameSessionId, Model model, Principal principal) {
         GameSession session = gameSessionService.getSession(gameSessionId);
         model.addAttribute("gameSession", session);
         model.addAttribute("dashboardView", true);
+        model.addAttribute("username", principal.getName());
         String gameName = session.getGame().getEnglishName();
 
         return "administration/moderator/gamePanels/" + gameName;

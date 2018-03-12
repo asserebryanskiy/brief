@@ -33,20 +33,6 @@ import java.util.concurrent.ScheduledFuture;
 @Controller
 public class IndexController {
 
-    private final PlayerValidator validator;
-    private final GameSessionService gameSessionService;
-
-    @Autowired
-    public IndexController(PlayerValidator validator, GameSessionService gameSessionService) {
-        this.validator = validator;
-        this.gameSessionService = gameSessionService;
-    }
-
-    @InitBinder("player")
-    protected void initBinder(WebDataBinder binder) {
-        binder.setValidator(validator);
-    }
-
     @RequestMapping("/")
     public String getMain(HttpServletRequest request, Model model) {
         if (request.getSession(false) != null) {

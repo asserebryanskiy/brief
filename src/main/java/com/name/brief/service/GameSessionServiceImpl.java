@@ -56,7 +56,7 @@ public class GameSessionServiceImpl implements GameSessionService {
 
     @Override
     public GameSession getSession(Long gameSessionId) {
-        return gameSessionRepository.findOne(gameSessionId);
+        return gameSessionRepository.findById(gameSessionId).orElseThrow(GameSessionNotFoundException::new);
     }
 
     @Override
@@ -88,8 +88,8 @@ public class GameSessionServiceImpl implements GameSessionService {
 
     @Override
     public void changeRound(Long gameSessionId, int nextRoundIndex) {
-        GameSession gameSession = gameSessionRepository.findOne(gameSessionId);
-        if (gameSession == null) throw new GameSessionNotFoundException();
+        GameSession gameSession = gameSessionRepository.findById(gameSessionId)
+                .orElseThrow(GameSessionNotFoundException::new);
         gameSession.setCurrentRoundIndex(nextRoundIndex);
         gameSession.setCurrentPhaseNumber(0);
         gameSession.setEndOfTimer(null);
@@ -98,8 +98,8 @@ public class GameSessionServiceImpl implements GameSessionService {
 
     @Override
     public String getCorrectAnswerForCurrentRound(Long gameSessionId) {
-        GameSession gameSession = gameSessionRepository.findOne(gameSessionId);
-        if (gameSession == null) throw new GameSessionNotFoundException();
+        GameSession gameSession = gameSessionRepository.findById(gameSessionId)
+                .orElseThrow(GameSessionNotFoundException::new);
         return gameSession.getGame().getCorrectAnswer(gameSession.getCurrentRoundIndex());
     }
 }

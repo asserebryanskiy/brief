@@ -17,7 +17,7 @@ import java.util.Properties;
 
 @Configuration
 @EnableJpaRepositories(basePackages = "com.name.brief.repository")
-@PropertySource("application.properties")
+@PropertySource("classpath:application.properties")
 public class DataConfig {
     private final Environment env;
 

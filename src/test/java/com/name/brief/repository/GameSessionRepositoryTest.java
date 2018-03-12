@@ -4,6 +4,7 @@ import com.name.brief.model.GameSession;
 import com.name.brief.model.Player;
 import com.name.brief.model.User;
 import com.name.brief.model.games.Brief;
+import com.name.brief.repository.projections.CurrentPhaseOnly;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,7 +69,7 @@ public class GameSessionRepositoryTest {
         Player player = session.getPlayers().get(0);
         player.setLoggedIn(true);
         repository.save(session);
-        GameSession found = repository.findOne(session.getId());
+        GameSession found = repository.findById(session.getId()).get();
 
         assertThat(found.getPlayers().get(0).isLoggedIn(), is(true));
     }
@@ -102,10 +103,8 @@ public class GameSessionRepositoryTest {
 
     @Test
     public void findBuStrIdAndActiveDate_returnsNullIfSessionActiveDateExpired() {
-        GameSession session = new GameSession.GameSessionBuilder("id")
-                .withActiveDate(LocalDate.now().minusDays(1))
-                .withUser(new User())
-                .build();
+        GameSession session = createDefaultSession();
+        session.setActiveDate(LocalDate.now().minusDays(1));
         entityManager.persist(session);
         entityManager.flush();
 
@@ -151,8 +150,9 @@ public class GameSessionRepositoryTest {
         repository.save(session);
 
         repository.changePhase(session.getId(), 2);
+        GameSession found = repository.findById(session.getId()).get();
 
-        assertThat(repository.findOne(session.getId()).getCurrentPhaseNumber(), is(2));
+        assertThat(found.getCurrentPhaseNumber(), is(2));
     }
 
     @Test
@@ -177,8 +177,9 @@ public class GameSessionRepositoryTest {
 
         LocalTime time = LocalTime.of(20, 20);
         repository.setEndOfTimer(session.getId(), time);
+        GameSession found = repository.findById(session.getId()).get();
 
-        assertThat(repository.findOne(session.getId()).getEndOfTimer(), is(time));
+        assertThat(found.getEndOfTimer(), is(time));
     }
 
     private GameSession createDefaultSession() {

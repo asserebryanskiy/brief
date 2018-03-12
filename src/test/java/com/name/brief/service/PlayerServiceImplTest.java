@@ -11,8 +11,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.*;
-import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
 @RunWith(SpringRunner.class)
@@ -27,18 +27,13 @@ public class PlayerServiceImplTest {
     private GameSessionService gameSessionService;
 
     @Test
-    public void addResponses_addsNewDecisionObjectAndPersistsItToDb() {
-        GameSession session = mock(GameSession.class);
-        when(session.getCurrentRoundIndex()).thenReturn(0);
-        when(session.getId()).thenReturn(0L);
-        when(gameSessionService.getSession(any())).thenReturn(session);
-        Player player = new Player();
-        player.setUsername("user");
-        player.setGameSession(session);
+    public void addResponses_addsNewAnswerToAppropriateDecision() {
+        GameSession session = new GameSession.GameSessionBuilder("id").build();
+        Player player = new Player(session, "name");
 
         playerService.addResponses(player, "A1", 0);
 
-        assertThat(player.getDecisions(), hasSize(1));
+        assertThat(player.getDecisions().get(0).getAnswer(), is("A1"));
         verify(repository, times(1)).save(player);
     }
 }

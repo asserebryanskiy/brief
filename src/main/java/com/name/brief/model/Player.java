@@ -1,5 +1,6 @@
 package com.name.brief.model;
 
+import com.name.brief.config.SecurityConfig;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -68,7 +69,7 @@ public class Player extends BaseEntity implements UserDetails{
 
     @Override
     public String getPassword() {
-        return "";
+        return SecurityConfig.passwordEncoder.encode("password");
     }
 
     @Override

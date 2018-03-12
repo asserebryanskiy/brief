@@ -37,7 +37,7 @@ public class DatabaseLoader implements ApplicationRunner {
         users.add(moderator1);
         users.add(moderator2);
         users.add(new User("admin", password, Role.ADMIN.getRole()));
-        userRepository.save(users);
+        userRepository.saveAll(users);
         GameSession session = new GameSession.GameSessionBuilder("test")
                 .withNumberOfCommands(5)
                 .withUser(moderator1)

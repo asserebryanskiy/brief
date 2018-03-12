@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.security.Principal;
 
 @Controller
 public class ModeratorController {
@@ -53,10 +54,12 @@ public class ModeratorController {
     }
 
     @RequestMapping("/moderator")
-    public String getModeratorPanel(Model model) {
+    public String getModeratorPanel(Model model, Principal principal) {
+        String username = principal.getName();
         System.out.println(registry.getAllPrincipals());
         model.addAttribute("activeSessions", service.getFutureSessions());
         model.addAttribute("pastSessions", service.getPastSessions());
+        model.addAttribute("username", username);
         if (!model.containsAttribute("gameSessionDto")) {
             model.addAttribute("gameSessionDto", new GameSessionDto());
         }

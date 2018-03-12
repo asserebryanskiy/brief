@@ -166,7 +166,7 @@ public class SecurityConfig {
 
         @Override
         protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-            auth.userDetailsService(playerService);
+            auth.userDetailsService(playerService).passwordEncoder(passwordEncoder);
         }
 
         @Override

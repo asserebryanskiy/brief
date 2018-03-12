@@ -1,5 +1,6 @@
 package com.name.brief.config.authentication;
 
+import com.name.brief.config.SecurityConfig;
 import com.name.brief.model.GameSession;
 import com.name.brief.model.Player;
 import com.name.brief.service.GameSessionService;
@@ -50,7 +51,7 @@ public class PlayerAuthenticationFilter extends UsernamePasswordAuthenticationFi
 
     @Override
     protected String obtainPassword(HttpServletRequest request) {
-        return "";
+        return "password";
     }
 
     @Override
