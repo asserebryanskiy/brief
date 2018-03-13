@@ -55,7 +55,6 @@ public class DataConfig {
 
     @Bean(name = "dataSource")
     @Profile("heroku")
-    // jndi - Java Naming and Directory Interface
     public DataSource herokuDataSource() {
         String dbUrl = System.getenv("JDBC_DATABASE_URL");
         String username = System.getenv("JDBC_DATABASE_USERNAME");

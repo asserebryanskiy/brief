@@ -9,6 +9,7 @@ import com.name.brief.service.GameSessionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -16,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
+@Profile("dev")
 public class DatabaseLoader implements ApplicationRunner {
 
     private final GameSessionService gameSessionService;
