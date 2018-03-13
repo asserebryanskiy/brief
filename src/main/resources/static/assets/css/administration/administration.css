@@ -315,7 +315,7 @@ svg {
     background-color: #e9a6e4;
 }
 
-@media(min-width: 769px) {
+@media(min-device-width: 769px) {
     .header-center-content {
         justify-content: center;
     }

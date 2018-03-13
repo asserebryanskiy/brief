@@ -86,7 +86,7 @@ h2 {
 }
 
 
-@media (min-width: 769px) {
+@media (min-device-width: 769px) {
     .main-content {
         display: flex;
     }

@@ -221,7 +221,7 @@ td button {
     background-color: rgba(78,53,73,0.3);
 }
 
-@media(min-width: 769px) {
+@media(min-device-width: 769px) {
     .new-session-wrapper {
         justify-content: flex-end;
         padding-right: 100px;

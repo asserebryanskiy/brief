@@ -151,7 +151,7 @@ h1 {
     margin: 5px 5px;
 }
 
-@media (max-width: 340px) {
+@media (max-device-width: 340px) {
     .phase-container h1,
     .phase-container h2,
     #send-responses-btn {
@@ -159,11 +159,11 @@ h1 {
     }
 }
 
-@media (min-width: 769px) {
+@media (min-device-width: 769px) {
 
 }
 
-@media (max-height: 620px) {
+@media (max-device-height: 620px) {
     #phase-5 {
         margin-top: 80px;
     }

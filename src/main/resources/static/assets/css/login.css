@@ -87,11 +87,11 @@ a {
     margin: 0 auto;
 }*/
 
-@media (min-width: 576px) {
+@media (min-device-width: 576px) {
 
 }
 
-@media (min-width: 768px) {
+@media (min-device-width: 768px) {
     .session-container {
         justify-content: space-between;
     }
@@ -107,7 +107,7 @@ a {
     }
 }
 
-@media (min-width: 992px) {
+@media (min-device-width: 992px) {
     form {
         width: 260px;
     }
