@@ -19,7 +19,7 @@ import java.util.Properties;
 
 @Configuration
 @EnableJpaRepositories(basePackages = "com.name.brief.repository")
-@PropertySource("classpath:application.properties")
+@PropertySource("classpath:db.properties")
 public class DataConfig {
     private final Environment env;
 
@@ -30,6 +30,34 @@ public class DataConfig {
 
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
+        LocalContainerEntityManagerFactoryBean factory = setCommonEntityManagerProperties();
+        Properties properties = new Properties();
+        properties.put("hibernate.dialect", env.getProperty("hibernate.dialect"));
+        properties.put("hibernate.implicit_naming_strategy",env.getProperty("hibernate.implicit_naming_strategy"));
+        properties.put("hibernate.format_sql", env.getProperty("hibernate.format_sql"));
+        properties.put("hibernate.show_sql", env.getProperty("hibernate.show_sql"));
+        properties.put("hibernate.hbm2ddl.auto", env.getProperty("hibernate.hbm2ddl.auto"));
+        factory.setJpaProperties(properties);
+
+        return factory;
+    }
+
+    @Bean("entityManagerFactory")
+    @Profile("heroku")
+    public LocalContainerEntityManagerFactoryBean herokuEntityManagerFactory() {
+        LocalContainerEntityManagerFactoryBean factory = setCommonEntityManagerProperties();
+        Properties properties = new Properties();
+        properties.put("hibernate.dialect", env.getProperty("hibernate.heroku.dialect"));
+        properties.put("hibernate.implicit_naming_strategy",env.getProperty("hibernate.heroku.implicit_naming_strategy"));
+        properties.put("hibernate.format_sql", env.getProperty("hibernate.heroku.format_sql"));
+        properties.put("hibernate.show_sql", env.getProperty("hibernate.heroku.show_sql"));
+        properties.put("hibernate.hbm2ddl.auto", env.getProperty("hibernate.heroku.hbm2ddl.auto"));
+        factory.setJpaProperties(properties);
+
+        return factory;
+    }
+
+    private LocalContainerEntityManagerFactoryBean setCommonEntityManagerProperties() {
         LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
 
         HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
@@ -37,8 +65,6 @@ public class DataConfig {
         factory.setDataSource(dataSource());
         factory.setJpaVendorAdapter(vendorAdapter);
         factory.setPackagesToScan(env.getProperty("brief.entity.package"));
-        factory.setJpaProperties(getHibernateProperties());
-
         return factory;
     }
 
@@ -60,21 +86,12 @@ public class DataConfig {
         String username = System.getenv("JDBC_DATABASE_USERNAME");
         String password = System.getenv("JDBC_DATABASE_PASSWORD");
 
-        BasicDataSource basicDataSource = new BasicDataSource();
-        basicDataSource.setUrl(dbUrl);
-        basicDataSource.setUsername(username);
-        basicDataSource.setPassword(password);
+        BasicDataSource dataSource = new BasicDataSource();
+        dataSource.setDriverClassName(env.getProperty("brief.db.heroku.driver"));
+        dataSource.setUrl(dbUrl);
+        dataSource.setUsername(username);
+        dataSource.setPassword(password);
 
-        return basicDataSource;
-    }
-
-    private Properties getHibernateProperties() {
-        Properties properties = new Properties();
-        properties.put("hibernate.dialect", env.getProperty("hibernate.dialect"));
-        properties.put("hibernate.implicit_naming_strategy",env.getProperty("hibernate.implicit_naming_strategy"));
-        properties.put("hibernate.format_sql", env.getProperty("hibernate.format_sql"));
-        properties.put("hibernate.show_sql", env.getProperty("hibernate.show_sql"));
-        properties.put("hibernate.hbm2ddl.auto", env.getProperty("hibernate.hbm2ddl.auto"));
-        return properties;
+        return dataSource;
     }
 }
