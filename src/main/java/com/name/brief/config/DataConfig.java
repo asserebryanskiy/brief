@@ -54,10 +54,19 @@ public class DataConfig {
     }
 
     @Bean(name = "dataSource")
-    @Profile("prod")
+    @Profile("heroku")
     // jndi - Java Naming and Directory Interface
-    public DataSource jndiDataSource() {
-        return new JndiDataSourceLookup().getDataSource(env.getProperty("brief.jndi"));
+    public DataSource herokuDataSource() {
+        String dbUrl = System.getenv("JDBC_DATABASE_URL");
+        String username = System.getenv("JDBC_DATABASE_USERNAME");
+        String password = System.getenv("JDBC_DATABASE_PASSWORD");
+
+        BasicDataSource basicDataSource = new BasicDataSource();
+        basicDataSource.setUrl(dbUrl);
+        basicDataSource.setUsername(username);
+        basicDataSource.setPassword(password);
+
+        return basicDataSource;
     }
 
     private Properties getHibernateProperties() {

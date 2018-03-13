@@ -169,13 +169,6 @@ public class SecurityConfig {
             auth.userDetailsService(playerService);
         }
 
-        @Override
-        public void configure(WebSecurity web) throws Exception {
-            web.ignoring().antMatchers("/assets/**");
-        }
-
-
-
         @Bean
         public Filter playerAuthenticationFilter() throws Exception {
             PlayerAuthenticationFilter filter = new PlayerAuthenticationFilter(gameSessionService);
