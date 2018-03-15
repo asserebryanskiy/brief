@@ -2,6 +2,7 @@ package com.name.brief.web.controller;
 
 import com.name.brief.model.Player;
 import com.name.brief.service.GameSessionService;
+import com.name.brief.service.PlayerService;
 import com.name.brief.validation.PlayerValidator;
 import com.name.brief.web.FlashMessage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.concurrent.ConcurrentTaskScheduler;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -33,8 +35,22 @@ import java.util.concurrent.ScheduledFuture;
 @Controller
 public class IndexController {
 
+    private final PlayerService playerService;
+
+    @Autowired
+    public IndexController(PlayerService playerService) {
+        this.playerService = playerService;
+    }
+
     @RequestMapping("/")
-    public String getMain(HttpServletRequest request, Model model) {
+    public String getMain(HttpServletRequest request, Model model, Principal principal) {
+        // if player is already authenticated redirect him to game
+        Authentication authentication = (Authentication) principal;
+        if (authentication != null && authentication.getPrincipal() instanceof Player
+                && playerService.isLoggedIn((Player) authentication.getPrincipal())) {
+            return "redirect:/game";
+        }
+
         if (request.getSession(false) != null) {
             HttpSession session = request.getSession();
             addFlashAttribute(model, session, "flash");
