@@ -25,17 +25,14 @@ public class BriefController {
     private final SimpMessagingTemplate template;
     private final PlayerService playerService;
     private final GameSessionService gameSessionService;
-    private final SessionRegistry sessionRegistry;
 
     @Autowired
     public BriefController(SimpMessagingTemplate template,
                            PlayerService playerService,
-                           GameSessionService gameSessionService,
-                           SessionRegistry sessionRegistry) {
+                           GameSessionService gameSessionService) {
         this.template = template;
         this.playerService = playerService;
         this.gameSessionService = gameSessionService;
-        this.sessionRegistry = sessionRegistry;
     }
 
     /**
@@ -46,7 +43,7 @@ public class BriefController {
 //    @SendTo("/queue/{gameSessionId}/connection")
     public void connectPlayer(Principal principal) {
         Player player = (Player) ((Authentication) principal).getPrincipal();
-        playerService.login(player);
+        playerService.setLoggedIn(player);
         template.convertAndSend("/queue/" + player.getGameSession().getId() + "/connection",
                 "Connect " + player.getUsername());
     }
@@ -59,14 +56,9 @@ public class BriefController {
     * */
     @MessageMapping("/logout/{username}")
     public void logoutPlayer(@DestinationVariable String username) {
-        Player player = (Player) sessionRegistry.getAllPrincipals().stream()
-                .filter(p -> ((Player) p).getUsername().equals(username))
-                .findAny()
-                .orElse(null);
+        Player player = playerService.findByUsername(username);
 
         if (player != null) {
-            sessionRegistry.getAllSessions(player, false)
-                    .forEach(SessionInformation::expireNow);
             playerService.logout(player);
             template.convertAndSend("/queue/" + player.getGameSession().getId() + "/connection",
                     "Logout " + player.getUsername());
@@ -81,8 +73,8 @@ public class BriefController {
      * @param gameSessionId - id of gameSession whose players should be pushed to next phase.
      * @return message of type NextPhaseMessage
      */
-    @MessageMapping("/{gameSessionId}/nextPhase")
-    @SendTo("/topic/{gameSessionId}/nextPhase")
+    @MessageMapping("/{gameSessionId}/changePhase")
+    @SendTo("/topic/{gameSessionId}/changePhase")
     public NextPhaseMessage nextPhase(NextPhaseMessage message,
                                       @DestinationVariable Long gameSessionId) {
         gameSessionService.changePhase(gameSessionId, message.getPhaseNumber());
