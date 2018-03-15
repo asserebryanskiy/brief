@@ -29,6 +29,14 @@ public class GameSessionController {
         return "administration/moderator/gamePanels/" + gameName;
     }
 
+    @RequestMapping("/moderator/gameSession/{gameSessionId}/projector")
+    public String getProjectorView(@PathVariable Long gameSessionId, Model model) {
+        GameSession session = gameSessionService.getSession(gameSessionId);
+        model.addAttribute("gameSession", session);
+        model.addAttribute("projectorMode", true);
+        return "game/" + session.getGame().getEnglishName();
+    }
+
     @RequestMapping(value = "/moderator/gameSession/{gameSessionId}", method = RequestMethod.PUT)
     public String changeSessionSettings(@PathVariable Long gameSessionId) {
 

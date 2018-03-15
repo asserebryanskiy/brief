@@ -8,9 +8,9 @@
     <link rel="stylesheet" th:href="@{/assets/css/game/game.css}">
     <link rel="stylesheet" th:href="@{/assets/css/game/brief.css}">
 </head>
-<body>
+<body th:with="currentPhaseNumber = ${gameSession.currentPhaseNumber}">
     <div class="container">
-        <div th:replace="game/fragments :: header (${commandName}, ${round})"></div>
+        <div th:replace="game/fragments :: header (${commandName}, ${gameSession.currentRoundIndex})"></div>
         <div class="phase-container hidden" id="phase-0">
             <h2 th:text="#{brief.phase0.message}"></h2>
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M18.513 7.119c.958-1.143 1.487-2.577 1.487-4.036v-3.083h-16v3.083c0 1.459.528 2.892 1.487 4.035l3.087 3.68c.566.677.57 1.625.009 2.306l-3.13 3.794c-.937 1.136-1.453 2.555-1.453 3.995v3.107h16v-3.107c0-1.44-.517-2.858-1.453-3.994l-3.13-3.794c-.562-.681-.558-1.629.009-2.306l3.087-3.68zm-.513-4.12c0 1.101-.363 2.05-1.02 2.834l-.978 1.167h-8.004l-.978-1.167c-.66-.785-1.02-1.736-1.02-2.834h12zm-.996 15.172c.652.791.996 1.725.996 2.829h-1.061c-1.939-2-4.939-2-4.939-2s-3 0-4.939 2h-1.061c0-1.104.344-2.039.996-2.829l3.129-3.793c.342-.415.571-.886.711-1.377h.164v1h2v-1h.163c.141.491.369.962.711 1.376l3.13 3.794zm-6.004-1.171h2v1h-2v-1zm0-2h2v1h-2v-1z"></path></svg>
@@ -28,7 +28,7 @@
             <h2 th:text="#{brief.phase3.message}"></h2>
             <p class="answer-calc-help">Как считаются баллы?</p>
             <table class="choose-answer-table" th:fragment="playersTable">
-                <tr th:each="row, rowIter : ${answerTable}">
+                <tr th:each="row, rowIter : ${gameSession.game.getAnswerInput(decision)}">
                     <td th:each="cell, colIter : ${row}"
                         th:classappend="${cell} ? 'answer-variant animated selected' : (${rowIter.index} > 0 and ${colIter.index} > 0 ? 'answer-variant animated':'')">
                         <p th:if="${rowIter.index} > 0 and ${colIter.index} == 0" th:utext="'&#' + (65 + ${rowIter.index} - 1) + ';'"></p>
@@ -39,17 +39,17 @@
                     </td>
                 </tr>
             </table>
-            <button id="send-responses-btn">Отправить ответы</button>
+            <button th:unless="${projectorMode}" id="send-responses-btn">Отправить ответы</button>
         </div>
         <div class="phase-container hidden" id="phase-4">
             <h2 th:text="#{brief.phase4.message}"></h2>
             <p class="answer-calc-help">Как считаются баллы?</p>
             <table th:replace="this :: playersTable"></table>
-            <p class="score-text">Вы заработали 0 баллов</p>
+            <p th:unless="${projectorMode}" class="score-text">Вы заработали 0 баллов</p>
         </div>
         <div class="phase-container hidden" id="phase-5">
             <h2 th:text="#{brief.phase5.message}"></h2>
-            <div th:replace="game/fragments :: stats(${statsList})"></div>
+            <div th:replace="game/fragments :: stats(${gameSession.statsList})"></div>
         </div>
         <div class="phase-container hidden finish-game">
             <h2 th:text="#{brief.finishGame.message}"></h2>
@@ -74,12 +74,15 @@
         </div>
     </div>
 
-    <p id="game-session-id" class="hidden" th:text="${gameSessionId}"></p>
+    <p id="game-session-id" class="hidden" th:text="${gameSession.id}"></p>
     <p id="current-phase-number" class="hidden" th:text="${currentPhaseNumber}"></p>
-    <p id="answers-submitted" th:if="${answersSubmitted}"></p>
-    <p id="correct-answer" th:if="${currentPhaseNumber} == 4" th:text="${correctAnswer}" class="hidden"></p>
+    <p id="answers-submitted" th:if="${projectorMode} or !${gameSession.timerIsRunning()}"></p>
+    <p id="correct-answer" class="hidden"
+       th:if="${currentPhaseNumber} == 4"
+       th:text="${gameSession.game.getCorrectAnswer(__${currentPhaseNumber}__)}"></p>
+    <p id="projector-mode" class="hidden" th:if="${projectorMode}"></p>
 
-    <script th:src="@{/assets/js/jquery-3.3.1.min.js}"></script>
+    <script src="/webjars/jquery/jquery.js"></script>
     <script src="/webjars/sockjs-client/sockjs.min.js"></script>
     <script src="/webjars/stomp-websocket/stomp.min.js"></script>
     <script th:src="@{/assets/js/game/statsChart.js}"></script>
