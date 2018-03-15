@@ -17,7 +17,7 @@ public class BriefTest {
     @Before
     public void setUp() throws Exception {
         decision = new Decision();
-        decision.setRoundNumber(1);
+        decision.setRoundNumber(0);
         game = new Brief();
     }
 
@@ -29,8 +29,8 @@ public class BriefTest {
     }
 
     @Test
-    public void getScore_returnsZeroOn4Variants() {
-        decision.setAnswer("A1C2B4D1");
+    public void getScore_returnsZeroOn9Variants() {
+        decision.setAnswer("A1C2B4D1A2A4B1B2B3");
 
         assertThat(game.getScore(decision), is(0));
     }
@@ -43,23 +43,23 @@ public class BriefTest {
     }
 
     @Test
-    public void getScore_returnsThreeOn1CorrectVariant() {
-        decision.setAnswer("A1");
+    public void getScore_returnsFifteenOn1CorrectVariant() {
+        decision.setAnswer("A3");
 
-        assertThat(game.getScore(decision), is(3));
+        assertThat(game.getScore(decision), is(15));
     }
 
     @Test
-    public void getScore_returnsTwoOn2VariantsWithCorrect() {
-        decision.setAnswer("A1B2");
+    public void getScore_returnsTenOn2VariantsWithCorrect() {
+        decision.setAnswer("A3B2");
 
-        assertThat(game.getScore(decision), is(2));
+        assertThat(game.getScore(decision), is(10));
     }
 
     @Test
-    public void getScore_returnsOneOn3VariantsWithCorrect() {
-        decision.setAnswer("A1B2C3");
+    public void getScore_returns5On3VariantsWithCorrect() {
+        decision.setAnswer("A3B2C3");
 
-        assertThat(game.getScore(decision), is(1));
+        assertThat(game.getScore(decision), is(5));
     }
 }

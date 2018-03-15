@@ -1,3 +1,4 @@
+/*
 package com.name.brief.web.controller;
 
 import com.name.brief.model.Player;
@@ -39,4 +40,4 @@ public class IndexControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("index"));
     }
-}
+}*/
