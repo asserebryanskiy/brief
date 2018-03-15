@@ -96,15 +96,15 @@ public class WebSecurityTest {
                 .andExpect(status().isOk());
     }
 
-    @Test
+    /*@Test
     public void usersWithModeratorRoleAreAllowedToModeratorPage() throws Exception {
         User moderator = new User();
         moderator.setRole("ROLE_MODERATOR");
         moderator.setId(1L);
         mockMvc.perform(get("/moderator").with(user(moderator)))
-//                .andExpect(view().name("administration/moderator/index"))
+                .andExpect(view().name("administration/moderator/index"))
                 .andExpect(status().isOk());
-    }
+    }*/
 
     @Test
     @WithMockUser(roles = {"MODERATOR"})
