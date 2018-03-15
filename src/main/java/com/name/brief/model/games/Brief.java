@@ -17,7 +17,7 @@ public class Brief extends BaseEntity implements Game {
     private final int numberOfRounds = 5;
     private final String russianName = "Бриф";
     private final String englishName = "brief";
-    private final String[] correctAnswers = new String[]{"A1", "A1", "A1", "A1", "A1"};
+    private final String[] correctAnswers = new String[]{"A3", "A1", "B1", "D1", "D3"};
 
     public Brief() {
         super();
@@ -28,9 +28,9 @@ public class Brief extends BaseEntity implements Game {
         List<Phase> phases = new ArrayList<>(7);
         phases.addAll(Arrays.asList(
                 new Phase("Правила", false),
-                new Phase("Постановка задачи", true, Duration.ofSeconds(15)),
+                new Phase("Постановка задачи", true, Duration.ofSeconds(90)),
                 new Phase("Выдача полей", false),
-                new Phase("Внесение ответов", true, Duration.ofSeconds(30)),
+                new Phase("Внесение ответов", true, Duration.ofSeconds(90)),
                 new Phase("Правильный ответ", false),
                 new Phase("Результаты команд", false),
                 new Phase("Следующий раунд", false)
@@ -49,16 +49,12 @@ public class Brief extends BaseEntity implements Game {
         if (!hasCorrectAnswer) {
             return 0;
         } else {
-            switch (variants.size()) {
-                case 1:
-                    return 3;
-                case 2:
-                    return 2;
-                case 3:
-                    return 1;
-                default:
-                    return 0;
-            }
+            int numberOfVariants = variants.size();
+            if      (numberOfVariants == 1) return 15;
+            else if (numberOfVariants == 2) return 10;
+            else if (numberOfVariants < 5)  return 5;
+            else if (numberOfVariants < 9)  return 2;
+            else                            return 0;
         }
     }
 
@@ -85,6 +81,12 @@ public class Brief extends BaseEntity implements Game {
     @Override
     public String[] getCorrectAnswers() {
         return correctAnswers.clone();
+    }
+
+    @Override
+    public Object getAnswerInput(Decision decision) {
+        if (decision == null) return new boolean[5][5];
+        else return BriefUtils.getAnswerMatrix(decision);
     }
 
 }
