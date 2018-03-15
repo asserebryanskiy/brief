@@ -153,15 +153,12 @@ public class SecurityConfig {
 
         private final PlayerService playerService;
         private final GameSessionService gameSessionService;
-        private final SimpMessagingTemplate template;
 
         @Autowired
         public PlayerSecurityConfig(PlayerService playerService,
-                                    GameSessionService gameSessionService,
-                                    SimpMessagingTemplate template) {
+                                    GameSessionService gameSessionService) {
             this.playerService = playerService;
             this.gameSessionService = gameSessionService;
-            this.template = template;
         }
 
         @Override
@@ -185,9 +182,14 @@ public class SecurityConfig {
 
             // configure session authentication strategies
             List<SessionAuthenticationStrategy> strategies = new ArrayList<>(6);
-            strategies.add(new ConcurrentSessionControlAuthenticationStrategy(sessionRegistry()));
+            SessionRegistry sessionRegistry = sessionRegistry();
+
+            // set session registry also to playerService to give it an opportunity
+            // to programmatically logout players
+            playerService.setSessionRegistry(sessionRegistry);
+            strategies.add(new ConcurrentSessionControlAuthenticationStrategy(sessionRegistry));
             strategies.add(new SessionFixationProtectionStrategy());
-            strategies.add(new RegisterSessionAuthenticationStrategy(sessionRegistry()));
+            strategies.add(new RegisterSessionAuthenticationStrategy(sessionRegistry));
             filter.setSessionAuthenticationStrategy(
                     new CompositeSessionAuthenticationStrategy(strategies));
 
@@ -213,6 +215,10 @@ public class SecurityConfig {
                     .and()
                 .addFilterBefore(playerAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
+            http.sessionManagement().maximumSessions(1)
+                    .maxSessionsPreventsLogin(true)
+                    .sessionRegistry(sessionRegistry())
+                    .expiredUrl("/");
         }
 
         @Bean
