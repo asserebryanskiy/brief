@@ -44,14 +44,8 @@
         <div class="session-panel">
             <div th:replace="administration/fragments :: flash"></div>
             <div class="tab-btn-pane">
-                <label class="tab-btn" id="active-sessions-tab-btn">
-                    <input type="radio" name="session-type" checked="checked">
-                    Активные
-                </label>
-                <label class="tab-btn" id="past-sessions-tab-btn">
-                    <input type="radio" name="session-type">
-                    Прошедшие
-                </label>
+                <p class="tab-btn" id="active-sessions-tab-btn">Активные</p>
+                <p class="tab-btn" id="past-sessions-tab-btn">Прошедшие</p>
             </div>
             <table id="active-sessions-table">
                 <tr th:each="session : ${activeSessions}" >
@@ -90,7 +84,7 @@
         </div>
     </div>
 
-    <script th:src="@{/assets/js/jquery-3.3.1.min.js}"></script>
-    <script th:src="@{/assets/js/adminIndex.js}"></script>
+    <script src="/webjars/jquery/jquery.js"></script>
+    <script th:src="@{/assets/js/administration/adminIndex.js}"></script>
 </body>
 </html>

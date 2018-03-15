@@ -1,11 +1,9 @@
 .container {
     justify-content: center;
+    align-content: center;
 }
 
-* {
-    margin-top: 20px;
-}
-
-h1 {
-    margin-top: 50px;
+.error-wrapper {
+    display: block;
+    margin: auto;
 }

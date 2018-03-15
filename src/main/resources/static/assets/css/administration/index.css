@@ -209,10 +209,6 @@ td button {
     width: 100px;
 }
 
-.tab-btn-pane input {
-    display: none;
-}
-
 #past-sessions-table {
     display: none;
 }

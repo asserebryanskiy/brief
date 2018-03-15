@@ -1,6 +1,8 @@
+// phase number constants
 const SEND_ANSWERS_PHASE = 3;
 const SEND_STATISTICS_PHASE = 5;
 
+// web-socket constants
 const socket = new SockJS('/websocket');
 const stompClient = Stomp.over(socket);
 
@@ -10,6 +12,10 @@ const gameSessionId = href.substr(href.lastIndexOf('/') + 1);
 let timerId = 0;
 let timerSubscription;
 
+/********************************
+ *  GAME-SESSION MANIPULATIONS  *
+ ********************************/
+
 /**
 * Calls next phase of the game: exchanges classes, starts timer, changes view.
 * */
@@ -17,8 +23,11 @@ function nextPhase() {
     // clear timers if any
     clearTimers();
 
-    // set active phase to played
-    $('.phase.active').removeClass('active').addClass('played');
+    // set previous phase to played
+    $('.phase.previous').removeClass('previous').addClass('played');
+
+    // set active phase to previous
+    $('.phase.active').removeClass('active').addClass('previous');
 
     // set this phase to active
     const $newActive = $('.phase.next');
@@ -44,17 +53,54 @@ function nextPhase() {
     }
 
     // establish timer if it exists
-    const $timer = $newActive.children('.timer');
+    notifySubscribers($newActive, phaseOrder);
+}
+
+function previousPhase() {
+    // clear timers if any
+    clearTimers();
+    setTimersOriginalValues();
+
+    // remove next class from currently next phase
+    $('.phase.next').removeClass('next');
+
+    // set active phase to next
+    $('.phase.active').removeClass('active').addClass('next');
+
+    // set this phase to active
+    const $newActive = $('.phase.previous');
+    $newActive.removeClass('previous').addClass('active');
+
+    // set next to it phase to next
+    const phaseOrder = getPhaseOrder($newActive.attr('id'));
+    const previousPhaseId = 'phase-' + (((phaseOrder) - 1));
+    $('#' + previousPhaseId).removeClass('played').addClass('previous');
+
+    // if newActive order is greater than 2 show player-table
+    if (phaseOrder < SEND_ANSWERS_PHASE && $('.players-table').is(':visible')) togglePlayersView();
+
+    // if new phase is SEND_STATISTICS send statistics to players and projector
+    if (phaseOrder === SEND_STATISTICS_PHASE) {
+        stompClient.send('/app/' + gameSessionId + '/sendStatistics')
+    }
+
+    notifySubscribers($newActive, phaseOrder);
+}
+/**
+ * Sends commands to all subscribers to change phase.
+* */
+function notifySubscribers($newPhase, phaseOrder) {
+    const $timer = $newPhase.children('.timer');
     if ($timer.exists()) {
         // send to subscribers signal to change view
         console.log(getTimerDurationInSeconds($timer.text()));
-        stompClient.send('/app/' + gameSessionId + '/nextPhase', {}, JSON.stringify({
+        stompClient.send('/app/' + gameSessionId + '/changePhase', {}, JSON.stringify({
             'phaseNumber': phaseOrder,
             'timerDuration': getTimerDurationInSeconds($timer.text())
         }));
-        startTimer($timer, () => onTimerFinish($timer, $newActive));
+        startTimer($timer, () => onTimerFinish($timer, $newPhase));
     } else {
-        stompClient.send('/app/' + gameSessionId + '/nextPhase', {}, JSON.stringify({
+        stompClient.send('/app/' + gameSessionId + '/changePhase', {}, JSON.stringify({
             'phaseNumber': phaseOrder,
         }));
     }
@@ -70,13 +116,22 @@ function nextRound() {
 
     // clear timers if any
     clearTimers();
-    setOriginalValue($('.timer'));
+    setTimersOriginalValues();
 
     // hide player-table
     togglePlayersView();
 
     // set current-score-td to zero
-    $('.current-score-td').text('0');
+    $('.current-score-td').text(0);
+
+    // erase all sent answers
+    $('.answer-td').text('');
+
+    // erase calculated places
+    $('.place-td').text('');
+
+    // remove received-answers class from all commands' tr
+    $('.players-table tbody tr').removeClass('received-answers');
 
     // remove all phases' classes except phase
     $('.phase').attr('class', 'phase animated');
@@ -117,8 +172,12 @@ function finishGame() {
  *       POP-UP REACTIONS       *
  ********************************/
 
+$('.confirmation-popup').click(() => {
+
+});
+
 $('.early-game-finish-btn').click(function () {
-    $('#early-game-finish-popup').hide();
+    $('.confirmation-popup').hide();
     finishGame();
 });
 
@@ -130,6 +189,11 @@ $('.early-round-finish-btn').click(function () {
 $('.pass-round-popup-btn').click(function () {
     $('.confirmation-popup').hide();
     nextRound();
+});
+
+$('.previous-phase-popup-btn').click(function () {
+    $('.confirmation-popup').hide();
+    previousPhase();
 });
 
 
@@ -198,8 +262,8 @@ function onTimerFinish($timer, $phase) {
 /**
  * Returns timers to its original. Is needed when next round is started.
  * */
-function setOriginalValue($timers) {
-    $timers.each(function () {
+function setTimersOriginalValues() {
+    $('.timer').each(function () {
         $(this).text($(this).parent().children('.timer-original-value').text());
     })
 }
@@ -225,7 +289,7 @@ $('.player').hover(function (event) {
 // on click on logout btn logout player and push him to an index page
 $('.player-logout-svg').click(function (event) {
     const id = event.currentTarget.id;
-    const playerId = id.slice(0, id.lastIndexOf('-'));
+    const playerId = id.slice(0, id.indexOf('-logout'));
     stompClient.send(`/app/logout/${playerId}`);
 });
 
@@ -293,6 +357,8 @@ $('.phase').click(function (event) {
     const phase = event.currentTarget;
     if ($(phase).hasClass('next')) {
         nextPhase();
+    } else if ($(phase).hasClass('previous')) {
+        $('#previous-phase-popup-' + getPhaseOrder(phase.id)).show();
     }
 });
 
@@ -361,7 +427,7 @@ stompClient.connect({}, function (frame) {
         const currentScore = parseInt($currentScoreTd.text());
 
         // display received answer to user
-        $playerRow.children('.answer-td').text(answerStr);
+        $playerRow.children('.answer-td').text(answerStr === '' ? '-' : answerStr);
 
         // change current score
         $currentScoreTd.text(newScore);
@@ -374,7 +440,8 @@ stompClient.connect({}, function (frame) {
 
         // update table
         const $table = $('.players-table');
-        $table.trigger('updateCell', $playerRow.children('.current-score-td')[0]);
+        $table.trigger('updateCell', $currentScoreTd[0]);
+        $table.trigger('updateCell', $totalTd[0]);
         sortingByTotalResult = false;
         $table.trigger('sorton', [[[3,1]]]);
     });
@@ -403,7 +470,7 @@ $('th').click((event) => {
     sortingByTotalResult = $(heading).text() === 'Накопленный результат';
 });
 
-// add parser through the tablesorter addParser method
+/*// add parser through the tablesorter addParser method
 $.tablesorter.addParser({
     // set a unique id
     id: 'scores',
@@ -417,18 +484,57 @@ $.tablesorter.addParser({
     },
     // set type, either numeric or text
     type: 'numeric'
-});
+});*/
 
 $(document).ready(() => {
     const $table = $('.players-table');
-    $table.tablesorter({cssHeader:'', sortList: [[4,1],[3,1]], headers: {0 : {sorter:'integer'}, 3 : {sorter:'scores'}, 4: {sorter:'scores'}}});
+    $table.tablesorter({cssHeader:'', sortList: [[4,1]], headers: {0 : {sorter:'integer'}, 3 : {sorter:'integer'}, 4: {sorter:'integer'}}});
     $table.bind('sortEnd', () => {
         if (sortingByTotalResult) {
-            const $firstColCells = $('.place-td');
-            for (let i = 0; i < $firstColCells.length; i++) {
-                $($firstColCells[i]).text(i + 1);
-            }
+            computePlaces();
         }
         console.log('sorted places');
     });
+    computePlaces();
 });
+
+/**
+ * Helper function to calculate current places of connected commands.
+ * Computes places according to total-score column. 
+* */
+function computePlaces() {
+    const $placeCells = $('.place-td');
+    const $connectedCells = $('.connection-td');
+    const $answerCells = $('.answer-td');
+    const $totalScoreCells = $('.total-score-td');
+    const numberOfTeams = $placeCells.length;
+
+    // if order of sort is reverse apply places in reverse order
+    if (parseInt($($totalScoreCells[0]).text())
+        < parseInt($($totalScoreCells[numberOfTeams - 1]).text())) {
+        let numberOfPlaces = 0;
+        // count number of places
+        for (let i = 0; i < numberOfTeams; i++) {
+            if ($($connectedCells[i]).text() === 'Connected' &&
+                $($answerCells[i]).text() !== '') {
+                numberOfPlaces++;
+            }
+        }
+        // apply places in reverse order
+        let place = numberOfPlaces;
+        for (let i = 0; i < numberOfTeams; i++) {
+            if ($($connectedCells[i]).text() === 'Connected' &&
+                $($answerCells[i]).text() !== '') {
+                $($placeCells[i]).text(place--);
+            }
+        }
+    } else {
+        let place = 1;
+        for (let i = 0; i < numberOfTeams; i++) {
+            if ($($connectedCells[i]).text() === 'Connected' &&
+                $($answerCells[i]).text() !== '') {
+                $($placeCells[i]).text(place++);
+            }
+        }
+    }
+}

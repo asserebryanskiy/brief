@@ -8,18 +8,9 @@
     <div th:fragment="header (commandName, round)" class="header">
         <img th:src="@{/assets/image/logo.png}" alt="logo">
         <div class="header-text-box">
-            <p th:text="'Команда ' + ${commandName}" class="command-name"></p>
+            <p th:unless="${projectorMode}" th:text="'Команда ' + ${commandName}" class="command-name"></p>
             <p id="round-name" th:text="'Раунд ' + ${round + 1}"></p>
         </div>
-    </div>
-    <div th:fragment="message (message, svgName)" class="message-wrapper">
-        <h1 class="message" th:text="${message}"></h1>
-        <img th:src="@{|/assets/image/${svgName}|}">
-    </div>
-    <div th:fragment="stats"></div>
-    <div th:fragment="timer (heading)" class="timer-wrapper">
-        <p class="message" th:text="${heading}"></p>
-        <p class="timer">00:00</p>
     </div>
 
     <div th:fragment="stats (statsList)">
@@ -37,6 +28,7 @@
                 </div>
                 <p th:text="${stat.commandName}" class="chart-command-name"></p>
             </div>
+            <svg class="scroll-icon animated hidden" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M5 3l3.057-3 11.943 12-11.943 12-3.057-3 9-9z"></path></svg>
         </div>
         <div class="chart-legend">
             <div class="chart-legend-element">

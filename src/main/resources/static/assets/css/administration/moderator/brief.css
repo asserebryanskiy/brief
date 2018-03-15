@@ -35,7 +35,6 @@ h2 {
 
 .players-table th {
     cursor: pointer;
-    border-bottom: #4E3549 solid 1px;
 }
 
 .players-table .connected-row {
@@ -85,6 +84,9 @@ h2 {
     fill: #4e3549;
 }
 
+[id^=previous-phase-popup-] {
+    bottom: 70px;
+}
 
 @media (min-width: 769px) {
     .main-content {

@@ -209,7 +209,8 @@ svg {
 }
 
 .passed,
-.played {
+.played,
+.previous {
     background-color: #d7d7d7 !important;
     border-color: #d7d7d7 !important;
     color: #959595
@@ -238,6 +239,12 @@ svg {
 
 .disconnected {
     background-color: tomato !important;
+}
+
+.previous:hover {
+    background-color: #524f55 !important;
+    color: white !important;
+    cursor: pointer;
 }
 
 #pass-round-btn,

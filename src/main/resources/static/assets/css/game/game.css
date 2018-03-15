@@ -69,12 +69,14 @@ h1 {
 
 #phase-5 {
     width: 100%;
+    margin-top: 80px;
 }
 
 .bar-chart {
     display: flex;
     flex-flow: row nowrap;
     overflow-x: auto;
+    position: relative;
 }
 
 .chart-y-axis,
@@ -87,6 +89,16 @@ h1 {
 
 .chart-y-axis {
     width: 70px;
+}
+
+.bar-chart .scroll-icon {
+    position: absolute;
+    top: 30%;
+    right: 5px;
+    fill: #4E3549;
+    opacity: 0.2;
+    height: 30px;
+    width: 30px;
 }
 
 .bar-chart-col {

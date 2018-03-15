@@ -4,8 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Error</title>
+
+    <link rel="stylesheet" th:href="@{/assets/css/app.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/error.css}">
 </head>
 <body>
-    <h1 th:text="${errorMessage}"></h1>
+    <div class="container">
+        <div class="error-wrapper" th:if="${statusCode} == 404">
+            <p>Ошибка 404</p>
+            <p>Не удалось найти запрашиваемый ресурс</p>
+        </div>
+
+        <div class="error-wrapper" th:unless="${statusCode}">
+            <p>Что-то пошло не так!</p>
+            <p>Попробуйте обновить страницу или вернитесь на <a th:href="@{/}">главную</a></p>
+            <p>Если ошибка повторяется попросите помощи у ведущего.</p>
+        </div>
+    </div>
 </body>
 </html>
