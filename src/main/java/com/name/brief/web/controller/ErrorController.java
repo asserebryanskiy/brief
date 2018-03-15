@@ -6,18 +6,15 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.servlet.NoHandlerFoundException;
 
 @ControllerAdvice
 public class ErrorController {
 
     @ExceptionHandler(Throwable.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public String exception(final Throwable throwable, final Model model) {
-        if (throwable != null) {
-            throwable.printStackTrace();
-            String errorMessage = throwable.getMessage();
-            model.addAttribute("errorMessage", errorMessage);
-        }
+    public String exception(Throwable throwable) {
+        if (throwable != null) throwable.printStackTrace();
         return "error";
     }
 
@@ -25,5 +22,12 @@ public class ErrorController {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public String noSuchGameSession() {
         return "index";
+    }
+
+    @ExceptionHandler(NoHandlerFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public String error404(Model model) {
+        model.addAttribute("statusCode", 404);
+        return "error";
     }
 }
