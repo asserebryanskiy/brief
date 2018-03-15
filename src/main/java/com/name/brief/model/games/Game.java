@@ -14,6 +14,6 @@ public interface Game extends Serializable {
     String getRussianName();
     String getEnglishName();
     String getCorrectAnswer(int numberOfRound);
-
     String[] getCorrectAnswers();
+    Object getAnswerInput(Decision decision);
 }
