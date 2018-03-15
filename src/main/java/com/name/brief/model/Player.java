@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.IntStream;
 
-@EqualsAndHashCode(callSuper = true)
 @Data
 @ToString(exclude = "decisions")    // to overcome stackOverflow exception
 @Entity
@@ -118,4 +117,18 @@ public class Player extends BaseEntity implements UserDetails{
                 .mapToInt(d -> gameSession.getGame().getScore(d))
                 .sum();
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Player player = (Player) o;
+        return Objects.equals(username, player.username);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(username);
+    }
+
 }
