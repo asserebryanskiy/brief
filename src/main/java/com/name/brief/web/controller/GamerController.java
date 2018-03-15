@@ -33,30 +33,33 @@ public class GamerController {
                 .filter(p -> p.getId().equals(principal.getId()))
                 .findAny()
                 .get();
-        String commandName = player.getCommandName();
-        String gameType = gameSession.getGame().getEnglishName();
-        int currentRoundIndex = gameSession.getCurrentRoundIndex();
-        int currentPhase = gameSession.getCurrentPhaseNumber();
-        Decision decision = player.getDecision(currentRoundIndex);
+        Decision decision = player.getDecision(gameSession.getCurrentRoundIndex());
+        model.addAttribute("commandName", player.getCommandName());
+        model.addAttribute("gameSession", gameSession);
+        model.addAttribute("decision", decision);
+        if (!gameSession.timerIsRunning()) {
+            model.addAttribute("disableAnswerSend", true);
+        }
 
-        model.addAttribute("commandName", commandName);
+        return "game/" + gameSession.getGame().getEnglishName();
+//        String commandName = player.getCommandName();
+//        int currentRoundIndex = gameSession.getCurrentRoundIndex();
+//        int currentPhase = gameSession.getCurrentPhaseNumber();
+
+        /*model.addAttribute("commandName", commandName);
         model.addAttribute("round", currentRoundIndex);
         model.addAttribute("gameSessionId", gameSession.getId());
         model.addAttribute("currentPhaseNumber", currentPhase);
         model.addAttribute("correctAnswer", gameSession.getGame()
                 .getCorrectAnswer(currentRoundIndex));
-        model.addAttribute("statsList", gameSession.getStatsList());
+        model.addAttribute("statsList", gameSession.getStatsList());*/
 
         // if player already sent decision add it to the answer matrix and block decisions sending
-        if (decision.getAnswer() != null) {
-            model.addAttribute("answerTable", BriefUtils.getAnswerMatrix(decision));
-            model.addAttribute("answersSubmitted", true);
+//        model.addAttribute("answerTable", gameSession.getGame().getAnswerInput(decision));
+       /* if (decision.getAnswer() != null) {
         } else {
             model.addAttribute("answerTable", new boolean[5][5]);
-        }
-
-
-
-        return "game/player/" + gameType;
+        }*/
+        // if currently timer is not active make answer send impossible
     }
 }
