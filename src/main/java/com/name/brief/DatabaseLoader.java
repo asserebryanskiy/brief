@@ -1,6 +1,7 @@
 package com.name.brief;
 
 import com.name.brief.config.SecurityConfig;
+import com.name.brief.model.Decision;
 import com.name.brief.model.GameSession;
 import com.name.brief.model.Role;
 import com.name.brief.model.User;
@@ -52,7 +53,7 @@ public class DatabaseLoader implements ApplicationRunner {
                 decision.setAnswer(answers[Math.round((float) Math.random() * 3)]);
             }
         });
-        session.setCurrentPhaseNumber(5);*/
+        session.setCurrentPhaseNumber(3);*/
 
         GameSession session2 = new GameSession.GameSessionBuilder("testtest")
                 .withNumberOfCommands(3)
