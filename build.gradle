@@ -33,23 +33,28 @@ repositories {
 }
 
 dependencies {
+    // spring boot
     compile 'org.springframework.boot:spring-boot-devtools'
     compile 'org.springframework.boot:spring-boot-starter-thymeleaf'
-
 //    providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
-
     compile 'org.springframework.boot:spring-boot-starter-data-jpa'
     compile 'org.springframework.boot:spring-boot-starter-security'
     compile 'org.springframework.boot:spring-boot-starter-websocket'
-    compile 'org.apache.tomcat.embed:tomcat-embed-websocket:8.5.11'
-    compile 'org.postgresql:postgresql:42.2.1'
+
+    // webjars
     compile 'org.webjars:webjars-locator'
+    compile 'org.webjars:jquery:3.3.1'
+    compile 'org.webjars:tablesorter:2.25.4'
     compile 'org.webjars:sockjs-client:1.0.2'
     compile 'org.webjars:stomp-websocket:2.3.3'
+
+    // other
     compile 'org.hibernate:hibernate-core:5.2.13.Final'
     compile 'org.hibernate:hibernate-entitymanager:5.2.13.Final'
     compile 'org.hibernate:hibernate-java8:5.2.13.Final'
+    compile 'org.postgresql:postgresql:42.2.1'
     compile 'org.apache.tomcat:tomcat-dbcp:8.0.30'
+    compile 'org.apache.tomcat.embed:tomcat-embed-websocket:8.5.11'
     compile 'org.projectlombok:lombok:1.16.20'
     compile 'net.sourceforge.nekohtml:nekohtml:1.9.21'
     compile 'org.thymeleaf.extras:thymeleaf-extras-springsecurity4:2.1.2.RELEASE'
