@@ -14,23 +14,23 @@ function drawChart(statsList) {
                 $cellValue.text(statistics[i].roundScoreMap[j]);
             }
             const points = parseInt($cellValue.text());
-            let height;
-            switch (points) {
+            let height = points * 5;
+            /*switch (points) {
                 case 15:
-                    height = 80;
+                    height = 75;
                     break;
                 case 10:
-                    height = 60;
+                    height = 50;
                     break;
                 case 5:
-                    height = 40;
+                    height = 25;
                     break;
                 case 2:
-                    height = 20;
+                    height = 10;
                     break;
                 default:
                     height = 0;
-            }
+            }*/
             if (height === 0) $cellValue.hide();
             else $cellValue.show();
             if ($(col).find('.chart-command-name').text() !== commandName) {
