@@ -1,7 +1,6 @@
 package com.name.brief.service;
 
 import com.name.brief.exception.GameSessionAlreadyExistsException;
-import com.name.brief.model.games.GameType;
 import com.name.brief.model.GameSession;
 
 import java.time.LocalDate;
@@ -18,8 +17,6 @@ public interface GameSessionService {
     List<GameSession> getPastSessions();
 
     GameSession getSession(Long gameSessionId);
-
-    GameType getGameType(Long gameSessionId);
 
     void changePhase(Long gameSessionId, int phaseNumber);
 

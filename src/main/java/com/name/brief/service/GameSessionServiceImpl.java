@@ -3,7 +3,6 @@ package com.name.brief.service;
 import com.name.brief.exception.GameSessionAlreadyExistsException;
 import com.name.brief.exception.GameSessionNotFoundException;
 import com.name.brief.model.GameSession;
-import com.name.brief.model.games.GameType;
 import com.name.brief.repository.GameSessionRepository;
 import com.name.brief.utils.TimeConverter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,12 +56,6 @@ public class GameSessionServiceImpl implements GameSessionService {
     @Override
     public GameSession getSession(Long gameSessionId) {
         return gameSessionRepository.findOne(gameSessionId);
-    }
-
-    @Override
-    public GameType getGameType(Long gameSessionId) {
-        // ToDo: realize functionality
-        return GameType.BRIEF;
     }
 
     @Override
