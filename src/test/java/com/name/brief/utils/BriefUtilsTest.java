@@ -37,7 +37,7 @@ public class BriefUtilsTest {
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
                 boolean expectedResult = false;
-                if (i == 2 && j == 1) expectedResult = true;
+                if (i == 1 && j == 2) expectedResult = true;
                 assertThat(result[i][j], is(expectedResult));
             }
         }
@@ -52,7 +52,7 @@ public class BriefUtilsTest {
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
                 boolean expectedResult = false;
-                if ((i == 2 && j == 1) || (i == 3 && j == 4)) expectedResult = true;
+                if ((i == 1 && j == 2) || (i == 4 && j == 3)) expectedResult = true;
                 assertThat(result[i][j], is(expectedResult));
             }
         }
