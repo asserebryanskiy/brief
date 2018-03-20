@@ -35,7 +35,15 @@ public class Brief extends BaseEntity implements Game {
                 new Phase("Результаты команд", false),
                 new Phase("Следующий раунд", false)
         ));
+        for (int i = 0; i < phases.size(); i++) {
+            phases.get(i).setId(String.valueOf(i));
+        }
         return phases;
+    }
+
+    @Override
+    public List<Phase> getPhases(int roundNumber) {
+        return getPhases();
     }
 
     @Override

@@ -9,6 +9,7 @@ import java.util.List;
 @MappedSuperclass
 public interface Game extends Serializable {
     List<Phase> getPhases();
+    List<Phase> getPhases(int roundNumber);
     int getScore(Decision decision);
     int getNumberOfRounds();
     String getRussianName();
