@@ -13,40 +13,80 @@
         </div>
     </div>
 
-    <div th:fragment="stats (statsList)">
+    <div th:fragment="introPhase" class="phase-container hidden" id="phase-0">
+        <h2 th:text="#{player.intro.message}"></h2>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M18.513 7.119c.958-1.143 1.487-2.577 1.487-4.036v-3.083h-16v3.083c0 1.459.528 2.892 1.487 4.035l3.087 3.68c.566.677.57 1.625.009 2.306l-3.13 3.794c-.937 1.136-1.453 2.555-1.453 3.995v3.107h16v-3.107c0-1.44-.517-2.858-1.453-3.994l-3.13-3.794c-.562-.681-.558-1.629.009-2.306l3.087-3.68zm-.513-4.12c0 1.101-.363 2.05-1.02 2.834l-.978 1.167h-8.004l-.978-1.167c-.66-.785-1.02-1.736-1.02-2.834h12zm-.996 15.172c.652.791.996 1.725.996 2.829h-1.061c-1.939-2-4.939-2-4.939-2s-3 0-4.939 2h-1.061c0-1.104.344-2.039.996-2.829l3.129-3.793c.342-.415.571-.886.711-1.377h.164v1h2v-1h.163c.141.491.369.962.711 1.376l3.13 3.794zm-6.004-1.171h2v1h-2v-1zm0-2h2v1h-2v-1z"></path></svg>
+    </div>
+
+    <div class="hidden" th:fragment="gameSettings(gameSession)">
+        <p id="game-session-id" class="hidden" th:text="${gameSession.id}"></p>
+        <p id="current-phase-number" class="hidden" th:text="${gameSession.currentPhaseNumber}"></p>
+    </div>
+
+    <div class="hidden" th:fragment="vendorScripts">
+        <script src="/webjars/jquery/jquery.js"></script>
+        <script src="/webjars/sockjs-client/sockjs.min.js"></script>
+        <script src="/webjars/stomp-websocket/stomp.min.js"></script>
+    </div>
+
+    <div th:fragment="stats (statsList)" class="chart-wrapper">
         <div class="bar-chart" >
-            <div class="chart-y-axis">
-                <p>Названия команд</p>
-            </div>
-            <div class="bar-chart-col animated" th:each="stat : ${statsList.statistics}">
-                <p class="col-total-score" th:text="${stat.totalScore}"></p>
+            <p class="chart-column-heading">Команды</p>
+            <div class="bar-chart-row animated" th:each="stat : ${statsList.statistics}">
+                <p th:text="${stat.commandName}" class="chart-command-name"></p>
                 <div class="cells">
                     <div th:each="statsCell : ${stat.roundScoreMap}" class="stats-cell animated">
                         <p class="cell-round-name hidden" th:text="${statsCell.key + 1}"></p>
                         <p th:text="${statsCell.value}" class="cell-value"></p>
                     </div>
                 </div>
-                <p th:text="${stat.commandName}" class="chart-command-name"></p>
+                <p class="row-total-score" th:text="${stat.totalScore}"></p>
             </div>
-            <svg class="scroll-icon animated hidden" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M5 3l3.057-3 11.943 12-11.943 12-3.057-3 9-9z"></path></svg>
+            <!--<svg class="scroll-icon animated hidden" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M5 3l3.057-3 11.943 12-11.943 12-3.057-3 9-9z"></path></svg>-->
+            <svg class="scroll-icon animated hidden" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 507.312 507.312">
+                <path d="M301.656,75.312c0-26.51-21.49-48-48-48c-26.51,0-48,21.49-48,48v160c-44.161,0.053-79.947,35.839-80,80v85.616l64,80     v26.384h32v-37.616l-64-80v-74.384c0-26.51,21.49-48,48-48v112h32v-304c0-8.837,7.163-16,16-16s16,7.163,16,16v140.224     l52.32,14.272l8.416-30.88l-28.8-7.84L301.656,75.312z"></path>
+                <rect x="356.49" y="211.066" transform="matrix(-0.9648 -0.2629 0.2629 -0.9648 672.1706 544.0817)" width="32" height="32"></rect>
+                <polygon points="414.6,255.056 445.656,263.536 445.656,405.984 397.656,469.984 397.656,507.312 429.656,507.312      429.656,480.64 477.656,416.64 477.656,239.088 423.016,224.192    "></polygon>
+                <polygon points="88.968,22.624 66.344,0 7.032,59.312 66.344,118.624 88.968,96 68.28,75.312 109.656,75.312 109.656,43.312      68.28,43.312    "></polygon>
+                <rect x="141.656" y="43.312" width="32" height="32"></rect>
+                <polygon points="418.344,96 440.968,118.624 500.28,59.312 440.968,0 418.344,22.624 439.032,43.312 397.656,43.312      397.656,75.312 439.032,75.312    "></polygon>
+                <rect x="333.656" y="43.312" width="32" height="32"></rect>
+            </svg>
         </div>
         <div class="chart-legend">
             <div class="chart-legend-element">
-                <div class="inline chart-legend-color" id="chart-legend-round-0-color"></div><p class="inline">- 1-ый раунд</p>
+                <div class="inline chart-legend-color" id="chart-legend-round-0-color"></div><p class="inline">- раунд 1</p>
             </div>
             <div class="chart-legend-element">
-                <div class="inline chart-legend-color" id="chart-legend-round-1-color"></div><p class="inline"> - 2-ой раунд</p>
+                <div class="inline chart-legend-color" id="chart-legend-round-1-color"></div><p class="inline"> - раунд 2</p>
             </div>
             <div class="chart-legend-element">
-                <div class="inline chart-legend-color" id="chart-legend-round-2-color"></div><p class="inline"> - 3-ий раунд</p>
+                <div class="inline chart-legend-color" id="chart-legend-round-2-color"></div><p class="inline"> - раунд 3</p>
             </div>
             <div class="chart-legend-element">
-                <div class="inline chart-legend-color" id="chart-legend-round-3-color"></div><p class="inline"> - 4-ый раунд</p>
+                <div class="inline chart-legend-color" id="chart-legend-round-3-color"></div><p class="inline"> - раунд 4</p>
             </div>
             <div class="chart-legend-element">
-                <div class="inline chart-legend-color" id="chart-legend-round-4-color"></div><p class="inline"> - 5-ый раунд</p>
+                <div class="inline chart-legend-color" id="chart-legend-round-4-color"></div><p class="inline"> - раунд 5</p>
             </div>
 
+        </div>
+    </div>
+    <div th:fragment="logout" class="logout-wrapper">
+        <svg class="logout-svg"
+             th:unless="${projectorMode}"
+             xmlns="http://www.w3.org/2000/svg" version="1.1" id="Capa_1" x="0px" y="0px" width="492.5px" height="492.5px" viewBox="0 0 492.5 492.5" style="enable-background:new 0 0 492.5 492.5;" xml:space="preserve"><g><path d="M184.646,0v21.72H99.704v433.358h31.403V53.123h53.539V492.5l208.15-37.422v-61.235V37.5L184.646,0z M222.938,263.129   c-6.997,0-12.67-7.381-12.67-16.486c0-9.104,5.673-16.485,12.67-16.485s12.67,7.381,12.67,16.485   C235.608,255.748,229.935,263.129,222.938,263.129z"></path></g></svg>
+        <div class="hidden logout-popup popup-wrapper">
+            <div class="popup">
+                <div class="popup-back"></div>
+                <div class="popup-content">
+                    <p th:text="#{player.logout.message}"></p>
+                    <div class="popup-button-line">
+                        <button class="logout-popup-yes-btn">Да</button>
+                        <button class="close-popup-btn">Нет</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </body>

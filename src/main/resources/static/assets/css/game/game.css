@@ -3,6 +3,7 @@ h1 {
 }
 
 .container {
+    flex-direction: column;
     align-content: center;
     justify-content: center;
     overflow-x: auto;
@@ -59,57 +60,67 @@ h1 {
     font-size: 2.5em;
 }
 
-#phase-1 h1 {
-    margin-top: 15px;
-}
-
 /*************************
 *      STATS CHART       *
 **************************/
 
-#phase-5 {
-    width: 100%;
-    margin-top: 80px;
+.chart-wrapper {
+    margin-top: 30px;
 }
 
 .bar-chart {
-    display: flex;
-    flex-flow: row nowrap;
+    display: block;
     overflow-x: auto;
     position: relative;
 }
 
-.chart-y-axis,
-.bar-chart-col {
-    margin: 0 5px;
+.bar-chart-row {
     display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-content: center;
 }
 
-.chart-y-axis {
-    width: 70px;
+.cells {
+    display: flex;
+    flex-wrap: nowrap;
 }
 
 .bar-chart .scroll-icon {
     position: absolute;
-    top: 30%;
+    top: calc(50% - 25px);
     right: 5px;
     fill: #4E3549;
-    opacity: 0.2;
-    height: 30px;
-    width: 30px;
+    opacity: 0.7;
+    height: 50px;
+    width: 50px;
+    margin-top: 0;
 }
 
-.bar-chart-col {
-    width: 50px;
-    flex-shrink: 0;
+.bar-chart-row {
+    height: 30px;
+    margin-bottom: 10px;
 }
 
 .stats-cell {
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.chart-command-name,
+.chart-column-heading {
+    width: 70px;
+}
+
+.chart-command-name,
+.row-total-score {
+    margin: auto 0;
+    flex-shrink: 0;
+}
+
+.row-total-score {
+    padding: 0 10px;
 }
 
 .stats-cell:first-child,
@@ -141,10 +152,6 @@ h1 {
     color: #524f55;
 }
 
-.chart-command-name {
-    margin-top: 10px;
-}
-
 .chart-legend {
     display: flex;
     margin: 10px 20px;
@@ -163,6 +170,26 @@ h1 {
     margin: 5px 5px;
 }
 
+/*************************
+*      PLAYER LOGOUT     *
+**************************/
+
+.logout-wrapper {
+    align-self: end;
+    margin: 10px auto;
+}
+
+.logout-svg {
+    max-width: 30px;
+    max-height: 30px;
+    fill: #4e3549;
+    cursor: pointer;
+}
+
+.logout-svg:hover {
+    fill: tomato;
+}
+
 @media (max-width: 340px) {
     .phase-container h1,
     .phase-container h2,
@@ -173,11 +200,5 @@ h1 {
 
 @media (min-width: 769px) {
 
-}
-
-@media (max-height: 620px) {
-    #phase-5 {
-        margin-top: 80px;
-    }
 }
 

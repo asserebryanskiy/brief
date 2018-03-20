@@ -2,75 +2,6 @@ const SEND_ANSWER_PHASE = 3;
 const RECEIVE_CORRECT_ANSWER_PHASE = 4;
 const STATISTICS_PHASE = 5;
 
-const socket = new SockJS('/websocket');
-const stompClient = Stomp.over(socket);
-const gameSessionId = $('#game-session-id').text();
-const projectorMode = $('#projector-mode').length > 0;
-
-let username = '';
-let currentPhaseNumber = $('#current-phase-number').text();
-let currentRoundIndex = 0;
-let disableTimer = false;
-
-function getTimerDurationStr(timerDuration) {
-    let min = Math.floor(timerDuration / 60);
-    let sec = timerDuration % 60;
-    if (min < 10) min = '0' + min;
-    if (sec < 10) sec = '0' + sec;
-    return min + ":" + sec;
-}
-
-function changePhase(newPhaseNumber, timerStr, additional) {
-    // enable timer in case it was disabled in previous phase
-    disableTimer = false;
-
-    // do phase specific stuff
-    switch (parseInt(newPhaseNumber)) {
-        case SEND_ANSWER_PHASE:
-            if (!projectorMode) enableAnswerSend(true);
-            break;
-        case RECEIVE_CORRECT_ANSWER_PHASE:
-            let correctAnswer = additional;
-            if (correctAnswer === '') correctAnswer = $('#correct-answer').text();
-            $('p:contains("' + correctAnswer + '")').parent().addClass('correct-answer');
-            if (!projectorMode) setScore(correctAnswer);
-            break;
-        case STATISTICS_PHASE:
-            drawChart();
-            break;
-    }
-
-    // if phase is earlier than RECEIVE-CORRECT-ANSWER than erase correct answer
-    if (parseInt(newPhaseNumber) < RECEIVE_CORRECT_ANSWER_PHASE) {
-        $('.correct-answer').removeClass('correct-answer');
-    }
-
-    // change view
-    $('#phase-' + currentPhaseNumber).hide();
-    $('#phase-' + newPhaseNumber).show();
-    currentPhaseNumber = newPhaseNumber;
-    const $timer = $('.timer');
-    if ($timer.is(':visible')) {
-        $timer.text(timerStr);
-    }
-}
-
-function nextRound(roundNumber) {
-    // set current round to new value
-    currentRoundIndex = roundNumber;
-
-    // change round-name text
-    $('#round-name').text('Раунд ' + (parseInt(roundNumber) + 1));
-
-    // enable answer send
-    if (!projectorMode) enableAnswerSend(true);
-
-    // erase all answers and correct-answer
-    $('.answer-variant').removeClass('selected correct-answer');
-
-    changePhase(0, '');
-}
-
 /************************************
  *            HELP POPUP            *
  ************************************/
@@ -106,7 +37,8 @@ function sendResponses() {
     // send responses
     stompClient.send('/app/responses', {}, JSON.stringify({'username':username, 'answerStr':answer}));
 
-    enableAnswerSend(false);
+    // enableAnswerSend(false);
+    $('.flash').slideDown(800).delay(1000).slideUp(800);
 }
 
 function enableAnswerSend(value) {
@@ -152,40 +84,28 @@ function setScore(correctAnswer) {
     $('.score-text').text(scoreText);
 }
 
-/************************************
- *         STATISTICS CHART         *
- ************************************/
-
-
-
-/************************************
- *         ON DOCUMENT LOAD         *
- ************************************/
-
-stompClient.connect({}, function (frame) {
-    username = frame.headers['user-name'];
-    console.log(username);
-
-    if (!projectorMode) {
-        stompClient.subscribe('/queue/' + username + '/logout', function () {
-            stompClient.disconnect();
-            const url = window.location.href;
-            window.location = url.slice(0, url.lastIndexOf('/'));
-        }, {});
+// show appropriate phase if page was reloaded
+const phaseCallbacks = {
+    [SEND_ANSWER_PHASE]: () => {
+        if (!projectorMode) enableAnswerSend(true);
+    },
+    [RECEIVE_CORRECT_ANSWER_PHASE]: (additional) => {
+        enableAnswerSend(false);
+        let correctAnswer = additional;
+        if (correctAnswer === '') correctAnswer = $('#correct-answer').text();
+        $('p:contains("' + correctAnswer + '")').parent().addClass('correct-answer');
+        if (!projectorMode) setScore(correctAnswer);
+    },
+    [STATISTICS_PHASE]: () => {
+        drawChart();
+    },
+    afterAll: (newPhaseNumber) => {
+        if (parseInt(newPhaseNumber) < RECEIVE_CORRECT_ANSWER_PHASE) {
+            $('.correct-answer').removeClass('correct-answer');
+        }
     }
-
-    stompClient.subscribe('/topic/' + gameSessionId + '/changePhase', (message) => {
-        const newPhaseNumber = JSON.parse(message.body).phaseNumber;
-        const timerStr = getTimerDurationStr(JSON.parse(message.body).timerDuration);
-        const additional = JSON.parse(message.body).additional;
-        console.log(timerStr);
-        changePhase(newPhaseNumber, timerStr, additional);
-    }, {});
-
-    stompClient.subscribe('/topic/' + gameSessionId + '/changeRound', (roundNumber) => {
-        nextRound(roundNumber.body);
-    });
-
+};
+function onWsConnect(stompClient) {
     stompClient.subscribe('/topic/' + gameSessionId + '/timer', (message) => {
         const newTimerValue = message.body;
         if (!disableTimer) {
@@ -195,6 +115,7 @@ stompClient.connect({}, function (frame) {
                 && !projectorMode) {
                 if (newTimerValue === '00:00') {
                     sendResponses();
+                    enableAnswerSend(false);
                 }
             }
         }
@@ -202,19 +123,14 @@ stompClient.connect({}, function (frame) {
     stompClient.subscribe('/topic/' + gameSessionId + '/additionalAnswerSendTime', () => {
         if (!projectorMode) enableAnswerSend(true);
     }, {});
-    stompClient.subscribe('/topic/' + gameSessionId + '/statistics', (statsList) => {
-        drawChart(JSON.parse(statsList.body));
+    stompClient.subscribe('/topic/' + gameSessionId + '/changePhase', (message) => {
+        const newPhaseNumber = parseInt(JSON.parse(message.body).phaseNumber);
+        if (newPhaseNumber === RECEIVE_CORRECT_ANSWER_PHASE) sendResponses();
     }, {});
-    stompClient.subscribe('/topic/' + gameSessionId + '/finishGame', () => {
-        $('#phase-' + currentPhaseNumber).hide();
-        $('.finish-game').show();
-    }, {});
-    if (!projectorMode) stompClient.send("/app/connect", {}, "");
-    // ToDo: Если соединение прервано, нужно сообщить об этом модератору!
-});
+}
 
-// show appropriate phase if page was reloaded
-changePhase(currentPhaseNumber, '', '');
+const game = new Game(phaseCallbacks, null, onWsConnect);
+game.changePhase(currentPhaseNumber, '', '');
 
 // if answers were already submitted block input
 if ($('#answers-submitted').length !== 0) {

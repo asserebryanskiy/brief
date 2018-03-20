@@ -40,7 +40,7 @@
                 <span>|</span>
                 <a th:href="@{|/moderator/gameSession/${gameSession.id}/gamer|}">Участник</a>
                 <span>|</span>
-                <a th:href="@{|/moderator/gameSession/${gameSession.id}/projector|}">Проектор</a>
+                <a th:href="@{|/moderator/gameSession/${gameSession.id}/projector|}" target="_blank">Проектор</a>
             </div>
             <div th:replace="administration/fragments :: user-pane"></div>
         </div>
@@ -57,10 +57,10 @@
         </div>
     </div>
 
-    <div th:fragment="round-count-bar" class="round-count-bar">
-        <h2 class="bold">Раунд</h2>
+    <div th:fragment="round-count-bar" class="round-count-bar" th:with="gameType = ${gameSession.game.englishName}">
+        <h2 class="bold" th:text="#{${gameType + '.round.count.heading'}}">Раунд</h2>
         <div class="rounds">
-            <div th:replace="administration/fragments :: confirmation-popup('Закончить раунд досрочно?', 'early-round-finish-popup', 'early-round-finish-btn')"></div>
+            <div th:replace="administration/fragments :: confirmation-popup(#{${gameType + '.round.count.popup'}}, 'early-round-finish-popup', 'early-round-finish-btn')"></div>
             <div th:each="round,iter : ${gameSession.rounds}" class="round animated"
                  th:with="currentRound = ${gameSession.currentRoundIndex}"
                  th:classappend="(${iter.index} == ${currentRound} ? 'active' : (${iter.index} == ${currentRound + 1}? 'next' : (${iter.index} < ${currentRound}? 'played')))"
@@ -69,9 +69,35 @@
             </div>
         </div>
         <button id="pass-round-btn">Пропустить раунд</button>
-        <div th:replace="administration/fragments :: confirmation-popup('Пропустить раунд?', 'pass-round-popup', 'pass-round-popup-btn')"></div>
+        <div th:replace="administration/fragments :: confirmation-popup(#{${gameType + '.round.count.skip'}}, 'pass-round-popup', 'pass-round-popup-btn')"></div>
         <button id="game-over-btn">Завершить игру</button>
         <div th:replace="administration/fragments :: confirmation-popup('Завершить игру досрочно?', 'early-game-finish-popup', 'early-game-finish-btn')"></div>
+    </div>
+
+    <div th:fragment="roundNav(phases, roundNumber)" class="round-nav" th:classappend="'round-nav-' + ${roundNumber}">
+        <div th:each="phase,iter : ${phases}">
+            <div class="phase animated" th:with="currentPhase = ${gameSession.currentPhaseNumber}"
+                 th:classappend="(${iter.index} == ${currentPhase} - 1? 'previous':(${iter.index} < ${currentPhase}? 'played':(${iter.index} == ${currentPhase}? 'active':(${iter.index} == ${currentPhase + 1}? 'next'))))"
+                 th:id="'phase-' + ${phase.id}">
+                <p class="phase-name" th:text="${phase.name}"></p>
+                <p class="timer" th:if="${phase.hasTimer}" th:text="(${iter.index} == ${currentPhase} and ${gameSession.timerIsRunning()}) ? ${gameSession.getRemainingTimerTime()} : ${phase.getStrTimerDuration()}"></p>
+                <button class="add-30-sec-btn hidden" th:if="${phase.hasTimer}">+ 30с</button>
+
+                <p class="timer-original-value hidden" th:if="${phase.hasTimer}" th:text="${phase.getStrTimerDuration()}"></p>
+                <p class="timer-is-running hidden" th:if="${phase.hasTimer} and ${currentPhase} == ${iter.index} and ${gameSession.timerIsRunning()}"></p>
+                <p class="timer-finished hidden" th:if="${phase.hasTimer} and ${currentPhase} == ${iter.index} and ${!gameSession.timerIsRunning()}"></p>
+            </div>
+            <div th:replace="administration/fragments :: confirmation-popup('Вернуться на предыдущую фазу?', 'previous-phase-popup-' + ${iter.index}, 'previous-phase-popup-btn')"></div>
+        </div>
+    </div>
+
+    <div class="players" th:fragment="players">
+        <div class="player v-centered animated" th:each="player : ${gameSession.players}" th:id="${player.username}" th:classappend="${player.loggedIn?'connected':''}">
+            <div class="player-info">
+                <p th:id="${player.username} + '-command-name'" class="command-name bold" th:text="${player.commandName}"></p>
+                <svg th:id="${player.username} + '-logout'" class="player-logout-svg" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M14 12h-4v-12h4v12zm4.213-10.246l-1.213 1.599c2.984 1.732 5 4.955 5 8.647 0 5.514-4.486 10-10 10s-10-4.486-10-10c0-3.692 2.016-6.915 5-8.647l-1.213-1.599c-3.465 2.103-5.787 5.897-5.787 10.246 0 6.627 5.373 12 12 12s12-5.373 12-12c0-4.349-2.322-8.143-5.787-10.246z"></path></svg>
+            </div>
+        </div>
     </div>
 
     <div th:fragment="confirmation-popup (message, popupId, yesBtnClass)" class="confirmation-popup" th:id="${popupId}">

@@ -47,7 +47,7 @@ body {
     color: white;
     padding: 5px;
     border-radius: 0 0 10px 10px;
-    margin-top: -10px;
+    /*margin-top: -10px;*/
 }
 
 .flash {
@@ -88,4 +88,58 @@ body {
 
 .hidden {
     display: none;
+}
+
+.popup,
+.popup-back {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.popup-back {
+    background-color: rgba(82,79,85,0.5);
+    z-index: 1;
+}
+
+.popup {
+    display: flex;
+}
+
+.popup-content {
+    position: relative;
+    z-index: 2;
+    margin: auto;
+    background-color: white;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: #524f55 0 0 7px 2px;
+    text-align: center;
+}
+
+.popup-button-line {
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+}
+
+.popup-button-line button {
+    width: 50px;
+    padding: 5px;
+    margin: 0 20px;
+    border-radius: 10px;
+    background-color: transparent;
+    border: #4E3549 1px solid;
+    cursor: pointer;
+    -webkit-transition: all 0.5s;
+    -o-transition: all 0.5s;
+    -moz-transition: all 0.5s;
+    transition: all 0.5s;
+}
+
+.popup-button-line button:hover {
+    background-color: #4e3549;
+    color: white;
 }

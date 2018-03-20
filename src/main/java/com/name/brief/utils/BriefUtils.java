@@ -11,8 +11,8 @@ public class BriefUtils {
         boolean[][] result = new boolean[5][5];
         if (answer == null) return result;
         for (int i = 0; i < answer.length(); i+=2) {
-            int row = (int) answer.charAt(i) - 65 + 1;  // 65 - code of 'A' in Unicode
-            int col = Character.getNumericValue(answer.charAt(i + 1));
+            int row = Character.getNumericValue(answer.charAt(i + 1));
+            int col = (int) answer.charAt(i) - 65 + 1;  // 65 - code of 'A' in Unicode
             result[row][col] = true;
         }
         return result;
@@ -20,7 +20,7 @@ public class BriefUtils {
 
 
     /**
-     * Coverts Decision object to a set of variants, that are represented by String like "B1".
+     * Converts Decision object to a set of variants, that are represented by String like "B1".
      *
      * Example:
      *      Decision decision = new Decision();
