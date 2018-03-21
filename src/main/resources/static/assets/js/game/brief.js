@@ -84,27 +84,34 @@ function setScore(correctAnswer) {
     $('.score-text').text(scoreText);
 }
 
-// show appropriate phase if page was reloaded
-const phaseCallbacks = {
-    [SEND_ANSWER_PHASE]: () => {
-        if (!projectorMode) enableAnswerSend(true);
-    },
-    [RECEIVE_CORRECT_ANSWER_PHASE]: (additional) => {
-        enableAnswerSend(false);
-        let correctAnswer = additional;
-        if (correctAnswer === '') correctAnswer = $('#correct-answer').text();
-        $('p:contains("' + correctAnswer + '")').parent().addClass('correct-answer');
-        if (!projectorMode) setScore(correctAnswer);
-    },
-    [STATISTICS_PHASE]: () => {
-        drawChart();
-    },
-    afterAll: (newPhaseNumber) => {
-        if (parseInt(newPhaseNumber) < RECEIVE_CORRECT_ANSWER_PHASE) {
-            $('.correct-answer').removeClass('correct-answer');
-        }
+/************************************
+ *        CONTROLLER SETTINGS       *
+ ************************************/
+
+controller.setOnPhaseChange((newPhaseNumber, timerStr, additional) => {
+    newPhaseNumber = parseInt(newPhaseNumber);
+
+    switch(newPhaseNumber) {
+        case SEND_ANSWER_PHASE:
+            if (!projectorMode) enableAnswerSend(true);
+            break;
+        case RECEIVE_CORRECT_ANSWER_PHASE:
+            enableAnswerSend(false);
+            let correctAnswer = additional;
+            if (correctAnswer === '') correctAnswer = $('#correct-answer').text();
+            $('p:contains("' + correctAnswer + '")').parent().addClass('correct-answer');
+            if (!projectorMode) setScore(correctAnswer);
+            break;
+        case STATISTICS_PHASE:
+            drawChart();
+            break;
     }
-};
+
+    if (newPhaseNumber < RECEIVE_CORRECT_ANSWER_PHASE) {
+        $('.correct-answer').removeClass('correct-answer');
+    }
+});
+
 function onWsConnect(stompClient) {
     stompClient.subscribe('/topic/' + gameSessionId + '/timer', (message) => {
         const newTimerValue = message.body;
@@ -128,9 +135,8 @@ function onWsConnect(stompClient) {
         if (newPhaseNumber === RECEIVE_CORRECT_ANSWER_PHASE) sendResponses();
     }, {});
 }
-
-const game = new Game(phaseCallbacks, null, onWsConnect);
-game.changePhase(currentPhaseNumber, '', '');
+controller.connect(onWsConnect);
+controller.changePhase(currentPhaseNumber, '', '');
 
 // if answers were already submitted block input
 if ($('#answers-submitted').length !== 0) {

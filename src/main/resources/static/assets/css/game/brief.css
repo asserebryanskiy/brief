@@ -24,6 +24,12 @@ body{
     margin: 80px auto auto;
 }
 
+@media (max-width: 427px) {
+    #phase-2 h2 {
+        max-width: 250px;
+    }
+}
+
 /****************************************
 *          CHOOSE ANSWER TABLE         *
 ****************************************/

@@ -3,6 +3,7 @@ package com.name.brief.web.dto;
 import com.name.brief.model.GameSession;
 import com.name.brief.model.games.Brief;
 import com.name.brief.model.games.Game;
+import com.name.brief.model.games.RiskMap;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -14,7 +15,7 @@ import java.time.format.DateTimeFormatter;
 public class GameSessionDto {
     public static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-    private final String[] gameTypes = new String[]{"Бриф"};
+    private final String[] gameTypes = new String[]{"Бриф", "Карта рисков"};
     private String strId;
     private String activeDateStr = LocalDate.now().format(DATE_FORMATTER);
     private String gameType = gameTypes[0];
@@ -32,6 +33,8 @@ public class GameSessionDto {
         switch (gameType) {
             case "Бриф":
                 return new Brief();
+            case "Карта рисков":
+                return new RiskMap();
         }
         return new Brief();
     }

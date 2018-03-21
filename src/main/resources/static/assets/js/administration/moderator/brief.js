@@ -47,6 +47,40 @@ controller.setOnNextRound(() => {
 });
 controller.setLastPhase($('#phase-5'));
 
+function onWsConnect(stompClient) {
+    stompClient.subscribe('/queue/' + gameSessionId + '/answer', (message) => {
+        const body = JSON.parse(message.body);
+        const username = body.username;
+        const answerStr = body.answerStr;
+        const newScore = parseInt(body.score);
+        const $playerRow = $('#player-row-' + username);
+        const $currentScoreTd = $playerRow.children('.current-score-td');
+        const $totalTd = $playerRow.children('.total-score-td');
+        const currentScore = parseInt($currentScoreTd.text());
+
+        // display received answer to user
+        $playerRow.children('.answer-td').text(answerStr === '' ? '-' : answerStr);
+
+        // change current score
+        $currentScoreTd.text(newScore);
+
+        // change accumulated score
+        $totalTd.text(parseInt($totalTd.text()) - currentScore + newScore);
+
+        // change style
+        $playerRow.addClass('received-answers');
+
+        // update table
+        const $table = $('.players-table');
+        $table.trigger('updateCell', $currentScoreTd[0]);
+        $table.trigger('updateCell', $totalTd[0]);
+        sortingByTotalResult = false;
+        $table.trigger('sorton', [[[3,1]]]);
+    });
+}
+
+controller.connect(onWsConnect);
+
 // if current phase order is greater than 2, show players-table
 if (getPhaseOrder($('.phase.active').attr('id')) > 2) togglePlayersView();
 

@@ -32,7 +32,7 @@
                         <select id="popup-gameType-input" class="popup-form-col2" th:field="*{gameType}">
                             <option th:each="gameType : *{gameTypes}" th:value="${gameType}" th:text="${gameType}"></option>
                         </select>
-                        <label for="popup-commandsNumber-input" class="popup-form-col1">Количество комманд</label>
+                        <label for="popup-commandsNumber-input" class="popup-form-col1">Количество команд</label>
                         <input id="popup-commandsNumber-input" class="popup-form-col2" type="number" th:field="*{numberOfCommands}">
                         <button class="popup-submit-btn" type="submit">Создать</button>
                     </form>

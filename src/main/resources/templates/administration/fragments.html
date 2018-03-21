@@ -110,5 +110,13 @@
             </div>
         </div>
     </div>
+
+    <div th:fragment="vendorScripts">
+        <script src="/webjars/jquery/jquery.js"></script>
+        <script src="/webjars/tablesorter/js/jquery.tablesorter.js"></script>
+        <script src="/webjars/sockjs-client/sockjs.min.js"></script>
+        <script src="/webjars/stomp-websocket/stomp.min.js"></script>
+        <script th:src="@{/assets/js/vendor/jquery-color.js}"></script>
+    </div>
 </body>
 </html>
