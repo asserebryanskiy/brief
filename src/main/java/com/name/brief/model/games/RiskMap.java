@@ -76,6 +76,29 @@ public class RiskMap implements Game {
 
     @Override
     public Object getAnswerInput(Decision decision) {
-        return new boolean[3][4];
+        int[] input = new int[12];
+        Arrays.fill(input, -1);
+        if (decision.getAnswer() != null) {
+            String answer = decision.getAnswer();
+            char[] chars = answer.toCharArray();
+            boolean imgNumber = true;
+            StringBuilder builder = new StringBuilder();
+            for (char aChar : chars) {
+                if (aChar == '-') {
+                    imgNumber = false;
+                } else if (aChar == ',') {
+                    imgNumber = true;
+                    builder.delete(0, builder.length());
+                } else {
+                    if (imgNumber) {
+                        builder.append(aChar);
+                    } else {
+                        input[Integer.parseInt(builder.toString())]
+                                = Character.getNumericValue(aChar);
+                    }
+                }
+            }
+        }
+        return input;
     }
 }

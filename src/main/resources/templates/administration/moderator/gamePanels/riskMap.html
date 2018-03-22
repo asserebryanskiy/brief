@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Карта рисков | Панель модератора</title>
+    <link rel="stylesheet" th:href="@{/assets/css/app.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/administration/administration.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/administration/moderator/riskMap.css}">
+</head>
+<body>
+    <div th:replace="administration/fragments :: game-session-header"></div>
+    <div class="main-content">
+        <div th:replace="administration/fragments :: round-count-bar"></div>
+        <div class="round-nav-and-commands">
+            <h2 class="bold">Фазы раунда</h2>
+            <div th:replace="administration/fragments :: roundNav(${gameSession.game.getPhases(0)}, 0)"></div>
+            <div th:replace="administration/fragments :: roundNav(${gameSession.game.getPhases(1)}, 1)"></div>
+            <h2 class="bold">Команды</h2>
+            <div th:replace="administration/fragments :: players"></div>
+        </div>
+    </div>
+
+    <div th:replace="administration/fragments :: vendorScripts"></div>
+    <script th:src="@{/assets/js/administration/moderator/timer.js}"></script>
+    <script th:src="@{/assets/js/administration/moderator/gameSessionController.js}"></script>
+    <script th:src="@{/assets/js/administration/moderator/riskMap.js}"></script>
+</body>
+</html>

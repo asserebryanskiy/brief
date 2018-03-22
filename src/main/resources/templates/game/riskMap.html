@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>МОЗ | Карта рисков</title>
+    <link rel="stylesheet" th:href="@{/assets/css/app.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/game/game.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/game/riskMap.css}">
+</head>
+<body>
+    <div class="container">
+        <div th:replace="game/fragments :: header(${commandName},${gameSession.currentRoundIndex})"></div>
+        <div th:replace="game/fragments :: introPhase"></div>
+        <div class="phase-container hidden" id="phase-1">
+            <h2 th:text="#{riskMap.phase1.message}"></h2>
+            <h1 class="timer">00:00</h1>
+            <div class="risk-grid">
+                <div th:each="i, iter : ${gameSession.game.getAnswerInput(decision)}"
+                     class="risk-img-cell">
+                    <div class="small-img-wrapper">
+                        <img th:src="@{|/assets/image/riskMap/low_2000/low_2000_${#numbers.formatInteger(iter.count, 2)}.jpg|}" alt=""
+                             th:id="${iter.index / 4 + '' + iter.index % 4 + '-small-img'}"
+                             class="risk-small-img animated scale-on-hover">
+                        <div class="risk-indicator answer-input hidden"
+                             th:classappend="${i} == -1 ? 'no-level' : (${i} == 0 ? 'low-level' : (${i} == 1 ? 'mid-level' : (${i} == 2 ? 'high-level':'')))"></div>
+                    </div>
+                    <div class="popup-wrapper hidden">
+                        <div class="answer-input-popup popup">
+                            <div class="popup-back">
+                                <svg class="close-popup-btn" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z"/></svg>
+                            </div>
+                            <div class="popup-content">
+                                <div class="answer-inputs">
+                                    <div class="answer-input no-level animated" th:classappend="${i} == -1 ? 'selected' : ''">
+                                        <svg class="selected-svg animated" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                                            <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
+                                        </svg>
+                                    </div>
+                                    <div class="answer-input low-level animated" th:classappend="${i} == 0 ? 'selected' : ''">
+                                        <svg class="selected-svg animated" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                                            <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
+                                        </svg>
+                                    </div>
+                                    <div class="answer-input mid-level animated" th:classappend="${i} == 1 ? 'selected' : ''">
+                                        <svg class="selected-svg animated" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                                            <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
+                                        </svg>
+                                    </div>
+                                    <div class="answer-input high-level animated" th:classappend="${i} == 2 ? 'selected' : ''">
+                                        <svg class="selected-svg animated" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                                            <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div th:replace="game/fragments :: logout"></div>
+    </div>
+
+    <div class="heavy-images hidden">
+        <img th:each="i, iter : ${gameSession.game.getAnswerInput(decision)}"
+             th:src="@{|/assets/image/riskMap/low_5000/low_5000_${#numbers.formatInteger(iter.count, 2)}.jpg|}" alt=""
+             th:id="${iter.index / 4 + '' + iter.index % 4 + '-large-img'}">
+    </div>
+    <div th:replace="game/fragments :: gameSettings(${gameSession})"></div>
+    <div th:replace="game/fragments :: vendorScripts"></div>
+    <script th:src="@{/assets/js/popup.js}"></script>
+    <script th:src="@{/assets/js/game/gameController.js}"></script>
+    <script th:src="@{/assets/js/game/riskMap.js}"></script>
+</body>
+</html>

@@ -14,7 +14,6 @@ public class Decision extends BaseEntity {
     @ManyToOne
     private Player player;
     private int roundNumber;
-    @Pattern(regexp = "([A-D][0-4])*", message = "{decision.answer.pattern}")
     private String answer;
 
     public Decision() {

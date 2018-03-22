@@ -37,7 +37,7 @@ function sendResponses() {
     // send responses
     stompClient.send('/app/responses', {}, JSON.stringify({'username':username, 'answerStr':answer}));
 
-    // enableAnswerSend(false);
+    // answerSendEnabled(false);
     $('.flash').slideDown(800).delay(1000).slideUp(800);
 }
 

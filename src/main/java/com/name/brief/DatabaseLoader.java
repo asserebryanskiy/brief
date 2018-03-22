@@ -5,6 +5,9 @@ import com.name.brief.model.Decision;
 import com.name.brief.model.GameSession;
 import com.name.brief.model.Role;
 import com.name.brief.model.User;
+import com.name.brief.model.games.Brief;
+import com.name.brief.model.games.Game;
+import com.name.brief.model.games.RiskMap;
 import com.name.brief.repository.UserRepository;
 import com.name.brief.service.GameSessionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,14 +49,16 @@ public class DatabaseLoader implements ApplicationRunner {
                 .withUser(moderator1)
                 .build();
 
-        /*final String[] answers = {"", "A1B2C2", "A1C3", "A1"};
+        Game brief = new Brief();
+        final String[] answers = brief.getCorrectAnswers();
+        final String[] additions = {"", "D4", "D4D2", "D4D2D1B4B2B1"};
         session.getPlayers().forEach(p -> {
-            for (int i = 0; i < 5; i++) {
+            for (int i = 0; i < brief.getNumberOfRounds(); i++) {
                 Decision decision = p.getDecision(i);
-                decision.setAnswer(answers[Math.round((float) Math.random() * 3)]);
+                decision.setAnswer(answers[i] + additions[Math.round((float) (Math.random() * 3.0))]);
             }
         });
-        session.setCurrentPhaseNumber(3);*/
+        session.setCurrentPhaseNumber(3);
 
         GameSession session2 = new GameSession.GameSessionBuilder("testtest")
                 .withNumberOfCommands(3)
@@ -66,9 +71,14 @@ public class DatabaseLoader implements ApplicationRunner {
                 .withActiveDate(LocalDate.now().minusDays(1))
                 .withUser(moderator1)
                 .build();
+        GameSession riskMapSession = new GameSession.GameSessionBuilder("riskMap")
+                .withUser(moderator1)
+                .withGame(new RiskMap())
+                .build();
         gameSessionService.save(session);
         gameSessionService.save(session2);
         gameSessionService.save(session3);
         gameSessionService.save(pastSession);
+        gameSessionService.save(riskMapSession);
     }
 }
