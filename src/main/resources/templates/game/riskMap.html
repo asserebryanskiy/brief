@@ -63,7 +63,7 @@
 
     <div class="heavy-images hidden">
         <img th:each="i, iter : ${gameSession.game.getAnswerInput(decision)}"
-             th:src="@{|/assets/image/riskMap/low_5000/low_5000_${#numbers.formatInteger(iter.count, 2)}.jpg|}" alt=""
+             th:src="@{|/assets/image/riskMap/big_with_sectors/${iter.count}.jpg|}" alt=""
              th:id="${iter.index / 4 + '' + iter.index % 4 + '-large-img'}">
     </div>
     <div th:replace="game/fragments :: gameSettings(${gameSession})"></div>
