@@ -44,7 +44,7 @@ public class DatabaseLoader implements ApplicationRunner {
         users.add(moderator2);
         users.add(new User("admin", password, Role.ADMIN.getRole()));
         userRepository.save(users);
-        GameSession session = new GameSession.GameSessionBuilder("test")
+        GameSession session = new GameSession.GameSessionBuilder("brief")
                 .withNumberOfCommands(5)
                 .withUser(moderator1)
                 .build();
@@ -53,12 +53,11 @@ public class DatabaseLoader implements ApplicationRunner {
         final String[] answers = brief.getCorrectAnswers();
         final String[] additions = {"", "D4", "D4D2", "D4D2D1B4B2B1"};
         session.getPlayers().forEach(p -> {
-            for (int i = 0; i < brief.getNumberOfRounds(); i++) {
-                Decision decision = p.getDecision(i);
-                decision.setAnswer(answers[i] + additions[Math.round((float) (Math.random() * 3.0))]);
+            if (!p.getCommandName().equals("2")) {
+                Decision decision = p.getDecision(0);
+                decision.setAnswer(answers[0] + additions[Math.round((float) (Math.random() * 3.0))]);
             }
         });
-        session.setCurrentPhaseNumber(3);
 
         GameSession session2 = new GameSession.GameSessionBuilder("testtest")
                 .withNumberOfCommands(3)

@@ -133,31 +133,32 @@ h1 {
 
 .stats-cell:first-child,
 #chart-legend-round-0-color {
-    background-color: #729d76;
+    background-color: #D21D48;
+    color: white;
 }
 
 .stats-cell:nth-child(2),
 #chart-legend-round-1-color  {
-    background-color: #4158d0;
+    background-color: #E86444;
     color: white;
 }
 
 .stats-cell:nth-child(3),
 #chart-legend-round-2-color  {
-    background-color: #4e3549;
+    background-color: #F5AD0E;
     color: white;
 }
 
 .stats-cell:nth-child(4),
 #chart-legend-round-3-color  {
-    background-color: #fff238;
-    color: #4e3549;
+    background-color: #90798B;
+    color: white;
 }
 
 .stats-cell:nth-child(5),
 #chart-legend-round-4-color  {
-    background-color: #d7d7d7;
-    color: #524f55;
+    background-color: #4e3549;
+    color: white;
 }
 
 .chart-legend {
