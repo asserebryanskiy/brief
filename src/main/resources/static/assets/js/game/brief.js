@@ -37,7 +37,10 @@ function sendResponses() {
     // send responses
     stompClient.send('/app/responses', {}, JSON.stringify({'username':username, 'answerStr':answer}));
 
-    // answerSendEnabled(false);
+    const $btn = $('#send-responses-btn');
+    if ($btn.text() === sendNewAnswersText) {
+        $btn.text(changeAnswersText).addClass('change-answers');
+    }
     $('.flash').slideDown(800).delay(1000).slideUp(800);
 }
 
@@ -48,16 +51,26 @@ function enableAnswerSend(value) {
 
     // enable answer-variant clicking
     const $cell = $('.answer-variant');
+    const $btn = $('#send-responses-btn');
     if (value) {
         // because if round was skipped than there are two opposite handlers on click
         $cell.unbind('click');
+
         $cell.click((event) => toggleSelected(event));
+        // if any answer is already selected change #send-responses-btn text to changeAnswersText message
+        if (getAnswerStr().length > 0) {
+            $btn.text(changeAnswersText);
+            if (!$btn.hasClass('change-answers')) $btn.addClass('change-answers');
+        } else {
+            $btn.text(sendNewAnswersText).removeClass('change-answers');
+        }
     } else {
         $cell.unbind('click');
+        $btn.text(sentAnswersText).removeClass('change-answers');
     }
 
     // enable send-responses btn
-    $('#send-responses-btn').prop('disabled', !value);
+    $btn.prop('disabled', !value);
 }
 
 function setScore(correctAnswer) {
@@ -93,7 +106,9 @@ controller.setOnPhaseChange((newPhaseNumber, timerStr, additional) => {
 
     switch(newPhaseNumber) {
         case SEND_ANSWER_PHASE:
-            if (!projectorMode) enableAnswerSend(true);
+            if (!projectorMode) {
+                enableAnswerSend(true);
+            }
             break;
         case RECEIVE_CORRECT_ANSWER_PHASE:
             enableAnswerSend(false);
@@ -110,6 +125,10 @@ controller.setOnPhaseChange((newPhaseNumber, timerStr, additional) => {
     if (newPhaseNumber < RECEIVE_CORRECT_ANSWER_PHASE) {
         $('.correct-answer').removeClass('correct-answer');
     }
+});
+
+controller.setOnRoundChange(() => {
+    $('#send-responses-btn').text('Отправить ответы');
 });
 
 function onWsConnect(stompClient) {

@@ -4,6 +4,11 @@ const gameSessionId = $('#game-session-id').text();
 const projectorMode = $('#projector-mode').length > 0;
 const controller = new GameController();
 
+// message constants
+const sendNewAnswersText = $('#new-answers-text').text();
+const changeAnswersText = $('#change-answers-text').text();
+const sentAnswersText = $('#sent-answers-text').text();
+
 let username = '';
 let currentPhaseNumber = $('#current-phase-number').text();
 let currentRoundIndex = 0;
@@ -11,9 +16,10 @@ let disableTimer = false;
 
 function GameController() {
     this.onPhaseChange = null;
-    // this.onTimerChanged = null;
+    this.onRoundChange = null;
 
     this.setOnPhaseChange = (onPhaseChange) => this.onPhaseChange = onPhaseChange;
+    this.setOnRoundChange = (onRoundChange) => this.onRoundChange = onRoundChange;
     // this.setOnTimerChanged = (onTimerChanged) => this.onTimerChanged = onTimerChanged;
 
     this.connect = (onWsConnect) => {
@@ -90,6 +96,9 @@ function GameController() {
         $('.answer-variant').removeClass('selected correct-answer');
 
         controller.changePhase(0, '');
+
+        // do round specific stuff
+        if (this.onRoundChange != null) this.onRoundChange(roundNumber);
     };
 }
 

@@ -150,7 +150,7 @@ h1 {
 
 .stats-cell:nth-child(4),
 #chart-legend-round-3-color  {
-    background-color: #dfcadb;
+    background-color: #fff238;
     color: #4e3549;
 }
 
@@ -187,15 +187,13 @@ h1 {
     margin: 10px auto;
 }
 
-.logout-svg {
-    max-width: 30px;
-    max-height: 30px;
-    fill: #4e3549;
+.logout-text {
+    color: #4e3549;
     cursor: pointer;
 }
 
-.logout-svg:hover {
-    fill: tomato;
+.logout-text:hover {
+    color: tomato;
 }
 
 @media (max-width: 340px) {

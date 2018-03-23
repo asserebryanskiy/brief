@@ -24,7 +24,9 @@
             <h1 class="timer">00:00</h1>
             <h2 th:text="#{brief.phase3.message}"></h2>
             <p class="answer-calc-help">Как считаются баллы?</p>
-            <div class="flash success hidden">Ответы отправлены!</div>
+            <div class="flash-placeholder">
+                <p class="flash success hidden">Ответы отправлены!</p>
+            </div>
             <table class="choose-answer-table" th:fragment="playersTable">
                 <tr th:each="row, rowIter : ${gameSession.game.getAnswerInput(decision)}">
                     <td th:each="cell, colIter : ${row}"
@@ -41,7 +43,9 @@
                     </td>
                 </tr>
             </table>
-            <button th:unless="${projectorMode}" id="send-responses-btn">Отправить ответы</button>
+            <button th:unless="${projectorMode}" id="send-responses-btn"
+                    th:text="${!gameSession.timerIsRunning()} ? #{game.sendAnswersBtn.sent} : (${decision.answer} == null ? #{game.sendAnswersBtn.new} : #{game.sendAnswersBtn.change})"
+                    th:classappend="${gameSession.timerIsRunning() && decision.answer != null} ? #{game.sendAnswersbtn.change} : ''"></button>
         </div>
         <div class="phase-container hidden" id="phase-4">
             <h2 th:text="#{brief.phase4.message}"></h2>
@@ -66,7 +70,8 @@
             <button id="close-popup-btn">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z"></path></svg>
             </button>
-            <p>Если хотя бы одно выбранное изображение верное, то команда получает баллы. Количество баллов обратно пропорционально количеству выбранных изображений:</p>
+            <p>Если хотя бы одно выбранное изображение верное, то команда получает баллы.</p>
+            <p>Количество баллов обратно пропорционально количеству выбранных изображений:</p>
             <ul>
                 <li>1 изображение - 15 баллов</li>
                 <li>2 изображения - 10 баллов</li>

@@ -2,15 +2,16 @@ img {
     display: block;
     height: 100px;
     padding: 2% 5px 0;
-    margin: 0 auto;
+    margin: 75px auto;
 }
 
 .container {
-    align-content: center;
+    align-content: flex-start;
 }
 
 h1 {
     color: #4E3549;
+    margin: 0 0 40px;
 }
 
 form {
@@ -70,6 +71,8 @@ a {
     display: block;
     margin-top: 20px;
     font-size: 12px;
+    color: #524f55;
+    font-family: "Circe Light", serif;
 }
 
 /*.container {
