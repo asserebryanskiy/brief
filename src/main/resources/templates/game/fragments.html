@@ -21,6 +21,7 @@
     <div class="hidden" th:fragment="gameSettings(gameSession)">
         <p class="hidden" id="game-session-id" th:text="${gameSession.id}"></p>
         <p class="hidden" id="current-phase-number" th:text="${gameSession.currentPhaseNumber}"></p>
+        <p class="hidden" id="block-answer-input" th:if="${projectorMode} or !${gameSession.timerIsRunning()}"></p>
         <p class="hidden" id="new-answers-text" th:text="#{game.sendAnswersBtn.new}"></p>
         <p class="hidden" id="change-answers-text" th:text="#{game.sendAnswersBtn.change}"></p>
         <p class="hidden" id="sent-answers-text" th:text="#{game.sendAnswersBtn.sent}"></p>
@@ -85,12 +86,22 @@
 
         </div>
     </div>
+
+    <button th:fragment="sendResponsesBtn"
+            th:unless="${projectorMode}" id="send-responses-btn"
+            th:text="${!gameSession.timerIsRunning()} ? #{game.sendAnswersBtn.sent} : (${decision.answer} == null ? #{game.sendAnswersBtn.new} : #{game.sendAnswersBtn.change})"
+            th:classappend="${gameSession.timerIsRunning() && decision.answer != null} ? 'change-answers' : ''"></button>
+
+    <div th:fragment="flash(message)" class="flash-placeholder">
+        <p class="flash success hidden" th:text="${message}">Ответы отправлены!</p>
+    </div>
+
     <div th:fragment="logout" class="logout-wrapper">
         <p class="logout-text"
-           th:unless="${projectorMode}">Выйти</p>
+        th:unless="${projectorMode}">Выйти</p>
         <!--<svg class="logout-svg"-->
-             <!--th:unless="${projectorMode}"-->
-             <!--xmlns="http://www.w3.org/2000/svg" version="1.1" id="Capa_1" x="0px" y="0px" width="492.5px" height="492.5px" viewBox="0 0 492.5 492.5" style="enable-background:new 0 0 492.5 492.5;" xml:space="preserve"><g><path d="M184.646,0v21.72H99.704v433.358h31.403V53.123h53.539V492.5l208.15-37.422v-61.235V37.5L184.646,0z M222.938,263.129   c-6.997,0-12.67-7.381-12.67-16.486c0-9.104,5.673-16.485,12.67-16.485s12.67,7.381,12.67,16.485   C235.608,255.748,229.935,263.129,222.938,263.129z"></path></g></svg>-->
+        <!--th:unless="${projectorMode}"-->
+        <!--xmlns="http://www.w3.org/2000/svg" version="1.1" id="Capa_1" x="0px" y="0px" width="492.5px" height="492.5px" viewBox="0 0 492.5 492.5" style="enable-background:new 0 0 492.5 492.5;" xml:space="preserve"><g><path d="M184.646,0v21.72H99.704v433.358h31.403V53.123h53.539V492.5l208.15-37.422v-61.235V37.5L184.646,0z M222.938,263.129   c-6.997,0-12.67-7.381-12.67-16.486c0-9.104,5.673-16.485,12.67-16.485s12.67,7.381,12.67,16.485   C235.608,255.748,229.935,263.129,222.938,263.129z"></path></g></svg>-->
         <div class="hidden logout-popup popup-wrapper">
             <div class="popup">
                 <div class="popup-back"></div>
@@ -104,5 +115,6 @@
             </div>
         </div>
     </div>
+
 </body>
 </html>

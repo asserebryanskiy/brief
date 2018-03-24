@@ -2,6 +2,7 @@ const socket = new SockJS('/websocket');
 const stompClient = Stomp.over(socket);
 const gameSessionId = $('#game-session-id').text();
 const projectorMode = $('#projector-mode').length > 0;
+const blockAnswerInput = $('#block-answer-input').length !== 0;
 const controller = new GameController();
 
 // message constants
@@ -12,7 +13,12 @@ const sentAnswersText = $('#sent-answers-text').text();
 let username = '';
 let currentPhaseNumber = $('#current-phase-number').text();
 let currentRoundIndex = 0;
-let disableTimer = false;
+let answerSendingEnabled = true;
+
+// if answers were already submitted block input
+if (blockAnswerInput) {
+    controller.enableAnswerSend(false);
+}
 
 function GameController() {
     this.onPhaseChange = null;
@@ -34,6 +40,22 @@ function GameController() {
                 }, {});
             }
 
+            // subscribe on timer change
+            stompClient.subscribe('/topic/' + gameSessionId + '/timer', (message) => {
+                const newTimerValue = message.body;
+                $('.timer').text(newTimerValue);
+                // phase-3 is send responses phase
+                if ($('.phase-container:visible').attr('id') === 'phase-' + SEND_ANSWER_PHASE
+                    && !projectorMode) {
+                    if (newTimerValue === '00:00') {
+                        controller.sendResponses();
+                        controller.enableAnswerSend(false);
+                    }
+                }
+            }, {});
+            stompClient.subscribe('/topic/' + gameSessionId + '/additionalAnswerSendTime', () => {
+                if (!projectorMode) controller.enableAnswerSend(true);
+            }, {});
             stompClient.subscribe('/topic/' + gameSessionId + '/changePhase', (message) => {
                 const newPhaseNumber = JSON.parse(message.body).phaseNumber;
                 const timerStr = getTimerDurationStr(JSON.parse(message.body).timerDuration);
@@ -64,9 +86,6 @@ function GameController() {
     };
 
     this.changePhase = function changePhase(newPhaseNumber, timerStr, additional) {
-        // enable timer in case it was disabled in previous phase
-        disableTimer = false;
-
         newPhaseNumber = parseInt(newPhaseNumber);
 
         // do phase specific stuff
@@ -90,7 +109,7 @@ function GameController() {
         $('#round-name').text('Раунд ' + (parseInt(roundNumber) + 1));
 
         // enable answer send
-        if (!projectorMode) enableAnswerSend(true);
+        if (!projectorMode) controller.enableAnswerSend(true);
 
         // erase all answers and correct-answer
         $('.answer-variant').removeClass('selected correct-answer');
@@ -100,6 +119,46 @@ function GameController() {
         // do round specific stuff
         if (this.onRoundChange != null) this.onRoundChange(roundNumber);
     };
+
+    this.sendResponses = () => {
+        const answer = getAnswerStr();
+        // send responses
+        stompClient.send('/app/responses', {}, JSON.stringify({'username':username, 'answerStr':answer}));
+
+        const $btn = $('#send-responses-btn');
+        if ($btn.text() === sendNewAnswersText) {
+            $btn.text(changeAnswersText).addClass('change-answers');
+        }
+        $('.flash').slideDown(800).delay(1000).slideUp(800);
+    };
+
+    this.enableAnswerSend = (value) => {
+        // enable answer-variant clicking
+        const $cell = $('.answer-variant');
+        const $btn = $('#send-responses-btn');
+        if (value) {
+            // because if round was skipped than there are two opposite handlers on click
+            $cell.unbind('click');
+            $cell.click((event) => toggleSelected(event));
+
+            if (getAnswerStr().length > 0) {
+                $btn.text(changeAnswersText);
+                if (!$btn.hasClass('change-answers')) $btn.addClass('change-answers');
+            } else {
+                $btn.text(sendNewAnswersText).removeClass('change-answers');
+            }
+        } else {
+            // if any answer is already selected change #send-responses-btn text to changeAnswersText message
+            console.log('entered in unbind');
+            $cell.unbind('click');
+            $btn.text(sentAnswersText).removeClass('change-answers');
+        }
+
+        // enable send-responses btn
+        $btn.prop('disabled', !value);
+
+        answerSendingEnabled = value;
+    };
 }
 
 /***********************************************
@@ -108,12 +167,16 @@ function GameController() {
  *                                             *
  ************************************************/
 
-$('.logout-svg').click(() => {
+$('.logout-text').click(() => {
     $('.logout-popup').show();
 });
 
 $('.logout-popup-yes-btn').click(() => {
     stompClient.send("/app/logout/" + username, {}, "");
+});
+
+$('#send-responses-btn').click(() => {
+    controller.sendResponses();
 });
 
 /***********************************************

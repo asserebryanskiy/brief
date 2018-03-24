@@ -247,7 +247,7 @@ $('.add-30-sec-btn').click(function (event) {
     controller.timer.startTimer($timer, () => onTimerFinish($timer, $phase));
 
     // if parent of this btn is send-responses phase inform subscribers about additional time.
-    if ($phase.attr('id') === 'phase-3') {
+    if ($phase.attr('id') === 'phase-' + SEND_ANSWER_PHASE) {
         stompClient.send('/topic/' + gameSessionId + '/additionalAnswerSendTime');
     }
 });

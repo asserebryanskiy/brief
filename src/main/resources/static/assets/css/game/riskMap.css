@@ -1,17 +1,29 @@
+body {
+    background: none;
+}
+
+.container {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 0;
+}
+
 #phase-1 {
     flex-direction: column;
     margin: 0 auto auto;
 }
 
 #phase-1 h2 {
-    font-size: 25px;
-    margin-top: 80px;
+    font-size: 20px;
+    margin: 140px 10px 0;
     justify-self: flex-start;
+    font-family: "Circe Light", serif;
 }
 
 .risk-grid {
     display: grid;
-    width: 90%;
+    width: 100%;
     grid-template-columns: repeat(4, auto);
     grid-template-rows: repeat(3, auto);
     grid-gap: 0;
@@ -49,6 +61,11 @@ img[id$='-large-img'] {
     margin: auto;
 }
 
+.answer-input-popup p {
+    margin-bottom: 10px;
+    font-size: 1.2em;
+}
+
 .answer-inputs {
     display: flex;
     width: 300px;
@@ -56,19 +73,22 @@ img[id$='-large-img'] {
     margin: 10px auto;
 }
 
-.answer-input {
+.answer-input,
+.risk-indicator {
     display: flex;
     opacity: 0.8;
-    width: 50px;
-    height: 50px;
-    border-radius: 25px;
     cursor: pointer;
 }
 
-.risk-indicator.answer-input {
+.answer-input {
+    width: 50px;
+    height: 50px;
+    border-radius: 25px;
+}
+
+.risk-indicator {
     width: 20px;
     height: 20px;
-    opacity: 0.8;
     border-radius: 10px;
     position: absolute;
     z-index: 1;
@@ -76,20 +96,24 @@ img[id$='-large-img'] {
     top: 5px;
 }
 
+.no-answer {
+    background-color: #959595;
+}
+
 .no-level {
     background-color: #729d76;
 }
 
 .low-level {
-    background-color: #fff238;
+    background-color: #efdf02;
 }
 
 .mid-level {
-    background-color: orange;
+    background-color: #ff8302;
 }
 
 .high-level {
-    background-color: tomato;
+    background-color: #e80404;
 }
 
 .selected {
@@ -117,13 +141,14 @@ img[id$='-large-img'] {
     width: 95%;
 }
 
-.close-popup-btn {
-    fill: #e6e6e6 !important;
-    height: 50px !important;
-    width: 50px !important;
+.risk-img-cell .close-popup-btn {
+    color: #e6e6e6 !important;
+    font-size: 2em;
     position: absolute;
     bottom :-70px;
+    left: 50%;
     transform: translate(-50%, 0);
+    cursor: pointer;
 }
 
 @media (min-width: 500px) {
@@ -142,14 +167,17 @@ img[id$='-large-img'] {
         width: 130px;
     }
 
-    .close-popup-btn {
-        transform: none;
-        bottom: 0;
-        right: -70px;
-        top: 0;
-    }
-
     .popup-content {
         width: 70%;
+    }
+}
+
+@media (min-width: 769px) {
+    .popup-content {
+        max-width: 500px;
+    }
+
+    #phase-1 h2 {
+        margin-top: 40px;
     }
 }

@@ -1,10 +1,10 @@
 // phase number constants
-const SEND_ANSWERS_PHASE = 3;
+const SEND_ANSWER_PHASE = 3;
 const SEND_STATISTICS_PHASE = 5;
 
 controller.setOnNextPhase((phaseOrder) => {
     // if newActive order is greater than 2 show player-table
-    if (phaseOrder >= SEND_ANSWERS_PHASE && !$('.players-table').is(':visible')) togglePlayersView();
+    if (phaseOrder >= SEND_ANSWER_PHASE && !$('.players-table').is(':visible')) togglePlayersView();
 
     // if new phase is SEND_STATISTICS send statistics to players and projector
     if (phaseOrder === SEND_STATISTICS_PHASE) {
@@ -13,7 +13,7 @@ controller.setOnNextPhase((phaseOrder) => {
 });
 controller.setOnPrevPhase((phaseOrder) => {
     // if newActive order is greater than 2 show player-table
-    if (phaseOrder < SEND_ANSWERS_PHASE && $('.players-table').is(':visible')) togglePlayersView();
+    if (phaseOrder < SEND_ANSWER_PHASE && $('.players-table').is(':visible')) togglePlayersView();
 
     // if new phase is SEND_STATISTICS send statistics to players and projector
     if (phaseOrder === SEND_STATISTICS_PHASE) {

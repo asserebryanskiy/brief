@@ -24,53 +24,8 @@ function toggleSelected(event) {
     $('.container').find('p:contains("' + answer + '")').parent().toggleClass('selected');
 }
 
-$('#send-responses-btn').click(() => {
-    sendResponses();
-});
-
 function getAnswerStr() {
     return $('#phase-3').find('.selected').text().replace(/\s+/g, '');
-}
-
-function sendResponses() {
-    const answer = getAnswerStr();
-    // send responses
-    stompClient.send('/app/responses', {}, JSON.stringify({'username':username, 'answerStr':answer}));
-
-    const $btn = $('#send-responses-btn');
-    if ($btn.text() === sendNewAnswersText) {
-        $btn.text(changeAnswersText).addClass('change-answers');
-    }
-    $('.flash').slideDown(800).delay(1000).slideUp(800);
-}
-
-function enableAnswerSend(value) {
-    // enable timer
-    // 3 - is number of send answers phase
-    disableTimer = !value && currentPhaseNumber === SEND_ANSWER_PHASE;
-
-    // enable answer-variant clicking
-    const $cell = $('.answer-variant');
-    const $btn = $('#send-responses-btn');
-    if (value) {
-        // because if round was skipped than there are two opposite handlers on click
-        $cell.unbind('click');
-
-        $cell.click((event) => toggleSelected(event));
-        // if any answer is already selected change #send-responses-btn text to changeAnswersText message
-        if (getAnswerStr().length > 0) {
-            $btn.text(changeAnswersText);
-            if (!$btn.hasClass('change-answers')) $btn.addClass('change-answers');
-        } else {
-            $btn.text(sendNewAnswersText).removeClass('change-answers');
-        }
-    } else {
-        $cell.unbind('click');
-        $btn.text(sentAnswersText).removeClass('change-answers');
-    }
-
-    // enable send-responses btn
-    $btn.prop('disabled', !value);
 }
 
 function setScore(correctAnswer) {
@@ -106,12 +61,12 @@ controller.setOnPhaseChange((newPhaseNumber, timerStr, additional) => {
 
     switch(newPhaseNumber) {
         case SEND_ANSWER_PHASE:
-            if (!projectorMode) {
-                enableAnswerSend(true);
+            if (!blockAnswerInput) {
+                controller.enableAnswerSend(true);
             }
             break;
         case RECEIVE_CORRECT_ANSWER_PHASE:
-            enableAnswerSend(false);
+            controller.enableAnswerSend(false);
             let correctAnswer = additional;
             if (correctAnswer === '') correctAnswer = $('#correct-answer').text();
             $('p:contains("' + correctAnswer + '")').parent().addClass('correct-answer');
@@ -132,32 +87,10 @@ controller.setOnRoundChange(() => {
 });
 
 function onWsConnect(stompClient) {
-    stompClient.subscribe('/topic/' + gameSessionId + '/timer', (message) => {
-        const newTimerValue = message.body;
-        if (!disableTimer) {
-            $('.timer').text(newTimerValue);
-            // phase-3 is send responses phase
-            if ($('.phase-container:visible').attr('id') === 'phase-' + SEND_ANSWER_PHASE
-                && !projectorMode) {
-                if (newTimerValue === '00:00') {
-                    sendResponses();
-                    enableAnswerSend(false);
-                }
-            }
-        }
-    }, {});
-    stompClient.subscribe('/topic/' + gameSessionId + '/additionalAnswerSendTime', () => {
-        if (!projectorMode) enableAnswerSend(true);
-    }, {});
     stompClient.subscribe('/topic/' + gameSessionId + '/changePhase', (message) => {
         const newPhaseNumber = parseInt(JSON.parse(message.body).phaseNumber);
-        if (newPhaseNumber === RECEIVE_CORRECT_ANSWER_PHASE) sendResponses();
+        if (newPhaseNumber === RECEIVE_CORRECT_ANSWER_PHASE) controller.sendResponses();
     }, {});
 }
 controller.connect(onWsConnect);
 controller.changePhase(currentPhaseNumber, '', '');
-
-// if answers were already submitted block input
-if ($('#answers-submitted').length !== 0) {
-    enableAnswerSend(false);
-}

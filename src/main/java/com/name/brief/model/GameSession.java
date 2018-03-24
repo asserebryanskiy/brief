@@ -143,7 +143,8 @@ public class GameSession extends BaseEntity{
     }
 
     public String getRemainingTimerTime() {
-        if (endOfTimer == null) throw new IllegalArgumentException("endOfTimer is null");
+        if (endOfTimer == null) return TimeConverter.getTimeStrFromDuration(game.getPhases()
+                    .get(currentPhaseNumber).getTimerDuration());
         LocalTime now = LocalTime.now();
         if (now.isAfter(endOfTimer)) return "00:00";
         return TimeConverter.getTimeStrFromDuration(Duration.between(LocalTime.now(), endOfTimer));
@@ -154,6 +155,7 @@ public class GameSession extends BaseEntity{
     }
 
     public boolean timerIsRunning() {
-        return endOfTimer != null && endOfTimer.isAfter(LocalTime.now());
+        // if endOfTimer is null it means that it was not launched yet
+        return endOfTimer == null || endOfTimer.isAfter(LocalTime.now());
     }
 }

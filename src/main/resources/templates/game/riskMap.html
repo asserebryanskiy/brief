@@ -22,41 +22,45 @@
                         <img th:src="@{|/assets/image/riskMap/low_2000/low_2000_${#numbers.formatInteger(iter.count, 2)}.jpg|}" alt=""
                              th:id="${iter.index / 4 + '' + iter.index % 4 + '-small-img'}"
                              class="risk-small-img animated scale-on-hover">
-                        <div class="risk-indicator answer-input hidden"
-                             th:classappend="${i} == -1 ? 'no-level' : (${i} == 0 ? 'low-level' : (${i} == 1 ? 'mid-level' : (${i} == 2 ? 'high-level':'')))"></div>
+                        <div class="risk-indicator hidden no-answer"
+                             th:classappend="${i} == 0 ? 'no-level' : (${i} == 1 ? 'low-level' : (${i} == 2 ? 'mid-level' : (${i} == 3 ? 'high-level':'')))"></div>
                     </div>
                     <div class="popup-wrapper hidden">
                         <div class="answer-input-popup popup">
                             <div class="popup-back"></div>
                             <div class="popup-content">
+                                <p th:text="#{riskMap.phase1.answerPopup}"></p>
                                 <div class="answer-inputs">
-                                    <div class="answer-input no-level animated" th:classappend="${i} == -1 ? 'selected' : ''">
+                                    <div class="answer-input no-level animated" th:classappend="${i} == 0 ? 'selected' : ''">
                                         <svg class="selected-svg animated" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                                             <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
                                         </svg>
                                     </div>
-                                    <div class="answer-input low-level animated" th:classappend="${i} == 0 ? 'selected' : ''">
+                                    <div class="answer-input low-level animated" th:classappend="${i} == 1 ? 'selected' : ''">
                                         <svg class="selected-svg animated" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                                             <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
                                         </svg>
                                     </div>
-                                    <div class="answer-input mid-level animated" th:classappend="${i} == 1 ? 'selected' : ''">
+                                    <div class="answer-input mid-level animated" th:classappend="${i} == 2 ? 'selected' : ''">
                                         <svg class="selected-svg animated" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                                             <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
                                         </svg>
                                     </div>
-                                    <div class="answer-input high-level animated" th:classappend="${i} == 2 ? 'selected' : ''">
+                                    <div class="answer-input high-level animated" th:classappend="${i} == 3 ? 'selected' : ''">
                                         <svg class="selected-svg animated" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                                             <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
                                         </svg>
                                     </div>
                                 </div>
-                                <svg class="close-popup-btn" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z"></path></svg>
+                                <p class="close-popup-btn" >Ок</p>
+                                <!--<svg class="close-popup-btn" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z"></path></svg>-->
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+            <button th:replace="game/fragments :: sendResponsesBtn"></button>
+            <div th:replace="game/fragments :: flash(#{game.answersSent.flash})"></div>
         </div>
         <div th:replace="game/fragments :: logout"></div>
     </div>

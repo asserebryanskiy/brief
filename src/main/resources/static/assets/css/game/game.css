@@ -197,6 +197,41 @@ h1 {
     color: tomato;
 }
 
+/*************************
+*   SEND RESPONSES BTN   *
+**************************/
+
+#send-responses-btn {
+    margin: 10px 0;
+    font-size: 1em;
+    padding: 5px 10px;
+    border-radius: 10px;
+    background-color: #4a9d61;
+    color: white;
+    cursor: pointer;
+    width: 170px;
+}
+
+#send-responses-btn:active {
+    background-color: #4E3549 !important;
+    color: white !important;
+}
+
+.change-answers {
+    background-color: transparent !important;
+    color: #4a9d61 !important;
+    border: #4a9d61 1px solid !important;
+}
+
+#send-responses-btn:disabled {
+    background-color: #d7d7d7;
+    color: #959595;
+}
+
+.flash-placeholder {
+    height: 40px;
+}
+
 @media (max-width: 340px) {
     .phase-container h1,
     .phase-container h2,

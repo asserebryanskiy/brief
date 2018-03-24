@@ -24,9 +24,7 @@
             <h1 class="timer">00:00</h1>
             <h2 th:text="#{brief.phase3.message}"></h2>
             <p class="answer-calc-help">Как считаются баллы?</p>
-            <div class="flash-placeholder">
-                <p class="flash success hidden">Ответы отправлены!</p>
-            </div>
+            <div th:replace="game/fragments :: flash(#{game.answersSent.flash})"></div>
             <table class="choose-answer-table" th:fragment="playersTable">
                 <tr th:each="row, rowIter : ${gameSession.game.getAnswerInput(decision)}">
                     <td th:each="cell, colIter : ${row}"
@@ -43,9 +41,8 @@
                     </td>
                 </tr>
             </table>
-            <button th:unless="${projectorMode}" id="send-responses-btn"
-                    th:text="${!gameSession.timerIsRunning()} ? #{game.sendAnswersBtn.sent} : (${decision.answer} == null ? #{game.sendAnswersBtn.new} : #{game.sendAnswersBtn.change})"
-                    th:classappend="${gameSession.timerIsRunning() && decision.answer != null} ? #{game.sendAnswersbtn.change} : ''"></button>
+
+            <button th:replace="game/fragments :: sendResponsesBtn"></button>
         </div>
         <div class="phase-container hidden" id="phase-4">
             <h2 th:text="#{brief.phase4.message}"></h2>
@@ -83,7 +80,6 @@
     </div>
 
     <div th:replace="game/fragments :: gameSettings(${gameSession})"></div>
-    <p id="answers-submitted" th:if="${projectorMode} or !${gameSession.timerIsRunning()}"></p>
     <p id="correct-answer" class="hidden"
        th:if="${currentPhaseNumber} == 4"
        th:text="${gameSession.game.getCorrectAnswer(__${gameSession.currentRoundIndex}__)}"></p>
