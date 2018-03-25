@@ -1,5 +1,7 @@
 package com.name.brief.model;
 
+import com.name.brief.model.games.riskmap.Comment;
+import com.name.brief.model.games.riskmap.Vote;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -36,6 +38,12 @@ public class Player extends BaseEntity implements UserDetails{
     @OneToMany(mappedBy = "player", cascade = CascadeType.ALL)
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<Decision> decisions;
+    @OneToMany(mappedBy = "player")
+    @LazyCollection(LazyCollectionOption.FALSE)
+    private List<Comment> comments;
+    @OneToMany(mappedBy = "player")
+    @LazyCollection(LazyCollectionOption.FALSE)
+    private List<Vote> votes;
     private String username;
 
     public Player() {
@@ -50,12 +58,13 @@ public class Player extends BaseEntity implements UserDetails{
         username = constructUsername(gameSession.getStrId(), gameSession.getActiveDate(), commandName);
         int numberOfRounds = gameSession.getGame().getNumberOfRounds();
         decisions = new ArrayList<>(numberOfRounds);
+        comments = new ArrayList<>();
         IntStream.range(0, numberOfRounds)
                 .forEach(i -> decisions.add(new Decision(this, i, null)));
     }
 
     public static String constructUsername(String strId, LocalDate activeDate, String commandName) {
-        return String.format("%s%s%s", strId, activeDate.toString(), commandName);
+        return String.format("%s%s%s", strId.toLowerCase(), activeDate.toString(), commandName);
     }
 
     @Override

@@ -28,13 +28,14 @@ public class GameSession extends BaseEntity{
     @NotNull
     private LocalDate activeDate;
     @NotNull
+    @OneToOne
     private Game game;
     @Transient
     private int numberOfCommands;
     @OneToMany(mappedBy = "gameSession", cascade = CascadeType.ALL)
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<Player> players;
-    private int[] rounds;
+    private int[] rounds;   // are represented by array to simplify thymeleaf processing
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
@@ -55,7 +56,7 @@ public class GameSession extends BaseEntity{
                        int numberOfCommands,
                        User user) {
         this();
-        this.strId = strId;
+        this.strId = strId.toLowerCase();
         this.activeDate = activeDate;
         this.game = game;
         players = new ArrayList<>(numberOfCommands);
@@ -157,5 +158,9 @@ public class GameSession extends BaseEntity{
     public boolean timerIsRunning() {
         // if endOfTimer is null it means that it was not launched yet
         return endOfTimer == null || endOfTimer.isAfter(LocalTime.now());
+    }
+
+    public void setStrId(String strId) {
+        this.strId = strId.toLowerCase();
     }
 }

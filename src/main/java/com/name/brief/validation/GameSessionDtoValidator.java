@@ -28,7 +28,7 @@ public class GameSessionDtoValidator implements Validator {
     public void validate(Object target, Errors errors) {
         GameSessionDto dto = (GameSessionDto) target;
 
-        if (service.getSession(dto.getStrId(), dto.getActiveDate()) != null) {
+        if (service.getSession(dto.getStrId().toLowerCase(), dto.getActiveDate()) != null) {
             errors.rejectValue("strId", "gameSessionDto.validation.strIdIsOccupied");
         }
     }
