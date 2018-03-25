@@ -7,6 +7,11 @@ body {
     width: 100%;
     height: 100%;
     border-radius: 0;
+    justify-content: start;
+}
+
+.header {
+    top: 20px;
 }
 
 #phase-1 {
@@ -16,7 +21,7 @@ body {
 
 #phase-1 h2 {
     font-size: 20px;
-    margin: 140px 10px 0;
+    margin: 110px 10px 0;
     justify-self: flex-start;
     font-family: "Circe Light", serif;
 }
@@ -149,6 +154,48 @@ img[id$='-large-img'] {
     left: 50%;
     transform: translate(-50%, 0);
     cursor: pointer;
+}
+
+/****************************************
+*              SECTOR-PHASES            *
+****************************************/
+
+.sector-phases {
+    height: 100%;
+}
+
+.sector-phases .image-placeholder {
+    width: 95%;
+    height: 350px;
+    background-color: #959595;
+    margin: auto;
+}
+
+.sector-header,
+.sector-stats {
+    margin: 20px;
+}
+
+.sector-header {
+    display: flex;
+    justify-content: space-between;
+}
+
+.sector-header .sector-name {
+    justify-self: flex-start;
+}
+
+.sector-header .logout-wrapper {
+    justify-self: flex-end;
+    margin: 0;
+}
+
+.sector-stats .risk-indicator {
+    position: unset;
+}
+
+.flash-placeholder {
+    margin: 0 30px;
 }
 
 @media (min-width: 500px) {

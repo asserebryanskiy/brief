@@ -186,6 +186,7 @@ h1 {
 .logout-wrapper {
     align-self: end;
     margin: 10px auto;
+    text-align: center;
 }
 
 .logout-text {
@@ -209,7 +210,7 @@ h1 {
     background-color: #4a9d61;
     color: white;
     cursor: pointer;
-    width: 170px;
+    width: 180px;
 }
 
 #send-responses-btn:active {
