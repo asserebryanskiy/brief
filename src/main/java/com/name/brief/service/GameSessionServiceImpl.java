@@ -3,6 +3,7 @@ package com.name.brief.service;
 import com.name.brief.exception.GameSessionAlreadyExistsException;
 import com.name.brief.exception.GameSessionNotFoundException;
 import com.name.brief.model.GameSession;
+import com.name.brief.repository.GameRepository;
 import com.name.brief.repository.GameSessionRepository;
 import com.name.brief.utils.TimeConverter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,12 +18,15 @@ import java.util.List;
 public class GameSessionServiceImpl implements GameSessionService {
     private final GameSessionRepository gameSessionRepository;
     private final PlayerService playerService;
+    private final GameRepository gameRepository;
 
     @Autowired
     public GameSessionServiceImpl(GameSessionRepository gameSessionRepository,
-                                  PlayerService playerService) {
+                                  PlayerService playerService,
+                                  GameRepository gameRepository) {
         this.gameSessionRepository = gameSessionRepository;
         this.playerService = playerService;
+        this.gameRepository = gameRepository;
     }
 
     @Override
@@ -34,6 +38,10 @@ public class GameSessionServiceImpl implements GameSessionService {
     public void save(GameSession gameSession) throws GameSessionAlreadyExistsException {
         GameSession saved = getSession(gameSession.getStrId(), gameSession.getActiveDate());
         if (saved != null) throw new GameSessionAlreadyExistsException();
+        gameRepository.save(gameSession.getGame());
+
+        // is done here because game need to be saved before referencing from unsaved gameSession
+        gameSession.getGame().setGameSession(gameSession);
         gameSessionRepository.save(gameSession);
         gameSession.getPlayers().forEach(playerService::save);
     }

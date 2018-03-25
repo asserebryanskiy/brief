@@ -1,17 +1,46 @@
 package com.name.brief.model.games;
 
+import com.name.brief.model.BaseEntity;
 import com.name.brief.model.Decision;
+import com.name.brief.model.games.riskmap.Comment;
+import com.name.brief.model.games.riskmap.Sector;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.OneToMany;
+import javax.persistence.OrderColumn;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class RiskMap implements Game {
+@EqualsAndHashCode(callSuper = true)
+@Entity(name = "riskmap")
+@Data
+@ToString(exclude = "sectors")
+public class RiskMap extends Game {
 
-    private final int numberOfRounds = 12;
+    private final int numberOfSectors = 12;
     private final String russianName = "Карта рисков";
     private final String englishName = "riskMap";
+
+    @OneToMany(mappedBy = "riskMap", cascade = CascadeType.ALL)
+    private final List<Sector> sectors;
+    // 0 stands for "before start" sector where players choose risk level on all pictures
+    private int currentSectorNumber = 0;
+
+    public RiskMap() {
+        super();
+        sectors = new ArrayList<>(numberOfSectors);
+        for (int i = 0; i < numberOfSectors; i++) {
+            sectors.add(new Sector(i + 1, this));
+        }
+    }
 
     @Override
     public List<Phase> getPhases() {
@@ -22,7 +51,7 @@ public class RiskMap implements Game {
                 new Phase("Работа с секторами", false)
         ));
         for (int i = 0; i < phases.size(); i++) {
-            phases.get(i).setId("0_" + String.valueOf(i));
+            phases.get(i).setId(String.valueOf(i));
         }
         return phases;
     }
@@ -39,7 +68,7 @@ public class RiskMap implements Game {
                 new Phase("Следующий сектор", false)
         ));
         for (int i = 0; i < phases.size(); i++) {
-            phases.get(i).setId(String.format("%s_%s", roundNumber, i));
+            phases.get(i).setId(String.valueOf(i));
         }
         return phases;
     }
@@ -51,7 +80,7 @@ public class RiskMap implements Game {
 
     @Override
     public int getNumberOfRounds() {
-        return numberOfRounds;
+        return numberOfSectors;
     }
 
     @Override

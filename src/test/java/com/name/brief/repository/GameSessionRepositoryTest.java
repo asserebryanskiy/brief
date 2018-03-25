@@ -4,6 +4,7 @@ import com.name.brief.model.GameSession;
 import com.name.brief.model.Player;
 import com.name.brief.model.User;
 import com.name.brief.model.games.Brief;
+import com.name.brief.model.games.Game;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,13 +56,11 @@ public class GameSessionRepositoryTest {
         }
     }
 
-    private GameSession createSession() {
-        return new GameSession("id", LocalDate.now(), new Brief(), 5, null);
-    }
+   
 
     @Test
     public void update_withUpdatedCommandPersistsCommandAsWell() {
-        GameSession session = createSession();
+        GameSession session = createDefaultSession();
         entityManager.persist(session);
         entityManager.flush();
 
@@ -75,7 +74,7 @@ public class GameSessionRepositoryTest {
 
     @Test
     public void getSessionByStrIdAndActiveDate_returnsNullIfStrIdMatchAndActiveDateNot() {
-        GameSession session = createSession();
+        GameSession session = createDefaultSession();
         entityManager.persist(session);
         entityManager.flush();
 
@@ -86,7 +85,7 @@ public class GameSessionRepositoryTest {
 
     @Test
     public void whenFindByStringIdAndDate_returnsGameSession() {
-        GameSession session = createSession();
+        GameSession session = createDefaultSession();
         entityManager.persist(session);
         entityManager.flush();
 
@@ -114,7 +113,7 @@ public class GameSessionRepositoryTest {
 
     @Test
     public void savingSessionAddsIdToIt() {
-        GameSession session = createSession();
+        GameSession session = createDefaultSession();
 
         repository.save(session);
 
@@ -125,12 +124,15 @@ public class GameSessionRepositoryTest {
     public void findSessionsAfter_ReturnsOnlySessionsOfCurrentUser() {
         User user1 = new User("user1", "", "");
         User user2 = new User("user2", "", "");
+        Game brief = new Brief();
+        entityManager.persist(brief);
         entityManager.persist(user1);
         entityManager.persist(user2);
         IntStream.range(0, 10).forEach(i -> {
             GameSession session = new GameSession.GameSessionBuilder(String.valueOf(i))
                     .withUser(i < 5 ? user1 : user2)
                     .withActiveDate(LocalDate.now().plusDays(i))
+                    .withGame(brief)
                     .build();
             entityManager.persist(session);
         });
@@ -181,9 +183,12 @@ public class GameSessionRepositoryTest {
 
     private GameSession createDefaultSession() {
         User user = new User("user", "", "ROLE_MODERATOR");
+        Game game = new Brief();
+        entityManager.persist(game);
         entityManager.persist(user);
         return new GameSession.GameSessionBuilder("id")
                 .withUser(user)
+                .withGame(game)
                 .build();
     }
 }

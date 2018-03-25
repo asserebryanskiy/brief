@@ -5,6 +5,7 @@ import com.name.brief.model.GameSession;
 import com.name.brief.model.User;
 import com.name.brief.model.games.Brief;
 import com.name.brief.model.games.Game;
+import com.name.brief.repository.GameRepository;
 import com.name.brief.repository.GameSessionRepository;
 import com.name.brief.web.dto.NextPhaseMessage;
 import org.junit.Test;
@@ -31,6 +32,8 @@ public class GameSessionServiceTest {
     private GameSessionRepository repository;
     @MockBean
     private PlayerService playerService;
+    @MockBean
+    private GameRepository gameRepository;
 
     @Test
     public void isSessionActive_returnsFalseIfNoSessionWithThisStrId() {

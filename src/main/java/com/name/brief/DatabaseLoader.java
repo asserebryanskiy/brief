@@ -8,6 +8,7 @@ import com.name.brief.model.User;
 import com.name.brief.model.games.Brief;
 import com.name.brief.model.games.Game;
 import com.name.brief.model.games.RiskMap;
+import com.name.brief.repository.GameRepository;
 import com.name.brief.repository.UserRepository;
 import com.name.brief.service.GameSessionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,12 +27,15 @@ public class DatabaseLoader implements ApplicationRunner {
 
     private final GameSessionService gameSessionService;
     private final UserRepository userRepository;
+    private final GameRepository gameRepository;
 
     @Autowired
     public DatabaseLoader(GameSessionService gameSessionService,
-                          UserRepository userRepository) {
+                          UserRepository userRepository,
+                          GameRepository gameRepository) {
         this.gameSessionService = gameSessionService;
         this.userRepository = userRepository;
+        this.gameRepository = gameRepository;
     }
 
     @Override
@@ -44,12 +48,17 @@ public class DatabaseLoader implements ApplicationRunner {
         users.add(moderator2);
         users.add(new User("admin", password, Role.ADMIN.getRole()));
         userRepository.save(users);
+        Game brief = new Brief();
+        Game riskMap = new RiskMap();
+        gameRepository.save(brief);
+        gameRepository.save(riskMap);
+
         GameSession session = new GameSession.GameSessionBuilder("brief")
                 .withNumberOfCommands(5)
+                .withGame(brief)
                 .withUser(moderator1)
                 .build();
 
-        Game brief = new Brief();
         final String[] answers = brief.getCorrectAnswers();
         final String[] additions = {"", "D4", "D4D2", "D4D2D1B4B2B1"};
         session.getPlayers().forEach(p -> {
@@ -61,19 +70,23 @@ public class DatabaseLoader implements ApplicationRunner {
 
         GameSession session2 = new GameSession.GameSessionBuilder("testtest")
                 .withNumberOfCommands(3)
+                .withGame(brief)
                 .withUser(moderator1)
                 .build();
         GameSession session3 = new GameSession.GameSessionBuilder("otherUserSession")
                 .withUser(moderator2)
+                .withGame(brief)
                 .build();
         GameSession pastSession = new GameSession.GameSessionBuilder("otherUserSession")
                 .withActiveDate(LocalDate.now().minusDays(1))
                 .withUser(moderator1)
+                .withGame(brief)
                 .build();
         GameSession riskMapSession = new GameSession.GameSessionBuilder("riskMap")
                 .withUser(moderator1)
-                .withGame(new RiskMap())
+                .withGame(riskMap)
                 .build();
+        riskMapSession.setCurrentPhaseNumber(1);
         gameSessionService.save(session);
         gameSessionService.save(session2);
         gameSessionService.save(session3);

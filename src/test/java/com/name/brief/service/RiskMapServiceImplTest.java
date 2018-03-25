@@ -1,4 +1,3 @@
-/*
 package com.name.brief.service;
 
 import com.name.brief.model.GameSession;
@@ -42,4 +41,4 @@ public class RiskMapServiceImplTest {
         assertThat(riskMap.getCurrentSectorNumber(), is(1));
         verify(gameRepository, times(1)).save(riskMap);
     }
-}*/
+}

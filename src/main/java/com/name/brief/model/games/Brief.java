@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
-public class Brief extends BaseEntity implements Game {
+public class Brief extends Game {
 
     private final int numberOfRounds = 5;
     private final String russianName = "Бриф";
