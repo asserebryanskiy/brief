@@ -8,14 +8,30 @@
     <link rel="stylesheet" th:href="@{/assets/css/administration/administration.css}">
     <link rel="stylesheet" th:href="@{/assets/css/administration/moderator/riskMap.css}">
 </head>
-<body>
+<body th:with="riskMap = ${gameSession.game}">
     <div th:replace="administration/fragments :: game-session-header"></div>
     <div class="main-content">
-        <div th:replace="administration/fragments :: round-count-bar"></div>
+        <div class="round-count-bar sector-count-bar">
+            <h2 class="bold">Сектор</h2>
+            <div class="rounds" th:with="currentSector = ${riskMap.currentSectorNumber}">
+                <div th:replace="administration/fragments :: confirmation-popup('Следующий сектор?', 'next-sector-popup', 'next-sector-popup-btn')"></div>
+                <div class="round active hidden" id="round-0"
+                     th:if="${currentSector} == 0"></div>
+                <div th:each="sector : ${riskMap.sectors}" class="round animated"
+                     th:classappend="(${sector.number} == ${currentSector} ? 'active' : (${sector.number} == ${currentSector + 1}? 'next' : (${sector.number} < ${currentSector}? 'played')))"
+                     th:id="'round-' + ${sector.number}">
+                    <p th:text="${sector.number}"></p>
+                </div>
+            </div>
+            <button id="pass-round-btn">Следующий сектор</button>
+            <div th:replace="administration/fragments :: confirmation-popup('Перейти к следующему сектору?', 'pass-round-popup', 'pass-round-popup-btn')"></div>
+            <button id="game-over-btn">Завершить игру</button>
+            <div th:replace="administration/fragments :: confirmation-popup('Завершить игру досрочно?', 'early-game-finish-popup', 'early-game-finish-btn')"></div>
+        </div>
         <div class="round-nav-and-commands">
             <h2 class="bold">Фазы раунда</h2>
-            <div th:replace="administration/fragments :: roundNav(${gameSession.game.getPhases(0)}, 0)"></div>
-            <div th:replace="administration/fragments :: roundNav(${gameSession.game.getPhases(1)}, 1)"></div>
+            <div th:replace="administration/fragments :: roundNav(${riskMap.getPhases(0)}, 0)"></div>
+            <div th:replace="administration/fragments :: roundNav(${riskMap.getPhases(1)}, 1)"></div>
             <h2 class="bold">Команды</h2>
             <div th:replace="administration/fragments :: players"></div>
         </div>

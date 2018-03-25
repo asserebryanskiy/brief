@@ -37,15 +37,8 @@ controller.setOnNextRound(() => {
 
     // remove received-answers class from all commands' tr
     $('.players-table tbody tr').removeClass('received-answers');
-
-    // remove all phases' classes except phase
-    $('.phase').attr('class', 'phase animated');
-
-    // set first phase active and second next
-    $('#phase-0').addClass('active');
-    $('#phase-1').addClass('next');
 });
-controller.setLastPhase($('#phase-5'));
+controller.setLastPhase($('.phase-5'));
 
 function onWsConnect(stompClient) {
     stompClient.subscribe('/queue/' + gameSessionId + '/answer', (message) => {
@@ -82,7 +75,7 @@ function onWsConnect(stompClient) {
 controller.connect(onWsConnect);
 
 // if current phase order is greater than 2, show players-table
-if (getPhaseOrder($('.phase.active').attr('id')) > 2) togglePlayersView();
+if (getPhaseOrder($('.phase.active')) > 2) togglePlayersView();
 
 function togglePlayersView() {
     $('.players').toggle();

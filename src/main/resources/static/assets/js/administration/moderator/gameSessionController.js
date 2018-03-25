@@ -49,7 +49,7 @@ function GameSessionController() {
         $newActive.removeClass('next').addClass('active');
 
         // set next to it phase to next
-        const phaseOrder = getPhaseOrder($newActive.attr('id'));
+        const phaseOrder = getPhaseOrder($newActive);
         const $nextPhase = getPhaseNear($newActive, 1);
         if ($nextPhase.exists()) {
             $nextPhase.addClass('next');
@@ -139,6 +139,13 @@ function GameSessionController() {
             }
             stompClient.send('/app/' + gameSessionId + '/changeRound', {}, getRoundOrder(roundId));
         }
+
+        // remove all phases' classes except phase
+        $('.phase').removeClass('active previous next played');
+
+        // set first phase active and second next
+        $('.phase-0').addClass('active');
+        $('.phase-1').addClass('next');
     };
 
     this.finishGame = () => {
@@ -208,7 +215,7 @@ $('.round').click(function (event) {
     const stage = event.currentTarget;
     if ($(stage).hasClass('next')) {
         // check if next phase is last. if not show confirmation popup
-        if (getPhaseOrder($('.phase.next').attr('id')) === $('.phase').length - 1) {
+        if (getPhaseOrder($('.phase.next')) === $('.phase').length - 1) {
             controller.nextRound();
         } else {
             $('#early-round-finish-popup').show();
@@ -257,7 +264,7 @@ $('.phase').click(function (event) {
     if ($(phase).hasClass('next')) {
         controller.nextPhase();
     } else if ($(phase).hasClass('previous')) {
-        $('#previous-phase-popup-' + getPhaseOrder(phase.id)).show();
+        $('#previous-phase-popup-' + getPhaseOrder($(phase))).show();
     }
 });
 
@@ -308,27 +315,17 @@ $('.confirmation-popup-no-btn').click(function () {
  *                                             *
  ************************************************/
 
-function getPhaseOrder(phaseId) {
-    const roundDivInd = phaseId.indexOf('_');
-    return parseInt(roundDivInd < 0 ? phaseId.substr(phaseId.indexOf('-') + 1)
-                                    : phaseId.substr(roundDivInd + 1));
+function getPhaseOrder($phase) {
+    return parseInt($phase[0].className.substr($phase[0].className.indexOf('phase-') + 6, 1));
 }
 
-function getRoundOrder(stageId) {
-    return parseInt(stageId.substr(stageId.indexOf('-') + 1));
+function getRoundOrder(roundId) {
+    return parseInt(roundId.substr(roundId.indexOf('-') + 1));
 }
 
 function getPhaseNear($newActive, delta) {
-    const phaseId = $newActive.attr('id');
-    const roundDivInd = phaseId.indexOf('_');
-    const phaseOrder = getPhaseOrder(phaseId);
-    let nextPhaseId;
-    if (roundDivInd < 0) {
-        nextPhaseId = 'phase-' + ((phaseOrder + delta));
-    } else {
-        nextPhaseId = phaseId.slice(0, roundDivInd + 1) + ((phaseOrder + delta));
-    }
-    return $('#' + nextPhaseId);
+    console.log((getPhaseOrder($newActive) + delta));
+    return $('.phase-' + (getPhaseOrder($newActive) + delta) + ':visible');
 }
 
 // helper function to check if jQuery returns an element

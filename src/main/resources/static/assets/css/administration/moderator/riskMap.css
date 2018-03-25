@@ -1,7 +1,4 @@
-.round-count-bar {
-    display: none;
-}
-
-.round-nav-1 {
-    display: none;
+.sector-count-bar {
+    display: flex;
+    flex-direction: column;
 }

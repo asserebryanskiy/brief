@@ -162,6 +162,16 @@ img[id$='-large-img'] {
 
 .sector-phases {
     height: 100%;
+    align-content: center;
+}
+
+.sector-phases .img-wrapper {
+    width: 90%;
+    margin: auto;
+}
+
+.sector-phases img {
+    width: 100%;
 }
 
 .sector-phases .image-placeholder {
@@ -172,7 +182,8 @@ img[id$='-large-img'] {
 }
 
 .sector-header,
-.sector-stats {
+.sector-stats,
+.sector-phases h2 {
     margin: 20px;
 }
 
@@ -190,8 +201,35 @@ img[id$='-large-img'] {
     margin: 0;
 }
 
-.sector-stats .risk-indicator {
-    position: unset;
+.stats-row {
+    margin: 5px 0;
+    display: flex;
+    flex-wrap: nowrap;
+    align-content: center;
+}
+
+.stats-row .indicator {
+    width: 30px;
+    height: 30px;
+    border-radius: 2px;
+}
+
+.stats-row .indicator.low-level {
+    width: 60px;
+}
+
+.stats-row .indicator.mid-level {
+    width: 210px;
+}
+
+.stats-row .indicator.high-level {
+    width: 90px;
+}
+
+.stats-row p {
+    font-size: 1.2em;
+    padding: 0 20px;
+    margin: auto 0;
 }
 
 .flash-placeholder {
