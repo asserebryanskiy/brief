@@ -64,7 +64,7 @@ public class Player extends BaseEntity implements UserDetails{
     }
 
     public static String constructUsername(String strId, LocalDate activeDate, String commandName) {
-        return String.format("%s%s%s", strId, activeDate.toString(), commandName);
+        return String.format("%s%s%s", strId.toLowerCase(), activeDate.toString(), commandName);
     }
 
     @Override
