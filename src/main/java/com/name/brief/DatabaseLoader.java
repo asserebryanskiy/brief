@@ -86,7 +86,6 @@ public class DatabaseLoader implements ApplicationRunner {
                 .withUser(moderator1)
                 .withGame(riskMap)
                 .build();
-        riskMapSession.setCurrentPhaseNumber(1);
         gameSessionService.save(session);
         gameSessionService.save(session2);
         gameSessionService.save(session3);

@@ -82,7 +82,7 @@ function changeSector(newSector) {
  *        CONTROLLER SETTINGS       *
  ************************************/
 
-function onWsConnect(stompClient) {
+/*function onWsConnect(stompClient) {
     stompClient.subscribe('/topic/' + gameSessionId + '/changeSector', (message) => {
         const newSector = message.body;
         changeSector(newSector);
@@ -119,18 +119,19 @@ controller.changePhase = (newPhaseNumber, timerStr, additional) => {
             }
         })
     }
-};
-controller.connect(onWsConnect);
+};*/
+controller.connect();
 controller.changePhase(currentPhaseNumber, '', '');
 
 /************************************
  *            ON PAGE LOAD          *
  ************************************/
 
+/*
 if (currentSectorNumber === 0) {
     $('.preparation-phases').show();
 } else {
     $('.sector-phases').hide();
     $('#sector-phases-' + currentSectorNumber).show();
 }
-controller.changePhase(currentPhaseNumber);
+controller.changePhase(currentPhaseNumber);*/

@@ -10,6 +10,12 @@ body {
     justify-content: start;
 }
 
+.preparation-phases {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
 .header {
     top: 20px;
 }
