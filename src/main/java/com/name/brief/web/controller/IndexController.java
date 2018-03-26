@@ -1,45 +1,27 @@
 package com.name.brief.web.controller;
 
 import com.name.brief.model.Player;
-import com.name.brief.service.GameSessionService;
+import com.name.brief.service.PlayerAuthenticationService;
 import com.name.brief.service.PlayerService;
-import com.name.brief.validation.PlayerValidator;
-import com.name.brief.web.FlashMessage;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.TaskScheduler;
-import org.springframework.scheduling.concurrent.ConcurrentTaskScheduler;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.validation.Valid;
 import java.security.Principal;
 import java.time.LocalDate;
-import java.util.Collections;
-import java.util.concurrent.ScheduledFuture;
 
 @Controller
 public class IndexController {
 
-    private final PlayerService playerService;
+    private final PlayerAuthenticationService playerAuthenticationService;
 
     @Autowired
-    public IndexController(PlayerService playerService) {
-        this.playerService = playerService;
+    public IndexController(PlayerAuthenticationService playerAuthenticationService) {
+        this.playerAuthenticationService = playerAuthenticationService;
     }
 
     @RequestMapping("/")
@@ -47,7 +29,7 @@ public class IndexController {
         // if player is already authenticated redirect him to game
         Authentication authentication = (Authentication) principal;
         if (authentication != null && authentication.getPrincipal() instanceof Player
-                && playerService.isLoggedIn((Player) authentication.getPrincipal())) {
+                && playerAuthenticationService.isLoggedIn((Player) authentication.getPrincipal())) {
             return "redirect:/game";
         }
 

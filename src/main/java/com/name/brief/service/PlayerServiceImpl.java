@@ -41,20 +41,6 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
-    public void setLoggedIn(Player player) {
-        player.setLoggedIn(true);
-        playerRepository.save(player);
-    }
-
-    @Override
-    public void logout(Player player) {
-        sessionRegistry.getAllSessions(player, false)
-                .forEach(SessionInformation::expireNow);
-        player.setLoggedIn(false);
-        playerRepository.save(player);
-    }
-
-    @Override
     public void addResponses(Player player, String responses, int roundIndex) {
         player.getDecision(roundIndex).setAnswer(responses);
         playerRepository.save(player);
@@ -63,11 +49,5 @@ public class PlayerServiceImpl implements PlayerService {
     @Override
     public void setSessionRegistry(SessionRegistry sessionRegistry) {
         this.sessionRegistry = sessionRegistry;
-    }
-
-    @Override
-    public boolean isLoggedIn(Player player) {
-        return sessionRegistry != null &&
-                sessionRegistry.getAllSessions(player, false).size() > 0;
     }
 }

@@ -74,14 +74,13 @@ function GameController() {
                 $('.finish-game').show();
             }, {});
 
-            // connect
-            if (!projectorMode) stompClient.send("/app/connect", {}, "");
+            // // connect
+            // if (!projectorMode) stompClient.send("/app/connect", {}, "");
 
             // do game specific stuff if any
             if (onWsConnect != null) onWsConnect(stompClient);
 
             // show screen
-            // ToDo: Если соединение прервано, нужно сообщить об этом модератору!
         });
     };
 

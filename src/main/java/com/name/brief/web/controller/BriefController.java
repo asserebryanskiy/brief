@@ -3,6 +3,7 @@ package com.name.brief.web.controller;
 import com.name.brief.model.GameSession;
 import com.name.brief.model.Player;
 import com.name.brief.service.GameSessionService;
+import com.name.brief.service.PlayerAuthenticationService;
 import com.name.brief.service.PlayerService;
 import com.name.brief.web.dto.NextPhaseMessage;
 import com.name.brief.web.dto.Answers;
@@ -13,8 +14,6 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.session.SessionInformation;
-import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.stereotype.Controller;
 
 import java.security.Principal;
@@ -24,30 +23,19 @@ public class BriefController {
 
     private final SimpMessagingTemplate template;
     private final PlayerService playerService;
+    private final PlayerAuthenticationService playerAuthenticationService;
     private final GameSessionService gameSessionService;
 
     @Autowired
     public BriefController(SimpMessagingTemplate template,
                            PlayerService playerService,
+                           PlayerAuthenticationService playerAuthenticationService,
                            GameSessionService gameSessionService) {
         this.template = template;
         this.playerService = playerService;
+        this.playerAuthenticationService = playerAuthenticationService;
         this.gameSessionService = gameSessionService;
     }
-
-    /**
-     * Is used by a players when he logs in. It notifies its moderator and changes its loggedIn field
-     * to true.
-    */
-    @MessageMapping("/connect")
-//    @SendTo("/queue/{gameSessionId}/connection")
-    public void connectPlayer(Principal principal) {
-        Player player = (Player) ((Authentication) principal).getPrincipal();
-        playerService.setLoggedIn(player);
-        template.convertAndSend("/queue/" + player.getGameSession().getId() + "/connection",
-                "Connect " + player.getUsername());
-    }
-
 
     /**
      * Is called from moderator panel (assets/js/administration/moderator/brief.js)
@@ -59,9 +47,7 @@ public class BriefController {
         Player player = playerService.findByUsername(username);
 
         if (player != null) {
-            playerService.logout(player);
-            template.convertAndSend("/queue/" + player.getGameSession().getId() + "/connection",
-                    "Logout " + player.getUsername());
+            playerAuthenticationService.logout(player);
             template.convertAndSend("/queue/" + username + "/logout", "");
         }
     }

@@ -165,22 +165,31 @@ function GameSessionController() {
                 const divider = mes.indexOf(' ');
                 const command = mes.slice(0, divider);
                 const playerId = mes.substr(divider + 1);
-                const player = $('#' + playerId);
-                const playerRow = $('#player-row-' + playerId);
+                const $player = $('#' + playerId);
+                const $playerRow = $('#player-row-' + playerId);
+
+                function signalDisconnection($el) {
+                    $el.removeClass('connected').addClass('disconnected');
+                    window.setTimeout(() => $el.removeClass('disconnected'), 500);
+                    window.setTimeout(() => $el.addClass('disconnected'), 1000);
+                    window.setTimeout(() => $el.removeClass('disconnected'), 1500);
+                }
+
                 switch (command) {
                     case 'Connect':
-                        player.removeClass('disconnected').addClass('connected');
-                        playerRow.removeClass('disconnected').addClass('connected-row');
-                        playerRow.children('.connection-td').text('Connected');
+                        $player.removeClass('disconnected').addClass('connected');
+                        $playerRow.removeClass('disconnected').addClass('connected-row');
+                        $playerRow.children('.connection-td').text('Connected');
                         break;
-                    case 'Logout':
-                        player.removeClass('connected');
-                        playerRow.removeClass('connected-row');
-                        playerRow.children('.connection-td').text('Disconnected');
-                        break;
-                    case 'Disconnected':
-                        player.removeClass('connected').addClass('disconnected');
-                        playerRow.removeClass('connected').addClass('disconnected');
+                    // case 'Logout':
+                    //     player.removeClass('connected');
+                    //     playerRow.removeClass('connected-row');
+                    //     playerRow.children('.connection-td').text('Disconnected');
+                    //     break;
+                    case 'Disconnect':
+                        signalDisconnection($player);
+                        signalDisconnection($playerRow);
+                        // $playerRow.removeClass('connected').addClass('disconnected');
                         break;
                 }
             });
