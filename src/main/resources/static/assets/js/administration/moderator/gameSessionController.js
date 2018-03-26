@@ -343,10 +343,6 @@ $.fn.exists = function () {
     return this.length !== 0;
 };
 
-function notNull(obj) {
-    return typeof obj !== 'undefined';
-}
-
 function onTimerFinish($timer, $phase) {
     $timer.hide();
     $phase.children('.add-30-sec-btn').show();

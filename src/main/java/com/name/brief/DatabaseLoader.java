@@ -59,14 +59,15 @@ public class DatabaseLoader implements ApplicationRunner {
                 .withUser(moderator1)
                 .build();
 
-        final String[] answers = brief.getCorrectAnswers();
+        /*final String[] answers = brief.getCorrectAnswers();
         final String[] additions = {"", "D4", "D4D2", "D4D2D1B4B2B1"};
         session.getPlayers().forEach(p -> {
             if (!p.getCommandName().equals("2")) {
                 Decision decision = p.getDecision(0);
                 decision.setAnswer(answers[0] + additions[Math.round((float) (Math.random() * 3.0))]);
             }
-        });
+        });*/
+        session.setCurrentPhaseNumber(3);
 
         GameSession session2 = new GameSession.GameSessionBuilder("testtest")
                 .withNumberOfCommands(3)
@@ -82,14 +83,9 @@ public class DatabaseLoader implements ApplicationRunner {
                 .withUser(moderator1)
                 .withGame(brief)
                 .build();
-        GameSession riskMapSession = new GameSession.GameSessionBuilder("riskMap")
-                .withUser(moderator1)
-                .withGame(riskMap)
-                .build();
         gameSessionService.save(session);
         gameSessionService.save(session2);
         gameSessionService.save(session3);
         gameSessionService.save(pastSession);
-        gameSessionService.save(riskMapSession);
     }
 }

@@ -15,7 +15,7 @@ import java.time.format.DateTimeFormatter;
 public class GameSessionDto {
     public static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-    private final String[] gameTypes = new String[]{"Бриф", "Карта рисков"};
+    private final String[] gameTypes = new String[]{"Бриф"};
     private String strId;
     private String activeDateStr = LocalDate.now().format(DATE_FORMATTER);
     private String gameType = gameTypes[0];
