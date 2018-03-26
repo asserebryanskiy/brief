@@ -169,7 +169,7 @@ function GameSessionController() {
                 const $playerRow = $('#player-row-' + playerId);
 
                 function signalDisconnection($el) {
-                    $el.removeClass('connected').addClass('disconnected');
+                    $el.removeClass('connected connected-row').addClass('disconnected');
                     window.setTimeout(() => $el.removeClass('disconnected'), 500);
                     window.setTimeout(() => $el.addClass('disconnected'), 1000);
                     window.setTimeout(() => $el.removeClass('disconnected'), 1500);
@@ -189,6 +189,7 @@ function GameSessionController() {
                     case 'Disconnect':
                         signalDisconnection($player);
                         signalDisconnection($playerRow);
+                        $playerRow.children('.connection-td').text('Disconnected');
                         // $playerRow.removeClass('connected').addClass('disconnected');
                         break;
                 }
