@@ -5,6 +5,7 @@ import com.name.brief.model.Decision;
 import com.name.brief.model.GameSession;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.persistence.Entity;
 import javax.persistence.MappedSuperclass;
@@ -15,6 +16,7 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Data
+@ToString(exclude = "gameSession")
 public abstract class Game extends BaseEntity implements Serializable {
     @OneToOne
     private GameSession gameSession;

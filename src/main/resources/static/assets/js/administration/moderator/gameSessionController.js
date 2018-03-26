@@ -81,7 +81,7 @@ function GameSessionController() {
         $newActive.removeClass('previous').addClass('active');
 
         // set next to it phase to next
-        const phaseOrder = getPhaseOrder($newActive.attr('id'));
+        const phaseOrder = getPhaseOrder($newActive);
         const $prevPhase = getPhaseNear($newActive, -1);
         $prevPhase.removeClass('played').addClass('previous');
 
@@ -254,7 +254,7 @@ $('.add-30-sec-btn').click(function (event) {
     controller.timer.startTimer($timer, () => onTimerFinish($timer, $phase));
 
     // if parent of this btn is send-responses phase inform subscribers about additional time.
-    if ($phase.attr('id') === 'phase-' + SEND_ANSWER_PHASE) {
+    if (getPhaseOrder($phase) === SEND_ANSWER_PHASE) {
         stompClient.send('/topic/' + gameSessionId + '/additionalAnswerSendTime');
     }
 });

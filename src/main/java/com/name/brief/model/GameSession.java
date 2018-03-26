@@ -20,7 +20,7 @@ import java.util.stream.IntStream;
 
 @Entity
 @Data
-@ToString(exclude = {"players", "rounds", "game"})
+@ToString(exclude = {"players", "rounds"})
 //@ValidateDateRange(startDate = "activeDate", endDate = "endDate")
 public class GameSession extends BaseEntity{
     @NotNull
