@@ -4,6 +4,8 @@ import com.name.brief.model.Player;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
+import java.util.List;
+
 public interface PlayerService extends UserDetailsService {
     void save(Player player);
 
@@ -12,4 +14,8 @@ public interface PlayerService extends UserDetailsService {
     Player findByUsername(String username);
 
     void setSessionRegistry(SessionRegistry sessionRegistry);
+
+    void delete(Player player);
+
+    void delete(List<Player> players);
 }

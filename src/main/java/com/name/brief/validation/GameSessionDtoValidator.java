@@ -7,11 +7,11 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 @Component
 public class GameSessionDtoValidator implements Validator {
-    private String strIdField;
-    private String activeDateField;
-
     private final GameSessionService service;
 
     @Autowired
@@ -28,8 +28,11 @@ public class GameSessionDtoValidator implements Validator {
     public void validate(Object target, Errors errors) {
         GameSessionDto dto = (GameSessionDto) target;
 
-        if (service.getSession(dto.getStrId().toLowerCase(), dto.getActiveDate()) != null) {
-            errors.rejectValue("strId", "gameSessionDto.validation.strIdIsOccupied");
+        if (!dto.getNewStrId().matches("[a-zA-Z0-9]+")) {
+            errors.rejectValue("newStrId", "gameSessionDto.validation.patternViolation");
+        } else if (!dto.getNewStrId().equals(dto.getOldStrId()) &&
+                service.getSession(dto.getNewStrId().toLowerCase(), dto.getActiveDate()) != null) {
+            errors.rejectValue("newStrId", "gameSessionDto.validation.strIdIsOccupied");
         }
     }
 }

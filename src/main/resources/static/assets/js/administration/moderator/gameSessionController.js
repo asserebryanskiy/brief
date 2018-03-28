@@ -319,6 +319,10 @@ $('.confirmation-popup-no-btn').click(function () {
     $('.confirmation-popup').hide();
 });
 
+$('#game-session-settings-btn').click(() => {
+    $('.change-session-popup').show();
+});
+
 /***********************************************
  *                                             *
  *               HELPER FUNCTIONS              *

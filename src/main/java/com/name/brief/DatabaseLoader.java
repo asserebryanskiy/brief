@@ -27,15 +27,12 @@ public class DatabaseLoader implements ApplicationRunner {
 
     private final GameSessionService gameSessionService;
     private final UserRepository userRepository;
-    private final GameRepository gameRepository;
 
     @Autowired
     public DatabaseLoader(GameSessionService gameSessionService,
-                          UserRepository userRepository,
-                          GameRepository gameRepository) {
+                          UserRepository userRepository) {
         this.gameSessionService = gameSessionService;
         this.userRepository = userRepository;
-        this.gameRepository = gameRepository;
     }
 
     @Override
@@ -48,14 +45,9 @@ public class DatabaseLoader implements ApplicationRunner {
         users.add(moderator2);
         users.add(new User("admin", password, Role.ADMIN.getRole()));
         userRepository.save(users);
-        Game brief = new Brief();
-        Game riskMap = new RiskMap();
-        gameRepository.save(brief);
-        gameRepository.save(riskMap);
 
         GameSession session = new GameSession.GameSessionBuilder("brief")
                 .withNumberOfCommands(5)
-                .withGame(brief)
                 .withUser(moderator1)
                 .build();
 
@@ -71,17 +63,14 @@ public class DatabaseLoader implements ApplicationRunner {
 
         GameSession session2 = new GameSession.GameSessionBuilder("testtest")
                 .withNumberOfCommands(3)
-                .withGame(brief)
                 .withUser(moderator1)
                 .build();
         GameSession session3 = new GameSession.GameSessionBuilder("otherUserSession")
                 .withUser(moderator2)
-                .withGame(brief)
                 .build();
         GameSession pastSession = new GameSession.GameSessionBuilder("otherUserSession")
                 .withActiveDate(LocalDate.now().minusDays(1))
                 .withUser(moderator1)
-                .withGame(brief)
                 .build();
         gameSessionService.save(session);
         gameSessionService.save(session2);

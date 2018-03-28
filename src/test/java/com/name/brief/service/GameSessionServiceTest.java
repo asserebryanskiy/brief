@@ -2,11 +2,13 @@ package com.name.brief.service;
 
 import com.name.brief.exception.GameSessionAlreadyExistsException;
 import com.name.brief.model.GameSession;
+import com.name.brief.model.Player;
 import com.name.brief.model.User;
 import com.name.brief.model.games.Brief;
 import com.name.brief.model.games.Game;
 import com.name.brief.repository.GameRepository;
 import com.name.brief.repository.GameSessionRepository;
+import com.name.brief.web.dto.GameSessionDto;
 import com.name.brief.web.dto.NextPhaseMessage;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -84,5 +86,31 @@ public class GameSessionServiceTest {
         String found = service.getCorrectAnswerForCurrentRound(0L);
 
         assertThat(found, is(game.getCorrectAnswer(2)));
+    }
+
+    @Test
+    public void update_deletesRedundantPlayers() {
+        GameSession session = new GameSession.GameSessionBuilder("id")
+                .withNumberOfCommands(5).build();
+        when(repository.findOne(any())).thenReturn(session);
+        GameSessionDto dto = new GameSessionDto();
+        dto.setNumberOfCommands(7);
+
+        service.update(dto);
+
+        verify(playerService, times(2)).delete(any(Player.class));
+    }
+
+    @Test
+    public void update_savesExcessivePlayers() {
+        GameSession session = new GameSession.GameSessionBuilder("id")
+                .withNumberOfCommands(5).build();
+        when(repository.findOne(any())).thenReturn(session);
+        GameSessionDto dto = new GameSessionDto();
+        dto.setNumberOfCommands(7);
+
+        service.update(dto);
+
+        verify(playerService, times(2)).save(any());
     }
 }

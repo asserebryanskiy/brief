@@ -3,3 +3,5 @@
 /build/
 /out/
 /.gradle/
+/src/main/resources/static/assets/css/game/test.css
+/src/main/resources/templates/game/riskMapPages.html

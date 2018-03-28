@@ -18,9 +18,9 @@ svg {
     max-width: 30px;
 }
 
-/***************
-* header css
-****************/
+/*********************************
+*              HEADER            *
+**********************************/
 
 .search-field > *,
 .user-pane > * {
@@ -80,9 +80,9 @@ svg {
     cursor: pointer;
 }
 
-/********************
-* GAME-SESSION-HEADER
-*********************/
+/*********************************
+*       GAME SESSION HEADER      *
+**********************************/
 
 /* game-nav */
 .game-session-header {
@@ -165,9 +165,40 @@ svg {
     margin-left: 10px;
 }
 
-/****************
-* round-COUNT-BAR
-****************/
+.change-session-popup .popup-content {
+    position: absolute;
+    right: 20px;
+    top: 50px;
+    max-width: 400px;
+}
+
+.game-session-form-content {
+    display: grid;
+    grid-template-columns: max-content;
+    grid-gap: 10px;
+    margin: 10px 0;
+    justify-items: left;
+    text-align: left;
+}
+
+.game-session-form-content .flash-placeholder {
+    grid-column-start: 1;
+    grid-column-end: 3;
+    max-width: 250px;
+    margin: 10px auto;
+}
+
+.game-session-form-content .popup-submit-btn {
+    justify-self: right;
+    grid-column-start: 2;
+    text-decoration: underline;
+    color: #4a9d61 !important;
+    height: auto;
+}
+
+/*********************************
+*         ROUND COUNT BAR        *
+**********************************/
 
 .round-count-bar {
     display: flex;
@@ -204,8 +235,6 @@ svg {
 
 .active {
     background-color: #dfcadb !important;
-    /*border-color: #4a9d61 !important;*/
-    /*color: white;*/
 }
 
 .passed,
@@ -216,13 +245,7 @@ svg {
     color: #959595
 }
 
-/*.played {
-    background-color: #4E3549 !important;
-    color: white !important;
-}*/
-
 .next {
-    /*background-color: #4a9d61;*/
     cursor: pointer !important;
     box-shadow: #524f55 2px 4px 2px -2px;
 }
@@ -269,9 +292,10 @@ svg {
     color: white;
 }
 
-/*******************
-* CONFIRMATION-POPUP
-*******************/
+/*********************************
+*       CONFIRMATION POPUP       *
+**********************************/
+
 .confirmation-popup {
     display: none;
     width: 0;
@@ -339,6 +363,10 @@ svg {
 .player.connected:hover .command-name {
     display: none;
 }
+
+/*********************************
+*          MEDIA QUERIES         *
+**********************************/
 
 @media(min-width: 769px) {
     .header-center-content {
@@ -438,11 +466,6 @@ svg {
         display: inline;
         padding: 0 10px;
     }
-
-    /*.add-30-sec-box {
-        position: relative;
-        bottom: 20px;
-    }*/
 
     .players {
         display: flex;

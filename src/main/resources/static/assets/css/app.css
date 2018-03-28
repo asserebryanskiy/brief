@@ -52,6 +52,10 @@ body {
     /*margin-top: -10px;*/
 }
 
+.flash-placeholder {
+    height: 40px;
+}
+
 .flash {
     border-radius: 10px;
 }
@@ -91,6 +95,10 @@ body {
 .hidden {
     display: none;
 }
+
+/*********************************
+*              POPUP             *
+**********************************/
 
 .popup,
 .popup-back {
@@ -142,6 +150,21 @@ body {
 }
 
 .popup-button-line button:hover {
-    background-color: #4e3549;
-    color: white;
+    background-color: #4e3549 !important;
+    color: white !important;
+}
+
+.popup-header {
+    text-align: center;
+    position: relative;
+    color: #4E3549;
+    fill: #4E3549;
+}
+
+.popup-header .close-popup-btn {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 15px;
+    height: 15px;
 }

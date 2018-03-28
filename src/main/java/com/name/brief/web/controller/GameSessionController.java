@@ -1,18 +1,15 @@
 package com.name.brief.web.controller;
 
 import com.name.brief.model.GameSession;
-import com.name.brief.model.Player;
 import com.name.brief.service.GameSessionService;
 import com.name.brief.service.PlayerAuthenticationService;
+import com.name.brief.web.dto.GameSessionDto;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-
-import java.util.stream.Collectors;
 
 @Controller
 public class GameSessionController {
@@ -34,6 +31,10 @@ public class GameSessionController {
         model.addAttribute("dashboardView", true);
         model.addAttribute("loggedInPlayers",
                 playerAuthenticationService.getAuthenticatedPlayersUsernames(gameSessionId));
+        // comes from moderator controller if attempt to change session parameters failed
+        if (!model.containsAttribute("changeGameSessionDto")) {
+            model.addAttribute("changeGameSessionDto", GameSessionDto.createFrom(session));
+        }
         String gameName = session.getGame().getEnglishName();
 
         return "administration/moderator/gamePanels/" + gameName;

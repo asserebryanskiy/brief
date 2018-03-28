@@ -16,6 +16,7 @@ import org.springframework.validation.Errors;
 
 import java.time.LocalDate;
 
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.times;
@@ -37,8 +38,8 @@ public class GameSessionDtoValidatorTest {
     @Before
     public void setUp() throws Exception {
         dto = new GameSessionDto();
-        dto.setStrId("id");
-        dto.setActiveDateStr(LocalDate.now().format(GameSessionDto.DATE_FORMATTER));
+        dto.setNewStrId("id");
+        dto.setActiveDate(LocalDate.now());
     }
 
     @Test
@@ -54,7 +55,7 @@ public class GameSessionDtoValidatorTest {
     }
 
     @Test
-    public void ifStrIdIsFreeForThisDayReturnsError() {
+    public void ifStrIdIsFreeForThisDayReturnsNoErrors() {
         Errors errors= new BeanPropertyBindingResult(dto, "dto");
         when(service.getSession("id", LocalDate.now())).thenReturn(null);
 
@@ -62,5 +63,26 @@ public class GameSessionDtoValidatorTest {
 
         assertThat(errors.hasErrors(), is(false));
         verify(service, times(1)).getSession("id", LocalDate.now());
+    }
+
+    @Test
+    public void ifNewStrIdIsEqualToOldStrIdReturnsNoErrors() {
+        Errors errors = new BeanPropertyBindingResult(dto, "dto");
+        dto.setOldStrId(dto.getNewStrId());
+
+        validator.validate(dto, errors);
+
+        assertThat(errors.hasErrors(), is(false));
+    }
+
+    @Test
+    public void ifNewStrIdDoesNotMatchesPatternReturnsPatternViolationError() {
+        Errors errors = new BeanPropertyBindingResult(dto, "dto");
+        dto.setNewStrId("ABC90авгода");
+
+        validator.validate(dto, errors);
+
+        assertThat(errors.getAllErrors(), hasSize(1));
+        assertThat(errors.getAllErrors().get(0).getCode(), is("gameSessionDto.validation.patternViolation"));
     }
 }

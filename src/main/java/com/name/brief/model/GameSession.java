@@ -28,12 +28,9 @@ public class GameSession extends BaseEntity{
     @NotNull
     private LocalDate activeDate;
     @NotNull
-    @OneToOne
+    @OneToOne(mappedBy = "gameSession", cascade = CascadeType.ALL)
     private Game game;
-    @Transient
-    private int numberOfCommands;
-    @OneToMany(mappedBy = "gameSession", cascade = CascadeType.ALL)
-    @LazyCollection(LazyCollectionOption.FALSE)
+    @OneToMany(mappedBy = "gameSession", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Player> players;
     private int[] rounds;   // are represented by array to simplify thymeleaf processing
     @ManyToOne
@@ -59,6 +56,7 @@ public class GameSession extends BaseEntity{
         this.strId = strId.toLowerCase();
         this.activeDate = activeDate;
         this.game = game;
+        game.setGameSession(this);
         players = new ArrayList<>(numberOfCommands);
         IntStream.range(0, numberOfCommands)
                 .forEach(i -> players.add(new Player(this, String.valueOf((i + 1)))));
@@ -162,5 +160,10 @@ public class GameSession extends BaseEntity{
 
     public void setStrId(String strId) {
         this.strId = strId.toLowerCase();
+    }
+
+    public void setGame(Game game) {
+        this.game = game;
+        game.setGameSession(this);
     }
 }

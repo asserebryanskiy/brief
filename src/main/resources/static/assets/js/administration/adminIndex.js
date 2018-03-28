@@ -24,27 +24,52 @@ $("#mobile-close-search-icon").click(function() {
 const $activeSessionBtn = $("#active-sessions-tab-btn");
 const $pastSessionBtn = $("#past-sessions-tab-btn");
 $activeSessionBtn.click(function () {
-    $activeSessionBtn.css("background-color", "rgba(78,53,73,0.3)");
-    $pastSessionBtn.css("background-color", "transparent");
+    $activeSessionBtn.addClass('chosen');
+    $pastSessionBtn.removeClass('chosen');
     $("#past-sessions-table").hide();
     $("#active-sessions-table").show();
 });
 $pastSessionBtn.click(function () {
-    $pastSessionBtn.css("background-color", "rgba(78,53,73,0.3)");
-    $activeSessionBtn.css("background-color", "transparent");
+    $activeSessionBtn.removeClass('chosen');
+    $pastSessionBtn.addClass('chosen');
     $("#active-sessions-table").hide();
     $("#past-sessions-table").show();
 });
 
 // create new session btn settings
-$("#new-session-btn").click(function () {
-    $(".new-session-popup").show();
-});
-$(".new-session-popup-background").click(function () {
-    $(".new-session-popup").hide();
+$("#new-session-btn").click((event) => {
+    $(event.currentTarget).siblings('.popup-wrapper').show();
 });
 
-// enable close-popup-btn
-$("#close-popup-button").click(function () {
-    $(".new-session-popup").hide();
+$('.edit-session-btn').click((event) => {
+    const $menu = $(event.currentTarget).siblings('.edit-menu-wrapper').children('.edit-menu');
+    $menu.slideToggle();
 });
+
+$('.edit-menu-item').click((event) => {
+    const $target = $(event.currentTarget);
+    $target.parents('.column3').children('.edit-popup').show();
+    $target.parents('.edit-menu').hide();
+});
+
+$('.edit-menu').mouseleave((event) => {
+    const $el = $(event.currentTarget);
+    window.setTimeout(() => {
+        if (!$el.is(':hover')) $el.slideUp();
+    }, 1000)
+});
+
+$('tr').mouseleave((event) => {
+    const $el = $(event.currentTarget);
+    window.setTimeout(() => {
+        if (!$el.is(':hover')) $el.find('.edit-menu').slideUp();
+    }, 1000)
+});
+
+$('.delete-menu-item').click((event) => {
+    const $target = $(event.currentTarget);
+    $target.parents('.column3').children('.delete-popup').show();
+    $target.parents('.edit-menu').hide();
+});
+
+$('.flash').delay(7000).slideUp().delay(400);

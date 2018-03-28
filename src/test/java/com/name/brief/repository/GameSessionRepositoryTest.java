@@ -181,6 +181,41 @@ public class GameSessionRepositoryTest {
         assertThat(repository.findOne(session.getId()).getEndOfTimer(), is(time));
     }
 
+    @Test
+    public void savingExistingSessionWithNewStrIdUpdatesStrId() {
+        GameSession session = createDefaultSession();
+        repository.save(session);
+
+        session.setStrId("new");
+        repository.save(session);
+
+        assertThat(repository.findOne(session.getId()).getStrId(), is("new"));
+    }
+
+    @Test
+    public void deletingSessionDeletesGame() {
+        GameSession session = createDefaultSession();
+        repository.save(session);
+
+        assertThat(entityManager.find(Game.class, session.getGame().getId()), is(session.getGame()));
+        repository.delete(session);
+
+        assertThat(entityManager.find(Game.class, session.getGame().getId()), nullValue());
+    }
+
+    @Test
+    public void deletingSessionDeletesAllPLayers() {
+        GameSession session = createDefaultSession();
+        repository.save(session);
+
+        session.getPlayers().forEach(p ->
+                assertThat(entityManager.find(Player.class, p.getId()), is(p)));
+        repository.delete(session);
+
+        session.getPlayers().forEach(p ->
+                assertThat(entityManager.find(Player.class, p.getId()), nullValue()));
+    }
+
     private GameSession createDefaultSession() {
         User user = new User("user", "", "ROLE_MODERATOR");
         Game game = new Brief();

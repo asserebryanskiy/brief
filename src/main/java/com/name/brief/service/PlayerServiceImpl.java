@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
+import java.util.List;
 
 @Service
 public class PlayerServiceImpl implements PlayerService {
@@ -49,5 +50,17 @@ public class PlayerServiceImpl implements PlayerService {
     @Override
     public void setSessionRegistry(SessionRegistry sessionRegistry) {
         this.sessionRegistry = sessionRegistry;
+    }
+
+    @Override
+    public void delete(Player player) {
+        playerRepository.delete(player.getId());
+    }
+
+    @Override
+    public void delete(List<Player> players) {
+        playerRepository.delete(players);
+
+        System.out.println();
     }
 }

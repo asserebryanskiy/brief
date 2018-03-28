@@ -4,10 +4,9 @@ import com.name.brief.model.Decision;
 import com.name.brief.model.GameSession;
 import com.name.brief.model.Player;
 import com.name.brief.service.GameSessionService;
-import com.name.brief.utils.BriefUtils;
+import com.name.brief.service.PlayerAuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,13 +15,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class GamerController {
 
     private final GameSessionService service;
-    private final SessionRegistry registry;
+    private final PlayerAuthenticationService playerAuthenticationService;
 
     @Autowired
-    public GamerController(GameSessionService service,
-                           SessionRegistry registry) {
+    public GamerController(GameSessionService service, PlayerAuthenticationService playerAuthenticationService) {
         this.service = service;
-        this.registry = registry;
+        this.playerAuthenticationService = playerAuthenticationService;
     }
 
     @RequestMapping("/game")
@@ -32,7 +30,12 @@ public class GamerController {
         Player player = gameSession.getPlayers().stream()
                 .filter(p -> p.getId().equals(principal.getId()))
                 .findAny()
-                .get();
+                .orElse(null);
+        // if player is null it means it was deleted from gameSession object
+        if (player == null) {
+            playerAuthenticationService.logout(principal);
+            return "redirect:/";
+        }
         Decision decision = player.getDecision(gameSession.getCurrentRoundIndex());
         model.addAttribute("commandName", player.getCommandName());
         model.addAttribute("gameSession", gameSession);
