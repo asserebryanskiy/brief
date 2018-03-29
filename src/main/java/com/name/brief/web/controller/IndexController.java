@@ -8,6 +8,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -45,6 +46,12 @@ public class IndexController {
         }
 
         return "index";
+    }
+
+    @RequestMapping("/.well-known/acme-challenge/H-zTGXNuknNuEDEa2rixZkv0mNFN_u72NO0IAozsBng")
+    @ResponseBody
+    public String sertificate() {
+        return "H-zTGXNuknNuEDEa2rixZkv0mNFN_u72NO0IAozsBng.yaJ7SlCwIHaiDb-R461yRIaVEMru1jJgTSFlM8NlRSc";
     }
 
     private void addFlashAttribute(Model model, HttpSession session, String attr) {
