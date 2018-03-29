@@ -15,11 +15,12 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 
 import javax.sql.DataSource;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Properties;
 
 @Configuration
 @EnableJpaRepositories(basePackages = "com.name.brief.repository")
-@PropertySource("classpath:db.properties")
 public class DataConfig {
     private final Environment env;
 
@@ -30,7 +31,14 @@ public class DataConfig {
 
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
-        LocalContainerEntityManagerFactoryBean factory = setCommonEntityManagerProperties();
+        LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
+
+        HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
+
+        factory.setDataSource(dataSource());
+        factory.setJpaVendorAdapter(vendorAdapter);
+        factory.setPackagesToScan(env.getProperty("brief.entity.package"));
+
         Properties properties = new Properties();
         properties.put("hibernate.dialect", env.getProperty("hibernate.dialect"));
         properties.put("hibernate.implicit_naming_strategy",env.getProperty("hibernate.implicit_naming_strategy"));
@@ -39,32 +47,6 @@ public class DataConfig {
         properties.put("hibernate.hbm2ddl.auto", env.getProperty("hibernate.hbm2ddl.auto"));
         factory.setJpaProperties(properties);
 
-        return factory;
-    }
-
-    @Bean("entityManagerFactory")
-    @Profile("heroku")
-    public LocalContainerEntityManagerFactoryBean herokuEntityManagerFactory() {
-        LocalContainerEntityManagerFactoryBean factory = setCommonEntityManagerProperties();
-        Properties properties = new Properties();
-        properties.put("hibernate.dialect", env.getProperty("hibernate.heroku.dialect"));
-        properties.put("hibernate.implicit_naming_strategy",env.getProperty("hibernate.heroku.implicit_naming_strategy"));
-        properties.put("hibernate.format_sql", env.getProperty("hibernate.heroku.format_sql"));
-        properties.put("hibernate.show_sql", env.getProperty("hibernate.heroku.show_sql"));
-        properties.put("hibernate.hbm2ddl.auto", env.getProperty("hibernate.heroku.hbm2ddl.auto"));
-        factory.setJpaProperties(properties);
-
-        return factory;
-    }
-
-    private LocalContainerEntityManagerFactoryBean setCommonEntityManagerProperties() {
-        LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
-
-        HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
-
-        factory.setDataSource(dataSource());
-        factory.setJpaVendorAdapter(vendorAdapter);
-        factory.setPackagesToScan(env.getProperty("brief.entity.package"));
         return factory;
     }
 
@@ -81,17 +63,23 @@ public class DataConfig {
 
     @Bean(name = "dataSource")
     @Profile("heroku")
-    public DataSource herokuDataSource() {
-        String dbUrl = System.getenv("JDBC_DATABASE_URL");
-        String username = System.getenv("JDBC_DATABASE_USERNAME");
-        String password = System.getenv("JDBC_DATABASE_PASSWORD");
+    public DataSource herokuDataSource() throws URISyntaxException {
+        URI dbUri = new URI(System.getenv("DATABASE_URL"));
 
-        BasicDataSource dataSource = new BasicDataSource();
-        dataSource.setDriverClassName(env.getProperty("brief.db.heroku.driver"));
-        dataSource.setUrl(dbUrl);
-        dataSource.setUsername(username);
-        dataSource.setPassword(password);
+        String username = dbUri.getUserInfo().split(":")[0];
+        String password = dbUri.getUserInfo().split(":")[1];
+        String dbUrl = "jdbc:postgresql://" + dbUri.getHost() + ':' + dbUri.getPort() + dbUri.getPath() + "?sslmode=require";
 
-        return dataSource;
+        BasicDataSource basicDataSource = new BasicDataSource();
+        basicDataSource.setUrl(dbUrl);
+        basicDataSource.setUsername(username);
+        basicDataSource.setPassword(password);
+
+//        BasicDataSource basicDataSource = new BasicDataSource();
+//        basicDataSource.setUrl("jdbc:postgresql://localhost:5432/postgres");
+//        basicDataSource.setUsername("andreyserebryanskiy");
+//        basicDataSource.setPassword("");
+
+        return basicDataSource;
     }
 }

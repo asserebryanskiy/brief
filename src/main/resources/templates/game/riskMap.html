@@ -62,43 +62,7 @@
             <button th:replace="game/fragments :: sendResponsesBtn"></button>
             <div th:replace="game/fragments :: flash('Ответы отправлены')"></div>
         </div>
-        <div class="phase-container hidden" id="phase-3">
-            <div class="sector-header">
-                <p class="sector-name">Сектор 2</p>
-                <div th:replace="game/fragments :: logout"></div>
-            </div>
-            <div class="img-wrapper">
-                <img th:src="@{/assets/image/riskMap/big_with_sectors/2.jpg}" alt="">
-            </div>
-            <h2>Ответы команд</h2>
-            <div class="sector-stats">
-                <div class="stats-row">
-                    <div class="indicator no-answer"></div>
-                    <div class="bar no-answer"></div>
-                    <p>0</p>
-                </div>
-                <div class="stats-row">
-                    <div class="indicator no-level"></div>
-                    <div class="bar no-level"></div>
-                    <p>0</p>
-                </div>
-                <div class="stats-row">
-                    <div class="indicator low-level"></div>
-                    <div class="bar low-level"></div>
-                    <p>1</p>
-                </div>
-                <div class="stats-row">
-                    <div class="indicator mid-level"></div>
-                    <div class="bar mid-level"></div>
-                    <p>6</p>
-                </div>
-                <div class="stats-row">
-                    <div class="indicator high-level"></div>
-                    <div class="bar high-level"></div>
-                    <p>2</p>
-                </div>
-            </div>
-        </div>
+
         <div th:replace="game/fragments :: logout"></div>
     </div>
 

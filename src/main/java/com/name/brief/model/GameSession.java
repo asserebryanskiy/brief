@@ -34,7 +34,7 @@ public class GameSession extends BaseEntity{
     private List<Player> players;
     private int[] rounds;   // are represented by array to simplify thymeleaf processing
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "users_id")
     private User user;
 
     private int currentPhaseNumber;   // is used to track current status of game

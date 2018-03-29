@@ -8,10 +8,7 @@ import lombok.ToString;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,8 +22,7 @@ public class Sector extends BaseEntity implements Serializable{
     @JoinColumn(name = "riskmap_id")
     private RiskMap riskMap;
     private int number;
-    @OneToMany
-    @LazyCollection(LazyCollectionOption.FALSE)
+    @OneToMany(mappedBy = "sector", cascade = CascadeType.ALL)
     private List<Comment> comments;
     private int[] stats;
 

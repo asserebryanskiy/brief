@@ -8,10 +8,7 @@ import lombok.ToString;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,8 +21,7 @@ public class Comment extends BaseEntity {
     @JoinColumn(name = "player_id")
     private Player player;
     private String content;
-    @OneToMany
-    @LazyCollection(LazyCollectionOption.FALSE)
+    @OneToMany(mappedBy = "comment", cascade = CascadeType.ALL)
     private List<Vote> votes;
     @ManyToOne
     @JoinColumn(name = "sector_id")

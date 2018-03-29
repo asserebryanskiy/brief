@@ -39,10 +39,8 @@ public class Player extends BaseEntity implements UserDetails{
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<Decision> decisions;
     @OneToMany(mappedBy = "player")
-    @LazyCollection(LazyCollectionOption.FALSE)
     private List<Comment> comments;
     @OneToMany(mappedBy = "player")
-    @LazyCollection(LazyCollectionOption.FALSE)
     private List<Vote> votes;
     private String username;
 

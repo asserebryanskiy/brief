@@ -2,20 +2,23 @@ package com.name.brief.model;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Enumerated;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 @EqualsAndHashCode(callSuper = true)
 @Entity
+@Table(name = "users")
 @Data
+@ToString(exclude = "gameSessions")
 public class User extends BaseEntity implements UserDetails {
     @Column(unique = true)
     @NotNull
@@ -23,6 +26,8 @@ public class User extends BaseEntity implements UserDetails {
     @NotNull
     private String password;
     private String role;
+    @OneToMany(mappedBy = "user")
+    private List<GameSession> gameSessions;
 
     public User() {
         super();
@@ -33,6 +38,7 @@ public class User extends BaseEntity implements UserDetails {
         this.username = username;
         this.password = password;
         this.role = role;
+        gameSessions = new ArrayList<>();
     }
 
     @Override
