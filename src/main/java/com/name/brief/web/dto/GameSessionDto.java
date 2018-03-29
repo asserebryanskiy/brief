@@ -19,7 +19,7 @@ import java.util.Map;
 public class GameSessionDto {
     public static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("ddMMyyyy");
 
-    private final String[] gameTypes = new String[]{"Бриф"};
+    private final String[] gameTypes = new String[]{"Бриф", "Карта рисков"};
     private String oldStrId;
     private String newStrId;
     @DateTimeFormat(pattern = "yyyy-MM-dd")

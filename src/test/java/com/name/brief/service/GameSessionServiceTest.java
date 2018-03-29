@@ -53,19 +53,6 @@ public class GameSessionServiceTest {
     }
 
     @Test
-    public void save_savesAlsoNewUserForEveryCommand() {
-        GameSession session = new GameSession.GameSessionBuilder("id")
-                .withNumberOfCommands(3)
-                .withUser(new User())
-                .build();
-        when(repository.findByStrIdAndActiveDate(any(), any())).thenReturn(null);
-
-        service.save(session);
-
-        verify(playerService, times(3)).save(any());
-    }
-
-    @Test
     public void incrementPhase_returnsZeroIfCurrentPhaseIsLast() {
         NextPhaseMessage message = new NextPhaseMessage(0, 30);
 
@@ -86,31 +73,5 @@ public class GameSessionServiceTest {
         String found = service.getCorrectAnswerForCurrentRound(0L);
 
         assertThat(found, is(game.getCorrectAnswer(2)));
-    }
-
-    @Test
-    public void update_deletesRedundantPlayers() {
-        GameSession session = new GameSession.GameSessionBuilder("id")
-                .withNumberOfCommands(5).build();
-        when(repository.findOne(any())).thenReturn(session);
-        GameSessionDto dto = new GameSessionDto();
-        dto.setNumberOfCommands(7);
-
-        service.update(dto);
-
-        verify(playerService, times(2)).delete(any(Player.class));
-    }
-
-    @Test
-    public void update_savesExcessivePlayers() {
-        GameSession session = new GameSession.GameSessionBuilder("id")
-                .withNumberOfCommands(5).build();
-        when(repository.findOne(any())).thenReturn(session);
-        GameSessionDto dto = new GameSessionDto();
-        dto.setNumberOfCommands(7);
-
-        service.update(dto);
-
-        verify(playerService, times(2)).save(any());
     }
 }
