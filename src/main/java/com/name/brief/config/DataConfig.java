@@ -51,7 +51,7 @@ public class DataConfig {
     }
 
     @Bean
-    @Profile("dev")
+    @Profile({"dev", "localPostgre", "none"})
     public DataSource dataSource() {
         BasicDataSource ds = new BasicDataSource();
         ds.setDriverClassName(env.getProperty("brief.db.driver"));
@@ -74,11 +74,6 @@ public class DataConfig {
         basicDataSource.setUrl(dbUrl);
         basicDataSource.setUsername(username);
         basicDataSource.setPassword(password);
-
-//        BasicDataSource basicDataSource = new BasicDataSource();
-//        basicDataSource.setUrl("jdbc:postgresql://localhost:5432/postgres");
-//        basicDataSource.setUsername("andreyserebryanskiy");
-//        basicDataSource.setPassword("");
 
         return basicDataSource;
     }

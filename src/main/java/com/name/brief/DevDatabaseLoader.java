@@ -22,15 +22,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-@Profile("dev")
-public class DatabaseLoader implements ApplicationRunner {
+@Profile({"dev", "localPostgre"})
+public class DevDatabaseLoader implements ApplicationRunner {
 
     private final GameSessionService gameSessionService;
     private final UserRepository userRepository;
 
     @Autowired
-    public DatabaseLoader(GameSessionService gameSessionService,
-                          UserRepository userRepository) {
+    public DevDatabaseLoader(GameSessionService gameSessionService,
+                             UserRepository userRepository) {
         this.gameSessionService = gameSessionService;
         this.userRepository = userRepository;
     }
