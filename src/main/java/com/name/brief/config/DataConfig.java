@@ -44,7 +44,7 @@ public class DataConfig {
         properties.put("hibernate.implicit_naming_strategy",env.getProperty("hibernate.implicit_naming_strategy"));
         properties.put("hibernate.format_sql", env.getProperty("hibernate.format_sql"));
         properties.put("hibernate.show_sql", env.getProperty("hibernate.show_sql"));
-//        properties.put("hibernate.hbm2ddl.auto", env.getProperty("hibernate.hbm2ddl.auto"));
+        properties.put("hibernate.hbm2ddl.auto", env.getProperty("hibernate.hbm2ddl.auto"));
         factory.setJpaProperties(properties);
 
         return factory;
@@ -64,7 +64,8 @@ public class DataConfig {
     @Bean(name = "dataSource")
     @Profile("heroku")
     public DataSource herokuDataSource() throws URISyntaxException {
-        URI dbUri = new URI(System.getenv("DATABASE_URL"));
+        URI dbUri = new URI("postgres://fibufkhugjdcwh:96f0e8f210edb6c3dc3e0898da86bae663d22032970fc5aa2851117967ec032e@ec2-50-17-206-214.compute-1.amazonaws.com:5432/d3q7op2e2vk40r");
+//        URI dbUri = new URI(System.getenv("DATABASE_URL"));
 
         String username = dbUri.getUserInfo().split(":")[0];
         String password = dbUri.getUserInfo().split(":")[1];

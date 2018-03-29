@@ -22,7 +22,10 @@ public class HerokuDatabaseLoader implements ApplicationRunner{
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        String password = SecurityConfig.passwordEncoder.encode("slozhniyparol");
-        userRepository.save(new User("masterskaya", password, "ROLE_MODERATOR"));
+        String username = "masterskaya";
+        if (userRepository.findByUsername(username) == null) {
+            String password = SecurityConfig.passwordEncoder.encode("slozhniyparol");
+            userRepository.save(new User(username, password, "ROLE_MODERATOR"));
+        }
     }
 }
