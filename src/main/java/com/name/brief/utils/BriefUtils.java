@@ -33,6 +33,7 @@ public class BriefUtils {
     public static Set<String> toVariantsSet(Decision decision) {
         Set<String> result = new HashSet<>();
         String answer = decision.getAnswer();
+        System.out.println(answer);
         for (int i = 0; i < answer.length(); i+=2) {
             result.add(answer.substring(i, i + 2));
         }

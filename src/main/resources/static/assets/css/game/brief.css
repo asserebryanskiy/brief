@@ -13,7 +13,7 @@
 
 #phase-3,
 #phase-4 {
-    margin: 80px auto auto;
+    margin: 80px 20px auto;
 }
 
 @media (max-width: 427px) {
@@ -25,21 +25,60 @@
 /****************************************
 *          CHOOSE ANSWER TABLE         *
 ****************************************/
-.choose-answer-table {
-    /*width: 100%;*/
-    max-width: 270px;
+.choose-answer-grid {
+    display: grid;
+    width: 100%;
+    grid-template-rows: 30px auto auto auto auto;
+    margin: 10px 0;
+}
+
+.choose-answer-grid .grid-row {
+    display: flex;
+    flex-direction: row;
+}
+
+.grid-row .grid-cell:first-child {
+    width: 30px;
+}
+
+.grid-cell {
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    align-content: center;
+}
+
+.grid-cell > p {
     margin: auto;
-    border-spacing: 10px;
+}
+
+.grid-row:first-child .grid-cell:nth-child(n + 2),
+.answer-variant {
+    /* 70px = 30px container margin + 30px first column width + 40px phase-3 margin */
+    width: calc(calc(100vw - 100px) / 4);
 }
 
 .answer-variant {
-    width: 48px;
-    /*width: calc(25% - 30px);*/
-    height: 48px;
-    border: #4E3549 1px solid;
+    /* 70px = 30px container margin + 20px first column width + 20px phase-3 margin */
+    height: calc(calc(100vw - 100px) / 4);
+    border-left: #4E3549 1px solid;
+    border-top: #4E3549 1px solid;
+    position: relative;
+}
+
+.answer-variant:nth-child(5n) {
+    border-right: #4E3549 1px solid;
+}
+
+.grid-row:last-child .grid-cell:nth-child(n + 2) {
+    border-bottom: #4E3549 1px solid;
 }
 
 .selected-svg {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
     max-width: 20px;
     max-height: 20px;
     opacity: 0;
@@ -48,7 +87,7 @@
 }
 
 .selected {
-    box-shadow: #4E3549 0 0 1px 1px;
+    box-shadow: #4E3549 0 0 5px 1px;
 }
 
 .selected .selected-svg {
@@ -108,4 +147,29 @@
 
 .help-popup-content li {
     margin-left: 20px;
+}
+
+@media (max-width: 375px) {
+    #phase-0 h2 {
+        max-width: 200px;
+    }
+}
+
+@media (min-width: 400px) {
+
+    .choose-answer-grid {
+        max-width: 320px;
+        margin: auto;
+    }
+
+    .grid-row:first-child .grid-cell:nth-child(n + 2),
+    .answer-variant {
+        /* 70px = 30px container margin + 20px first column width + 20px phase-3 margin */
+        width: 75px;
+    }
+
+    .answer-variant {
+        /* 70px = 30px container margin + 20px first column width + 20px phase-3 margin */
+        height: 75px;
+    }
 }

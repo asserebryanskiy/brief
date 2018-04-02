@@ -51,6 +51,11 @@ public class DevDatabaseLoader implements ApplicationRunner {
                 .withUser(moderator1)
                 .build();
 
+        session.getPlayers().get(0).getDecision(0).setAnswer("A1A3");
+        session.getPlayers().get(2).getDecision(2).setAnswer("A3A1A4");
+        session.getPlayers().get(3).getDecision(3).setAnswer("A3A1A4D1D2");
+        session.getPlayers().get(4).getDecision(4).setAnswer("A3A1");
+
         GameSession session2 = new GameSession.GameSessionBuilder("testtest")
                 .withNumberOfCommands(3)
                 .withUser(moderator1)

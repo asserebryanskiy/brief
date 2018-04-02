@@ -69,7 +69,7 @@ controller.setOnPhaseChange((newPhaseNumber, timerStr, additional) => {
             controller.enableAnswerSend(false);
             let correctAnswer = additional;
             if (correctAnswer === '') correctAnswer = $('#correct-answer').text();
-            $('p:contains("' + correctAnswer + '")').parent().addClass('correct-answer');
+            $('p:contains("' + correctAnswer + '")').parents('.answer-variant').addClass('correct-answer');
             if (!projectorMode) setScore(correctAnswer);
             break;
         case STATISTICS_PHASE:
