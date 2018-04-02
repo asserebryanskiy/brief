@@ -4,6 +4,7 @@
     <div th:include="appFragments :: headContent" th:remove="tag"></div>
     <link rel="stylesheet" th:href="@{/assets/css/game/game.css}">
     <link rel="stylesheet" th:href="@{/assets/css/game/brief.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/game/projector.css}" th:if="${projectorMode}">
     <title>МОЗ Бриф</title>
 </head>
 <body th:with="currentPhaseNumber = ${gameSession.currentPhaseNumber}">
@@ -19,26 +20,35 @@
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M11.362 2c4.156 0 2.638 6 2.638 6s6-1.65 6 2.457v11.543h-16v-20h7.362zm.827-2h-10.189v24h20v-14.386c0-2.391-6.648-9.614-9.811-9.614zm4.811 13h-3v-1h3v1zm0 2h-3v1h3v-1zm0 3h-10v1h10v-1zm-5-6h-5v4h5v-4z"></path></svg>
         </div>
         <div class="phase-container hidden" id="phase-3">
-            <h1 class="timer">00:00</h1>
-            <h2 th:text="#{brief.phase3.message}"></h2>
-            <p class="answer-calc-help">Как считаются баллы?</p>
-            <div class="choose-answer-grid" th:fragment="playersTable">
-                <div class="grid-row"
-                     th:each="row, rowIter : ${gameSession.game.getAnswerInput(decision)}">
-                    <div class="grid-cell"
-                         th:each="cell, colIter : ${row}"
-                         th:classappend="${cell} ? 'answer-variant animated selected' : (${rowIter.index} > 0 and ${colIter.index} > 0 ? 'answer-variant animated':'')">
-                        <p th:if="${rowIter.index} > 0 and ${colIter.index} == 0" th:text="${rowIter.index}"></p>
-                        <p th:if="${rowIter.index} == 0 and ${colIter.index} > 0" th:utext="'&#' + (65 + ${colIter.index} - 1) + ';'"></p>
-                        <p th:if="${rowIter.index} > 0 and ${colIter.index} > 0"
-                           class="hidden answer-text"
-                           th:utext="'&#' + (65 + ${colIter.index} - 1) + ';' + ${rowIter.index}"></p>
-                        <svg th:if="${rowIter.index} > 0 and ${colIter.index} > 0"
-                             class="selected-svg animated" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                            <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
-                        </svg>
+            <h2 th:if="${projectorMode}" th:text="#{brief.phase3.message}"></h2>
+            <div class="projector-wrapper" th:if="${projectorMode}">
+                <h1 class="timer">00:00</h1>
+                <div th:replace="this :: playersTable"></div>
+            </div>
+            <div th:unless="${projectorMode}">
+                <h1 class="timer">00:00</h1>
+                <h2 th:text="#{brief.phase3.message}"></h2>
+                <p class="answer-calc-help">Как считаются баллы?</p>
+                <div class="choose-answer-grid" th:fragment="playersTable">
+                    <div class="grid-row"
+                         th:each="row, rowIter : ${gameSession.game.getAnswerInput(decision)}">
+                        <div class="grid-cell"
+                             th:each="cell, colIter : ${row}"
+                             th:classappend="${cell} ? 'answer-variant animated selected' : (${rowIter.index} > 0 and ${colIter.index} > 0 ? 'answer-variant animated':'')">
+                            <p th:if="${rowIter.index} > 0 and ${colIter.index} == 0" th:text="${rowIter.index}"></p>
+                            <p th:if="${rowIter.index} == 0 and ${colIter.index} > 0" th:utext="'&#' + (65 + ${colIter.index} - 1) + ';'"></p>
+                            <p th:if="${rowIter.index} > 0 and ${colIter.index} > 0"
+                               class="hidden answer-text"
+                               th:utext="'&#' + (65 + ${colIter.index} - 1) + ';' + ${rowIter.index}"></p>
+                            <svg th:if="${rowIter.index} > 0 and ${colIter.index} > 0"
+                                 class="selected-svg animated" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                                <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
+                            </svg>
+                        </div>
                     </div>
                 </div>
+                <div th:replace="game/fragments :: flash(#{game.answersSent.flash})"></div>
+                <button th:replace="game/fragments :: sendResponsesBtn"></button>
             </div>
             <!--<table class="choose-answer-table hidden" th:fragment="playersTable">
                 <tr th:each="row, rowIter : ${gameSession.game.getAnswerInput(decision)}">
@@ -56,8 +66,6 @@
                     </td>
                 </tr>
             </table>-->
-            <div th:replace="game/fragments :: flash(#{game.answersSent.flash})"></div>
-            <button th:replace="game/fragments :: sendResponsesBtn"></button>
         </div>
         <div class="phase-container hidden" id="phase-4">
             <h2 th:text="#{brief.phase4.message}"></h2>
@@ -82,15 +90,17 @@
             <button id="close-popup-btn">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z"></path></svg>
             </button>
-            <p>Если хотя бы одно выбранное изображение верное, то команда получает баллы.</p>
-            <p>Количество баллов обратно пропорционально количеству выбранных изображений:</p>
-            <ul>
-                <li>1 изображение - 15 баллов</li>
-                <li>2 изображения - 10 баллов</li>
-                <li>3-4 изображения - 5 баллов</li>
-                <li>5-8 изображений - 2 балла</li>
-                <li>9+ изображений - 0 баллов</li>
-            </ul>
+            <div th:fragment="scoreCountHelp" class="score-count-help">
+                <p>Если хотя бы одно выбранное изображение верное, то команда получает баллы.</p>
+                <p>Количество баллов обратно пропорционально количеству выбранных изображений:</p>
+                <ul>
+                    <li>1 изображение - 15 баллов</li>
+                    <li>2 изображения - 10 баллов</li>
+                    <li>3-4 изображения - 5 баллов</li>
+                    <li>5-8 изображений - 2 балла</li>
+                    <li>9+ изображений - 0 баллов</li>
+                </ul>
+            </div>
         </div>
     </div>
 

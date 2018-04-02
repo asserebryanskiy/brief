@@ -1,0 +1,84 @@
+.phase-container {
+    margin: 0;
+}
+
+.projector-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+    align-content: center;
+    margin: 0;
+}
+
+.phase-container svg {
+    width: 180px;
+    height: 180px;
+    margin: auto 0;
+}
+
+.phase-container h2 {
+    font-size: 4em;
+}
+
+.strId h2 {
+    font-family: 'Circe Light', serif;
+}
+
+.strId h1 {
+    font-size: 8em;
+}
+
+.phase-container .timer {
+    font-size: 9em;
+}
+
+#phase-3 {
+    margin: 0;
+}
+
+.score-count-help {
+    margin: 0 30px;
+    text-align: left;
+    font-family: "Circe Light", serif;
+    font-size: 2em;
+}
+
+#phase-3 .timer {
+    margin: auto;
+    min-width: 370px;
+    text-align: center;
+}
+
+.score-count-help ul {
+    margin-left: 30px;
+}
+
+.bar-chart {
+    width: fit-content;
+    margin: auto;
+}
+
+.bar-chart-row {
+    height: 50px;
+    opacity: 1 !important;
+}
+
+@media (min-width: 1600px) {
+    #round-name {
+        font-size: 3em;
+    }
+
+    .header img {
+        height: 150px;
+    }
+
+    .phase-container h2 {
+        font-size: 5em;
+    }
+
+    .phase-container svg {
+        height: 240px;
+        width: 240px;
+    }
+}
+

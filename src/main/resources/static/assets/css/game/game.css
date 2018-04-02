@@ -230,6 +230,10 @@ h1 {
     color: #959595;
 }
 
+.warning {
+    color: tomato;
+}
+
 @media (max-width: 340px) {
     .phase-container h1,
     .phase-container h2,

@@ -43,7 +43,15 @@ function GameController() {
             // subscribe on timer change
             stompClient.subscribe('/topic/' + gameSessionId + '/timer', (message) => {
                 const newTimerValue = message.body;
-                $('.timer').text(newTimerValue);
+                const $timer = $('.timer');
+                $timer.text(newTimerValue);
+                const div = newTimerValue.indexOf(':');
+                if (parseInt(newTimerValue.slice(0, div)) === 0
+                    && parseInt(newTimerValue.substr(div + 1)) < 11) {
+                    $timer.addClass('warning');
+                } else {
+                    $timer.removeClass('warning');
+                }
                 // phase-3 is send responses phase
                 if ($('.phase-container:visible').attr('id') === 'phase-' + SEND_ANSWER_PHASE
                     && !projectorMode) {

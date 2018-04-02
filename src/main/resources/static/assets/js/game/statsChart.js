@@ -14,7 +14,7 @@ function drawChart(statsList) {
                 $cellValue.text(statistics[i].roundScoreMap[j]);
             }
             const points = parseInt($cellValue.text());
-            let width = points * 5;
+            let width = points * (projectorMode ? 10 : 5);
             /*switch (points) {
                 case 15:
                     width = 75;
@@ -44,15 +44,17 @@ function drawChart(statsList) {
 
 const $chart = $('.bar-chart');
 $chart.scroll(() => {
-    const $icon = $chart.find('.scroll-icon');
-    if ($chart.scrollLeft() < 10) $icon.show();
-    else                          $icon.hide();
+    if (!projectorMode) {
+        const $icon = $chart.find('.scroll-icon');
+        if ($chart.scrollLeft() < 10) $icon.show();
+        else                          $icon.hide();
+    }
 });
 
 $chart.ready(() => {
     console.log($chart.prop('scrollWidth'));
     console.log($chart.width());
-    if ($chart.prop('scrollWidth') > $chart.width()) {
+    if ($chart.prop('scrollWidth') > $chart.width() && !projectorMode) {
         $chart.find('.scroll-icon').show();
     }
 });
