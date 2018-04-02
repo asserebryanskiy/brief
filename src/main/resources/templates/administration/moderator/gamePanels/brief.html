@@ -1,12 +1,10 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Бриф | Панель модератора</title>
-    <link rel="stylesheet" th:href="@{/assets/css/app.css}">
+    <div th:include="appFragments :: headContent" th:remove="tag"></div>
     <link rel="stylesheet" th:href="@{/assets/css/administration/administration.css}">
     <link rel="stylesheet" th:href="@{/assets/css/administration/moderator/brief.css}">
+    <title>Бриф | Панель модератора</title>
 </head>
 <body>
     <div th:replace="administration/fragments :: game-session-header"></div>
