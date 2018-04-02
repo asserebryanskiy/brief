@@ -237,6 +237,7 @@ svg {
 
 .round-wrapper .round-info {
     position: absolute;
+    top: calc(100% + 10px);
     z-index: 2;
     height: fit-content;
     padding: 10px;
@@ -244,6 +245,30 @@ svg {
     border-radius: 2px;
     background-color: white;
     text-align: left;
+}
+
+.round-info:after, .round-info:before {
+    bottom: 100%;
+    left: 50px;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+}
+
+.round-info:after {
+    border-color: rgba(255, 255, 255, 0);
+    border-bottom-color: #fff;
+    border-width: 10px;
+    margin-left: -10px;
+}
+.round-info:before {
+    border-color: rgba(0, 0, 0, 0);
+    border-bottom-color: #4e3549;
+    border-width: 11px;
+    margin-left: -11px;
 }
 
 .round-info .players-stats-box {
@@ -431,7 +456,8 @@ svg {
 
     .round-count-bar {
         display: block;
-        width: 150px;
+        min-width: 100px;
+        max-width: 100px;
         text-align: center;
         margin: auto 5px;
     }
