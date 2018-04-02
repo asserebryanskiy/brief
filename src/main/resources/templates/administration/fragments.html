@@ -80,11 +80,35 @@
         <h2 class="bold" th:text="#{${gameType + '.round.count.heading'}}">Раунд</h2>
         <div class="rounds">
             <div th:replace="administration/fragments :: confirmation-popup(#{${gameType + '.round.count.popup'}}, 'early-round-finish-popup', 'early-round-finish-btn')"></div>
-            <div th:each="round,iter : ${gameSession.rounds}" class="round animated"
-                 th:with="currentRound = ${gameSession.currentRoundIndex}"
-                 th:classappend="(${iter.index} == ${currentRound} ? 'active' : (${iter.index} == ${currentRound + 1}? 'next' : (${iter.index} < ${currentRound}? 'played')))"
-                 th:id="'round-' + ${iter.index}">
-                <p th:text="${iter.count}"></p>
+            <div class="round-wrapper" th:each="round,iter : ${gameSession.rounds}">
+                <div class="round animated"
+                     th:with="currentRound = ${gameSession.currentRoundIndex}"
+                     th:classappend="(${iter.index} == ${currentRound} ? 'active' : (${iter.index} == ${currentRound + 1}? 'next' : (${iter.index} < ${currentRound}? 'played')))"
+                     th:id="'round-' + ${iter.index}">
+                    <p th:text="${iter.count}"></p>
+                </div>
+                <div class="round-info-wrapper hidden">
+                    <div class="round-info">
+                        <svg class="close-round-info-btn" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z"></path></svg>
+                        <p th:text="'Раунд ' + ${iter.count}"></p>
+                        <p th:text="'Правильный ответ: ' + ${gameSession.game.getCorrectAnswer(__${iter.index}__)}"></p>
+                        <div class="players-stats-box">
+                            <div th:each="player : ${gameSession.players}" class="player-stats" th:classappend="'player-stats-' + ${player.username}">
+                                <p th:text="'Команда ' + ${player.commandName}"></p>
+                                <p>
+                                    Ответ:
+                                    <span th:text="' ' + (${player.getDecision(__${iter.index}__).answer}?:'-')"
+                                          class="round-info-player-answer"></span>
+                                </p>
+                                <p>
+                                    Заработано баллов:
+                                    <span th:text="' ' + ${player.getScoreForRound(__${iter.index}__)}"
+                                          class="round-info-player-score"></span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         <button id="pass-round-btn">Пропустить раунд</button>

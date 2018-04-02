@@ -69,6 +69,11 @@ function onWsConnect(stompClient) {
         $table.trigger('updateCell', $totalTd[0]);
         sortingByTotalResult = false;
         $table.trigger('sorton', [[[3,1]]]);
+
+        // update round-info
+        const $roundInfo = $('.round.active').find($('.round-info'));
+        $roundInfo.find('.player-stats-' + username).find('.round-info-player-answer').text(answerStr);
+        $roundInfo.find('.player-stats-' + username).find('.round-info-player-score').text(newScore);
     });
 }
 

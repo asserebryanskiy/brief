@@ -222,15 +222,21 @@ function GameSessionController() {
  ************************************************/
 
 $('.round').click(function (event) {
-    const stage = event.currentTarget;
-    if ($(stage).hasClass('next')) {
+    const round = event.currentTarget;
+    if ($(round).hasClass('next')) {
         // check if next phase is last. if not show confirmation popup
         if (getPhaseOrder($('.phase.next')) === $('.phase').length - 1) {
             controller.nextRound();
         } else {
             $('#early-round-finish-popup').show();
         }
+    } else if ($(round).hasClass('played')) {
+        $(round).siblings('.round-info-wrapper').toggle();
     }
+});
+
+$('.close-round-info-btn').click((event) => {
+    $(event.currentTarget).parents('.round-info-wrapper').hide();
 });
 
 $('#pass-round-btn').click(function () {
