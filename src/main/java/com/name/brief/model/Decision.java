@@ -26,8 +26,4 @@ public class Decision extends BaseEntity {
         this.roundNumber = roundNumber;
         this.answer = answer;
     }
-
-    public String getAnswer() {
-        return answer != null && answer.isEmpty() ? "-" : answer;
-    }
 }
