@@ -14,7 +14,6 @@ $('.small-img-wrapper').click((event) => {
     $popup.show();
 });
 
-console.log('entered in bind');
 $('.answer-input').click((event) => {
     if (answerSendingEnabled) {
         toggleSelected(event);
@@ -65,61 +64,16 @@ function toggleSelected(event) {
  *       OVERRIDDEN FUNCTIONS       *
  ************************************/
 
-function changeSector(newSector) {
-    if (currentSectorNumber === 0 && newSector > 0) {
-        $('.preparation-phases').hide();
-    }
-
-    // toggle sectors
-    $('.sector-phases').hide();
-    $('#sector-phases-' + newSector).show();
-
-    // change phase
-    controller.changePhase(0);
-}
 
 /************************************
  *        CONTROLLER SETTINGS       *
  ************************************/
 
-/*function onWsConnect(stompClient) {
-    stompClient.subscribe('/topic/' + gameSessionId + '/changeSector', (message) => {
-        const newSector = message.body;
-        changeSector(newSector);
-    }, {})
-}
-
-
-controller.nextRound = () => {};
-controller.changePhase = (newPhaseNumber, timerStr, additional) => {
-    newPhaseNumber = parseInt(newPhaseNumber);
-
-    // change view
-    const idPrefix = currentSectorNumber === 0 ? '#phase-' : '#sector-phase-';
-    $(idPrefix + currentPhaseNumber).hide();
-    const $newActive = $(idPrefix + newPhaseNumber);
-    $newActive.show();
-    currentPhaseNumber = newPhaseNumber;
-    const $timer = $('.timer');
-    if ($timer.is(':visible')) {
-        $timer.text(timerStr);
-    }
-
-    // do phase specific stuff
-    if (currentSectorNumber > 0 && newPhaseNumber === 0) {
-        console.log($newActive);
-        $newActive.find('.stats-row').each((i, row) => {
-            console.log('entered');
-            const $votesText = $(row).find('.votes-number');
-            const votes = parseInt($votesText.text());
-            if (votes > 0) {
-                $(row).width(votes * 10);
-            } else {
-                $votesText.hide();
-            }
-        })
-    }
-};*/
+controller.setOnRoundChange(() => {
+    $('.risk-indicator').removeClass('no-level low-level mid-level high-level')
+        .addClass('no-answer');
+    controller.sendResponses();
+});
 controller.connect();
 controller.changePhase(currentPhaseNumber, '', '');
 

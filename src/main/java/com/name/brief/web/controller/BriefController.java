@@ -2,6 +2,7 @@ package com.name.brief.web.controller;
 
 import com.name.brief.model.GameSession;
 import com.name.brief.model.Player;
+import com.name.brief.model.games.RiskMap;
 import com.name.brief.service.GameSessionService;
 import com.name.brief.service.PlayerAuthenticationService;
 import com.name.brief.service.PlayerService;
@@ -87,8 +88,15 @@ public class BriefController {
     @MessageMapping("/responses")
     public void persistResponses(Answers answers, Principal principal) {
         Player player = (Player) ((Authentication) principal).getPrincipal();
-        int roundIndex = gameSessionService.getSession(player.getGameSession().getId())
-                .getCurrentRoundIndex();
+        GameSession gameSession = gameSessionService.getSession(player.getGameSession().getId());
+        int roundIndex = gameSession.getCurrentRoundIndex();
+
+        // temporal decision to provide functionality for HR tech exhibition on 04.04.18
+        if (gameSession.getGame() instanceof RiskMap && answers.getAnswerStr().isEmpty()) {
+            answers.setAnswerStr(null);
+        }
+        //
+
         playerService.addResponses(player, answers.getAnswerStr(), roundIndex);
         answers.setScore(player.getScoreForRound(roundIndex));
         template.convertAndSend("/queue/" + player.getGameSession().getId() + "/answer",

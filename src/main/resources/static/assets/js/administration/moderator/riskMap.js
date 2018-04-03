@@ -1,22 +1,15 @@
-const SEND_ANSWER_PHASE = '0_1';
+const SEND_ANSWER_PHASE = '1';
 
-if (getRoundOrder($('.round.active').attr('id')) === 0) {
-    $('.sector-count-bar').hide();
-    $('.round-nav-1').hide();
-} else {
-    $('.round-nav-0').hide();
-}
+controller.nextRound = () => {
+    // remove all phases' classes except phase
+    $('.phase').removeClass('active previous next played');
 
-controller.setOnNextRound(() => {
-    if (getRoundOrder($('.round.active').attr('id')) === 0) {
-        $('.sector-count-bar').show();
-        $('.round-nav-0').hide();
-        $('.round-nav-1').show();
-        $('#round-0').hide();
-    }
+    // set first phase active and second next
+    $('.phase-0').addClass('active');
+    $('.phase-1').addClass('next');
 
-    stompClient.send('/app/' + gameSessionId + '/changeSector', {}, getRoundOrder($('.round.next').attr('id')));
-});
+    stompClient.send('/app/' + gameSessionId + '/changeRound', {}, 0);
+};
 function onWsConnect(stompClient) {
 
 }

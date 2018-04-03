@@ -1,19 +1,11 @@
 package com.name.brief.model.games;
 
-import com.name.brief.model.BaseEntity;
 import com.name.brief.model.Decision;
-import com.name.brief.model.games.riskmap.Comment;
-import com.name.brief.model.games.riskmap.Sector;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.OrderColumn;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,21 +17,12 @@ import java.util.List;
 @ToString(exclude = "sectors")
 public class RiskMap extends Game {
 
-    private final int numberOfSectors = 12;
+    private final int numberOfRounds = 1;
     private final String russianName = "Карта рисков";
     private final String englishName = "riskMap";
 
-    @OneToMany(mappedBy = "riskMap", cascade = CascadeType.ALL)
-    private final List<Sector> sectors;
-    // 0 stands for "before start" sector where players choose risk level on all pictures
-    private int currentSectorNumber = 0;
-
     public RiskMap() {
         super();
-        sectors = new ArrayList<>(numberOfSectors);
-        for (int i = 0; i < numberOfSectors; i++) {
-            sectors.add(new Sector(i + 1, this));
-        }
     }
 
     @Override
@@ -48,7 +31,8 @@ public class RiskMap extends Game {
         phases.addAll(Arrays.asList(
                 new Phase("Объяснение правил", false),
                 new Phase("Выбор ответа", true, Duration.ofSeconds(600)),
-                new Phase("Работа с секторами", false)
+                new Phase("Результаты", false),
+                new Phase("Начать заново", false)
         ));
         for (int i = 0; i < phases.size(); i++) {
             phases.get(i).setId(String.valueOf(i));
@@ -58,19 +42,7 @@ public class RiskMap extends Game {
 
     @Override
     public List<Phase> getPhases(int roundNumber) {
-        if (roundNumber == 0) return getPhases();
-        List<Phase> phases = new ArrayList<>(5);
-        phases.addAll(Arrays.asList(
-                new Phase("Информация о секторе", false),
-                new Phase("Внесение комментария", true, Duration.ofSeconds(90)),
-                new Phase("Голосование", true, Duration.ofSeconds(90)),
-                new Phase("Результаты голосования", false),
-                new Phase("Следующий сектор", false)
-        ));
-        for (int i = 0; i < phases.size(); i++) {
-            phases.get(i).setId(String.valueOf(i));
-        }
-        return phases;
+        return getPhases();
     }
 
     @Override
@@ -80,7 +52,7 @@ public class RiskMap extends Game {
 
     @Override
     public int getNumberOfRounds() {
-        return numberOfSectors;
+        return numberOfRounds;
     }
 
     @Override
