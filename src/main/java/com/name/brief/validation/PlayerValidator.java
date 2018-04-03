@@ -3,6 +3,7 @@ package com.name.brief.validation;
 import com.name.brief.model.GameSession;
 import com.name.brief.model.Player;
 import com.name.brief.service.GameSessionService;
+import com.name.brief.service.PlayerAuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
@@ -10,11 +11,14 @@ import org.springframework.validation.Validator;
 
 @Component
 public class PlayerValidator implements Validator {
-    private final GameSessionService service;
+    private final GameSessionService gameSessionService;
+    private final PlayerAuthenticationService playerAuthenticationService;
 
     @Autowired
-    public PlayerValidator(GameSessionService service) {
-        this.service = service;
+    public PlayerValidator(GameSessionService gameSessionService,
+                           PlayerAuthenticationService playerAuthenticationService) {
+        this.gameSessionService = gameSessionService;
+        this.playerAuthenticationService = playerAuthenticationService;
     }
 
     @Override
@@ -27,7 +31,7 @@ public class PlayerValidator implements Validator {
         Player player = (Player) target;
         GameSession provided = player.getGameSession();
 
-        GameSession gameSession = service.getSession(provided.getStrId(), provided.getActiveDate());
+        GameSession gameSession = gameSessionService.getSession(provided.getStrId(), provided.getActiveDate());
         if (gameSession == null) {
             errors.rejectValue("gameSession", "player.validation.wrongGameSessionStrId");
         } else {
@@ -41,7 +45,7 @@ public class PlayerValidator implements Validator {
                         .findAny()
                         .orElse(null);  // ignore because we've already checked that player exists
                 //noinspection ConstantConditions
-                if (found.isLoggedIn()) {
+                if (playerAuthenticationService.isLoggedIn(found)) {
                     errors.rejectValue("loggedIn", "player.validation.commandIsLoggedIn");
                 }
             }

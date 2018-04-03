@@ -3,6 +3,7 @@ package com.name.brief.validation;
 import com.name.brief.model.GameSession;
 import com.name.brief.model.Player;
 import com.name.brief.service.GameSessionService;
+import com.name.brief.service.PlayerAuthenticationService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,6 +31,9 @@ public class PlayerValidatorTest {
 
     @MockBean
     private GameSessionService service;
+
+    @MockBean
+    private PlayerAuthenticationService playerAuthenticationService;
 
     private GameSession session;
     private Player player;
@@ -72,6 +76,7 @@ public class PlayerValidatorTest {
         List<Player> players = Collections.singletonList(player);
         session.setPlayers(players);
         given(service.getSession(session.getStrId(), session.getActiveDate())).willReturn(session);
+        given(playerAuthenticationService.isLoggedIn(player)).willReturn(true);
         Errors errors = new BeanPropertyBindingResult(player, "player");
 
         validator.validate(player, errors);
@@ -85,6 +90,7 @@ public class PlayerValidatorTest {
         List<Player> players = Collections.singletonList(player);
         session.setPlayers(players);
         given(service.getSession(session.getStrId(), session.getActiveDate())).willReturn(session);
+        given(playerAuthenticationService.isLoggedIn(player)).willReturn(false);
         Errors errors = new BeanPropertyBindingResult(player, "player");
 
         validator.validate(player, errors);

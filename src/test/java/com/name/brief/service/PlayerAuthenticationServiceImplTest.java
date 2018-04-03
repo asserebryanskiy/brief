@@ -37,6 +37,7 @@ public class PlayerAuthenticationServiceImplTest {
                 new ArrayList<>(session.getPlayers().size() + other.getPlayers().size());
         allPlayersList.addAll(session.getPlayers());
         allPlayersList.addAll(other.getPlayers());
+        service.setSessionRegistry(registry);
         when(registry.getAllPrincipals()).thenReturn(allPlayersList);
 
         Set<String> result = service.getAuthenticatedPlayersUsernames(1L);

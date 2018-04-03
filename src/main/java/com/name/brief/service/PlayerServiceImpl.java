@@ -17,7 +17,6 @@ import java.util.List;
 public class PlayerServiceImpl implements PlayerService {
 
     private final PlayerRepository playerRepository;
-    private SessionRegistry sessionRegistry;
 
     @Autowired
     public PlayerServiceImpl(PlayerRepository playerRepository) {
@@ -45,11 +44,6 @@ public class PlayerServiceImpl implements PlayerService {
     public void addResponses(Player player, String responses, int roundIndex) {
         player.getDecision(roundIndex).setAnswer(responses);
         playerRepository.save(player);
-    }
-
-    @Override
-    public void setSessionRegistry(SessionRegistry sessionRegistry) {
-        this.sessionRegistry = sessionRegistry;
     }
 
     @Override

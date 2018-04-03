@@ -3,6 +3,7 @@ package com.name.brief.config.authentication;
 import com.name.brief.model.GameSession;
 import com.name.brief.model.Player;
 import com.name.brief.service.GameSessionService;
+import com.name.brief.service.PlayerAuthenticationService;
 import com.name.brief.validation.PlayerValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -10,7 +11,6 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.stereotype.Component;
 import org.springframework.validation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,10 +19,13 @@ import java.time.LocalDate;
 
 public class PlayerAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private final GameSessionService gameSessionService;
+    private final PlayerAuthenticationService playerAuthenticationService;
 
     @Autowired
-    public PlayerAuthenticationFilter(GameSessionService gameSessionService) {
+    public PlayerAuthenticationFilter(GameSessionService gameSessionService,
+                                      PlayerAuthenticationService playerAuthenticationService) {
         this.gameSessionService = gameSessionService;
+        this.playerAuthenticationService = playerAuthenticationService;
     }
 
     @Override
@@ -30,7 +33,7 @@ public class PlayerAuthenticationFilter extends UsernamePasswordAuthenticationFi
         Player player = getPlayer(request);
 
         BindingResult result = new BeanPropertyBindingResult(player, "player");
-        Validator validator = new PlayerValidator(gameSessionService);
+        Validator validator = new PlayerValidator(gameSessionService, playerAuthenticationService);
         validator.validate(player, result);
 
         if (result.hasErrors()) {

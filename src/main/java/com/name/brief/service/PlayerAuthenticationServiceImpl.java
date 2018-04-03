@@ -11,12 +11,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class PlayerAuthenticationServiceImpl implements PlayerAuthenticationService {
-    private final SessionRegistry playerSessionRegistry;
-
-    @Autowired
-    public PlayerAuthenticationServiceImpl(SessionRegistry playerSessionRegistry) {
-        this.playerSessionRegistry = playerSessionRegistry;
-    }
+    private SessionRegistry playerSessionRegistry;
 
     @Override
     public Set<String> getAuthenticatedPlayersUsernames(Long gameSessionId) {
@@ -36,5 +31,10 @@ public class PlayerAuthenticationServiceImpl implements PlayerAuthenticationServ
     @Override
     public boolean isLoggedIn(Player player) {
         return playerSessionRegistry.getAllSessions(player, false).size() > 0;
+    }
+
+    @Override
+    public void setSessionRegistry(SessionRegistry sessionRegistry) {
+        this.playerSessionRegistry = sessionRegistry;
     }
 }

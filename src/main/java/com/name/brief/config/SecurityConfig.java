@@ -1,8 +1,8 @@
 package com.name.brief.config;
 
 import com.name.brief.config.authentication.PlayerAuthenticationFilter;
-import com.name.brief.model.Player;
 import com.name.brief.service.GameSessionService;
+import com.name.brief.service.PlayerAuthenticationService;
 import com.name.brief.service.PlayerService;
 import com.name.brief.service.UserService;
 import com.name.brief.web.FlashMessage;
@@ -13,7 +13,6 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.core.annotation.Order;
 import org.springframework.data.repository.query.spi.EvaluationContextExtension;
 import org.springframework.data.repository.query.spi.EvaluationContextExtensionSupport;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.access.expression.SecurityExpressionRoot;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -160,12 +159,15 @@ public class SecurityConfig {
 
         private final PlayerService playerService;
         private final GameSessionService gameSessionService;
+        private final PlayerAuthenticationService playerAuthenticationService;
 
         @Autowired
         public PlayerSecurityConfig(PlayerService playerService,
-                                    GameSessionService gameSessionService) {
+                                    GameSessionService gameSessionService,
+                                    PlayerAuthenticationService playerAuthenticationService) {
             this.playerService = playerService;
             this.gameSessionService = gameSessionService;
+            this.playerAuthenticationService = playerAuthenticationService;
         }
 
         @Override
@@ -175,7 +177,7 @@ public class SecurityConfig {
 
         @Bean
         public Filter playerAuthenticationFilter() throws Exception {
-            PlayerAuthenticationFilter filter = new PlayerAuthenticationFilter(gameSessionService);
+            PlayerAuthenticationFilter filter = new PlayerAuthenticationFilter(gameSessionService, playerAuthenticationService);
             filter.setAuthenticationManager(authenticationManager());
             filter.setRequiresAuthenticationRequestMatcher(new AntPathRequestMatcher("/","POST"));
 
@@ -191,9 +193,9 @@ public class SecurityConfig {
             List<SessionAuthenticationStrategy> strategies = new ArrayList<>(6);
             SessionRegistry sessionRegistry = sessionRegistry();
 
-            // set session registry also to playerService to give it an opportunity
+            // set session registry also to playerAuthenticationService to give it an opportunity
             // to programmatically logout players
-            playerService.setSessionRegistry(sessionRegistry);
+            playerAuthenticationService.setSessionRegistry(sessionRegistry);
             strategies.add(new ConcurrentSessionControlAuthenticationStrategy(sessionRegistry));
             strategies.add(new SessionFixationProtectionStrategy());
             strategies.add(new RegisterSessionAuthenticationStrategy(sessionRegistry));

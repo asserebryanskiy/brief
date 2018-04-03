@@ -13,8 +13,6 @@ public interface PlayerService extends UserDetailsService {
 
     Player findByUsername(String username);
 
-    void setSessionRegistry(SessionRegistry sessionRegistry);
-
     void delete(Player player);
 
     void delete(List<Player> players);
