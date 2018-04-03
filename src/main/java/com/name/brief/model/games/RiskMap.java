@@ -107,6 +107,7 @@ public class RiskMap extends Game {
     public Object getAnswerInput(Decision decision) {
         int[] input = new int[12];
         Arrays.fill(input, -1);
+        if (decision == null) return input;
         if (decision.getAnswer() != null) {
             String answer = decision.getAnswer();
             char[] chars = answer.toCharArray();
