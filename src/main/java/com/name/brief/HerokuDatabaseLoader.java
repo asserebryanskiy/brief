@@ -15,10 +15,13 @@ import org.springframework.stereotype.Component;
 public class HerokuDatabaseLoader implements ApplicationRunner{
 
     private final UserRepository userRepository;
+    private final GameSessionRepository gameSessionRepository;
 
     @Autowired
-    public HerokuDatabaseLoader(UserRepository userRepository) {
+    public HerokuDatabaseLoader(UserRepository userRepository,
+                                GameSessionRepository gameSessionRepository) {
         this.userRepository = userRepository;
+        this.gameSessionRepository = gameSessionRepository;
     }
 
     @Override
@@ -28,5 +31,7 @@ public class HerokuDatabaseLoader implements ApplicationRunner{
             String password = SecurityConfig.passwordEncoder.encode("slozhniyparol");
             userRepository.save(new User(username, password, "ROLE_MODERATOR"));
         }
+
+        gameSessionRepository.deleteAll();
     }
 }
