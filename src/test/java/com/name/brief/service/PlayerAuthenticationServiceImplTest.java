@@ -7,10 +7,12 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.core.session.SessionInformation;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -39,12 +41,13 @@ public class PlayerAuthenticationServiceImplTest {
         allPlayersList.addAll(other.getPlayers());
         service.setSessionRegistry(registry);
         when(registry.getAllPrincipals()).thenReturn(allPlayersList);
+        when(registry.getAllSessions(session.getPlayers().get(0), false)).thenReturn(Collections.singletonList(null));
+        when(registry.getAllSessions(session.getPlayers().get(1), false)).thenReturn(Collections.singletonList(null));
 
         Set<String> result = service.getAuthenticatedPlayersUsernames(1L);
 
-        assertThat(result, hasSize(session.getPlayers().size()));
-        session.getPlayers().stream()
-                .map(Player::getUsername)
-                .forEach(username -> assertThat(result, hasItem(username)));
+        assertThat(result, hasSize(2));
+        assertThat(result, hasItem(session.getPlayers().get(0).getUsername()));
+        assertThat(result, hasItem(session.getPlayers().get(1).getUsername()));
     }
 }

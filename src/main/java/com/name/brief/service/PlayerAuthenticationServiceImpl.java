@@ -16,8 +16,9 @@ public class PlayerAuthenticationServiceImpl implements PlayerAuthenticationServ
     @Override
     public Set<String> getAuthenticatedPlayersUsernames(Long gameSessionId) {
         return playerSessionRegistry.getAllPrincipals().stream()
-                .filter(p -> p instanceof Player &&
-                        ((Player) p).getGameSession().getId().equals(gameSessionId))
+                .filter(p -> p instanceof Player
+                        && isLoggedIn((Player) p)
+                        && ((Player) p).getGameSession().getId().equals(gameSessionId))
                 .map(p -> ((Player) p).getUsername())
                 .collect(Collectors.toSet());
     }
