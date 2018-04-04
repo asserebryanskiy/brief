@@ -10,12 +10,6 @@ body {
     justify-content: center;
 }
 
-.preparation-phases {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-}
-
 .header {
     top: 20px;
 }
@@ -30,6 +24,10 @@ body {
     margin: 110px 10px 0;
     justify-self: flex-start;
     font-family: "Circe Light", serif;
+}
+
+#phase-2 {
+    margin-top: 100px;
 }
 
 .risk-grid {
