@@ -66,7 +66,7 @@ public class BriefController {
                                       @DestinationVariable Long gameSessionId) {
         gameSessionService.changePhase(gameSessionId, message.getPhaseNumber());
 
-        // 4 is number of send correct responses phase
+        // 4 is number of send correct responses phase in brief
         if (message.getPhaseNumber() == 4) {
             message.setAdditional(gameSessionService.getCorrectAnswerForCurrentRound(gameSessionId));
         }

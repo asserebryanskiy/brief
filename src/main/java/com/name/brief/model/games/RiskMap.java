@@ -14,7 +14,6 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 @Entity(name = "riskmap")
 @Data
-@ToString(exclude = "sectors")
 public class RiskMap extends Game {
 
     private final int numberOfRounds = 1;
@@ -71,8 +70,12 @@ public class RiskMap extends Game {
     }
 
     @Override
-    public String[] getCorrectAnswers() {
-        return new String[0];
+    public Object getCorrectAnswers() {
+        return new int[]{
+                -1,1,1,-1,
+                1,1,1,3,
+                2,0,-1,-1
+        };
     }
 
     @Override

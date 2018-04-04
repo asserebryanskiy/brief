@@ -162,6 +162,24 @@ img[id$='-large-img'] {
     cursor: pointer;
 }
 
+.correct-answer-cover {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.3;
+}
+
+.correct-answer-cover.no-level {
+    opacity: 0.6;
+}
+
+#show-correct-answers-btn {
+    font-family: "Circe Light", serif;
+    text-decoration: underline;
+}
+
 /****************************************
 *              SECTOR-PHASES            *
 ****************************************/

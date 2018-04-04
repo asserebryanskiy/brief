@@ -38,7 +38,7 @@ public abstract class Game extends BaseEntity implements Serializable {
     public abstract String getRussianName();
     public abstract String getEnglishName();
     public abstract String getCorrectAnswer(int numberOfRound);
-    public abstract String[] getCorrectAnswers();
+    public abstract Object getCorrectAnswers();
     public abstract Object getAnswerInput(Decision decision);
 
 

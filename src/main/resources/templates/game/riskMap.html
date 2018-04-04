@@ -16,7 +16,7 @@
             <h1 class="timer">00:00</h1>
             <div class="risk-grid">
                 <div th:each="i, iter : ${gameSession.game.getAnswerInput(decision)}"
-                     class="risk-img-cell">
+                     th:class="'risk-img-cell risk-img-cell-' + ${iter.index}">
                     <div class="small-img-wrapper">
                         <img th:src="@{|/assets/image/riskMap/low_2000/low_2000_${#numbers.formatInteger(iter.count, 2)}.jpg|}" alt=""
                              th:id="${iter.index / 4 + '' + iter.index % 4 + '-small-img'}"
@@ -60,6 +60,26 @@
             </div>
             <button th:replace="game/fragments :: sendResponsesBtn"></button>
             <div th:replace="game/fragments :: flash('Ответы отправлены')"></div>
+        </div>
+
+        <div class="phase-container hidden" id="phase-2">
+            <h2>Вы заработали <span id="score-text">0</span> баллов</h2>
+            <p id="show-correct-answers-btn">Показать правильные ответы</p>
+            <div class="risk-grid" th:with="correctAnswers = ${gameSession.game.correctAnswers}">
+                <div th:each="i, iter : ${gameSession.game.getAnswerInput(decision)}"
+                     th:class="'risk-img-cell risk-img-cell-' + ${iter.index}">
+                    <div class="small-img-wrapper" th:with="ca = ${correctAnswers[iter.index]}">
+                        <img th:src="@{|/assets/image/riskMap/low_2000/low_2000_${#numbers.formatInteger(iter.count, 2)}.jpg|}" alt=""
+                             th:id="${iter.index / 4 + '' + iter.index % 4 + '-small-img'}"
+                             class="risk-small-img animated scale-on-hover">
+                        <div class="risk-indicator hidden no-answer"
+                             th:classappend="${'correct-answer-risk-indicator-' + iter.index} + ${i} == 0 ? 'no-level' : (${i} == 1 ? 'low-level' : (${i} == 2 ? 'mid-level' : (${i} == 3 ? 'high-level':'')))"></div>
+                        <div class="correct-answer-cover hidden"
+                             th:if="${ca} >= 0"
+                             th:classappend="${ca} == 0 ? 'no-level' : (${ca} == 1 ? 'low-level' : (${ca} == 2 ? 'mid-level' : 'high-level'))"></div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div th:replace="game/fragments :: logout"></div>

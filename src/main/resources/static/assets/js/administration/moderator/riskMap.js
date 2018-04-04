@@ -1,6 +1,9 @@
 const SEND_ANSWER_PHASE = '1';
 
 controller.nextRound = () => {
+    controller.timer.clearTimers();
+    setTimersOriginalValues();
+
     // remove all phases' classes except phase
     $('.phase').removeClass('active previous next played');
 

@@ -1,4 +1,5 @@
 const SEND_ANSWER_PHASE = 1;
+const CORRECT_ANSWERS_PHASE = 2;
 
 const currentSectorNumber = parseInt($('#currents-sector-number').text());
 
@@ -20,13 +21,16 @@ $('.answer-input').click((event) => {
     }
 });
 
+$('#show-correct-answers-btn').click(() => {
+    $('.correct-answer-cover').slideToggle();
+});
 /************************************
  *       OVERRIDDEN FUNCTIONS       *
  ************************************/
 
 function getAnswerStr() {
     let answerStr = '';
-    $('.risk-img-cell').each((i, el) => {
+    $('#phase-1 .risk-img-cell').each((i, el) => {
         const $indicator = $(el).find('.risk-indicator');
         if ($indicator.hasClass('no-level')) answerStr += i + '-0,';
         if ($indicator.hasClass('low-level')) answerStr += i + '-1,';
@@ -48,7 +52,9 @@ function toggleSelected(event) {
     $target.toggleClass('selected');
 
     // remove indicator from img-cell if any
-    const $indicator = $target.parents('.risk-img-cell').find('.risk-indicator');
+    const $indicator = $('.' + $target.parents('.risk-img-cell')[0].classList[1])
+        .find('.risk-indicator');
+    console.log($indicator);
     $indicator.removeClass('low-level mid-level high-level');
 
     if ($target.hasClass('selected')) {
@@ -74,6 +80,11 @@ controller.setOnRoundChange(() => {
         .addClass('no-answer');
     controller.sendResponses();
 });
+controller.setOnPhaseChange((phaseNumber) => {
+    if (phaseNumber === CORRECT_ANSWERS_PHASE) {
+        $('#score-text').text(getScore());
+    }
+});
 controller.connect();
 controller.changePhase(currentPhaseNumber, '', '');
 
@@ -81,11 +92,147 @@ controller.changePhase(currentPhaseNumber, '', '');
  *            ON PAGE LOAD          *
  ************************************/
 
-/*
-if (currentSectorNumber === 0) {
-    $('.preparation-phases').show();
-} else {
-    $('.sector-phases').hide();
-    $('#sector-phases-' + currentSectorNumber).show();
+function getScore() {
+    const answer = getAnswerStr();
+    const answerMatrix = getAnswerMatrix(answer);
+    const correctAnswers = [
+        [-1,1,1,-1],
+        [1,1,1,3],
+        [2,0,-1,-1],
+    ];
+    let score = 0;
+    for (let i = 0; i < 3; i++) {
+        for (let j = 0; j < 4; j++) {
+            switch (correctAnswers[i][j]) {
+                case -1: continue;
+                case 0:
+                    switch (answerMatrix[i][j]) {
+                        case -1:
+                            score += -100;
+                            continue;
+                        case 0:
+                            score += 100;
+                            continue;
+                        case 1:
+                            score += 50;
+                            continue;
+                        case 2:
+                            score += 25;
+                            continue;
+                        case 3:
+                            score += 0;
+                            continue;
+                    }
+                    break;
+                case 1:
+                    switch (answerMatrix[i][j]) {
+                        case -1:
+                            score += -200;
+                            continue;
+                        case 0:
+                            score += 50;
+                            continue;
+                        case 1:
+                            score += 200;
+                            continue;
+                        case 2:
+                            score += 100;
+                            continue;
+                        case 3:
+                            score += 50;
+                            continue;
+                    }
+                    break;
+                case 2:
+                    switch (answerMatrix[i][j]) {
+                        case -1:
+                            score += -300;
+                            continue;
+                        case 0:
+                            score += 25;
+                            continue;
+                        case 1:
+                            score += 100;
+                            continue;
+                        case 2:
+                            score += 300;
+                            continue;
+                        case 3:
+                            score += 150;
+                            continue;
+                    }
+                    break;
+                case 3:
+                    switch (answerMatrix[i][j]) {
+                        case -1:
+                            score += -400;
+                            continue;
+                        case 0:
+                            score += 0;
+                            continue;
+                        case 1:
+                            score += 50;
+                            continue;
+                        case 2:
+                            score += 150;
+                            continue;
+                        case 3:
+                            score += 400;
+                            continue;
+                    }
+                    break;
+            }
+        }
+    }
+
+    return score;
 }
-controller.changePhase(currentPhaseNumber);*/
+
+function getScoreForSector(sector, answer) {
+    const correctAnswers = [
+        [-1,1,1,-1],
+        [1,1,1,3],
+        [2,0,-1,-1],
+    ];
+
+    // scoring varies depending on correct answer
+    switch (correctAnswers[sector / 4][sector % 4]) {
+        case -1:
+            return 0;
+        case 0:
+
+        case 1:
+            switch (answer) {
+                case -1: return -200;
+                case 0: return 50;
+                case 1: return 200;
+            }
+    }
+}
+
+function getAnswerMatrix(answer) {
+    const answerMatrix = new Array(3);
+    for (let i = 0; i < 3; i++) {
+        const inner = new Array(4);
+        inner.fill(-1);
+        answerMatrix[i] = inner;
+    }
+    if (answer.length === 0) return answerMatrix;
+    let acc = '';
+    let sector = 0;
+    for (let i = 0; i < answer.length; i++) {
+        const letter = answer.charAt(i);
+        if (letter === '-') {
+            sector = parseInt(acc);
+            acc = '';
+        } else if (letter === ',') {
+            answerMatrix[Math.floor(sector / 4)][sector % 4] = parseInt(acc);
+            acc = '';
+            sector = 0;
+        } else {
+            acc += letter;
+        }
+    }
+    answerMatrix[Math.floor(sector / 4)][sector % 4] = parseInt(acc);
+    return answerMatrix;
+}

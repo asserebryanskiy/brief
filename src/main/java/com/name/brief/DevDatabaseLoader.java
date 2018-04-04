@@ -67,9 +67,14 @@ public class DevDatabaseLoader implements ApplicationRunner {
                 .withActiveDate(LocalDate.now().minusDays(1))
                 .withUser(moderator1)
                 .build();
+        GameSession riskMap = new GameSession.GameSessionBuilder("risk")
+                .withGame(new RiskMap())
+                .withUser(moderator1)
+                .build();
         gameSessionService.save(session);
         gameSessionService.save(session2);
         gameSessionService.save(session3);
         gameSessionService.save(pastSession);
+        gameSessionService.save(riskMap);
     }
 }
