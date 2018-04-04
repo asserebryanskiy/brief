@@ -97,4 +97,20 @@ public class PlayerValidatorTest {
 
         assertThat(errors.hasErrors(), is(false));
     }
+
+    @Test
+    public void construction_withExcessiveSpacesResultsInNoErrors() {
+        List<Player> players = Collections.singletonList(player);
+        session.setPlayers(players);
+        given(service.getSession(session.getStrId(), session.getActiveDate())).willReturn(session);
+        given(playerAuthenticationService.isLoggedIn(player)).willReturn(false);
+        Player underTest = new Player();
+        underTest.setGameSession(new GameSession.GameSessionBuilder(session.getStrId() + " ").build());
+        underTest.setCommandName(player.getCommandName() + " ");
+        Errors errors = new BeanPropertyBindingResult(player, "player");
+
+        validator.validate(player, errors);
+
+        assertThat(errors.hasErrors(), is(false));
+    }
 }

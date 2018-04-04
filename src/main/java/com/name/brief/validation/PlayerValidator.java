@@ -31,17 +31,18 @@ public class PlayerValidator implements Validator {
         Player player = (Player) target;
         GameSession provided = player.getGameSession();
 
-        GameSession gameSession = gameSessionService.getSession(provided.getStrId(), provided.getActiveDate());
+        GameSession gameSession = gameSessionService
+                .getSession(provided.getStrId().trim(), provided.getActiveDate());
         if (gameSession == null) {
             errors.rejectValue("gameSession", "player.validation.wrongGameSessionStrId");
         } else {
             if (gameSession.getPlayers() == null || gameSession.getPlayers().stream()
                     .map(Player::getCommandName)
-                    .noneMatch(name -> name.equals(player.getCommandName()))) {
+                    .noneMatch(name -> name.equals(player.getCommandName().trim()))) {
                 errors.rejectValue("commandName", "player.validation.noCommandWithSuchName");
             } else {
                 Player found = gameSession.getPlayers().stream()
-                        .filter(c -> c.getCommandName().equals(player.getCommandName()))
+                        .filter(c -> c.getCommandName().equals(player.getCommandName().trim()))
                         .findAny()
                         .orElse(null);  // ignore because we've already checked that player exists
                 //noinspection ConstantConditions
