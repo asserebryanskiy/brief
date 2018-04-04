@@ -1,5 +1,5 @@
 .phase-container {
-    margin: 0;
+    margin: auto 0;
 }
 
 .projector-wrapper {
@@ -7,7 +7,13 @@
     display: flex;
     justify-content: space-evenly;
     align-content: center;
-    margin: 0;
+    margin: auto;
+}
+
+.projector-wrapper img {
+    width: 30%;
+    height: 30%;
+    margin: auto;
 }
 
 .phase-container svg {
@@ -20,12 +26,20 @@
     font-size: 4em;
 }
 
+.strId {
+    margin: auto;
+}
+
 .strId h2 {
     font-family: 'Circe Light', serif;
 }
 
 .strId h1 {
     font-size: 8em;
+}
+
+.strId span {
+    font-size: 2em;
 }
 
 .phase-container .timer {
