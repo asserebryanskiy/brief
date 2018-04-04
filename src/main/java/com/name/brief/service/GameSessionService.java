@@ -34,4 +34,6 @@ public interface GameSessionService {
     void update(GameSessionDto dto);
 
     void delete(Long gameSessionId);
+
+    void nullPlayersAnswers(Long gameSessionId);
 }

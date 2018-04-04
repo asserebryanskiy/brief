@@ -131,4 +131,11 @@ public class GameSessionServiceImpl implements GameSessionService {
     public void delete(Long gameSessionId) {
         gameSessionRepository.delete(gameSessionId);
     }
+
+    @Override
+    public void nullPlayersAnswers(Long gameSessionId) {
+        GameSession session = getSession(gameSessionId);
+        session.getPlayers().forEach(p -> p.getDecisions().forEach(d -> d.setAnswer(null)));
+        gameSessionRepository.save(session);
+    }
 }

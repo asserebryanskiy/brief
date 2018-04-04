@@ -68,7 +68,7 @@ public class BriefController {
 
         GameSession session = gameSessionService.getSession(gameSessionId);
         if (message.getPhaseNumber() == 0 && session.getGame() instanceof RiskMap) {
-            session.getPlayers().forEach(p -> p.getDecisions().forEach(d -> d.setAnswer(null)));
+            gameSessionService.nullPlayersAnswers(gameSessionId);
         }
 
         // 4 is number of send correct responses phase in brief
@@ -82,6 +82,12 @@ public class BriefController {
     @SendTo("/topic/{gameSessionId}/changeRound")
     public int nextRound(int nextRoundIndex, @DestinationVariable Long gameSessionId) {
         gameSessionService.changeRound(gameSessionId, nextRoundIndex);
+
+        GameSession session = gameSessionService.getSession(gameSessionId);
+        if (session.getGame() instanceof RiskMap) {
+            gameSessionService.nullPlayersAnswers(gameSessionId);
+        }
+
         return nextRoundIndex;
     }
 
