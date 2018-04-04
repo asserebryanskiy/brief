@@ -78,6 +78,7 @@ function toggleSelected(event) {
 controller.setOnRoundChange(() => {
     $('.risk-indicator').removeClass('no-level low-level mid-level high-level')
         .addClass('no-answer');
+    $('.answer-input').removeClass('selected');
     controller.sendResponses();
 });
 controller.setOnPhaseChange((phaseNumber) => {

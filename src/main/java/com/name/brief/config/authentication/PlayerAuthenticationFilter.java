@@ -11,6 +11,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.stereotype.Component;
 import org.springframework.validation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -46,9 +47,9 @@ public class PlayerAuthenticationFilter extends UsernamePasswordAuthenticationFi
 
     @Override
     protected String obtainUsername(HttpServletRequest request) {
-        return Player.constructUsername(request.getParameter("gameSession.strId"),
+        return Player.constructUsername(request.getParameter("gameSession.strId").trim(),
                 LocalDate.now(),
-                request.getParameter("commandName"));
+                request.getParameter("commandName").trim());
     }
 
     @Override

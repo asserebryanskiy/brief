@@ -66,6 +66,11 @@ public class BriefController {
                                       @DestinationVariable Long gameSessionId) {
         gameSessionService.changePhase(gameSessionId, message.getPhaseNumber());
 
+        GameSession session = gameSessionService.getSession(gameSessionId);
+        if (message.getPhaseNumber() == 0 && session.getGame() instanceof RiskMap) {
+            session.getPlayers().forEach(p -> p.getDecisions().forEach(d -> d.setAnswer(null)));
+        }
+
         // 4 is number of send correct responses phase in brief
         if (message.getPhaseNumber() == 4) {
             message.setAdditional(gameSessionService.getCorrectAnswerForCurrentRound(gameSessionId));
