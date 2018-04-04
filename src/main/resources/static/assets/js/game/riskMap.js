@@ -55,7 +55,7 @@ function toggleSelected(event) {
     const $indicator = $('.' + $target.parents('.risk-img-cell')[0].classList[1])
         .find('.risk-indicator');
     console.log($indicator);
-    $indicator.removeClass('low-level mid-level high-level');
+    $indicator.removeClass('no-level low-level mid-level high-level');
 
     if ($target.hasClass('selected')) {
         // add new indicator to img-cell
