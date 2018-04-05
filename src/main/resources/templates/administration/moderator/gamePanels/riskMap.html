@@ -7,6 +7,7 @@
     <title>Карта рисков | Панель модератора</title>
 </head>
 <body th:with="riskMap = ${gameSession.game}">
+    <div th:replace="appFragments :: preloader"></div>
     <div th:replace="administration/fragments :: game-session-header"></div>
     <div class="main-content">
         <div class="round-nav-and-commands">

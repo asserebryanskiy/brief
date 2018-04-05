@@ -211,6 +211,7 @@ function GameSessionController() {
             if (onWsConnect !== null && typeof onWsConnect !== 'undefined') onWsConnect(stompClient);
 
             // show screen
+            $('.preloader').fadeOut();
         });
     };
 }

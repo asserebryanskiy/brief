@@ -88,9 +88,8 @@ function GameController() {
             // do game specific stuff if any
             if (onWsConnect != null) onWsConnect(stompClient);
 
-            // show screen
-
-            // on connection loss (i.g when Iphone is locked) try to reconnect every 2 seconds
+            // hide preloader show screen
+            $('.preloader').fadeOut();
         }
 
         function reconnect() {
@@ -123,6 +122,8 @@ function GameController() {
         stompClient.connect({}, (frame) => {
             connect(frame);
         }, () => {
+            $('.preloader').show();
+            // on connection loss (i.g when Iphone is locked) try to reconnect every 1 second
             reconnect()
         });
     };

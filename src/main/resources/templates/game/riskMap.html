@@ -8,6 +8,7 @@
     <title>МОЗ | Карта рисков</title>
 </head>
 <body>
+    <div th:replace="appFragments :: preloader"></div>
     <div class="container">
         <div th:replace="game/fragments :: header(${commandName},${gameSession.currentRoundIndex})"></div>
         <div th:replace="game/fragments :: introPhase"></div>

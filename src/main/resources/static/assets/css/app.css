@@ -168,3 +168,20 @@ body {
     width: 15px;
     height: 15px;
 }
+
+.preloader {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    background-color: #4E3549;
+    z-index: 10;
+}
+
+.preloader svg {
+    margin: auto;
+}

@@ -8,6 +8,7 @@
     <title>МОЗ Бриф</title>
 </head>
 <body th:with="currentPhaseNumber = ${gameSession.currentPhaseNumber}">
+    <div th:replace="appFragments :: preloader"></div>
     <div class="container">
         <div th:replace="game/fragments :: header (${commandName}, ${gameSession.currentRoundIndex})"></div>
         <div th:replace="game/fragments :: introPhase"></div>
