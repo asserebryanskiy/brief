@@ -29,7 +29,7 @@ function GameController() {
     // this.setOnTimerChanged = (onTimerChanged) => this.onTimerChanged = onTimerChanged;
 
     this.connect = (onWsConnect) => {
-        stompClient.connect({}, function (frame) {
+        function connect(frame) {
             username = frame.headers['user-name'];
 
             if (!projectorMode) {
@@ -89,6 +89,29 @@ function GameController() {
             if (onWsConnect != null) onWsConnect(stompClient);
 
             // show screen
+
+            // on connection loss (i.g when Iphone is locked) try to reconnect every 2 seconds
+        }
+
+        function reconnect() {
+            let connected = false;
+            let reconInv = setInterval(() => {
+                stompClient.connect({}, (frame) => {
+                    clearInterval(reconInv);
+                    connected = true;
+                    connect(frame);
+                }, () => {
+                    if (connected) {
+                        reconnect();
+                    }
+                });
+            }, 1000);
+        }
+
+        stompClient.connect({}, (frame) => {
+            connect(frame);
+        }, () => {
+            reconnect()
         });
     };
 
@@ -203,3 +226,11 @@ function getTimerDurationStr(timerDuration) {
 function notNull(obj) {
     return typeof obj !== 'undefined';
 }
+
+/***********************************************
+ *                                             *
+ *             WEB SOCKET SETTINGS             *
+ *                                             *
+ ************************************************/
+
+// stompClient.onconnect(() => console.log('connected'));
