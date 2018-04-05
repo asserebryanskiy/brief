@@ -34,6 +34,9 @@ public class GameSessionServiceTest {
     @MockBean
     private GameSessionRepository repository;
 
+    @MockBean
+    private PlayerAuthenticationService playerAuthenticationService;
+
     @Test
     public void isSessionActive_returnsFalseIfNoSessionWithThisStrId() {
         when(repository.findByStrIdAndActiveDate("non-existing-id", LocalDate.now()))
@@ -138,5 +141,15 @@ public class GameSessionServiceTest {
         service.update(dto);
 
         assertThat(session.getPlayers(), hasSize(dto.getNumberOfCommands()));
+    }
+
+    @Test
+    public void delete_expiresAllGameSessionPlayers() {
+        GameSession session = new GameSession.GameSessionBuilder("id").build();
+        when(repository.findOne(session.getId())).thenReturn(session);
+
+        service.delete(session.getId());
+
+        session.getPlayers().forEach(p -> verify(playerAuthenticationService).logout(p));
     }
 }

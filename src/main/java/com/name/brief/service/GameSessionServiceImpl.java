@@ -4,7 +4,6 @@ import com.name.brief.exception.GameSessionAlreadyExistsException;
 import com.name.brief.exception.GameSessionNotFoundException;
 import com.name.brief.model.GameSession;
 import com.name.brief.model.Player;
-import com.name.brief.repository.GameRepository;
 import com.name.brief.repository.GameSessionRepository;
 import com.name.brief.utils.TimeConverter;
 import com.name.brief.web.dto.GameSessionDto;
@@ -15,17 +14,18 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.IntStream;
 
 @Service
 public class GameSessionServiceImpl implements GameSessionService {
     private final GameSessionRepository gameSessionRepository;
+    private final PlayerAuthenticationService playerAuthenticationService;
 
     @Autowired
-    public GameSessionServiceImpl(GameSessionRepository gameSessionRepository) {
+    public GameSessionServiceImpl(GameSessionRepository gameSessionRepository,
+                                  PlayerAuthenticationService playerAuthenticationService) {
         this.gameSessionRepository = gameSessionRepository;
+        this.playerAuthenticationService = playerAuthenticationService;
     }
 
     @Override
@@ -130,6 +130,9 @@ public class GameSessionServiceImpl implements GameSessionService {
 
     @Override
     public void delete(Long gameSessionId) {
+        GameSession gameSession = gameSessionRepository.findOne(gameSessionId);
+        if (gameSession == null) throw new GameSessionNotFoundException();
+        gameSession.getPlayers().forEach(playerAuthenticationService::logout);
         gameSessionRepository.delete(gameSessionId);
     }
 
