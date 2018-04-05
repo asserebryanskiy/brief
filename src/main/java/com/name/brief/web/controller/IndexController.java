@@ -57,53 +57,11 @@ public class IndexController {
         return "index";
     }
 
-    @RequestMapping("/.well-known/acme-challenge/H-zTGXNuknNuEDEa2rixZkv0mNFN_u72NO0IAozsBng")
-    @ResponseBody
-    public String sertificate() {
-        return "H-zTGXNuknNuEDEa2rixZkv0mNFN_u72NO0IAozsBng.yaJ7SlCwIHaiDb-R461yRIaVEMru1jJgTSFlM8NlRSc";
-    }
-
     private void addFlashAttribute(Model model, HttpSession session, String attr) {
         Object obj = session.getAttribute(attr);
         if (obj != null) {
             model.addAttribute(attr, obj);
             session.removeAttribute(attr);
         }
-    }
-
-    /*@RequestMapping(value = "/", method = RequestMethod.POST)
-    public String login(@Valid Player player,
-                        BindingResult result,
-                        RedirectAttributes redirectAttributes,
-                        HttpServletRequest request,
-                        HttpServletResponse response) {
-        if (result.hasErrors()) {
-            if (result.hasFieldErrors("loggedIn")) {
-                System.out.println("Already loggedIn");
-                String username = (String) SecurityContextHolder.getContext().getAuthentication()
-                        .getPrincipal();
-                if (username.equals(getUsername(player))) return "redirect:/game";
-            }
-            redirectAttributes.addFlashAttribute("player", player);
-            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.player", result);
-            return "redirect:/";
-        }
-        gameSessionService.login(player);
-        String username = getUsername(player);
-
-        SecurityContext context = SecurityContextHolder.getContext();
-        context.setAuthentication(
-                new UsernamePasswordAuthenticationToken(username, "",
-                        Collections.singletonList(new SimpleGrantedAuthority("ROLE_PLAYER"))));
-        HttpSession session = request.getSession(true);
-        session.setAttribute("SPRING_SECURITY_CONTEXT", context);
-
-//        redirectAttributes
-
-        return "redirect:/login";
-    }*/
-
-    private String getUsername(Player player) {
-        return player.getGameSession().getStrId() + LocalDate.now().toString() + player.getCommandName();
     }
 }

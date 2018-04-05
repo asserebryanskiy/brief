@@ -210,7 +210,6 @@ public class SecurityConfig {
             http
                 .authorizeRequests()
                     .antMatchers("/").permitAll()
-                    .antMatchers("/.well-known/**").permitAll()
                     .antMatchers("/game/**").hasRole("PLAYER")
                     .anyRequest().hasAnyRole("PLAYER", "ADMIN", "MODERATOR")
                     .and()
