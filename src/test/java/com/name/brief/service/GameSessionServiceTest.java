@@ -19,6 +19,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.LocalDate;
 
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
@@ -32,10 +33,6 @@ public class GameSessionServiceTest {
 
     @MockBean
     private GameSessionRepository repository;
-    @MockBean
-    private PlayerService playerService;
-    @MockBean
-    private GameRepository gameRepository;
 
     @Test
     public void isSessionActive_returnsFalseIfNoSessionWithThisStrId() {
@@ -73,5 +70,73 @@ public class GameSessionServiceTest {
         String found = service.getCorrectAnswerForCurrentRound(0L);
 
         assertThat(found, is(game.getCorrectAnswer(2)));
+    }
+
+    @Test
+    public void update_updatesDateInPlayersUsernames() {
+        GameSession session = new GameSession.GameSessionBuilder("id").build();
+        GameSessionDto dto = GameSessionDto.createFrom(session);
+        dto.setActiveDate(LocalDate.now().minusDays(1));
+        when(repository.findOne(dto.getGameSessionId())).thenReturn(session);
+
+        service.update(dto);
+
+        session.getPlayers().forEach(p -> {
+            String expected = Player.constructUsername(session.getStrId(), dto.getActiveDate(), p.getCommandName());
+            assertThat(p.getUsername(), is(expected));
+        });
+    }
+
+    @Test
+    public void update_updatesStrIdInPlayersUsernames() {
+        GameSession session = new GameSession.GameSessionBuilder("id").build();
+        GameSessionDto dto = GameSessionDto.createFrom(session);
+        dto.setNewStrId("newId");
+        when(repository.findOne(dto.getGameSessionId())).thenReturn(session);
+
+        service.update(dto);
+
+        session.getPlayers().forEach(p -> {
+            String expected = Player.constructUsername(dto.getNewStrId(), session.getActiveDate(), p.getCommandName());
+            assertThat(p.getUsername(), is(expected));
+        });
+    }
+
+    @Test
+    public void update_createsNewPlayersIfNewAmountIsBigger() {
+        GameSession session = new GameSession.GameSessionBuilder("id").build();
+        GameSessionDto dto = GameSessionDto.createFrom(session);
+        dto.setNumberOfCommands(10);
+        when(repository.findOne(dto.getGameSessionId())).thenReturn(session);
+
+        service.update(dto);
+
+        assertThat(session.getPlayers(), hasSize(dto.getNumberOfCommands()));
+    }
+
+    @Test
+    public void update_createsNewPlayersWithNewStrIdAndActiveDate() {
+        GameSession session = new GameSession.GameSessionBuilder("id").build();
+        GameSessionDto dto = GameSessionDto.createFrom(session);
+        dto.setNumberOfCommands(10);
+        dto.setNewStrId("newId");
+        dto.setActiveDate(LocalDate.now().minusDays(1));
+        when(repository.findOne(dto.getGameSessionId())).thenReturn(session);
+
+        service.update(dto);
+
+        assertThat(session.getPlayers(), hasSize(dto.getNumberOfCommands()));
+    }
+
+    @Test
+    public void update_deletesPlayersIfNewAmountIsSmaller() {
+        GameSession session = new GameSession.GameSessionBuilder("id").build();
+        GameSessionDto dto = GameSessionDto.createFrom(session);
+        dto.setNumberOfCommands(2);
+        when(repository.findOne(dto.getGameSessionId())).thenReturn(session);
+
+        service.update(dto);
+
+        assertThat(session.getPlayers(), hasSize(dto.getNumberOfCommands()));
     }
 }

@@ -104,24 +104,24 @@ public class GameSessionServiceImpl implements GameSessionService {
             List<Player> players = current.getPlayers();
             int currentSize = players.size();
             int newSize = dto.getNumberOfCommands();
-            if (newSize != currentSize) {
-                for (int i = 0; i < newSize; i++) {
-                    if (i < currentSize) {
-                        Player player = players.get(i);
-                        player.setUsername(Player.constructUsername(current.getStrId(),
-                                current.getActiveDate(),
-                                player.getCommandName()));
-                    } else {
-                        players.add(new Player(current, String.valueOf(i + 1)));
-                    }
-                }
-                if (newSize < currentSize) {
-                    for (int i = newSize; i < currentSize; i++) {
-                        players.get(i).setGameSession(null);
-                        players.remove(i);
-                    }
+            if (newSize < currentSize) {
+                for (int i = newSize; i < currentSize; i++) {
+                    players.get(newSize).setGameSession(null);
+                    players.remove(newSize);
                 }
             }
+            if (newSize > currentSize) {
+                for (int i = currentSize; i < newSize; i++) {
+                    players.add(new Player(current, String.valueOf(i + 1)));
+                }
+            }
+
+            // update players usernames
+            players.forEach(player -> player.setUsername(Player.constructUsername(
+                    current.getStrId(),
+                    current.getActiveDate(),
+                    player.getCommandName())
+            ));
 
             gameSessionRepository.save(current);
         }
