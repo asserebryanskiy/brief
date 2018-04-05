@@ -1,6 +1,8 @@
 package com.name.brief.web.controller;
 
 import com.name.brief.model.Player;
+import com.name.brief.model.Role;
+import com.name.brief.model.User;
 import com.name.brief.service.PlayerAuthenticationService;
 import com.name.brief.service.PlayerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,11 +29,18 @@ public class IndexController {
 
     @RequestMapping("/")
     public String getMain(HttpServletRequest request, Model model, Principal principal) {
-        // if player is already authenticated redirect him to game
         Authentication authentication = (Authentication) principal;
-        if (authentication != null && authentication.getPrincipal() instanceof Player
-                && playerAuthenticationService.isLoggedIn((Player) authentication.getPrincipal())) {
-            return "redirect:/game";
+        if (authentication != null) {
+            Object user = authentication.getPrincipal();
+            // if player is already authenticated redirect him to game
+            if (user instanceof Player
+                    && playerAuthenticationService.isLoggedIn((Player) authentication.getPrincipal())) {
+                return "redirect:/game";
+            }
+            // if moderator is authenticated redirect it to index
+            if (user instanceof User && ((User) user).getRole().equals(Role.MODERATOR.getRole())) {
+                return "redirect:/moderator";
+            }
         }
 
         if (request.getSession(false) != null) {
