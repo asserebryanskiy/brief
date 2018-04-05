@@ -56,7 +56,7 @@ public class GameSessionDto {
 
     public static Map<String, GameSessionDto> getDtosMap(List<GameSession> sessions) {
         Map<String, GameSessionDto> dtos = new HashMap<>(sessions.size());
-        sessions.forEach(s -> dtos.put(s.getStrId(), createFrom(s)));
+        sessions.forEach(s -> dtos.put("dto_" + s.getStrId(), createFrom(s)));
         return dtos;
     }
 

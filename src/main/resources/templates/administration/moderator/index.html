@@ -77,7 +77,7 @@
                                 <div class="popup-content">
                                     <div th:replace="administration/fragments :: popupHeader('Изменить игру')"></div>
                                     <form th:action="@{/moderator/changeGameSession}"
-                                          th:object="${__${session.strId}__}" method="post">
+                                          th:object="${__${'dto_' + session.strId}__}" method="post">
                                         <div th:replace="administration/fragments :: gameSessionFormContent(false)"></div>
                                     </form>
                                 </div>
