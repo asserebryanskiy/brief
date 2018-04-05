@@ -1,5 +1,5 @@
-const socket = new SockJS('/websocket');
-const stompClient = Stomp.over(socket);
+let socket = new SockJS('/websocket');
+let stompClient = Stomp.over(socket);
 const gameSessionId = $('#game-session-id').text();
 const projectorMode = $('#projector-mode').length > 0;
 const blockAnswerInput = $('#block-answer-input').length !== 0;
@@ -96,6 +96,8 @@ function GameController() {
         function reconnect() {
             let connected = false;
             let reconInv = setInterval(() => {
+                socket = new SockJS('/websocket');
+                stompClient = Stomp.over(socket);
                 stompClient.connect({}, (frame) => {
                     clearInterval(reconInv);
                     connected = true;
