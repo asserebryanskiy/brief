@@ -218,7 +218,6 @@ public class SecurityConfig {
                     .and()
                 .logout()
                     .logoutUrl("/game/logout")
-//                    .logoutSuccessHandler(logoutSuccessHandler())
                     .invalidateHttpSession(true)
                     .deleteCookies("JSESSIONID")
                     .and()
@@ -239,15 +238,5 @@ public class SecurityConfig {
         public HttpSessionEventPublisher sessionEventPublisher() {
             return new HttpSessionEventPublisher();
         }
-
-       /* private LogoutSuccessHandler logoutSuccessHandler() {
-            return (request, response, authentication) -> {
-                Player player = (Player) authentication.getPrincipal();
-                playerService.logout(player);
-                template.convertAndSend("/queue/" + player.getGameSession().getId(),
-                        "Logout " + player.getCommandName());
-                response.sendRedirect("/");
-            };
-        }*/
     }
 }
