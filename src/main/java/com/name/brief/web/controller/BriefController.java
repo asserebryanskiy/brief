@@ -6,6 +6,7 @@ import com.name.brief.model.games.RiskMap;
 import com.name.brief.service.GameSessionService;
 import com.name.brief.service.PlayerAuthenticationService;
 import com.name.brief.service.PlayerService;
+import com.name.brief.web.dto.MoveToDto;
 import com.name.brief.web.dto.NextPhaseMessage;
 import com.name.brief.web.dto.Answers;
 import com.name.brief.web.dto.StatsList;
@@ -119,5 +120,20 @@ public class BriefController {
     public StatsList sendStatistics(@DestinationVariable Long gameSessionId) {
         GameSession session = gameSessionService.getSession(gameSessionId);
         return session.getStatsList();
+    }
+
+
+    /**
+     * Sends MoveToDto object that contains current phase and current round of gameSession
+     * to currently authenticated player.
+     *
+     * @param principal - currently authenticated player
+     */
+    @MessageMapping("/whereI")
+    public void movePlayerToCurrentPosition(Principal principal) {
+        Player player = (Player) ((Authentication) principal).getPrincipal();
+
+        template.convertAndSend("/queue/" + player.getUsername() + "/moveTo",
+                gameSessionService.createMoveTo(player.getGameSession().getId()));
     }
 }

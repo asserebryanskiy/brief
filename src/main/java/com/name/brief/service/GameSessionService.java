@@ -3,6 +3,7 @@ package com.name.brief.service;
 import com.name.brief.exception.GameSessionAlreadyExistsException;
 import com.name.brief.model.GameSession;
 import com.name.brief.web.dto.GameSessionDto;
+import com.name.brief.web.dto.MoveToDto;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -36,4 +37,6 @@ public interface GameSessionService {
     void delete(Long gameSessionId);
 
     void nullPlayersAnswers(Long gameSessionId);
+
+    MoveToDto createMoveTo(Long gameSessionId);
 }

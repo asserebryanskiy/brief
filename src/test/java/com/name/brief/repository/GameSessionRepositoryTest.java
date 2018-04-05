@@ -171,6 +171,16 @@ public class GameSessionRepositoryTest {
     }
 
     @Test
+    public void findCurrentRoundIndexrById_returnsProperRound() {
+        GameSession session = createDefaultSession();
+        session.setCurrentRoundIndex(2);
+        repository.save(session);
+
+        assertThat(repository.findCurrentRoundIndexById(session.getId()).getCurrentRoundIndex(),
+                is(2));
+    }
+
+    @Test
     public void setEndOfTimerWorksAsExpected() {
         GameSession session = createDefaultSession();
         repository.save(session);

@@ -8,6 +8,7 @@ import com.name.brief.repository.GameRepository;
 import com.name.brief.repository.GameSessionRepository;
 import com.name.brief.utils.TimeConverter;
 import com.name.brief.web.dto.GameSessionDto;
+import com.name.brief.web.dto.MoveToDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -137,5 +138,13 @@ public class GameSessionServiceImpl implements GameSessionService {
         GameSession session = getSession(gameSessionId);
         session.getPlayers().forEach(p -> p.getDecisions().forEach(d -> d.setAnswer(null)));
         gameSessionRepository.save(session);
+    }
+
+    @Override
+    public MoveToDto createMoveTo(Long gameSessionId) {
+        MoveToDto dto = new MoveToDto();
+        dto.setPhase(gameSessionRepository.findCurrentPhaseNumberById(gameSessionId).getCurrentPhaseNumber());
+        dto.setRound(gameSessionRepository.findCurrentRoundIndexById(gameSessionId).getCurrentRoundIndex());
+        return dto;
     }
 }

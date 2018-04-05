@@ -102,6 +102,16 @@ function GameController() {
                     clearInterval(reconInv);
                     connected = true;
                     connect(frame);
+                    stompClient.send("/app/whereI", {}, "");
+                    stompClient.subscribe("/queue/" + username + "/moveTo", (message) => {
+                        const body = JSON.parse(message.body);
+                        if (currentRoundIndex !== parseInt(message.round)) {
+                            controller.nextRound(parseInt(message.round));
+                        }
+                        if (currentPhaseNumber !== parseInt(body.phase)) {
+                            controller.changePhase(parseInt(body.phase));
+                        }
+                    }, {})
                 }, () => {
                     if (connected) {
                         reconnect();

@@ -2,6 +2,7 @@ package com.name.brief.repository;
 
 import com.name.brief.model.GameSession;
 import com.name.brief.repository.projections.CurrentPhaseOnly;
+import com.name.brief.repository.projections.CurrentRoundOnly;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -24,6 +25,8 @@ public interface GameSessionRepository extends CrudRepository<GameSession, Long>
     List<GameSession> findSessionsBefore(@Param("date") LocalDate date);
 
     CurrentPhaseOnly findCurrentPhaseNumberById(Long id);
+
+    CurrentRoundOnly findCurrentRoundIndexById(Long id);
 
     @Modifying(clearAutomatically = true)
     @Query("update GameSession s set s.currentPhaseNumber = :phase where s.id = :id")
