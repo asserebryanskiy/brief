@@ -1,6 +1,7 @@
 // web-socket constants
-const socket = new SockJS('/websocket');
-const stompClient = Stomp.over(socket);
+let socket = new SockJS('/websocket');
+let stompClient = Stomp.over(socket);
+
 const controller = new GameSessionController();
 
 const href = window.location.href;
@@ -150,7 +151,7 @@ function GameSessionController() {
      ************************************************/
 
     this.connect = (onWsConnect) => {
-        stompClient.connect({}, function () {
+        function onConnection() {
             stompClient.subscribe('/queue/' + gameSessionId + '/connection', function (message) {
                 const mes = message.body;
                 const divider = mes.indexOf(' ');
@@ -203,7 +204,26 @@ function GameSessionController() {
 
             // show screen
             $('.preloader').fadeOut();
-        });
+        }
+
+        function reconnect() {
+            let connected = false;
+            let reconInv = setInterval(() => {
+                socket = new SockJS('/websocket');
+                stompClient = Stomp.over(socket);
+                stompClient.connect({}, () => {
+                    clearInterval(reconInv);
+                    connected = true;
+                    onConnection();
+                }, () => {
+                    if (connected) {
+                        reconnect();
+                    }
+                });
+            }, 1000);
+        }
+
+        stompClient.connect({}, () => onConnection(), () => reconnect());
     };
 }
 

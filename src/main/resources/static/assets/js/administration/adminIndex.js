@@ -72,7 +72,10 @@ $('.delete-menu-item').click((event) => {
     $target.parents('.edit-menu').hide();
 });
 
-$('.delete-past-session-icon').click((event) => $(event.currentTarget).siblings('form')[0].submit());
+$('.delete-past-session-icon').click((event) => {
+    $('.preloader').show();
+    $(event.currentTarget).siblings('form')[0].submit();
+});
 
 $('.flash').delay(7000).slideUp().delay(400);
 
