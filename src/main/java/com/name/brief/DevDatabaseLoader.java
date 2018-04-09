@@ -71,7 +71,6 @@ public class DevDatabaseLoader implements ApplicationRunner {
                 .withGame(new RiskMap())
                 .withUser(moderator1)
                 .build();
-        riskMap.setCurrentPhaseNumber(1);
         gameSessionService.save(session);
         gameSessionService.save(session2);
         gameSessionService.save(session3);

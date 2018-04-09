@@ -11,7 +11,10 @@ $('.small-img-wrapper').click((event) => {
     const $popup = $target.parent().find('.popup-wrapper');
     const $popupContent = $popup.find('.popup-content');
     if ($popupContent.children('img').length === 0) {
-        $('#' + imgId + '-large-img').insertBefore($popupContent.children('.answer-inputs'));
+        console.log('entered');
+        const $placeholder = $popupContent.children('.img-placeholder');
+        $('#' + imgId + '-large-img').insertBefore($placeholder);
+        $placeholder.remove();
         // $popupContent.children('.answer-inputs').insertAf.append($('#' + imgId + '-large-img'))
     }
     $popup.show();
@@ -94,17 +97,23 @@ controller.setOnRoundChange(() => {
     controller.sendResponses();
 });
 controller.setOnPhaseChange((phaseNumber) => {
-    if (phaseNumber === CORRECT_ANSWERS_PHASE) {
-        const answerMatrix = getAnswerMatrix(getAnswerStr());
-        $('#score-text').text(getTotalScore(answerMatrix));
-        $('.correct-answer-cover').each((i, el) => {
-            const className = $(el).parents('.risk-img-cell')[0].classList[1];
-            const sector = parseInt(className.substr(className.lastIndexOf('-') + 1));
-            const row = Math.floor(sector / 4);
-            const col = sector % 4;
-            const score = getScoreForSector(row, col, answerMatrix[row][col]);
-            $(el).find('.sector-score-text').text(score > 0 ? '+' + score : score);
-        })
+    switch (phaseNumber) {
+        case SEND_ANSWER_PHASE:
+            controller.enableAnswerSend(true);
+            break;
+        case CORRECT_ANSWERS_PHASE: {
+            const answerMatrix = getAnswerMatrix(getAnswerStr());
+            $('#score-text').text(getTotalScore(answerMatrix));
+            $('.correct-answer-cover').each((i, el) => {
+                const className = $(el).parents('.risk-img-cell')[0].classList[1];
+                const sector = parseInt(className.substr(className.lastIndexOf('-') + 1));
+                const row = Math.floor(sector / 4);
+                const col = sector % 4;
+                const score = getScoreForSector(row, col, answerMatrix[row][col]);
+                $(el).find('.sector-score-text').text(score > 0 ? '+' + score : score);
+            });
+            break;
+        }
     }
 });
 controller.connect();
