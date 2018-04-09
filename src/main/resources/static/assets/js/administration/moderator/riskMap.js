@@ -1,4 +1,4 @@
-const SEND_ANSWER_PHASE = '1';
+const SEND_ANSWER_PHASE = 1;
 
 controller.nextRound = () => {
     controller.timer.clearTimers();

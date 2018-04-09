@@ -141,22 +141,33 @@ img[id$='-large-img'] {
     opacity: 1;
 }
 
-.popup-back {
-    display: flex;
-}
-
 .popup-content {
     width: 95%;
 }
 
-.risk-img-cell .close-popup-btn {
-    color: #e6e6e6 !important;
-    font-size: 2em;
+.risk-img-cell svg.close-popup-btn {
     position: absolute;
-    bottom :-70px;
-    left: 50%;
-    transform: translate(-50%, 0);
+    top: 15px;
+    right: 15px;
+    width: 15px;
+    height: 15px;
+    /*transform: translate(-50%, 0);*/
     cursor: pointer;
+    margin: 0;
+}
+
+.popup-content p.close-popup-btn {
+    width: 100px;
+    border: #4E3549 0.5px solid;
+    border-radius: 10px;
+    margin: 20px auto 5px;
+    padding: 10px 0;
+    cursor: pointer;
+}
+
+.popup-content p.close-popup-btn:hover {
+    background-color: #4e3549;
+    color: white;
 }
 
 .correct-answer-cover {

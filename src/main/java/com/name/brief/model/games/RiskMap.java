@@ -29,7 +29,7 @@ public class RiskMap extends Game {
         List<Phase> phases = new ArrayList<>(3);
         phases.addAll(Arrays.asList(
                 new Phase("Объяснение правил", false),
-                new Phase("Выбор ответа", true, Duration.ofSeconds(600)),
+                new Phase("Выбор ответа", true, Duration.ofSeconds(10)),
                 new Phase("Результаты", false),
                 new Phase("Начать заново", false)
         ));
