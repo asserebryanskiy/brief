@@ -15,6 +15,55 @@
         <div class="phase-container hidden" id="phase-1">
             <h2 th:text="#{riskMap.phase1.message}" th:unless="${projectorMode}"></h2>
             <h1 class="timer">00:00</h1>
+            <p class="how-it-scores-btn">Как считатся баллы?</p>
+            <div class="popup-wrapper how-it-scores-popup">
+                <div class="popup">
+                    <div class="popup-back"></div>
+                    <div class="popup-content">
+                        <div class="how-it-scores-grid">
+                            <p class="how-it-scores-your-answer">Ваш ответ</p>
+                            <div class="how-it-scores-headings">
+                                <p>Правильный ответ</p>
+                            </div>
+                            <div class="no-answer how-it-scores-legend"></div>
+                            <div class="no-level how-it-scores-legend"></div>
+                            <div class="low-level how-it-scores-legend"></div>
+                            <div class="mid-level how-it-scores-legend"></div>
+                            <div class="high-level how-it-scores-legend"></div>
+                            <div class="no-answer how-it-scores-legend"></div>
+                            <p>0</p>
+                            <p>0</p>
+                            <p>0</p>
+                            <p>0</p>
+                            <p>0</p>
+                            <div class="no-level how-it-scores-legend"></div>
+                            <p>-100</p>
+                            <p>100</p>
+                            <p>50</p>
+                            <p>25</p>
+                            <p>0</p>
+                            <div class="low-level how-it-scores-legend"></div>
+                            <p>-200</p>
+                            <p>50</p>
+                            <p>200</p>
+                            <p>100</p>
+                            <p>50</p>
+                            <div class="mid-level how-it-scores-legend"></div>
+                            <p>-300</p>
+                            <p>25</p>
+                            <p>100</p>
+                            <p>300</p>
+                            <p>150</p>
+                            <div class="high-level how-it-scores-legend"></div>
+                            <p>-400</p>
+                            <p>0</p>
+                            <p>50</p>
+                            <p>150</p>
+                            <p>400</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="risk-grid">
                 <div th:each="i, iter : ${gameSession.game.getAnswerInput(decision)}"
                      th:class="'risk-img-cell risk-img-cell-' + ${iter.index}">

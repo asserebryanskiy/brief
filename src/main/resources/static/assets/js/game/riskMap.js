@@ -1,7 +1,9 @@
 const SEND_ANSWER_PHASE = 1;
 const CORRECT_ANSWERS_PHASE = 2;
 
-const currentSectorNumber = parseInt($('#currents-sector-number').text());
+/************************************
+ *        ON CLICK FUNCTIONS        *
+ ************************************/
 
 $('.small-img-wrapper').click((event) => {
     const $target = $(event.currentTarget);
@@ -36,6 +38,9 @@ $('#show-correct-answers-btn').click(() => {
         }
     })
 });
+
+$('.how-it-scores-btn').click(() => $('.how-it-scores-popup').show());
+
 /************************************
  *       OVERRIDDEN FUNCTIONS       *
  ************************************/
@@ -76,10 +81,6 @@ function toggleSelected(event) {
         $indicator.addClass(className);
     }
 }
-
-/************************************
- *       OVERRIDDEN FUNCTIONS       *
- ************************************/
 
 
 /************************************
