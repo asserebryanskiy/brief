@@ -102,7 +102,8 @@ controller.setOnPhaseChange((phaseNumber) => {
             controller.enableAnswerSend(true);
             break;
         case CORRECT_ANSWERS_PHASE: {
-            const answerMatrix = getAnswerMatrix(getAnswerStr());
+            const answerStr = getAnswerStr();
+            const answerMatrix = getAnswerMatrix(answerStr);
             $('#score-text').text(getTotalScore(answerMatrix));
             $('.correct-answer-cover').each((i, el) => {
                 const className = $(el).parents('.risk-img-cell')[0].classList[1];
@@ -112,6 +113,29 @@ controller.setOnPhaseChange((phaseNumber) => {
                 const score = getScoreForSector(row, col, answerMatrix[row][col]);
                 $(el).find('.sector-score-text').text(score > 0 ? '+' + score : score);
             });
+            if (answerStr.length > 0) {
+
+                let acc = '';
+                let sector = 0;
+                for (let i = 0; i < answerStr.length; i++) {
+                    const letter = answerStr.charAt(i);
+                    if (letter === '-') {
+                        sector = parseInt(acc);
+                        acc = '';
+                    } else if (letter === ',') {
+                        const $circles = $('.risk-img-cell-' + sector).find('.possible-results').find('.correct-answer-circle');
+                        $circles.removeClass('selected');
+                        $($circles[parseInt(acc) + 1]).addClass('selected');
+                        acc = '';
+                        sector = 0;
+                    } else {
+                        acc += letter;
+                    }
+                }
+                const $circles = $('.risk-img-cell-' + sector).find('.possible-results').find('.correct-answer-circle');
+                $circles.removeClass('selected');
+                $($circles[parseInt(acc) + 1]).addClass('selected');
+            }
             break;
         }
     }

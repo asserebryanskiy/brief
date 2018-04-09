@@ -345,7 +345,8 @@ img[id$='-large-img'] {
     grid-template-columns: repeat(5, auto);
     align-items: center;
     justify-items: center;
-    margin: 10px;
+    margin: 10px 0;
+    grid-gap-gap: 2px;
 }
 
 .correct-answer-wrapper {
