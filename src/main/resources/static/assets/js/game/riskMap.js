@@ -23,6 +23,18 @@ $('.answer-input').click((event) => {
 
 $('#show-correct-answers-btn').click(() => {
     $('.correct-answer-cover').slideToggle();
+    $('#phase-2 .small-img-wrapper').each((i, el) => {
+        const $correctAnswerCover = $(el).find('.correct-answer-cover');
+
+        function getDangerLevel($element) {
+            return $element[0].classList[$element[0].classList.length - 1];
+        }
+
+        if ($correctAnswerCover.length > 0 &&
+            getDangerLevel($(el).find('.risk-indicator')) === getDangerLevel($correctAnswerCover)) {
+            $(el).find('.correct-answer-icon').toggle();
+        }
+    })
 });
 /************************************
  *       OVERRIDDEN FUNCTIONS       *
@@ -54,7 +66,6 @@ function toggleSelected(event) {
     // remove indicator from img-cell if any
     const $indicator = $('.' + $target.parents('.risk-img-cell')[0].classList[1])
         .find('.risk-indicator');
-    console.log($indicator);
     $indicator.removeClass('no-level low-level mid-level high-level');
 
     if ($target.hasClass('selected')) {
@@ -83,7 +94,16 @@ controller.setOnRoundChange(() => {
 });
 controller.setOnPhaseChange((phaseNumber) => {
     if (phaseNumber === CORRECT_ANSWERS_PHASE) {
-        $('#score-text').text(getScore());
+        const answerMatrix = getAnswerMatrix(getAnswerStr());
+        $('#score-text').text(getTotalScore(answerMatrix));
+        $('.correct-answer-cover').each((i, el) => {
+            const className = $(el).parents('.risk-img-cell')[0].classList[1];
+            const sector = parseInt(className.substr(className.lastIndexOf('-') + 1));
+            const row = Math.floor(sector / 4);
+            const col = sector % 4;
+            const score = getScoreForSector(row, col, answerMatrix[row][col]);
+            $(el).find('.sector-score-text').text(score > 0 ? '+' + score : score);
+        })
     }
 });
 controller.connect();
@@ -93,103 +113,18 @@ controller.changePhase(currentPhaseNumber, '', '');
  *            ON PAGE LOAD          *
  ************************************/
 
-function getScore() {
-    const answer = getAnswerStr();
-    const answerMatrix = getAnswerMatrix(answer);
-    const correctAnswers = [
-        [-1,1,1,-1],
-        [1,1,1,3],
-        [2,0,-1,-1],
-    ];
+function getTotalScore(answerMatrix) {
     let score = 0;
     for (let i = 0; i < 3; i++) {
         for (let j = 0; j < 4; j++) {
-            switch (correctAnswers[i][j]) {
-                case -1: continue;
-                case 0:
-                    switch (answerMatrix[i][j]) {
-                        case -1:
-                            score += -100;
-                            continue;
-                        case 0:
-                            score += 100;
-                            continue;
-                        case 1:
-                            score += 50;
-                            continue;
-                        case 2:
-                            score += 25;
-                            continue;
-                        case 3:
-                            score += 0;
-                            continue;
-                    }
-                    break;
-                case 1:
-                    switch (answerMatrix[i][j]) {
-                        case -1:
-                            score += -200;
-                            continue;
-                        case 0:
-                            score += 50;
-                            continue;
-                        case 1:
-                            score += 200;
-                            continue;
-                        case 2:
-                            score += 100;
-                            continue;
-                        case 3:
-                            score += 50;
-                            continue;
-                    }
-                    break;
-                case 2:
-                    switch (answerMatrix[i][j]) {
-                        case -1:
-                            score += -300;
-                            continue;
-                        case 0:
-                            score += 25;
-                            continue;
-                        case 1:
-                            score += 100;
-                            continue;
-                        case 2:
-                            score += 300;
-                            continue;
-                        case 3:
-                            score += 150;
-                            continue;
-                    }
-                    break;
-                case 3:
-                    switch (answerMatrix[i][j]) {
-                        case -1:
-                            score += -400;
-                            continue;
-                        case 0:
-                            score += 0;
-                            continue;
-                        case 1:
-                            score += 50;
-                            continue;
-                        case 2:
-                            score += 150;
-                            continue;
-                        case 3:
-                            score += 400;
-                            continue;
-                    }
-                    break;
-            }
+            score += getScoreForSector(i, j, answerMatrix[i][j])
         }
     }
 
     return score;
 }
 
-function getScoreForSector(sector, answer) {
+function getScoreForSector(row, column, answer) {
     const correctAnswers = [
         [-1,1,1,-1],
         [1,1,1,3],
@@ -197,17 +132,44 @@ function getScoreForSector(sector, answer) {
     ];
 
     // scoring varies depending on correct answer
-    switch (correctAnswers[sector / 4][sector % 4]) {
-        case -1:
-            return 0;
+    switch (correctAnswers[row][column]) {
+        case -1: return 0;
         case 0:
-
+            switch (answer) {
+                case -1: return -100;
+                case 0: return 100;
+                case 1: return 50;
+                case 2: return 25;
+                case 3: return 0;
+            }
+            break;
         case 1:
             switch (answer) {
                 case -1: return -200;
                 case 0: return 50;
                 case 1: return 200;
+                case 2: return 100;
+                case 3: return 50;
             }
+            break;
+        case 2:
+            switch (answer) {
+                case -1: return -300;
+                case 0: return 25;
+                case 1: return 100;
+                case 2: return 300;
+                case 3: return 150;
+            }
+            break;
+        case 3:
+            switch (answer) {
+                case -1: return -400;
+                case 0: return 0;
+                case 1: return 50;
+                case 2: return 150;
+                case 3: return 400;
+            }
+            break;
     }
 }
 
