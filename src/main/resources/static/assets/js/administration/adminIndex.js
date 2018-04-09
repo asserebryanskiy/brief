@@ -75,3 +75,10 @@ $('.delete-menu-item').click((event) => {
 $('.delete-past-session-icon').click((event) => $(event.currentTarget).siblings('form')[0].submit());
 
 $('.flash').delay(7000).slideUp().delay(400);
+
+$('.popup-submit-btn').click(() => {
+    $('.popup-submit-btn').attr('disable', true);
+    $('.preloader').show();
+});
+
+document.onload = $('.preloader').hide();
