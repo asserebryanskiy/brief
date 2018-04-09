@@ -1,6 +1,8 @@
 #phase-0 {
+    display: block;
     padding: 10px;
     margin: 80px 0 auto;
+    text-align: left;
 }
 
 #phase-0 h2 {
@@ -26,7 +28,7 @@ p, li {
     overflow-y: scroll;
 }
 
-#start-btn {
+.next-phase-btn {
     padding: 10px;
     background-color: #4a9d61;
     border-radius: 10px;
