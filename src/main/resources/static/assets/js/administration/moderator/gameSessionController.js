@@ -12,7 +12,6 @@ function GameSessionController() {
     this.onNextPhase = null;
     this.onPrevPhase = null;
     this.onNextRound = null;
-    this.$lastPhase = null;
 
     // FUNCTIONS
     this.setOnNextPhase = (func) => {
@@ -25,10 +24,6 @@ function GameSessionController() {
 
     this.setOnNextRound = (func) => {
         this.onNextRound = func;
-    };
-
-    this.setLastPhase = ($phase) => {
-        this.$lastPhase = $phase;
     };
 
     /**
@@ -132,11 +127,7 @@ function GameSessionController() {
             const roundId = $newActive.attr('id');
             const nextRoundId = 'round-' + (getRoundOrder(roundId) + 1);
             const $nextRound = $('#' + nextRoundId);
-            if ($nextRound.exists()) {
-                $nextRound.addClass('next');
-            } else {
-                if (this.$lastPhase !== null) this.$lastPhase.find('.phase-name').text('Завершить игру')
-            }
+            $nextRound.addClass('next');
             stompClient.send('/app/' + gameSessionId + '/changeRound', {}, getRoundOrder(roundId));
         }
 

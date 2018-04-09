@@ -38,7 +38,6 @@ controller.setOnNextRound(() => {
     // remove received-answers class from all commands' tr
     $('.players-table tbody tr').removeClass('received-answers');
 });
-controller.setLastPhase($('.phase-5'));
 
 function onWsConnect(stompClient) {
     stompClient.subscribe('/queue/' + gameSessionId + '/answer', (message) => {
