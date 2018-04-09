@@ -299,16 +299,22 @@ img[id$='-large-img'] {
 .how-it-scores-grid {
     display: grid;
     width: 100%;
-    grid-template-rows: auto repeat(6, auto);
-    grid-template-columns: 50px repeat(5, auto);
+    grid-template-rows: auto repeat(5, auto);
+    grid-template-columns: 50px repeat(6, auto);
+    grid-gap: 5px;
     align-content: center;
     justify-content: center;
     align-items: center;
     justify-items: center;
 }
 
+.how-it-scores-grid .grid-empty-space {
+    grid-row: 1 / 3;
+    grid-column: 1 / 3;
+}
+
 .how-it-scores-your-answer {
-    grid-column: 2 / 7;
+    grid-column: 3 / 8;
     align-self: end;
 }
 
@@ -316,8 +322,7 @@ img[id$='-large-img'] {
     height: 100px;
     writing-mode: vertical-rl;
     transform: rotate(180deg);
-    grid-row: 1 / 3;
-    text-align: left;
+    grid-row: 3 / 8;
 }
 
 .how-it-scores-legend {
@@ -335,16 +340,13 @@ img[id$='-large-img'] {
     text-align: left;
 }
 
-.correct-answer-popup p {
-    margin-bottom: 0;
-}
-
 .possible-results {
     display: grid;
     grid-template-rows: auto auto;
     grid-template-columns: repeat(5, auto);
     align-items: center;
     justify-items: center;
+    margin: 10px;
 }
 
 .correct-answer-wrapper {
@@ -384,7 +386,7 @@ img[id$='-large-img'] {
 .correct-answer-comment {
     font-family: "Circe Light", serif;
     margin-top: 10px;
-    max-height: 75px;
+    max-height: 80px;
     overflow-y: auto;
 }
 

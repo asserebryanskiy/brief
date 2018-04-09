@@ -67,11 +67,6 @@ public class SecurityConfig {
         }
 
         @Override
-        public void configure(WebSecurity web) throws Exception {
-            web.ignoring().antMatchers("/assets/**");
-        }
-
-        @Override
         protected void configure(HttpSecurity http) throws Exception {
             http
                 .requestMatchers()
@@ -171,6 +166,11 @@ public class SecurityConfig {
         }
 
         @Override
+        public void configure(WebSecurity web) throws Exception {
+            web.ignoring().antMatchers("/assets/**", "/webjars/**");
+        }
+
+        @Override
         protected void configure(AuthenticationManagerBuilder auth) throws Exception {
             auth.userDetailsService(playerService);
         }
@@ -209,7 +209,7 @@ public class SecurityConfig {
         protected void configure(HttpSecurity http) throws Exception {
             http
                 .authorizeRequests()
-                    .antMatchers("/").permitAll()
+                    .antMatchers("/", "/demo/**").permitAll()
                     .antMatchers("/game/**").hasRole("PLAYER")
                     .anyRequest().hasAnyRole("PLAYER", "ADMIN", "MODERATOR")
                     .and()

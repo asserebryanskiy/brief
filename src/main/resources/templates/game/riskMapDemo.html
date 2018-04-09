@@ -4,49 +4,37 @@
     <div th:include="appFragments :: headContent" th:remove="tag"></div>
     <link rel="stylesheet" th:href="@{/assets/css/game/game.css}">
     <link rel="stylesheet" th:href="@{/assets/css/game/riskMap.css}">
-    <link rel="stylesheet" th:href="@{/assets/css/game/projector.css}" th:if="${projectorMode}">
+    <link rel="stylesheet" th:href="@{/assets/css/game/riskMapDemo.css}">
     <title>МОЗ | Карта рисков</title>
 </head>
 <body>
-    <div th:replace="appFragments :: preloader"></div>
     <div class="container">
-        <div th:replace="game/fragments :: header(${commandName},${gameSession.currentRoundIndex})"></div>
-        <div th:replace="game/fragments :: introPhase"></div>
+        <div th:replace="game/fragments :: header('Демо',0)"></div>
+        <div id="phase-0">
+            <h2>Демо-игра "Карта рисков"</h2>
+            <div class="rules-container">
+                <p><b>Задача: </b>в каждом из секторов определить уровень риска получения сотрудниками травмы в их офисе.</p>
+                <ul>
+                    <li><span class="no-answer">Серый</span> означает, что риска нет.</li>
+                    <li><span class="no-level">Зеленый</span> , что риск приемлем и с ним не надо никак работать.</li>
+                    <li><span class="low-level">Желтый</span> означает средний уровень риска.</li>
+                    <li><span class="mid-level">Оранжевый</span> означает высокий уровень риска.</li>
+                    <li><span class="high-level">Красный</span> означает неприемлемый уровень риска.</li>
+                </ul>
+
+                <p>У вас будет <b>2 минуты</b> на решение задачи.</p>
+            </div>
+            <p class="how-it-scores-btn">Как считаются баллы?</p>
+            <div th:replace="game/riskMap :: howItScoresPopup"></div>
+            <button id="start-btn">Начать</button>
+        </div>
         <div class="phase-container hidden" id="phase-1">
-            <h2 th:text="#{riskMap.phase1.message}" th:unless="${projectorMode}"></h2>
+            <h2 th:text="#{riskMap.phase1.message}"></h2>
             <h1 class="timer">00:00</h1>
             <p class="how-it-scores-btn">Как считаются баллы?</p>
-            <div class="popup-wrapper how-it-scores-popup hidden" th:fragment="howItScoresPopup">
-                <div class="popup">
-                    <div class="popup-back"></div>
-                    <div class="popup-content">
-                        <div class="how-it-scores-grid">
-                            <p class="how-it-scores-your-answer">Ваш ответ</p>
-                            <div class="no-answer how-it-scores-legend"></div>
-                            <div class="no-level how-it-scores-legend"></div>
-                            <div class="low-level how-it-scores-legend"></div>
-                            <div class="mid-level how-it-scores-legend"></div>
-                            <div class="high-level how-it-scores-legend"></div>
-
-                            <div class="grid-empty-space"></div>
-
-                            <p class="how-it-scores-correct-answer">Правильный ответ</p>
-                            <div class="no-answer how-it-scores-legend"></div>
-                            <p th:each="score : ${__${((demo != null and demo) ? '':'gameSession.') + 'game.getPossibleScore(-1)'}__}" th:text="${score}">0</p>
-                            <div class="no-level how-it-scores-legend"></div>
-                            <p th:each="score : ${__${((demo != null and demo) ? '':'gameSession.') + 'game.getPossibleScore(0)'}__}" th:text="${score}">0</p>
-                            <div class="low-level how-it-scores-legend"></div>
-                            <p th:each="score : ${__${((demo != null and demo) ? '':'gameSession.') + 'game.getPossibleScore(1)'}__}" th:text="${score}">0</p>
-                            <div class="mid-level how-it-scores-legend"></div>
-                            <p th:each="score : ${__${((demo != null and demo) ? '':'gameSession.') + 'game.getPossibleScore(2)'}__}" th:text="${score}">0</p>
-                            <div class="high-level how-it-scores-legend"></div>
-                            <p th:each="score : ${__${((demo != null and demo) ? '':'gameSession.') + 'game.getPossibleScore(3)'}__}" th:text="${score}">0</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <div th:replace="game/riskMap :: howItScoresPopup"></div>
             <div class="risk-grid">
-                <div th:each="i, iter : ${gameSession.game.getAnswerInput(decision)}"
+                <div th:each="i, iter : ${game.getAnswerInput(decision)}"
                      th:class="'risk-img-cell risk-img-cell-' + ${iter.index}">
                     <div class="small-img-wrapper">
                         <img th:src="@{|/assets/image/riskMap/low_2000/low_2000_${#numbers.formatInteger(iter.count, 2)}.jpg|}" alt=""
@@ -90,7 +78,7 @@
                     </div>
                 </div>
             </div>
-            <button th:replace="game/fragments :: sendResponsesBtn"></button>
+            <button id="send-responses-btn">Отправить ответы</button>
             <div th:replace="game/fragments :: flash('Ответы отправлены')"></div>
         </div>
 
@@ -98,8 +86,8 @@
             <h2>Вы заработали</h2>
             <h2><span id="score-text">0</span> баллов</h2>
             <p id="show-correct-answers-btn">Показать правильные ответы</p>
-            <div class="risk-grid" th:with="correctAnswers = ${gameSession.game.correctAnswers}">
-                <div th:each="i, iter : ${gameSession.game.getAnswerInput(decision)}"
+            <div class="risk-grid" th:with="correctAnswers = ${game.correctAnswers}">
+                <div th:each="i, iter : ${game.getAnswerInput(decision)}"
                      th:class="'risk-img-cell risk-img-cell-' + ${iter.index}"
                      th:with="ca = ${correctAnswers[iter.index]}">
                     <div class="small-img-wrapper">
@@ -119,7 +107,7 @@
                         </div>
                     </div>
                     <div class="popup-wrapper hidden correct-answer-popup">
-                        <div class="popup">
+                        <div class="answer-input-popup popup">
                             <div class="popup-back"></div>
                             <div class="popup-content">
                                 <div class="img-placeholder"></div>
@@ -127,8 +115,7 @@
                                     <p>Правильный ответ: </p>
                                     <div class="correct-answer-circle" th:classappend="${ca == -1} ? 'no-answer' : (${ca} == 0 ? 'no-level' : (${ca} == 1 ? 'low-level' : (${ca} == 2 ? 'mid-level' : 'high-level')))"></div>
                                 </div>
-                                <p>Ваш ответ: </p>
-                                <div class="possible-results" th:with="possibleScores = ${gameSession.game.getPossibleScore(ca)}">
+                                <div class="possible-results" th:with="possibleScores = ${game.getPossibleScore(ca)}">
                                     <div class="correct-answer-circle no-answer" th:classappend="${i == -1} ? 'selected'">
                                         <p th:text="${possibleScores[0]}"></p>
                                     </div>
@@ -145,7 +132,7 @@
                                         <p th:text="${possibleScores[4]}"></p>
                                     </div>
                                 </div>
-                                <p class="correct-answer-comment" th:text="${gameSession.game.getSectorComment(__${iter.index}__)}"></p>
+                                <p class="correct-answer-comment" th:text="${game.getSectorComment(__${iter.index}__)}"></p>
                                 <p class="close-popup-btn" >Ок</p>
                                 <!--<svg class="close-popup-btn" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z"></path></svg>-->
                             </div>
@@ -159,14 +146,12 @@
     </div>
 
     <div class="heavy-images hidden">
-        <img th:each="i, iter : ${gameSession.game.getAnswerInput(decision)}"
+        <img th:each="i, iter : ${game.getAnswerInput(decision)}"
              th:src="@{'/assets/image/riskMap/big_with_sectors/' + ${(__${iter.count == 2}__ ? 'animated.gif' : __${iter.count}__ + '.jpg')}}" alt=""
              th:id="${iter.index / 4 + '' + iter.index % 4 + '-large-img'}">
     </div>
-    <div th:replace="game/fragments :: gameSettings(${gameSession})"></div>
     <div th:replace="game/fragments :: vendorScripts"></div>
     <script th:src="@{/assets/js/popup.js}"></script>
-    <script th:src="@{/assets/js/game/gameController.js}"></script>
-    <script th:src="@{/assets/js/game/riskMap.js}"></script>
+    <script th:src="@{/assets/js/game/riskMapDemo.js}"></script>
 </body>
 </html>
