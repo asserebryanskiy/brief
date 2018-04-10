@@ -16,8 +16,8 @@
             <div class="error-message" th:if="${#fields.hasErrors('commandName')}" th:errors="*{commandName}"></div>
             <div class="error-message" th:if="${#fields.hasErrors('loggedIn')}" th:errors="*{loggedIn}"></div>
             <button type="submit">Войти</button>
-            <a th:href="@{/login/admin}">Войти как администратор</a>
             <a th:href="@{/demo}" class="demo-anchor">Демо</a>
+            <a th:href="@{/login/admin}">Войти как администратор</a>
         </form>
     </div>
 </body>

@@ -68,8 +68,8 @@ button:hover {
 }
 
 a {
+    margin: 10px auto;
     display: block;
-    margin-top: 20px;
     font-size: 12px;
     color: #524f55;
     font-family: "Circe Light", serif;
@@ -89,6 +89,11 @@ a {
     padding: 15px;
     margin: 0 auto;
 }*/
+
+.demo-anchor {
+    font-family: "Circe Bold", serif;
+    font-size: 1em;
+}
 
 @media (min-width: 576px) {
 
