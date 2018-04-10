@@ -37,9 +37,20 @@ p, li {
     display: block;
 }
 
+.sector-score-text {
+    font-family: "Circe Bold", serif;
+}
+
 @media (min-width: 350px) {
     .rules-container {
         max-height: unset;
         overflow-y: unset;
+    }
+}
+
+@media (min-width: 769px) {
+    .rules-container {
+        margin: auto;
+        max-width: 500px;
     }
 }

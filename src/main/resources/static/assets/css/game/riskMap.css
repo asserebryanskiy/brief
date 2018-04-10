@@ -108,20 +108,40 @@ img[id$='-large-img'] {
     background-color: #959595;
 }
 
+.no-answer-text {
+    color: #959595;
+}
+
 .no-level {
     background-color: #729d76;
+}
+
+.no-level-text {
+    color: #729d76;
 }
 
 .low-level {
     background-color: #efdf02;
 }
 
+.low-level-text {
+    color: #efdf02;
+}
+
 .mid-level {
     background-color: #ff8302;
 }
 
+.mid-level-text {
+    color: #ff8302;
+}
+
 .high-level {
     background-color: #e80404;
+}
+
+.high-level-text {
+    color: #e80404;
 }
 
 .selected {
