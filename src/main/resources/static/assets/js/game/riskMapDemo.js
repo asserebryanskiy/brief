@@ -1,4 +1,5 @@
 let blockAnswerInput = false;
+let timerInd = 0;
 
 $('.how-it-scores-btn').click(() => $('.how-it-scores-popup').show());
 
@@ -12,7 +13,10 @@ $('.next-phase-btn').click((event) => {
     const next = (activePhaseNumber + 1) % 3;
 
     if (next === 2) {
-        const answerMatrix = getAnswerMatrix(getAnswerStr());
+        window.clearInterval(timerInd);
+
+        const answerStr = getAnswerStr();
+        const answerMatrix = getAnswerMatrix(answerStr);
         $('#score-text').text(getTotalScore(answerMatrix));
         $('.correct-answer-cover').each((i, el) => {
             const className = $(el).parents('.risk-img-cell')[0].classList[1];
@@ -22,6 +26,31 @@ $('.next-phase-btn').click((event) => {
             const score = getScoreForSector(row, col, answerMatrix[row][col]);
             $(el).find('.sector-score-text').text(score > 0 ? '+' + score : score);
         });
+
+        if (answerStr.length > 0) {
+            let acc = '';
+            let sector = 0;
+            for (let i = 0; i < answerStr.length; i++) {
+                const letter = answerStr.charAt(i);
+                if (letter === '-') {
+                    sector = parseInt(acc);
+                    acc = '';
+                } else if (letter === ',') {
+                    const $circles = $('.risk-img-cell-' + sector).find('.possible-results').find('.correct-answer-circle');
+                    $circles.removeClass('selected');
+                    $($circles[parseInt(acc) + 1]).addClass('selected');
+                    acc = '';
+                    sector = 0;
+                } else {
+                    acc += letter;
+                }
+            }
+            const $circles = $('.risk-img-cell-' + sector).find('.possible-results').find('.correct-answer-circle');
+            $circles.removeClass('selected');
+            $($circles[parseInt(acc) + 1]).addClass('selected');
+        }
+    } else if (next === 0) {
+        location.reload();
     }
 
     $('.phase-container').hide();
@@ -29,11 +58,11 @@ $('.next-phase-btn').click((event) => {
     $nextPhase.show();
     const $timer = $nextPhase.children('.timer');
     if ($timer.length > 0) {
-        let ind = window.setInterval(() => {
+        timerInd = window.setInterval(() => {
             let min = parseInt($timer.text().substr(0, 2));
             let sec = parseInt($timer.text().substr(3));
             if (min === 0 && sec === 0) {
-                window.clearInterval(ind);
+                window.clearInterval(timerInd);
                 blockAnswerInput = true;
             }
 
