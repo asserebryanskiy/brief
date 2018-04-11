@@ -21,7 +21,7 @@ import org.springframework.stereotype.Controller;
 import java.security.Principal;
 
 @Controller
-public class BriefController {
+public class WsController {
 
     private final SimpMessagingTemplate template;
     private final PlayerService playerService;
@@ -29,10 +29,10 @@ public class BriefController {
     private final GameSessionService gameSessionService;
 
     @Autowired
-    public BriefController(SimpMessagingTemplate template,
-                           PlayerService playerService,
-                           PlayerAuthenticationService playerAuthenticationService,
-                           GameSessionService gameSessionService) {
+    public WsController(SimpMessagingTemplate template,
+                        PlayerService playerService,
+                        PlayerAuthenticationService playerAuthenticationService,
+                        GameSessionService gameSessionService) {
         this.template = template;
         this.playerService = playerService;
         this.playerAuthenticationService = playerAuthenticationService;

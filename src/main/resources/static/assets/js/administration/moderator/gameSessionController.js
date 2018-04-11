@@ -54,7 +54,6 @@ function GameSessionController() {
             return;
         }
 
-        console.log(this.onNextPhase);
         if (this.onNextPhase !== null) this.onNextPhase(phaseOrder);
 
         // establish timer if it exists
@@ -358,6 +357,10 @@ function getRoundOrder(roundId) {
 function getPhaseNear($newActive, delta) {
     console.log((getPhaseOrder($newActive) + delta));
     return $('.phase-' + (getPhaseOrder($newActive) + delta) + ':visible');
+}
+
+function getActivePhaseNumber() {
+    return getPhaseOrder($('.phase.active:visible'));
 }
 
 // helper function to check if jQuery returns an element

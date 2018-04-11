@@ -3,7 +3,7 @@ package com.name.brief.web.dto;
 import com.name.brief.model.GameSession;
 import com.name.brief.model.games.Brief;
 import com.name.brief.model.games.Game;
-import com.name.brief.model.games.PharmaRolePlay;
+import com.name.brief.model.games.roleplay.RolePlay;
 import com.name.brief.model.games.RiskMap;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -46,7 +46,7 @@ public class GameSessionDto {
             case "Карта рисков":
                 return new RiskMap();
             case "Ролевая игра":
-                return new PharmaRolePlay(numberOfCommands);
+                return new RolePlay(numberOfCommands);
         }
         return new Brief();
     }

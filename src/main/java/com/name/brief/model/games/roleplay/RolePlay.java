@@ -1,7 +1,8 @@
-package com.name.brief.model.games;
+package com.name.brief.model.games.roleplay;
 
-import com.name.brief.model.BaseEntity;
 import com.name.brief.model.Decision;
+import com.name.brief.model.games.Game;
+import com.name.brief.model.games.Phase;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -11,21 +12,26 @@ import java.time.Duration;
 import java.util.*;
 
 @EqualsAndHashCode(callSuper = true)
-@Entity(name = "pharmaroleplay")
+@Entity(name = "roleplay")
 @Data
-public class PharmaRolePlay extends Game {
+public class RolePlay extends Game {
     private final int numberOfRounds = 1;
     private final String russianName = "Ролевая игра";
-    private final String englishName = "pharmaRolePLay";
+    private final String englishName = "rolePLay";
+
+    private final String[] strategies = {
+            "Доктор - Торговый представитель"
+    };
 
     @ElementCollection
     private Map<Long, Integer> playersScoreMap;
+    private int strategyNumber;
 
-    public PharmaRolePlay() {
+    public RolePlay() {
         super();
     }
 
-    public PharmaRolePlay(int numberOfCommands) {
+    public RolePlay(int numberOfCommands) {
         this();
         this.playersScoreMap = new HashMap<>(numberOfCommands);
     }
@@ -34,6 +40,7 @@ public class PharmaRolePlay extends Game {
     public List<Phase> getPhases() {
         List<Phase> phases = new ArrayList<>(4);
         phases.addAll(Arrays.asList(
+                new Phase("Формирование игры", false),
                 new Phase("Подключение участников", false),
                 new Phase("Распределение ролей", false),
                 new Phase("Отправить инструкции", false),
@@ -76,5 +83,9 @@ public class PharmaRolePlay extends Game {
     @Override
     public Object getAnswerInput(Decision decision) {
         return null;
+    }
+
+    public void setStrategyNumber(int strategyNumber) {
+        this.strategyNumber = strategyNumber;
     }
 }

@@ -8,6 +8,7 @@ import com.name.brief.model.User;
 import com.name.brief.model.games.Brief;
 import com.name.brief.model.games.Game;
 import com.name.brief.model.games.RiskMap;
+import com.name.brief.model.games.roleplay.RolePlay;
 import com.name.brief.repository.GameRepository;
 import com.name.brief.repository.UserRepository;
 import com.name.brief.service.GameSessionService;
@@ -71,10 +72,15 @@ public class DevDatabaseLoader implements ApplicationRunner {
                 .withGame(new RiskMap())
                 .withUser(moderator1)
                 .build();
+        GameSession rolePlay = new GameSession.GameSessionBuilder("role")
+                .withGame(new RolePlay(5))
+                .withUser(moderator1)
+                .build();
         gameSessionService.save(session);
         gameSessionService.save(session2);
         gameSessionService.save(session3);
         gameSessionService.save(pastSession);
         gameSessionService.save(riskMap);
+        gameSessionService.save(rolePlay);
     }
 }

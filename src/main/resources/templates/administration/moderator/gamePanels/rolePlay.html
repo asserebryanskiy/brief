@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:include="appFragments :: headContent" th:remove="tag"></div>
+    <link rel="stylesheet" th:href="@{/assets/css/administration/administration.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/administration/moderator/rolePlay.css}">
+    <title>Ролевая игра | Панель модератора</title>
+</head>
+<body th:with="game = ${gameSession.game}">
+    <div th:replace="appFragments :: preloader"></div>
+    <div th:replace="administration/fragments :: game-session-header"></div>
+    <div class="main-content">
+        <div class="round-nav-and-commands">
+            <h2 class="bold">Фазы раунда</h2>
+            <div th:replace="administration/fragments :: roundNav(${game.getPhases()}, 0)"></div>
+            <div class="players-wrapper">
+                <h2 class="bold">Команды</h2>
+                <div th:replace="administration/fragments :: players"></div>
+            </div>
+            <div class="form-game-wrapper">
+                <h2 class="bold">Настройки игры</h2>
+                <div class="role-strategy-wrapper">
+                    <p>Сценарий: </p>
+                    <select class="inline">
+                        <option th:each="strategy, iter : ${game.strategies}"
+                                class="role-play-strategy-option"
+                                th:selected="${iter.index == game.strategyNumber}"
+                                th:value="${iter.index}"
+                                th:text="${strategy}"></option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <p class="hidden" id="game-id" th:text="${game.id}"></p>
+    <div th:replace="administration/fragments :: vendorScripts"></div>
+    <script th:src="@{/assets/js/administration/moderator/timer.js}"></script>
+    <script th:src="@{/assets/js/administration/moderator/gameSessionController.js}"></script>
+    <script th:src="@{/assets/js/administration/moderator/rolePlay.js}"></script>
+</body>
+</html>

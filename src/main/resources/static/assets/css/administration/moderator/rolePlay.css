@@ -1,0 +1,16 @@
+.phase {
+    text-align: left;
+}
+
+.phase-name {
+    padding: 0 10px;
+}
+
+.role-strategy-wrapper {
+    display: flex;
+}
+
+.form-roles-grid input {
+    border-bottom: #4e3549 1px solid;
+}
+
