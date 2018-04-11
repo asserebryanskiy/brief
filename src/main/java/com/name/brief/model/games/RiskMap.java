@@ -27,7 +27,7 @@ public class RiskMap extends Game {
 
     @Override
     public List<Phase> getPhases() {
-        List<Phase> phases = new ArrayList<>(3);
+        List<Phase> phases = new ArrayList<>(4);
         phases.addAll(Arrays.asList(
                 new Phase("Объяснение правил", false),
                 new Phase("Выбор ответа", true, Duration.ofSeconds(600)),
