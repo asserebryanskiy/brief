@@ -49,8 +49,6 @@ $('.next-phase-btn').click((event) => {
             $circles.removeClass('selected');
             $($circles[parseInt(acc) + 1]).addClass('selected');
         }
-    } else if (next === 0) {
-        location.reload();
     }
 
     $('.phase-container').hide();
@@ -58,28 +56,55 @@ $('.next-phase-btn').click((event) => {
     $nextPhase.show();
     const $timer = $nextPhase.children('.timer');
     if ($timer.length > 0) {
+        // make timer black again
+        $timer.removeClass('last-ten-seconds');
+        const $alertDigit = $('.alert-digit');
+        $alertDigit.hide();
         timerInd = window.setInterval(() => {
+            // parse current values
             let min = parseInt($timer.text().substr(0, 2));
             let sec = parseInt($timer.text().substr(3));
+
+            // on timer finish
             if (min === 0 && sec === 0) {
                 window.clearInterval(timerInd);
                 blockAnswerInput = true;
+                $('.time-is-over-popup').show();
+                $alertDigit.hide();
+                return;
             }
 
+            // decrease minutes
             if (sec === 0) {
                 sec = 60;
                 min--;
             }
 
+            // decrease seconds
             sec--;
 
+            // if only ten seconds left make timer red
+            if (min === 0 && sec < 11) {
+                $timer.addClass('last-ten-seconds');
+            }
+
+            // on last five seconds show big digits in the top of the screen
+            if (min === 0 && sec < 6) {
+                if (!$alertDigit.is(':visible')) $alertDigit.show();
+                $alertDigit.text(sec);
+            }
+
+            // add trailing zero if needed
             min = min < 10 ? '0' + min : min;
             sec = sec < 10 ? '0' + sec : sec;
 
+            // change timer text
             $timer.text(min + ':' + sec);
         }, 1000)
     }
 });
+
+$('.try-again-btn').click(() => location.reload());
 
 $('.small-img-wrapper').click((event) => {
     const $target = $(event.currentTarget);

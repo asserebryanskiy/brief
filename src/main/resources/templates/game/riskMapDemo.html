@@ -29,6 +29,7 @@
             <button class="next-phase-btn">Начать</button>
         </div>
         <div class="phase-container hidden" id="phase-1">
+            <p class="alert-digit hidden">5</p>
             <h2 th:text="#{riskMap.phase1.message}"></h2>
             <h1 class="timer">02:00</h1>
             <p class="how-it-scores-btn">Как считаются баллы?</p>
@@ -75,6 +76,16 @@
                                 <p class="close-popup-btn animated" >ОК</p>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+            <div class="popup-wrapper time-is-over-popup hidden">
+                <div class="popup">
+                    <div class="popup-back"></div>
+                    <div class="popup-content">
+                        <p>Время вышло.</p>
+                        <p>Отправка ответов заблокирована.</p>
+                        <p class="close-popup-btn">Ок</p>
                     </div>
                 </div>
             </div>
@@ -140,7 +151,7 @@
                 </div>
             </div>
 
-            <button class="next-phase-btn">Попробовать еще раз</button>
+            <button class="try-again-btn">Попробовать еще раз</button>
         </div>
 
         <div th:replace="game/fragments :: logout"></div>
