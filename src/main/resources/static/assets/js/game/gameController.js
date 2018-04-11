@@ -93,7 +93,8 @@ function GameController() {
         }
 
         function reconnect() {
-            let connected = false;
+            location.reload();
+            /*let connected = false;
             let reconInv = setInterval(() => {
                 socket = new SockJS('/websocket');
                 stompClient = Stomp.over(socket);
@@ -116,7 +117,7 @@ function GameController() {
                         reconnect();
                     }
                 });
-            }, 1000);
+            }, 1000);*/
         }
 
         stompClient.connect({}, (frame) => {
@@ -124,7 +125,7 @@ function GameController() {
         }, () => {
             $('.preloader').show();
             // on connection loss (i.g when Iphone is locked) try to reconnect every 1 second
-            reconnect()
+            reconnect();
         });
     };
 
