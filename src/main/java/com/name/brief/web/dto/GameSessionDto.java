@@ -3,6 +3,7 @@ package com.name.brief.web.dto;
 import com.name.brief.model.GameSession;
 import com.name.brief.model.games.Brief;
 import com.name.brief.model.games.Game;
+import com.name.brief.model.games.PharmaRolePlay;
 import com.name.brief.model.games.RiskMap;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,7 +20,7 @@ import java.util.Map;
 public class GameSessionDto {
     public static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("ddMMyyyy");
 
-    private final String[] gameTypes = new String[]{"Бриф", "Карта рисков"};
+    private final String[] gameTypes = new String[]{"Бриф", "Карта рисков", "Ролевая игра"};
     private String oldStrId;
     private String newStrId;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -44,6 +45,8 @@ public class GameSessionDto {
                 return new Brief();
             case "Карта рисков":
                 return new RiskMap();
+            case "Ролевая игра":
+                return new PharmaRolePlay(numberOfCommands);
         }
         return new Brief();
     }
