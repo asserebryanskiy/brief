@@ -175,8 +175,21 @@
         <p>Дата проведения</p>
         <input type="date" th:field="*{activeDate}">
         <label th:if="${createNew}">Тип игры</label>
-        <select th:if="${createNew}" th:field="*{gameType}">
+        <select th:if="${createNew}"
+                class="game-type-select"
+                th:field="*{gameType}">
             <option th:each="gameType : *{gameTypes}" th:value="${gameType}" th:text="${gameType}"></option>
+        </select>
+        <p th:if="${createNew}"
+           class="risk-map-type-label"
+           th:classappend="*{gameType} != 'Карта рисков' ? 'hidden' : ''">Тип карты</p>
+        <select th:if="${createNew}"
+                class="risk-map-type-select"
+                th:field="*{riskMapType}"
+                th:classappend="*{gameType} != 'Карта рисков' ? 'hidden' : ''">
+            <option th:each="riskMapType : *{riskMapTypes}"
+                    th:text="${riskMapType.russianName}"
+                    th:value="${riskMapType}"></option>
         </select>
         <p>Количество команд</p>
         <input type="number" th:field="*{numberOfCommands}">

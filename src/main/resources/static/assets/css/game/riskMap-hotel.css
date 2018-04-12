@@ -1,0 +1,10 @@
+.risk-indicator svg {
+    margin: 0;
+    width: 20px;
+    height: 20px;
+}
+
+.answer-input input {
+    margin: 10px auto;
+    width: 100%;
+}

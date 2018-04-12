@@ -4,10 +4,11 @@
     <div th:include="appFragments :: headContent" th:remove="tag"></div>
     <link rel="stylesheet" th:href="@{/assets/css/game/game.css}">
     <link rel="stylesheet" th:href="@{/assets/css/game/riskMap.css}">
+    <link rel="stylesheet" th:href="@{|/assets/css/game/riskMap-${gameSession.game.type.name}.css|}">
     <link rel="stylesheet" th:href="@{/assets/css/game/projector.css}" th:if="${projectorMode}">
     <title>МОЗ | Карта рисков</title>
 </head>
-<body>
+<body th:class="${gameSession.game.type.name} + '-risk-map'">
     <div th:replace="appFragments :: preloader"></div>
     <div class="container">
         <div th:replace="game/fragments :: header(${commandName},${gameSession.currentRoundIndex})"></div>
@@ -20,7 +21,8 @@
                 <div class="popup">
                     <div class="popup-back"></div>
                     <div class="popup-content">
-                        <div class="how-it-scores-grid">
+                        <div class="how-it-scores-grid how-it-scores-grid-office"
+                             th:if="${gameSession.game.type.answerType == T(com.name.brief.model.games.riskmap.RiskMapAnswerType).FIVE_ITEMS_SCALE}">
                             <p class="how-it-scores-your-answer">Ваш ответ</p>
                             <div class="no-answer how-it-scores-legend"></div>
                             <div class="no-level how-it-scores-legend"></div>
@@ -42,6 +44,26 @@
                             <div class="high-level how-it-scores-legend"></div>
                             <p th:each="score : ${__${((demo != null and demo) ? '':'gameSession.') + 'game.getPossibleScore(3)'}__}" th:text="${score}">0</p>
                         </div>
+                        <div class="how-it-scores-grid how-it-scores-grid-hotel"
+                             th:if="${gameSession.game.type.answerType == T(com.name.brief.model.games.riskmap.RiskMapAnswerType).SEVEN_ITEMS_SCALE}">
+                            <p>Ваш ответ</p>
+                            <p>Неправильный ответ</p>
+                            <p>Правильный ответ</p>
+                            <svg th:fragment="level-minus-3" version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="106.059px" height="106.059px" viewBox="0 0 106.059 106.059" xml:space="preserve"><path d="M90.545,90.542c20.686-20.685,20.684-54.342,0.002-75.024C69.857-5.172,36.198-5.172,15.514,15.513C-5.173,36.198-5.171,69.858,15.516,90.547C36.198,111.23,69.857,111.23,90.545,90.542z M21.301,21.3C38.794,3.807,67.261,3.805,84.759,21.302c17.494,17.494,17.492,45.962-0.002,63.455c-17.494,17.494-45.962,17.496-63.456,0.002C3.803,67.263,3.805,38.794,21.301,21.3z"></path><path d="M28.651,41.818h13.372c1.738,0,3.147-1.409,3.147-3.146c0-1.738-1.409-3.147-3.147-3.147H28.651c-1.738,0-3.147,1.409-3.147,3.147C25.504,40.409,26.913,41.818,28.651,41.818z"></path><path d="M64.033,41.819h13.372c1.738,0,3.147-1.409,3.147-3.146c0-1.738-1.409-3.147-3.147-3.147H64.033c-1.736,0-3.146,1.409-3.146,3.147C60.887,40.41,62.297,41.819,64.033,41.819z"></path><path d="M30.423,71.029c0,1.921,1.558,3.479,3.479,3.479h38.259c1.922,0,3.479-1.558,3.479-3.479s-1.558-3.478-3.479-3.478h-38.26C31.98,67.552,30.423,69.108,30.423,71.029z"></path></svg>
+                            <p th:each="score : ${gameSession.game.getPossibleScore(-3)}" th:text="${score}"></p>
+                            <svg th:fragment="level-minus-2" version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="106.059px" height="106.059px" viewBox="0 0 106.059 106.059" xml:space="preserve"><path d="M90.545,90.542c20.686-20.685,20.684-54.342,0.002-75.024C69.857-5.172,36.198-5.172,15.514,15.513C-5.173,36.198-5.171,69.858,15.516,90.547C36.198,111.23,69.857,111.23,90.545,90.542z M21.301,21.3C38.794,3.807,67.261,3.805,84.759,21.302c17.494,17.494,17.492,45.962-0.002,63.455c-17.494,17.494-45.962,17.496-63.456,0.002C3.803,67.263,3.805,38.794,21.301,21.3z"></path><path d="M28.651,41.818h13.372c1.738,0,3.147-1.409,3.147-3.146c0-1.738-1.409-3.147-3.147-3.147H28.651c-1.738,0-3.147,1.409-3.147,3.147C25.504,40.409,26.913,41.818,28.651,41.818z"></path><path d="M64.033,41.819h13.372c1.738,0,3.147-1.409,3.147-3.146c0-1.738-1.409-3.147-3.147-3.147H64.033c-1.736,0-3.146,1.409-3.146,3.147C60.887,40.41,62.297,41.819,64.033,41.819z"></path><path d="M30.423,71.029c0,1.921,1.558,3.479,3.479,3.479h38.259c1.922,0,3.479-1.558,3.479-3.479s-1.558-3.478-3.479-3.478h-38.26C31.98,67.552,30.423,69.108,30.423,71.029z"></path></svg>
+                            <p th:each="score : ${gameSession.game.getPossibleScore(-2)}" th:text="${score}"></p>
+                            <svg th:fragment="level-minus-1" version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="106.059px" height="106.059px" viewBox="0 0 106.059 106.059" xml:space="preserve"><path d="M90.545,90.542c20.686-20.685,20.684-54.342,0.002-75.024C69.857-5.172,36.198-5.172,15.514,15.513C-5.173,36.198-5.171,69.858,15.516,90.547C36.198,111.23,69.857,111.23,90.545,90.542z M21.301,21.3C38.794,3.807,67.261,3.805,84.759,21.302c17.494,17.494,17.492,45.962-0.002,63.455c-17.494,17.494-45.962,17.496-63.456,0.002C3.803,67.263,3.805,38.794,21.301,21.3z"></path><path d="M28.651,41.818h13.372c1.738,0,3.147-1.409,3.147-3.146c0-1.738-1.409-3.147-3.147-3.147H28.651c-1.738,0-3.147,1.409-3.147,3.147C25.504,40.409,26.913,41.818,28.651,41.818z"></path><path d="M64.033,41.819h13.372c1.738,0,3.147-1.409,3.147-3.146c0-1.738-1.409-3.147-3.147-3.147H64.033c-1.736,0-3.146,1.409-3.146,3.147C60.887,40.41,62.297,41.819,64.033,41.819z"></path><path d="M30.423,71.029c0,1.921,1.558,3.479,3.479,3.479h38.259c1.922,0,3.479-1.558,3.479-3.479s-1.558-3.478-3.479-3.478h-38.26C31.98,67.552,30.423,69.108,30.423,71.029z"></path></svg>
+                            <p th:each="score : ${gameSession.game.getPossibleScore(-1)}" th:text="${score}"></p>
+                            <svg th:fragment="level-zero" version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="106.059px" height="106.059px" viewBox="0 0 106.059 106.059" xml:space="preserve"><path d="M90.545,90.542c20.686-20.685,20.684-54.342,0.002-75.024C69.857-5.172,36.198-5.172,15.514,15.513C-5.173,36.198-5.171,69.858,15.516,90.547C36.198,111.23,69.857,111.23,90.545,90.542z M21.301,21.3C38.794,3.807,67.261,3.805,84.759,21.302c17.494,17.494,17.492,45.962-0.002,63.455c-17.494,17.494-45.962,17.496-63.456,0.002C3.803,67.263,3.805,38.794,21.301,21.3z"></path><path d="M28.651,41.818h13.372c1.738,0,3.147-1.409,3.147-3.146c0-1.738-1.409-3.147-3.147-3.147H28.651c-1.738,0-3.147,1.409-3.147,3.147C25.504,40.409,26.913,41.818,28.651,41.818z"></path><path d="M64.033,41.819h13.372c1.738,0,3.147-1.409,3.147-3.146c0-1.738-1.409-3.147-3.147-3.147H64.033c-1.736,0-3.146,1.409-3.146,3.147C60.887,40.41,62.297,41.819,64.033,41.819z"></path><path d="M30.423,71.029c0,1.921,1.558,3.479,3.479,3.479h38.259c1.922,0,3.479-1.558,3.479-3.479s-1.558-3.478-3.479-3.478h-38.26C31.98,67.552,30.423,69.108,30.423,71.029z"></path></svg>
+                            <p th:each="score : ${gameSession.game.getPossibleScore(0)}" th:text="${score}"></p>
+                            <svg th:fragment="level-plus-1" version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="106.059px" height="106.059px" viewBox="0 0 106.059 106.059" xml:space="preserve"><path d="M90.545,90.542c20.686-20.685,20.684-54.342,0.002-75.024C69.857-5.172,36.198-5.172,15.514,15.513C-5.173,36.198-5.171,69.858,15.516,90.547C36.198,111.23,69.857,111.23,90.545,90.542z M21.301,21.3C38.794,3.807,67.261,3.805,84.759,21.302c17.494,17.494,17.492,45.962-0.002,63.455c-17.494,17.494-45.962,17.496-63.456,0.002C3.803,67.263,3.805,38.794,21.301,21.3z"></path><path d="M28.651,41.818h13.372c1.738,0,3.147-1.409,3.147-3.146c0-1.738-1.409-3.147-3.147-3.147H28.651c-1.738,0-3.147,1.409-3.147,3.147C25.504,40.409,26.913,41.818,28.651,41.818z"></path><path d="M64.033,41.819h13.372c1.738,0,3.147-1.409,3.147-3.146c0-1.738-1.409-3.147-3.147-3.147H64.033c-1.736,0-3.146,1.409-3.146,3.147C60.887,40.41,62.297,41.819,64.033,41.819z"></path><path d="M30.423,71.029c0,1.921,1.558,3.479,3.479,3.479h38.259c1.922,0,3.479-1.558,3.479-3.479s-1.558-3.478-3.479-3.478h-38.26C31.98,67.552,30.423,69.108,30.423,71.029z"></path></svg>
+                            <p th:each="score : ${gameSession.game.getPossibleScore(1)}" th:text="${score}"></p>
+                            <svg th:fragment="level-plus-2" version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="106.059px" height="106.059px" viewBox="0 0 106.059 106.059" xml:space="preserve"><path d="M90.545,90.542c20.686-20.685,20.684-54.342,0.002-75.024C69.857-5.172,36.198-5.172,15.514,15.513C-5.173,36.198-5.171,69.858,15.516,90.547C36.198,111.23,69.857,111.23,90.545,90.542z M21.301,21.3C38.794,3.807,67.261,3.805,84.759,21.302c17.494,17.494,17.492,45.962-0.002,63.455c-17.494,17.494-45.962,17.496-63.456,0.002C3.803,67.263,3.805,38.794,21.301,21.3z"></path><path d="M28.651,41.818h13.372c1.738,0,3.147-1.409,3.147-3.146c0-1.738-1.409-3.147-3.147-3.147H28.651c-1.738,0-3.147,1.409-3.147,3.147C25.504,40.409,26.913,41.818,28.651,41.818z"></path><path d="M64.033,41.819h13.372c1.738,0,3.147-1.409,3.147-3.146c0-1.738-1.409-3.147-3.147-3.147H64.033c-1.736,0-3.146,1.409-3.146,3.147C60.887,40.41,62.297,41.819,64.033,41.819z"></path><path d="M30.423,71.029c0,1.921,1.558,3.479,3.479,3.479h38.259c1.922,0,3.479-1.558,3.479-3.479s-1.558-3.478-3.479-3.478h-38.26C31.98,67.552,30.423,69.108,30.423,71.029z"></path></svg>
+                            <p th:each="score : ${gameSession.game.getPossibleScore(2)}" th:text="${score}"></p>
+                            <svg th:fragment="level-plus-3" version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="106.059px" height="106.059px" viewBox="0 0 106.059 106.059" xml:space="preserve"><path d="M90.545,90.542c20.686-20.685,20.684-54.342,0.002-75.024C69.857-5.172,36.198-5.172,15.514,15.513C-5.173,36.198-5.171,69.858,15.516,90.547C36.198,111.23,69.857,111.23,90.545,90.542z M21.301,21.3C38.794,3.807,67.261,3.805,84.759,21.302c17.494,17.494,17.492,45.962-0.002,63.455c-17.494,17.494-45.962,17.496-63.456,0.002C3.803,67.263,3.805,38.794,21.301,21.3z"></path><path d="M28.651,41.818h13.372c1.738,0,3.147-1.409,3.147-3.146c0-1.738-1.409-3.147-3.147-3.147H28.651c-1.738,0-3.147,1.409-3.147,3.147C25.504,40.409,26.913,41.818,28.651,41.818z"></path><path d="M64.033,41.819h13.372c1.738,0,3.147-1.409,3.147-3.146c0-1.738-1.409-3.147-3.147-3.147H64.033c-1.736,0-3.146,1.409-3.146,3.147C60.887,40.41,62.297,41.819,64.033,41.819z"></path><path d="M30.423,71.029c0,1.921,1.558,3.479,3.479,3.479h38.259c1.922,0,3.479-1.558,3.479-3.479s-1.558-3.478-3.479-3.478h-38.26C31.98,67.552,30.423,69.108,30.423,71.029z"></path></svg>
+                            <p th:each="score : ${gameSession.game.getPossibleScore(3)}" th:text="${score}"></p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -53,16 +75,22 @@
                              th:id="${iter.index / 4 + '' + iter.index % 4 + '-small-img'}"
                              class="risk-small-img animated scale-on-hover">
                         <div class="risk-indicator hidden no-answer"
-                             th:classappend="${i} == 0 ? 'no-level' : (${i} == 1 ? 'low-level' : (${i} == 2 ? 'mid-level' : (${i} == 3 ? 'high-level':'')))"></div>
+                             th:if="${gameSession.game.type.answerType == T(com.name.brief.model.games.riskmap.RiskMapAnswerType).FIVE_ITEMS_SCALE}"
+                             th:classappend="${gameSession.game.answerClassNames.get(i)}"></div>
+                        <div class="risk-indicator hidden"
+                             th:if="${gameSession.game.type.answerType == T(com.name.brief.model.games.riskmap.RiskMapAnswerType).SEVEN_ITEMS_SCALE}">
+                            <svg th:replace="this :: ${gameSession.game.answerClassNames.get(i)}"></svg>
+                        </div>
+
                     </div>
                     <div class="popup-wrapper hidden">
                         <div class="answer-input-popup popup">
                             <div class="popup-back"></div>
                             <div class="popup-content">
                                 <p th:text="#{riskMap.phase1.answerPopup}"></p>
-                                <!--<svg class="close-popup-btn" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z"></path></svg>-->
                                 <div class="img-placeholder"></div>
-                                <div class="answer-inputs">
+                                <div class="answer-inputs"
+                                     th:if="${gameSession.game.type.answerType == T(com.name.brief.model.games.riskmap.RiskMapAnswerType).FIVE_ITEMS_SCALE}">
                                     <div class="answer-input no-level animated" th:classappend="${i} == 0 ? 'selected' : ''">
                                         <svg class="selected-svg animated" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                                             <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
@@ -83,6 +111,9 @@
                                             <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
                                         </svg>
                                     </div>
+                                </div>
+                                <div class="answer-input">
+                                    <input type="range" min="-3" max="3" th:value="${i}" step="1" title="">
                                 </div>
                                 <p class="close-popup-btn animated" >ОК</p>
                             </div>
@@ -121,14 +152,16 @@
                     <div class="popup-wrapper hidden correct-answer-popup">
                         <div class="popup">
                             <div class="popup-back"></div>
-                            <div class="popup-content">
+                            <div class="popup-content"
+                                 th:with="possibleScores = ${gameSession.game.getPossibleScore(ca)}">
                                 <div class="img-placeholder"></div>
                                 <div class="correct-answer-wrapper">
                                     <p>Правильный ответ: </p>
                                     <div class="correct-answer-circle" th:classappend="${ca == -1} ? 'no-answer' : (${ca} == 0 ? 'no-level' : (${ca} == 1 ? 'low-level' : (${ca} == 2 ? 'mid-level' : 'high-level')))"></div>
                                 </div>
                                 <p>Ваш ответ: </p>
-                                <div class="possible-results" th:with="possibleScores = ${gameSession.game.getPossibleScore(ca)}">
+                                <div class="possible-results possible-results-office"
+                                     th:if="${gameSession.game.type == T(com.name.brief.model.games.riskmap.RiskMapType).OFFICE}">
                                     <div class="correct-answer-circle no-answer" th:classappend="${i == -1} ? 'selected'">
                                         <p th:text="${possibleScores[0]}"></p>
                                     </div>
@@ -168,5 +201,6 @@
     <script th:src="@{/assets/js/popup.js}"></script>
     <script th:src="@{/assets/js/game/gameController.js}"></script>
     <script th:src="@{/assets/js/game/riskMap.js}"></script>
+    <script th:src="@{|/assets/js/game/riskMap-${gameSession.game.type.name}.js|}"></script>
 </body>
 </html>

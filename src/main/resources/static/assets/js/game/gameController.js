@@ -248,3 +248,13 @@ function notNull(obj) {
  ************************************************/
 
 // stompClient.onconnect(() => console.log('connected'));
+
+/***********************************************
+ *                                             *
+ *               ABSTRACT METHODS              *
+ *                                             *
+ ************************************************/
+
+function getAnswerStr() {
+    throw new Error("You must override this function!");
+}

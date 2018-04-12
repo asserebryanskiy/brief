@@ -8,6 +8,7 @@ import com.name.brief.model.User;
 import com.name.brief.model.games.Brief;
 import com.name.brief.model.games.Game;
 import com.name.brief.model.games.RiskMap;
+import com.name.brief.model.games.riskmap.RiskMapType;
 import com.name.brief.repository.GameRepository;
 import com.name.brief.repository.UserRepository;
 import com.name.brief.service.GameSessionService;
@@ -71,6 +72,7 @@ public class DevDatabaseLoader implements ApplicationRunner {
                 .withGame(new RiskMap())
                 .withUser(moderator1)
                 .build();
+        ((RiskMap) riskMap.getGame()).setType(RiskMapType.HOTEL);
         gameSessionService.save(session);
         gameSessionService.save(session2);
         gameSessionService.save(session3);

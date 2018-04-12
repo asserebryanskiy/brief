@@ -1,25 +1,28 @@
 package com.name.brief.model.games;
 
 import com.name.brief.model.Decision;
+import com.name.brief.model.games.riskmap.RiskMapAnswerType;
+import com.name.brief.model.games.riskmap.RiskMapType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import javax.persistence.Entity;
 import java.time.Duration;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
+
+import static com.name.brief.model.games.riskmap.RiskMapType.*;
 
 @EqualsAndHashCode(callSuper = true)
 @Entity(name = "riskmap")
 @Data
 public class RiskMap extends Game {
-
-    private static final String DEFAULT_COMMENT = "На картинке нет опасных ситуаций";
+    public static final String DEFAULT_COMMENT = "На картинке нет опасных ситуаций";
     private final int numberOfRounds = 1;
     private final String russianName = "Карта рисков";
     private final String englishName = "riskMap";
+
+    private RiskMapType type = OFFICE;
 
     public RiskMap() {
         super();
@@ -72,17 +75,13 @@ public class RiskMap extends Game {
 
     @Override
     public Object getCorrectAnswers() {
-        return new int[]{
-                -1,1,1,-1,
-                1,1,1,3,
-                2,0,-1,-1
-        };
+        return type.getCorrectAnswers();
     }
 
     @Override
     public Object getAnswerInput(Decision decision) {
         int[] input = new int[12];
-        Arrays.fill(input, -1);
+        Arrays.fill(input, type == OFFICE ? -1 : 0);
         if (decision == null) return input;
         if (decision.getAnswer() != null) {
             String answer = decision.getAnswer();
@@ -109,31 +108,72 @@ public class RiskMap extends Game {
     }
 
     public int[] getPossibleScore(int answer) {
-        switch (answer) {
-            case 0: return new int[]{-100, 100, 50, 25, 0};
-            case 1: return new int[]{-200, 50, 200, 100, 50};
-            case 2: return new int[]{-300, 25, 100, 300, 150};
-            case 3: return new int[]{-400, 0, 50, 150, 400};
-            default: return new int[]{0, 0, 0, 0, 0};
+        switch (type) {
+            case OFFICE: {
+                switch (answer) {
+                    case 0:
+                        return new int[]{-100, 100, 50, 25, 0};
+                    case 1:
+                        return new int[]{-200, 50, 200, 100, 50};
+                    case 2:
+                        return new int[]{-300, 25, 100, 300, 150};
+                    case 3:
+                        return new int[]{-400, 0, 50, 150, 400};
+                    default:
+                        return new int[]{0, 0, 0, 0, 0};
+                }
+            }
+            case HOTEL: {
+                switch (answer) {
+                    case -3: return new int[]{-50, 30};
+                    case -2: return new int[]{-25, 20};
+                    case -1: return new int[]{-10, 10};
+                    case 1: return new int[]{-10, 10};
+                    case 2: return new int[]{-25, 20};
+                    case 3: return new int[]{-50, 30};
+                    default: return new int[]{-5,-5};
+                }
+            }
         }
+        return null;
     }
 
     public String getSectorComment(int sectorIndex) {
-        String[] comments = new String[]{
-                DEFAULT_COMMENT,
-                "Риск падения работника\n",
-                "Девушка на высоких каблуках в длинных брюках спускается по лестнице, говорит по телефону, в другой руке несет документы\n ",
-                DEFAULT_COMMENT,
-                "Ограничен доступ к пожарному крану\n",
-                "Использование тряпки на входе вместо коврика\n",
-                "Провод в местах прохода сотрудников\n",
-                "Коробками и батареями отопления перекрыт доступ к аварийному выходу – групповой смертельный случай\n",
-                "Использование удлинителя рядом с кулером, возможность попадания воды и короткого замыкания\n",
-                "Вентилятор без защитной сетки\n",
-                DEFAULT_COMMENT,
-                DEFAULT_COMMENT
-        };
-
+        String[] comments = type.getAnswerComments();
         return comments[sectorIndex];
+    }
+
+    /**
+     * Creates map that contains css class names for every integer answer
+     * depending on RiskMapAnswerInput type;
+     *
+     * @return HashMap, where key is integer representation of an answer
+     * and value is css class name of the answer.
+     */
+    public Map<Integer, String> getAnswerClassNames() {
+        Map<Integer, String> map = null;
+        switch (type.getAnswerType()) {
+            case FIVE_ITEMS_SCALE: {
+                map = new HashMap<>(5);
+                map.put(-1, "no-answer");
+                map.put(0, "no-level");
+                map.put(1, "low-level");
+                map.put(2, "mid-level");
+                map.put(3, "high-level");
+                return map;
+            }
+            case SEVEN_ITEMS_SCALE:
+                map = new HashMap<>(7);
+                map.put(-3, "level-minus-3");
+                map.put(-2, "level-minus-2");
+                map.put(-1, "level-minus-1");
+                map.put(0, "level-zero");
+                map.put(1, "level-plus-1");
+                map.put(2, "level-plus-2");
+                map.put(3, "level-plus-3");
+                return map;
+        }
+
+        return map;
     }
 }

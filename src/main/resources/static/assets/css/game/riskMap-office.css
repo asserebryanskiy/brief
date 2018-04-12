@@ -1,0 +1,76 @@
+.answer-inputs {
+    display: flex;
+    width: 100%;
+    justify-content: space-evenly;
+    margin: 10px auto;
+}
+
+.answer-input,
+.risk-indicator {
+    display: flex;
+    opacity: 0.8;
+    cursor: pointer;
+}
+
+.answer-input {
+    width: 50px;
+    height: 50px;
+    border-radius: 25px;
+}
+
+.no-answer {
+    background-color: #959595;
+}
+
+.no-answer-text {
+    color: #959595;
+}
+
+.no-level {
+    background-color: #729d76;
+}
+
+.no-level-text {
+    color: #729d76;
+}
+
+.low-level {
+    background-color: #efdf02;
+}
+
+.low-level-text {
+    color: #efdf02;
+}
+
+.mid-level {
+    background-color: #ff8302;
+}
+
+.mid-level-text {
+    color: #ff8302;
+}
+
+.high-level {
+    background-color: #e80404;
+}
+
+.high-level-text {
+    color: #e80404;
+}
+
+.selected {
+    /*border: #4E3549 1px solid;*/
+    opacity: 0.8;
+}
+
+.selected-svg {
+    max-width: 20px;
+    max-height: 20px;
+    opacity: 0;
+    display: block;
+    margin: auto !important;
+}
+
+.selected .selected-svg {
+    opacity: 1;
+}
