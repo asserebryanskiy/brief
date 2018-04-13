@@ -84,7 +84,11 @@ public class SecurityConfig {
                     .logoutUrl("/logout/admin")
                     .logoutSuccessHandler(logoutSuccessHandler())
                     .invalidateHttpSession(true)
-                    .deleteCookies("JSESSIONID");
+                    .deleteCookies("JSESSIONID")
+                .and().rememberMe()
+                    .useSecureCookie(true)
+                    .tokenValiditySeconds(86940)
+                    .alwaysRemember(true);
 
             /*http.sessionManagement()
                     .maximumSessions(1)
