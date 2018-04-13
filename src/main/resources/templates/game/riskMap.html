@@ -195,7 +195,12 @@
 
     <div class="heavy-images hidden">
         <img th:each="i, iter : ${gameSession.game.getAnswerInput(decision)}"
-             th:src="@{'/assets/image/riskMap/' + ${gameSession.game.type.name} + '/big_with_sectors/' + ${(__${iter.count == 2}__ ? 'animated.gif' : __${iter.count}__ + '.jpg')}}" alt=""
+             th:if="${gameSession.game.type == T(com.name.brief.model.games.riskmap.RiskMapType).OFFICE}"
+             th:src="@{'/assets/image/riskMap/office/big_with_sectors/' + ${(__${iter.count == 2}__ ? 'animated.gif' : __${iter.count}__ + '.jpg')}}" alt=""
+             th:id="${iter.index / 4 + '' + iter.index % 4 + '-large-img'}">
+        <img th:each="i, iter : ${gameSession.game.getAnswerInput(decision)}"
+             th:if="${gameSession.game.type == T(com.name.brief.model.games.riskmap.RiskMapType).HOTEL}"
+             th:src="@{|/assets/image/riskMap/hotel/big_with_sectors/_${#numbers.formatInteger(iter.count, 2)}.jpg|}}" alt=""
              th:id="${iter.index / 4 + '' + iter.index % 4 + '-large-img'}">
     </div>
     <div th:replace="game/fragments :: gameSettings(${gameSession})"></div>
