@@ -81,7 +81,16 @@ public class RiskMap extends Game {
     @Override
     public Object getAnswerInput(Decision decision) {
         int[] input = new int[12];
-        Arrays.fill(input, type == OFFICE ? -1 : 0);
+        switch (type) {
+            case OFFICE:
+                Arrays.fill(input, -1);
+                break;
+            case HOTEL:
+                Arrays.fill(input, 3);
+                break;
+            default:
+                Arrays.fill(input, 0);
+        }
         if (decision == null) return input;
         if (decision.getAnswer() != null) {
             String answer = decision.getAnswer();
@@ -125,13 +134,13 @@ public class RiskMap extends Game {
             }
             case HOTEL: {
                 switch (answer) {
-                    case -3: return new int[]{-50, 30};
-                    case -2: return new int[]{-25, 20};
-                    case -1: return new int[]{-10, 10};
-                    case 1: return new int[]{-10, 10};
-                    case 2: return new int[]{-25, 20};
-                    case 3: return new int[]{-50, 30};
-                    default: return new int[]{-5,-5};
+                    case 0: return new int[]{-50, 30};
+                    case 1: return new int[]{-25, 20};
+                    case 2: return new int[]{-10, 10};
+                    case 3: return new int[]{-5,-5};
+                    case 4: return new int[]{-10, 10};
+                    case 5: return new int[]{-25, 20};
+                    case 6: return new int[]{-50, 30};
                 }
             }
         }
@@ -164,13 +173,9 @@ public class RiskMap extends Game {
             }
             case SEVEN_ITEMS_SCALE:
                 map = new HashMap<>(7);
-                map.put(-3, "level-minus-3");
-                map.put(-2, "level-minus-2");
-                map.put(-1, "level-minus-1");
-                map.put(0, "level-zero");
-                map.put(1, "level-plus-1");
-                map.put(2, "level-plus-2");
-                map.put(3, "level-plus-3");
+                for (int i = 0; i < 7; i++) {
+                    map.put(i, "level-" + i);
+                }
                 return map;
         }
 
