@@ -54,7 +54,10 @@
                     <div th:each="i, iter : ${gameSession.game.getAnswerInput(decision)}"
                          th:class="'risk-img-cell risk-img-cell-' + ${iter.index}">
                         <div class="small-img-wrapper">
-                            <img th:src="@{|/assets/image/riskMap/low_2000/low_2000_${#numbers.formatInteger(iter.count, 2)}.jpg|}" alt=""
+                            <!--<img th:src="@{|/assets/image/riskMap/low_2000/low_2000_${#numbers.formatInteger(iter.count, 2)}.jpg|}" alt=""
+                                 th:id="${iter.index / 4 + '' + iter.index % 4 + '-small-img'}"
+                                 class="risk-small-img animated scale-on-hover">-->
+                            <img th:src="@{|/assets/image/riskMap/temporal_new_office/low_2000/low_2000_${#numbers.formatInteger(iter.count, 2)}.jpg|}" alt=""
                                  th:id="${iter.index / 4 + '' + iter.index % 4 + '-small-img'}"
                                  class="risk-small-img animated scale-on-hover">
                             <div class="risk-indicator hidden no-answer"
@@ -109,7 +112,10 @@
                      th:class="'risk-img-cell risk-img-cell-' + ${iter.index}"
                      th:with="ca = ${correctAnswers[iter.index]}">
                     <div class="small-img-wrapper">
-                        <img th:src="@{|/assets/image/riskMap/low_2000/low_2000_${#numbers.formatInteger(iter.count, 2)}.jpg|}" alt=""
+                        <!--<img th:src="@{|/assets/image/riskMap/low_2000/low_2000_${#numbers.formatInteger(iter.count, 2)}.jpg|}" alt=""
+                             th:id="${iter.index / 4 + '' + iter.index % 4 + '-small-img'}"
+                             class="risk-small-img animated scale-on-hover">-->
+                        <img th:src="@{|/assets/image/riskMap/temporal_new_office/low_2000/low_2000_${#numbers.formatInteger(iter.count, 2)}.jpg|}" alt=""
                              th:id="${iter.index / 4 + '' + iter.index % 4 + '-small-img'}"
                              class="risk-small-img animated scale-on-hover">
                         <div class="risk-indicator hidden no-answer"
@@ -165,8 +171,11 @@
     </div>
 
     <div class="heavy-images hidden">
-        <img th:each="i, iter : ${gameSession.game.getAnswerInput(decision)}"
+        <!--<img th:each="i, iter : ${gameSession.game.getAnswerInput(decision)}"
              th:src="@{'/assets/image/riskMap/big_with_sectors/' + ${(__${iter.count == 2}__ ? 'animated.gif' : __${iter.count}__ + '.jpg')}}" alt=""
+             th:id="${iter.index / 4 + '' + iter.index % 4 + '-large-img'}">-->
+        <img th:each="i, iter : ${gameSession.game.getAnswerInput(decision)}"
+             th:src="@{|/assets/image/riskMap/temporal_new_office/low_5000/low_5000_${#numbers.formatInteger(iter.count, 2)}.jpg|}" alt=""
              th:id="${iter.index / 4 + '' + iter.index % 4 + '-large-img'}">
     </div>
     <div th:replace="game/fragments :: gameSettings(${gameSession})"></div>
