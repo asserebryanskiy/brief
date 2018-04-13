@@ -200,7 +200,7 @@
              th:id="${iter.index / 4 + '' + iter.index % 4 + '-large-img'}">
         <img th:each="i, iter : ${gameSession.game.getAnswerInput(decision)}"
              th:if="${gameSession.game.type == T(com.name.brief.model.games.riskmap.RiskMapType).HOTEL}"
-             th:src="@{|/assets/image/riskMap/hotel/big_with_sectors/_${#numbers.formatInteger(iter.count, 2)}.jpg|}}" alt=""
+             th:src="@{|/assets/image/riskMap/hotel/big_with_sectors/_${#numbers.formatInteger(iter.count, 2)}.jpg|}" alt=""
              th:id="${iter.index / 4 + '' + iter.index % 4 + '-large-img'}">
     </div>
     <div th:replace="game/fragments :: gameSettings(${gameSession})"></div>
