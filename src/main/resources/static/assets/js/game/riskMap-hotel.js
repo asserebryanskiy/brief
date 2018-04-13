@@ -11,8 +11,14 @@ function getAnswerStr() {
 $('.answer-input-slider').on('input', null, null, (event) => {
     const $slider = $(event.currentTarget);
     const val = parseInt($slider.val());
-    console.log(val);
+
+    // change svg in popup
     $slider.siblings('svg').remove();
-    const newSvg = $($('svg.level-' + val)[0]).clone();
-    newSvg.insertAfter($slider);
+    const $newSvg = $($('svg.level-' + val)[0]).clone();
+    $newSvg.insertAfter($slider);
+
+    // change svg in risk-indicator
+    const $oldSvg = $slider.parents('.risk-img-cell').find('.risk-indicator svg');
+    $newSvg.clone().insertAfter($oldSvg);
+    $oldSvg.remove();
 });
