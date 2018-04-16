@@ -37,15 +37,15 @@
 
                                 <p class="how-it-scores-correct-answer">Правильный ответ</p>
                                 <div class="no-answer how-it-scores-legend"></div>
-                                <p th:each="score : ${__${((demo != null and demo) ? '':'gameSession.') + 'game.getPossibleScore(-1)'}__}" th:text="${score}">0</p>
+                                <p th:each="score : ${gameSession.game.getPossibleScore(-1)}" th:text="${score}">0</p>
                                 <div class="no-level how-it-scores-legend"></div>
-                                <p th:each="score : ${__${((demo != null and demo) ? '':'gameSession.') + 'game.getPossibleScore(0)'}__}" th:text="${score}">0</p>
+                                <p th:each="score : ${gameSession.game.getPossibleScore(0)}" th:text="${score}">0</p>
                                 <div class="low-level how-it-scores-legend"></div>
-                                <p th:each="score : ${__${((demo != null and demo) ? '':'gameSession.') + 'game.getPossibleScore(1)'}__}" th:text="${score}">0</p>
+                                <p th:each="score : ${gameSession.game.getPossibleScore(1)}" th:text="${score}">0</p>
                                 <div class="mid-level how-it-scores-legend"></div>
-                                <p th:each="score : ${__${((demo != null and demo) ? '':'gameSession.') + 'game.getPossibleScore(2)'}__}" th:text="${score}">0</p>
+                                <p th:each="score : ${gameSession.game.getPossibleScore(2)}" th:text="${score}">0</p>
                                 <div class="high-level how-it-scores-legend"></div>
-                                <p th:each="score : ${__${((demo != null and demo) ? '':'gameSession.') + 'game.getPossibleScore(3)'}__}" th:text="${score}">0</p>
+                                <p th:each="score : ${gameSession.game.getPossibleScore(3)}" th:text="${score}">0</p>
                             </div>
                         </div>
                     </div>
@@ -108,7 +108,7 @@
             <h2 th:unless="${projectorMode}">Вы заработали</h2>
             <h2 th:unless="${projectorMode}"><span id="score-text">0</span> баллов</h2>
             <p id="show-correct-answers-btn">Показать правильные ответы</p>
-            <div class="risk-grid" th:with="correctAnswers = ${gameSession.game.correctAnswers}">
+            <div th:fragment="answerRiskGrid" class="risk-grid" th:with="correctAnswers = ${gameSession.game.correctAnswers}">
                 <div th:each="i, iter : ${gameSession.game.getAnswerInput(decision)}"
                      th:class="'risk-img-cell risk-img-cell-' + ${iter.index}"
                      th:with="ca = ${correctAnswers[iter.index]}">
@@ -116,7 +116,7 @@
                         <!--<img th:src="@{|/assets/image/riskMap/low_2000/low_2000_${#numbers.formatInteger(iter.count, 2)}.jpg|}" alt=""
                              th:id="${iter.index / 4 + '' + iter.index % 4 + '-small-img'}"
                              class="risk-small-img animated scale-on-hover">-->
-                        <img th:replace="this :: smallImg">
+                        <img th:replace="game/riskMap :: smallImg">
                         <div class="risk-indicator hidden no-answer"
                              th:classappend="${'correct-answer-risk-indicator-' + iter.index} + ${i} == 0 ? 'no-level' : (${i} == 1 ? 'low-level' : (${i} == 2 ? 'mid-level' : (${i} == 3 ? 'high-level':'')))">
                             <svg class="correct-answer-icon hidden" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
@@ -173,7 +173,8 @@
         <!--<img th:each="i, iter : ${gameSession.game.getAnswerInput(decision)}"
              th:src="@{'/assets/image/riskMap/big_with_sectors/' + ${(__${iter.count == 2}__ ? 'animated.gif' : __${iter.count}__ + '.jpg')}}" alt=""
              th:id="${iter.index / 4 + '' + iter.index % 4 + '-large-img'}">-->
-        <img th:each="i, iter : ${gameSession.game.getAnswerInput(decision)}"
+        <img th:fragment="bigImg"
+             th:each="i, iter : ${gameSession.game.getAnswerInput(decision)}"
              th:src="@{|/assets/image/riskMap/temporal_new_office/low_5000/low_5000_${#numbers.formatInteger(iter.count, 2)}.jpg|}" alt=""
              th:id="${iter.index / 4 + '' + iter.index % 4 + '-large-img'}">
     </div>

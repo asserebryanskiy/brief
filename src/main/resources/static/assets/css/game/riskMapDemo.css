@@ -31,6 +31,9 @@ p, li {
 .next-phase-btn,
 .try-again-btn {
     padding: 10px;
+    min-width: 150px;
+    height: 50px;
+    font-size: 18px;
     background-color: #4a9d61;
     border-radius: 10px;
     color: white;
