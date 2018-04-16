@@ -41,6 +41,11 @@ p, li {
     display: block;
 }
 
+.congratulation-text {
+    font-family: "Circe Bold", serif;
+    font-size: 20px;
+}
+
 .sector-score-text {
     font-family: "Circe Bold", serif;
 }
