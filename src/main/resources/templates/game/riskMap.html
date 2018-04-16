@@ -57,7 +57,8 @@
                             <!--<img th:src="@{|/assets/image/riskMap/low_2000/low_2000_${#numbers.formatInteger(iter.count, 2)}.jpg|}" alt=""
                                  th:id="${iter.index / 4 + '' + iter.index % 4 + '-small-img'}"
                                  class="risk-small-img animated scale-on-hover">-->
-                            <img th:src="@{|/assets/image/riskMap/temporal_new_office/low_2000/low_2000_${#numbers.formatInteger(iter.count, 2)}.jpg|}" alt=""
+                            <img th:fragment="smallImg"
+                                 th:src="@{|/assets/image/riskMap/temporal_new_office/low_2000/low_2000_${#numbers.formatInteger(iter.count, 2)}.jpg|}" alt=""
                                  th:id="${iter.index / 4 + '' + iter.index % 4 + '-small-img'}"
                                  class="risk-small-img animated scale-on-hover">
                             <div class="risk-indicator hidden no-answer"
@@ -115,9 +116,7 @@
                         <!--<img th:src="@{|/assets/image/riskMap/low_2000/low_2000_${#numbers.formatInteger(iter.count, 2)}.jpg|}" alt=""
                              th:id="${iter.index / 4 + '' + iter.index % 4 + '-small-img'}"
                              class="risk-small-img animated scale-on-hover">-->
-                        <img th:src="@{|/assets/image/riskMap/temporal_new_office/low_2000/low_2000_${#numbers.formatInteger(iter.count, 2)}.jpg|}" alt=""
-                             th:id="${iter.index / 4 + '' + iter.index % 4 + '-small-img'}"
-                             class="risk-small-img animated scale-on-hover">
+                        <img th:replace="this :: smallImg">
                         <div class="risk-indicator hidden no-answer"
                              th:classappend="${'correct-answer-risk-indicator-' + iter.index} + ${i} == 0 ? 'no-level' : (${i} == 1 ? 'low-level' : (${i} == 2 ? 'mid-level' : (${i} == 3 ? 'high-level':'')))">
                             <svg class="correct-answer-icon hidden" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
