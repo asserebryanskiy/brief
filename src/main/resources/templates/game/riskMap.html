@@ -180,7 +180,7 @@
              th:id="${iter.index / 4 + '' + iter.index % 4 + '-large-img'}">-->
         <img th:fragment="bigImg"
              th:each="i, iter : ${gameSession.game.getAnswerInput(decision)}"
-             th:src="@{|/assets/image/riskMap/temporal_new_office/low_5000/low_5000_${#numbers.formatInteger(iter.count, 2)}.jpg|}" alt=""
+             th:src="${iter.count == 2} ? @{/assets/image/riskMap/office/big_with_sectors/2.gif} : @{|/assets/image/riskMap/office/big_with_sectors/${iter.count}-01.jpg|}" alt=""
              th:id="${iter.index / 4 + '' + iter.index % 4 + '-large-img'}">
     </div>
     <div th:replace="game/fragments :: gameSettings(${gameSession})"></div>
