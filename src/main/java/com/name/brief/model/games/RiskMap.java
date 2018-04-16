@@ -17,6 +17,7 @@ import static com.name.brief.model.games.riskmap.RiskMapType.*;
 @Entity(name = "riskmap")
 @Data
 public class RiskMap extends Game {
+
     public static final String DEFAULT_COMMENT = "На картинке нет опасных ситуаций";
     private final int numberOfRounds = 1;
     private final String russianName = "Карта рисков";
@@ -77,6 +78,15 @@ public class RiskMap extends Game {
     public Object getCorrectAnswers() {
         return type.getCorrectAnswers();
     }
+
+    /*@Override
+    public Object getCorrectAnswers() {
+        return new int[]{
+                -1,1,1,-1,
+                1,1,1,3,
+                2,0,-1,-1
+        };
+    }*/
 
     @Override
     public Object getAnswerInput(Decision decision) {
@@ -151,6 +161,25 @@ public class RiskMap extends Game {
         String[] comments = type.getAnswerComments();
         return comments[sectorIndex];
     }
+
+    /*public String getSectorComment(int sectorIndex) {
+        String[] comments = new String[]{
+                DEFAULT_COMMENT,
+                "Риск падения работника\n",
+                "Девушка на высоких каблуках в длинных брюках спускается по лестнице, говорит по телефону, в другой руке несет документы\n ",
+                DEFAULT_COMMENT,
+                "Ограничен доступ к пожарному крану\n",
+                "Использование тряпки на входе вместо коврика\n",
+                "Провод в местах прохода сотрудников\n",
+                "Коробками и батареями отопления перекрыт доступ к аварийному выходу – групповой смертельный случай\n",
+                "Использование удлинителя рядом с кулером, возможность попадания воды и короткого замыкания\n",
+                "Вентилятор без защитной сетки\n",
+                DEFAULT_COMMENT,
+                DEFAULT_COMMENT
+        };
+
+        return comments[sectorIndex];
+    }*/
 
     /**
      * Creates map that contains css class names for every integer answer

@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class DemoController {
-    @RequestMapping({"/demo/riskMap", "/demo"})
+    @RequestMapping({"/E86CD2557B8F9C99"})
     public String getRiskMapDemo(Model model) {
         GameSession gameSession = new GameSession();
         gameSession.setGame(new RiskMap());

@@ -10,10 +10,10 @@
     margin: auto;
 }
 
-.projector-wrapper img {
+#phase-0 .projector-wrapper img {
     width: 30%;
     height: 30%;
-    margin: auto;
+    margin: auto 0;
 }
 
 .phase-container svg {
@@ -24,10 +24,6 @@
 
 .phase-container h2 {
     font-size: 4em;
-}
-
-.strId {
-    margin: auto;
 }
 
 .strId h2 {
@@ -75,6 +71,20 @@
 .bar-chart-row {
     height: 50px;
     opacity: 1 !important;
+}
+
+.risk-map-body #phase-1 {
+    margin: 0;
+}
+
+.risk-grid {
+    width: auto;
+    margin: 0;
+}
+
+.risk-map-body .timer {
+    margin: auto 0;
+    width: 350px;
 }
 
 @media (min-width: 1600px) {

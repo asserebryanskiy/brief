@@ -4,139 +4,118 @@
     <div th:include="appFragments :: headContent" th:remove="tag"></div>
     <link rel="stylesheet" th:href="@{/assets/css/game/game.css}">
     <link rel="stylesheet" th:href="@{/assets/css/game/riskMap.css}">
-    <link rel="stylesheet" th:href="@{|/assets/css/game/riskMap-${gameSession.game.type.name}.css|}">
     <link rel="stylesheet" th:href="@{/assets/css/game/projector.css}" th:if="${projectorMode}">
     <title>МОЗ | Карта рисков</title>
 </head>
-<body th:class="${gameSession.game.type.name} + '-risk-map'">
+<body class="risk-map-body">
     <div th:replace="appFragments :: preloader"></div>
     <div class="container">
         <div th:replace="game/fragments :: header(${commandName},${gameSession.currentRoundIndex})"></div>
         <div th:replace="game/fragments :: introPhase"></div>
         <div class="phase-container hidden" id="phase-1">
-            <h2 th:text="#{riskMap.phase1.message}" th:unless="${projectorMode}"></h2>
-            <h1 class="timer">00:00</h1>
-            <p class="how-it-scores-btn">Как считаются баллы?</p>
-            <div class="popup-wrapper how-it-scores-popup hidden" th:fragment="howItScoresPopup">
-                <div class="popup">
-                    <div class="popup-back"></div>
-                    <div class="popup-content">
-                        <div class="how-it-scores-grid how-it-scores-grid-office"
-                             th:if="${gameSession.game.type.answerType == T(com.name.brief.model.games.riskmap.RiskMapAnswerType).FIVE_ITEMS_SCALE}">
-                            <p class="how-it-scores-your-answer">Ваш ответ</p>
-                            <div class="no-answer how-it-scores-legend"></div>
-                            <div class="no-level how-it-scores-legend"></div>
-                            <div class="low-level how-it-scores-legend"></div>
-                            <div class="mid-level how-it-scores-legend"></div>
-                            <div class="high-level how-it-scores-legend"></div>
-
-                            <div class="grid-empty-space"></div>
-
-                            <p class="how-it-scores-correct-answer">Правильный ответ</p>
-                            <div class="no-answer how-it-scores-legend"></div>
-                            <p th:each="score : ${__${((demo != null and demo) ? '':'gameSession.') + 'game.getPossibleScore(-1)'}__}" th:text="${score}">0</p>
-                            <div class="no-level how-it-scores-legend"></div>
-                            <p th:each="score : ${__${((demo != null and demo) ? '':'gameSession.') + 'game.getPossibleScore(0)'}__}" th:text="${score}">0</p>
-                            <div class="low-level how-it-scores-legend"></div>
-                            <p th:each="score : ${__${((demo != null and demo) ? '':'gameSession.') + 'game.getPossibleScore(1)'}__}" th:text="${score}">0</p>
-                            <div class="mid-level how-it-scores-legend"></div>
-                            <p th:each="score : ${__${((demo != null and demo) ? '':'gameSession.') + 'game.getPossibleScore(2)'}__}" th:text="${score}">0</p>
-                            <div class="high-level how-it-scores-legend"></div>
-                            <p th:each="score : ${__${((demo != null and demo) ? '':'gameSession.') + 'game.getPossibleScore(3)'}__}" th:text="${score}">0</p>
-                        </div>
-                        <div class="how-it-scores-grid how-it-scores-grid-hotel"
-                             th:if="${gameSession.game.type.answerType == T(com.name.brief.model.games.riskmap.RiskMapAnswerType).SEVEN_ITEMS_SCALE}">
-                            <p>Ваш ответ</p>
-                            <p>Неправильный ответ</p>
-                            <p>Правильный ответ</p>
-                            <svg th:fragment="level-0" th:class="${gameSession.game.answerClassNames.get(0)}" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M18.414 10.727c.17 1.304-1.623 2.46-2.236 3.932-.986 2.479 2.405 3.747 3.512 1.4.931-1.974-.454-4.225-1.276-5.332zm.108 3.412c-.407.428-.954.063-.571-.408.227-.28.472-.646.667-1.037.128.338.236 1.097-.096 1.445zm-.522-4.137l-.755.506s-.503-.948-1.746-.948c-1.207 0-1.745.948-1.745.948l-.754-.506c.281-.748 1.205-2.002 2.499-2.002 1.295 0 2.218 1.254 2.501 2.002zm-7 0l-.755.506s-.503-.948-1.746-.948c-1.207 0-1.745.948-1.745.948l-.754-.506c.281-.748 1.205-2.002 2.499-2.002 1.295 0 2.218 1.254 2.501 2.002zm1-10.002c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm0 22c-5.514 0-10-4.486-10-10s4.486-10 10-10 10 4.486 10 10-4.486 10-10 10zm3.582-4.057c-.303.068-.645.076-1.023-.003-.903-.19-1.741-.282-2.562-.282-.819 0-1.658.092-2.562.282-1.11.233-1.944-.24-2.255-1.015-.854-2.131 1.426-3.967 4.816-3.967 1.207 0 2.245.22 3.062.588-.291.522-.44.912-.515 1.588-1.797-.874-6.359-.542-5.752 1.118.138.377 1.614-.279 3.205-.279 1.061 0 2.039.285 2.633.373.162.634.415 1.116.953 1.597z"></path></svg>
-                            <p th:each="score : ${gameSession.game.getPossibleScore(0)}" th:text="${score}"></p>
-                            <svg th:fragment="level-1" th:class="${gameSession.game.answerClassNames.get(1)}" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12 2c5.514 0 10 4.486 10 10s-4.486 10-10 10-10-4.486-10-10 4.486-10 10-10zm0-2c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm-3.5 8c-.828 0-1.5.671-1.5 1.5s.672 1.5 1.5 1.5 1.5-.671 1.5-1.5-.672-1.5-1.5-1.5zm7 0c-.828 0-1.5.671-1.5 1.5s.672 1.5 1.5 1.5 1.5-.671 1.5-1.5-.672-1.5-1.5-1.5zm-.941 9.94c-.903-.19-1.741-.282-2.562-.282-.819 0-1.658.092-2.562.282-1.11.233-1.944-.24-2.255-1.015-.854-2.131 1.426-3.967 4.816-3.967 3.537 0 5.666 1.853 4.817 3.968-.308.769-1.136 1.249-2.254 1.014zm-2.563-1.966c1.614 0 3.056.67 3.206.279.803-2.079-7.202-2.165-6.411 0 .138.377 1.614-.279 3.205-.279z"></path></svg>
-                            <p th:each="score : ${gameSession.game.getPossibleScore(1)}" th:text="${score}"></p>
-                            <svg th:fragment="level-2" th:class="${gameSession.game.answerClassNames.get(2)}" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12 2c5.514 0 10 4.486 10 10s-4.486 10-10 10-10-4.486-10-10 4.486-10 10-10zm0-2c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm.001 14c-2.332 0-4.145 1.636-5.093 2.797l.471.58c1.286-.819 2.732-1.308 4.622-1.308s3.336.489 4.622 1.308l.471-.58c-.948-1.161-2.761-2.797-5.093-2.797zm-3.501-6c-.828 0-1.5.671-1.5 1.5s.672 1.5 1.5 1.5 1.5-.671 1.5-1.5-.672-1.5-1.5-1.5zm7 0c-.828 0-1.5.671-1.5 1.5s.672 1.5 1.5 1.5 1.5-.671 1.5-1.5-.672-1.5-1.5-1.5z"></path></svg>
-                            <p th:each="score : ${gameSession.game.getPossibleScore(2)}" th:text="${score}"></p>
-                            <svg th:fragment="level-3" th:class="${gameSession.game.answerClassNames.get(3)}" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12 2c5.514 0 10 4.486 10 10s-4.486 10-10 10-10-4.486-10-10 4.486-10 10-10zm0-2c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm4 17h-8v-2h8v2zm-7.5-9c-.828 0-1.5.671-1.5 1.5s.672 1.5 1.5 1.5 1.5-.671 1.5-1.5-.672-1.5-1.5-1.5zm7 0c-.828 0-1.5.671-1.5 1.5s.672 1.5 1.5 1.5 1.5-.671 1.5-1.5-.672-1.5-1.5-1.5z"></path></svg>
-                            <p th:each="score : ${gameSession.game.getPossibleScore(3)}" th:text="${score}"></p>
-                            <svg th:fragment="level-4" th:class="${gameSession.game.answerClassNames.get(4)}" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12 2c5.514 0 10 4.486 10 10s-4.486 10-10 10-10-4.486-10-10 4.486-10 10-10zm0-2c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm5.507 13.941c-1.512 1.195-3.174 1.931-5.506 1.931-2.334 0-3.996-.736-5.508-1.931l-.493.493c1.127 1.72 3.2 3.566 6.001 3.566 2.8 0 4.872-1.846 5.999-3.566l-.493-.493zm-9.007-5.941c-.828 0-1.5.671-1.5 1.5s.672 1.5 1.5 1.5 1.5-.671 1.5-1.5-.672-1.5-1.5-1.5zm7 0c-.828 0-1.5.671-1.5 1.5s.672 1.5 1.5 1.5 1.5-.671 1.5-1.5-.672-1.5-1.5-1.5z"></path></svg>
-                            <p th:each="score : ${gameSession.game.getPossibleScore(4)}" th:text="${score}"></p>
-                            <svg th:fragment="level-5" th:class="${gameSession.game.answerClassNames.get(5)}" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12 2c5.514 0 10 4.486 10 10s-4.486 10-10 10-10-4.486-10-10 4.486-10 10-10zm0-2c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm5.508 13.941c-1.513 1.195-3.174 1.931-5.507 1.931-2.335 0-3.996-.736-5.509-1.931l-.492.493c1.127 1.72 3.2 3.566 6.001 3.566 2.8 0 4.872-1.846 5.999-3.566l-.492-.493zm.492-3.939l-.755.506s-.503-.948-1.746-.948c-1.207 0-1.745.948-1.745.948l-.754-.506c.281-.748 1.205-2.002 2.499-2.002 1.295 0 2.218 1.254 2.501 2.002zm-7 0l-.755.506s-.503-.948-1.746-.948c-1.207 0-1.745.948-1.745.948l-.754-.506c.281-.748 1.205-2.002 2.499-2.002 1.295 0 2.218 1.254 2.501 2.002z"></path></svg>
-                            <p th:each="score : ${gameSession.game.getPossibleScore(5)}" th:text="${score}"></p>
-                            <svg th:fragment="level-6" th:class="${gameSession.game.answerClassNames.get(6)}" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12 2c5.514 0 10 4.486 10 10s-4.486 10-10 10-10-4.486-10-10 4.486-10 10-10zm0-2c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm6 14h-12c.331 1.465 2.827 4 6.001 4 3.134 0 5.666-2.521 5.999-4zm0-3.998l-.755.506s-.503-.948-1.746-.948c-1.207 0-1.745.948-1.745.948l-.754-.506c.281-.748 1.205-2.002 2.499-2.002 1.295 0 2.218 1.254 2.501 2.002zm-7 0l-.755.506s-.503-.948-1.746-.948c-1.207 0-1.745.948-1.745.948l-.754-.506c.281-.748 1.205-2.002 2.499-2.002 1.295 0 2.218 1.254 2.501 2.002z"></path></svg>
-                            <p th:each="score : ${gameSession.game.getPossibleScore(6)}" th:text="${score}"></p>
-                        </div>
-                    </div>
-                </div>
+            <div class="projector-wrapper" th:if="${projectorMode}">
+                <h1 class="timer">00:00</h1>
+                <div th:replace="this :: riskGrid"></div>
             </div>
-            <div class="risk-grid">
-                <div th:each="i, iter : ${gameSession.game.getAnswerInput(decision)}"
-                     th:class="'risk-img-cell risk-img-cell-' + ${iter.index}">
-                    <div class="small-img-wrapper">
-                        <img th:src="@{|/assets/image/riskMap/${gameSession.game.type.name}/low_2000/low_2000_${#numbers.formatInteger(iter.count, 2)}.jpg|}" alt=""
-                             th:id="${iter.index / 4 + '' + iter.index % 4 + '-small-img'}"
-                             class="risk-small-img animated scale-on-hover">
-                        <div class="risk-indicator hidden no-answer"
-                             th:if="${gameSession.game.type.answerType == T(com.name.brief.model.games.riskmap.RiskMapAnswerType).FIVE_ITEMS_SCALE}"
-                             th:classappend="${gameSession.game.answerClassNames.get(i)}"></div>
-                        <div class="risk-indicator"
-                             th:if="${gameSession.game.type.answerType == T(com.name.brief.model.games.riskmap.RiskMapAnswerType).SEVEN_ITEMS_SCALE}">
-                            <svg th:replace="this :: ${gameSession.game.answerClassNames.get(i)}"></svg>
-                        </div>
+            <div th:remove="${projectorMode} ? 'all' : 'tag'">
+                <h2 th:text="#{riskMap.phase1.message}" th:unless="${projectorMode}"></h2>
+                <h1 class="timer">00:00</h1>
+                <p class="how-it-scores-btn">Как считаются баллы?</p>
+                <div class="popup-wrapper how-it-scores-popup hidden" th:fragment="howItScoresPopup">
+                    <div class="popup">
+                        <div class="popup-back"></div>
+                        <div class="popup-content">
+                            <div class="how-it-scores-grid">
+                                <p class="how-it-scores-your-answer">Ваш ответ</p>
+                                <div class="no-answer how-it-scores-legend"></div>
+                                <div class="no-level how-it-scores-legend"></div>
+                                <div class="low-level how-it-scores-legend"></div>
+                                <div class="mid-level how-it-scores-legend"></div>
+                                <div class="high-level how-it-scores-legend"></div>
 
-                    </div>
-                    <div class="popup-wrapper hidden">
-                        <div class="answer-input-popup popup">
-                            <div class="popup-back"></div>
-                            <div class="popup-content">
-                                <p th:text="#{riskMap.phase1.answerPopup}"></p>
-                                <div class="img-placeholder"></div>
-                                <div class="answer-inputs"
-                                     th:if="${gameSession.game.type.answerType == T(com.name.brief.model.games.riskmap.RiskMapAnswerType).FIVE_ITEMS_SCALE}">
-                                    <div class="answer-input no-level animated" th:classappend="${i} == 0 ? 'selected' : ''">
-                                        <svg class="selected-svg animated" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                                            <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
-                                        </svg>
-                                    </div>
-                                    <div class="answer-input low-level animated" th:classappend="${i} == 1 ? 'selected' : ''">
-                                        <svg class="selected-svg animated" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                                            <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
-                                        </svg>
-                                    </div>
-                                    <div class="answer-input mid-level animated" th:classappend="${i} == 2 ? 'selected' : ''">
-                                        <svg class="selected-svg animated" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                                            <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
-                                        </svg>
-                                    </div>
-                                    <div class="answer-input high-level animated" th:classappend="${i} == 3 ? 'selected' : ''">
-                                        <svg class="selected-svg animated" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                                            <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
-                                        </svg>
-                                    </div>
-                                </div>
-                                <div class="answer-input"
-                                     th:if="${gameSession.game.type.answerType == T(com.name.brief.model.games.riskmap.RiskMapAnswerType).SEVEN_ITEMS_SCALE}">
-                                    <input class="answer-input-slider" type="range" min="0" max="6" th:value="${i}" step="1" title="">
-                                    <svg th:replace="this :: ${gameSession.game.answerClassNames.get(i)}"></svg>
-                                </div>
-                                <p class="close-popup-btn animated">ОК</p>
+                                <div class="grid-empty-space"></div>
+
+                                <p class="how-it-scores-correct-answer">Правильный ответ</p>
+                                <div class="no-answer how-it-scores-legend"></div>
+                                <p th:each="score : ${__${((demo != null and demo) ? '':'gameSession.') + 'game.getPossibleScore(-1)'}__}" th:text="${score}">0</p>
+                                <div class="no-level how-it-scores-legend"></div>
+                                <p th:each="score : ${__${((demo != null and demo) ? '':'gameSession.') + 'game.getPossibleScore(0)'}__}" th:text="${score}">0</p>
+                                <div class="low-level how-it-scores-legend"></div>
+                                <p th:each="score : ${__${((demo != null and demo) ? '':'gameSession.') + 'game.getPossibleScore(1)'}__}" th:text="${score}">0</p>
+                                <div class="mid-level how-it-scores-legend"></div>
+                                <p th:each="score : ${__${((demo != null and demo) ? '':'gameSession.') + 'game.getPossibleScore(2)'}__}" th:text="${score}">0</p>
+                                <div class="high-level how-it-scores-legend"></div>
+                                <p th:each="score : ${__${((demo != null and demo) ? '':'gameSession.') + 'game.getPossibleScore(3)'}__}" th:text="${score}">0</p>
                             </div>
                         </div>
                     </div>
                 </div>
+                <div class="risk-grid" th:fragment="riskGrid">
+                    <div th:each="i, iter : ${gameSession.game.getAnswerInput(decision)}"
+                         th:class="'risk-img-cell risk-img-cell-' + ${iter.index}">
+                        <div class="small-img-wrapper">
+                            <!--<img th:src="@{|/assets/image/riskMap/low_2000/low_2000_${#numbers.formatInteger(iter.count, 2)}.jpg|}" alt=""
+                                 th:id="${iter.index / 4 + '' + iter.index % 4 + '-small-img'}"
+                                 class="risk-small-img animated scale-on-hover">-->
+                            <img th:src="@{|/assets/image/riskMap/temporal_new_office/low_2000/low_2000_${#numbers.formatInteger(iter.count, 2)}.jpg|}" alt=""
+                                 th:id="${iter.index / 4 + '' + iter.index % 4 + '-small-img'}"
+                                 class="risk-small-img animated scale-on-hover">
+                            <div class="risk-indicator hidden no-answer"
+                                 th:classappend="${i} == 0 ? 'no-level' : (${i} == 1 ? 'low-level' : (${i} == 2 ? 'mid-level' : (${i} == 3 ? 'high-level':'')))"></div>
+                        </div>
+                        <div class="popup-wrapper hidden">
+                            <div class="answer-input-popup popup">
+                                <div class="popup-back"></div>
+                                <div class="popup-content">
+                                    <p th:text="#{riskMap.phase1.answerPopup}"></p>
+                                    <!--<svg class="close-popup-btn" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z"></path></svg>-->
+                                    <div class="img-placeholder"></div>
+                                    <div class="answer-inputs">
+                                        <div class="answer-input no-level animated" th:classappend="${i} == 0 ? 'selected' : ''">
+                                            <svg class="selected-svg animated" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                                                <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
+                                            </svg>
+                                        </div>
+                                        <div class="answer-input low-level animated" th:classappend="${i} == 1 ? 'selected' : ''">
+                                            <svg class="selected-svg animated" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                                                <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
+                                            </svg>
+                                        </div>
+                                        <div class="answer-input mid-level animated" th:classappend="${i} == 2 ? 'selected' : ''">
+                                            <svg class="selected-svg animated" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                                                <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
+                                            </svg>
+                                        </div>
+                                        <div class="answer-input high-level animated" th:classappend="${i} == 3 ? 'selected' : ''">
+                                            <svg class="selected-svg animated" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                                                <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                    <p class="close-popup-btn animated" >ОК</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button th:replace="game/fragments :: sendResponsesBtn"></button>
+                <div th:replace="game/fragments :: flash('Ответы отправлены')"></div>
             </div>
-            <button th:replace="game/fragments :: sendResponsesBtn"></button>
-            <div th:replace="game/fragments :: flash('Ответы отправлены')"></div>
         </div>
 
         <div class="phase-container hidden" id="phase-2">
-            <h2>Вы заработали</h2>
-            <h2><span id="score-text">0</span> баллов</h2>
+            <h2 th:unless="${projectorMode}">Вы заработали</h2>
+            <h2 th:unless="${projectorMode}"><span id="score-text">0</span> баллов</h2>
             <p id="show-correct-answers-btn">Показать правильные ответы</p>
             <div class="risk-grid" th:with="correctAnswers = ${gameSession.game.correctAnswers}">
                 <div th:each="i, iter : ${gameSession.game.getAnswerInput(decision)}"
                      th:class="'risk-img-cell risk-img-cell-' + ${iter.index}"
                      th:with="ca = ${correctAnswers[iter.index]}">
                     <div class="small-img-wrapper">
-                        <img th:src="@{|/assets/image/riskMap/${gameSession.game.type.name}/low_2000/low_2000_${#numbers.formatInteger(iter.count, 2)}.jpg|}" alt=""
+                        <!--<img th:src="@{|/assets/image/riskMap/low_2000/low_2000_${#numbers.formatInteger(iter.count, 2)}.jpg|}" alt=""
+                             th:id="${iter.index / 4 + '' + iter.index % 4 + '-small-img'}"
+                             class="risk-small-img animated scale-on-hover">-->
+                        <img th:src="@{|/assets/image/riskMap/temporal_new_office/low_2000/low_2000_${#numbers.formatInteger(iter.count, 2)}.jpg|}" alt=""
                              th:id="${iter.index / 4 + '' + iter.index % 4 + '-small-img'}"
                              class="risk-small-img animated scale-on-hover">
                         <div class="risk-indicator hidden no-answer"
@@ -154,16 +133,14 @@
                     <div class="popup-wrapper hidden correct-answer-popup">
                         <div class="popup">
                             <div class="popup-back"></div>
-                            <div class="popup-content"
-                                 th:with="possibleScores = ${gameSession.game.getPossibleScore(ca)}">
+                            <div class="popup-content">
                                 <div class="img-placeholder"></div>
                                 <div class="correct-answer-wrapper">
                                     <p>Правильный ответ: </p>
                                     <div class="correct-answer-circle" th:classappend="${ca == -1} ? 'no-answer' : (${ca} == 0 ? 'no-level' : (${ca} == 1 ? 'low-level' : (${ca} == 2 ? 'mid-level' : 'high-level')))"></div>
                                 </div>
                                 <p>Ваш ответ: </p>
-                                <div class="possible-results possible-results-office"
-                                     th:if="${gameSession.game.type == T(com.name.brief.model.games.riskmap.RiskMapType).OFFICE}">
+                                <div class="possible-results" th:with="possibleScores = ${gameSession.game.getPossibleScore(ca)}">
                                     <div class="correct-answer-circle no-answer" th:classappend="${i == -1} ? 'selected'">
                                         <p th:text="${possibleScores[0]}"></p>
                                     </div>
@@ -194,13 +171,11 @@
     </div>
 
     <div class="heavy-images hidden">
+        <!--<img th:each="i, iter : ${gameSession.game.getAnswerInput(decision)}"
+             th:src="@{'/assets/image/riskMap/big_with_sectors/' + ${(__${iter.count == 2}__ ? 'animated.gif' : __${iter.count}__ + '.jpg')}}" alt=""
+             th:id="${iter.index / 4 + '' + iter.index % 4 + '-large-img'}">-->
         <img th:each="i, iter : ${gameSession.game.getAnswerInput(decision)}"
-             th:if="${gameSession.game.type == T(com.name.brief.model.games.riskmap.RiskMapType).OFFICE}"
-             th:src="@{'/assets/image/riskMap/office/big_with_sectors/' + ${(__${iter.count == 2}__ ? 'animated.gif' : __${iter.count}__ + '.jpg')}}" alt=""
-             th:id="${iter.index / 4 + '' + iter.index % 4 + '-large-img'}">
-        <img th:each="i, iter : ${gameSession.game.getAnswerInput(decision)}"
-             th:if="${gameSession.game.type == T(com.name.brief.model.games.riskmap.RiskMapType).HOTEL}"
-             th:src="@{|/assets/image/riskMap/hotel/big_with_sectors/_${#numbers.formatInteger(iter.count, 2)}.jpg|}" alt=""
+             th:src="@{|/assets/image/riskMap/temporal_new_office/low_5000/low_5000_${#numbers.formatInteger(iter.count, 2)}.jpg|}" alt=""
              th:id="${iter.index / 4 + '' + iter.index % 4 + '-large-img'}">
     </div>
     <div th:replace="game/fragments :: gameSettings(${gameSession})"></div>
@@ -208,6 +183,5 @@
     <script th:src="@{/assets/js/popup.js}"></script>
     <script th:src="@{/assets/js/game/gameController.js}"></script>
     <script th:src="@{/assets/js/game/riskMap.js}"></script>
-    <script th:src="@{|/assets/js/game/riskMap-${gameSession.game.type.name}.js|}"></script>
 </body>
 </html>

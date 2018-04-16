@@ -56,6 +56,55 @@ function onCorrectAnswerPhase() {
     throw new Error("You must override this function!");
 }
 
+/*function getScoreForSector(row, column, answer) {
+    const correctAnswers = [
+        [-1,1,1,-1],
+        [1,1,1,3],
+        [2,0,-1,-1],
+    ];
+
+    // scoring varies depending on correct answer
+    switch (correctAnswers[row][column]) {
+        case -1: return 0;
+        case 0:
+            switch (answer) {
+                case -1: return -100;
+                case 0: return 100;
+                case 1: return 50;
+                case 2: return 25;
+                case 3: return 0;
+            }
+            break;
+        case 1:
+            switch (answer) {
+                case -1: return -200;
+                case 0: return 50;
+                case 1: return 200;
+                case 2: return 100;
+                case 3: return 50;
+            }
+            break;
+        case 2:
+            switch (answer) {
+                case -1: return -300;
+                case 0: return 25;
+                case 1: return 100;
+                case 2: return 300;
+                case 3: return 150;
+            }
+            break;
+        case 3:
+            switch (answer) {
+                case -1: return -400;
+                case 0: return 0;
+                case 1: return 50;
+                case 2: return 150;
+                case 3: return 400;
+            }
+            break;
+    }
+}*/
+
 function onRoundChange() {
     throw new Error("You must override this function!");
 }
