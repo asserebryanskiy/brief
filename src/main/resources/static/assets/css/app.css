@@ -188,3 +188,32 @@ body {
 .preloader svg {
     margin: auto;
 }
+
+noscript {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+}
+
+noscript .text-content {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: auto;
+    padding: 20px;
+    background-color: tomato;
+    color: white;
+    z-index: 11;
+}
+
+noscript .background {
+    width: 100%;
+    height: 100%;
+    background-color: #959595;
+    opacity: 0.7;
+}
+
