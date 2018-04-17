@@ -104,7 +104,8 @@ controller.setOnPhaseChange((phaseNumber) => {
         case CORRECT_ANSWERS_PHASE: {
             const answerStr = getAnswerStr();
             const answerMatrix = getAnswerMatrix(answerStr);
-            $('#score-text').text(getTotalScore(answerMatrix));
+            const totalScore = getTotalScore(answerMatrix);
+            $('#score-text').text(totalScore);
             $('.correct-answer-cover').each((i, el) => {
                 const className = $(el).parents('.risk-img-cell')[0].classList[1];
                 const sector = parseInt(className.substr(className.lastIndexOf('-') + 1));
@@ -114,7 +115,6 @@ controller.setOnPhaseChange((phaseNumber) => {
                 $(el).find('.sector-score-text').text(score > 0 ? '+' + score : score);
             });
             if (answerStr.length > 0) {
-
                 let acc = '';
                 let sector = 0;
                 for (let i = 0; i < answerStr.length; i++) {
@@ -136,6 +136,14 @@ controller.setOnPhaseChange((phaseNumber) => {
                 $circles.removeClass('selected');
                 $($circles[parseInt(acc) + 1]).addClass('selected');
             }
+
+            let congratulationText = '';
+            if (totalScore < 0) congratulationText = 'Сотрудники все еще в большой опасности! Может, попробуете еще раз?';
+            else if (totalScore >= 0 && totalScore < 1000) congratulationText = 'Вы вышли в "плюс", однако не достигли верхних позиций рейтинга. Предлагаем попробовать еще раз!';
+            else if (totalScore >= 1000 && totalScore < 1500) congratulationText = 'Хорошая работа! Ваш результат находится в числе 35% лучших в рейтинге.';
+            else if (totalScore >= 1500 && totalScore < 1900) congratulationText = 'Поздравляем! Вы вошли в 20% лучших в рейтинге. Вы значительно повысили безопасность в офисе, однако есть еще над чем работать.';
+            else congratulationText = 'Великолепно! Вы вошли в 5% лучших в рейтинге. Благодаря вам, офис безопасен и сотрудники могут комфортно работать.';
+            $('.congratulation-text').text(congratulationText);
             break;
         }
     }

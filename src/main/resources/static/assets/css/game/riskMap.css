@@ -29,6 +29,10 @@ body {
     margin-top: 100px;
 }
 
+#phase-2 > h2 {
+    font-size: 29px;
+}
+
 .risk-grid {
     display: grid;
     width: 100%;
@@ -306,6 +310,12 @@ img[id$='-large-img'] {
     margin: 0 30px;
 }
 
+.congratulation-text {
+    font-family: "Circe Bold", serif;
+    font-size: 18px;
+    padding: 0 20px;
+}
+
 /*********************************
 *          HOW IT SCORES         *
 **********************************/
@@ -427,6 +437,12 @@ img[id$='-large-img'] {
     .correct-answer-comment {
         max-height: unset;
         overflow-y: unset;
+    }
+}
+
+@media (max-width: 340px) {
+    .congratulation-text {
+        font-size: 16px;
     }
 }
 
