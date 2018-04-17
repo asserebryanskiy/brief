@@ -5,7 +5,7 @@
     text-align: left;
 }
 
-#phase-0 h2 {
+#phase-0 > .header-wrapper {
     text-align: center;
     margin: 10px 0;
 }
@@ -39,11 +39,6 @@ p, li {
     color: white;
     margin: 20px auto;
     display: block;
-}
-
-.congratulation-text {
-    font-family: "Circe Bold", serif;
-    font-size: 20px;
 }
 
 .sector-score-text {

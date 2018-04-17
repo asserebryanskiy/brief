@@ -121,8 +121,8 @@ function getTotalScore(answerMatrix) {
 function getScoreForSector(row, column, answer) {
     const correctAnswers = [
         [-1,1,1,-1],
-        [1,1,1,3],
-        [2,0,-1,-1],
+        [3,1,1,1],
+        [2,1,1,-1]
     ];
 
     // scoring varies depending on correct answer

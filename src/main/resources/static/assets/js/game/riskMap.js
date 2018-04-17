@@ -38,6 +38,13 @@ controller.setOnPhaseChange((phaseNumber) => {
             break;
         case CORRECT_ANSWERS_PHASE: {
             onCorrectAnswerPhase();
+            /*let congratulationText = '';
+            if (totalScore < 0) congratulationText = 'Сотрудники все еще в большой опасности! Может, попробуете еще раз?';
+            else if (totalScore >= 0 && totalScore < 1000) congratulationText = 'Вы вышли в "плюс", однако не достигли верхних позиций рейтинга. Предлагаем попробовать еще раз!';
+            else if (totalScore >= 1000 && totalScore < 1500) congratulationText = 'Хорошая работа! Ваш результат находится в числе 35% лучших в рейтинге.';
+            else if (totalScore >= 1500 && totalScore < 1900) congratulationText = 'Поздравляем! Вы вошли в 20% лучших в рейтинге. Вы значительно повысили безопасность в офисе, однако есть еще над чем работать.';
+            else congratulationText = 'Великолепно! Вы вошли в 5% лучших в рейтинге. Благодаря вам, офис безопасен и сотрудники могут комфортно работать.';
+            $('.congratulation-text').text(congratulationText);*/
             break;
         }
     }
@@ -59,8 +66,8 @@ function onCorrectAnswerPhase() {
 /*function getScoreForSector(row, column, answer) {
     const correctAnswers = [
         [-1,1,1,-1],
-        [1,1,1,3],
-        [2,0,-1,-1],
+        [3,1,1,1],
+        [2,1,1,-1],
     ];
 
     // scoring varies depending on correct answer

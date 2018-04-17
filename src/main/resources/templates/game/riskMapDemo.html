@@ -8,12 +8,15 @@
     <link rel="stylesheet" th:href="@{/assets/css/game/riskMapDemo.css}">
     <title>МОЗ | Карта рисков</title>
 </head>
-<body th:with = "game = ${gameSession.game}">
+<body>
     <noscript th:replace="appFragments :: noscript"></noscript>
     <div class="container">
         <div th:replace="game/fragments :: header('Демо',0)"></div>
         <div id="phase-0" class="phase-container">
-            <h2>Демо-игра "Карта рисков"</h2>
+            <div class="header-wrapper">
+                <h2>Демо-игра</h2>
+                <h2>"Карта рисков"</h2>
+            </div>
             <div class="rules-container">
                 <p><b>Задача: </b>в каждом из секторов определить уровень риска получения сотрудниками травм.</p>
                 <ul>
@@ -23,8 +26,9 @@
                     <li><span class="mid-level-text">Оранжевый</span> - высокий уровень риска.</li>
                     <li><span class="high-level-text">Красный</span> - высочайший уровень риска.</li>
                 </ul>
-
-                <p>У вас будет <b>2 минуты</b> на решение задачи.</p>
+                <p>По умолчанию в каждом секторе выбран вариант "<span class="no-answer-text">риска нет</span>".</p>
+                <br>
+                <p>У вас будет <b>3 минуты</b> на решение задачи.</p>
             </div>
             <p class="how-it-scores-btn">Как считаются баллы?</p>
             <div th:replace="game/riskMap :: howItScoresPopup"></div>
@@ -51,8 +55,7 @@
         </div>
 
         <div class="phase-container hidden" id="phase-2">
-            <h2>Вы заработали</h2>
-            <h2><span id="score-text">0</span> баллов</h2>
+            <h2 th:unless="${projectorMode}">Вы заработали<br><span id="score-text">0</span> баллов</h2>
             <p class="congratulation-text">Поздравляем вы вошли в 20% лучших игроков!</p>
             <div th:replace="game/riskMap :: answerRiskGrid"></div>
             <p id="show-correct-answers-btn">Показать правильные ответы</p>

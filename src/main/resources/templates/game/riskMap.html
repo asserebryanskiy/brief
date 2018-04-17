@@ -56,12 +56,9 @@
         </div>
 
         <div class="phase-container hidden" id="phase-2">
-            <h2 th:unless="${projectorMode}">Вы заработали</h2>
-            <h2 th:unless="${projectorMode}"><span id="score-text">0</span> баллов</h2>
-            <p id="show-correct-answers-btn">Показать правильные ответы</p>
-            <div th:fragment="answerRiskGrid"
-                 class="risk-grid"
-                 th:with="correctAnswers = ${gameSession.game.correctAnswers}">
+            <h2 th:unless="${projectorMode}">Вы заработали<br><span id="score-text">0</span> баллов</h2>
+            <p class="congratulation-text">Поздравляем вы вошли в 20% лучших игроков!</p>
+            <div th:fragment="answerRiskGrid" class="risk-grid" th:with="correctAnswers = ${gameSession.game.correctAnswers}">
                 <div th:each="i, iter : ${gameSession.game.getAnswerInput(decision)}"
                      th:class="'risk-img-cell risk-img-cell-' + ${iter.index}"
                      th:with="ca = ${correctAnswers[iter.index]}">
@@ -84,6 +81,7 @@
                     </div>
                 </div>
             </div>
+            <p id="show-correct-answers-btn">Показать правильные ответы</p>
         </div>
 
         <div th:replace="game/fragments :: logout"></div>
