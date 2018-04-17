@@ -72,7 +72,7 @@ public class DevDatabaseLoader implements ApplicationRunner {
                 .withGame(new RiskMap())
                 .withUser(moderator1)
                 .build();
-        ((RiskMap) riskMap.getGame()).setType(RiskMapType.HOTEL);
+        ((RiskMap) riskMap.getGame()).setType(RiskMapType.OFFICE);
         gameSessionService.save(session);
         gameSessionService.save(session2);
         gameSessionService.save(session3);

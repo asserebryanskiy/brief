@@ -4,6 +4,7 @@
     <div th:include="appFragments :: headContent" th:remove="tag"></div>
     <link rel="stylesheet" th:href="@{/assets/css/game/game.css}">
     <link rel="stylesheet" th:href="@{/assets/css/game/riskMap.css}">
+    <link rel="stylesheet" th:href="@{|/assets/css/game/riskMap-${gameSession.game.type.name}.css|}">
     <link rel="stylesheet" th:href="@{/assets/css/game/projector.css}" th:if="${projectorMode}">
     <title>МОЗ | Карта рисков</title>
 </head>
