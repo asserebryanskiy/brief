@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Title</title>
+</head>
+<body>
+    <img th:fragment="bigImg"
+         th:each="i, iter : ${gameSession.game.getAnswerInput(decision)}"
+         th:src="${iter.count == 2} ? @{/assets/image/riskMap/office/big_with_sectors/2.gif} : @{|/assets/image/riskMap/office/big_with_sectors/${iter.count}-01.jpg|}" alt=""
+         th:id="${iter.index / 4 + '' + iter.index % 4 + '-large-img'}">
+</body>
+</html>

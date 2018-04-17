@@ -12,12 +12,17 @@ $('.next-phase-btn').click((event) => {
     const activePhaseNumber = $(event.currentTarget).parents('.phase-container').attr('id').substr(6);
     const next = (activePhaseNumber + 1) % 3;
 
+    // 2 - is a phase of correct answers
     if (next === 2) {
+        // stop timer
         window.clearInterval(timerInd);
 
         const answerStr = getAnswerStr();
         const answerMatrix = getAnswerMatrix(answerStr);
-        $('#score-text').text(getTotalScore(answerMatrix));
+        // set score text
+        const totalScore = getTotalScore(answerMatrix);
+        $('#score-text').text(totalScore);
+        // set up score on every correct-answer-cover
         $('.correct-answer-cover').each((i, el) => {
             const className = $(el).parents('.risk-img-cell')[0].classList[1];
             const sector = parseInt(className.substr(className.lastIndexOf('-') + 1));
@@ -49,6 +54,13 @@ $('.next-phase-btn').click((event) => {
             $circles.removeClass('selected');
             $($circles[parseInt(acc) + 1]).addClass('selected');
         }
+
+        let congratulationText = '';
+        if (totalScore < -1000) congratulationText = 'Потренирутейсь еще';
+        else if (totalScore >= -1000 && totalScore < 0) congratulationText = 'Ниже, чем средненько, чувак';
+        else if (totalScore >= 0 && totalScore < 1000) congratulationText = 'Выше, чем средненько, чувак';
+        else congratulationText = 'Поздравляем вы вошли в 20% лучших игроков!';
+        $('.congratulation-text').text(congratulationText);
     }
 
     $('.phase-container').hide();

@@ -119,8 +119,8 @@ public class GameSession extends BaseEntity{
             User principal;
             try {
                 principal = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            } catch (NullPointerException npe) {
-                npe.printStackTrace();
+            } catch (NullPointerException | ClassCastException e) {
+                e.printStackTrace();
                 principal = null;
             }
             return principal != null ? principal : new User();
