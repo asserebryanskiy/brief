@@ -9,6 +9,7 @@
     <title>МОЗ | Карта рисков</title>
 </head>
 <body th:with = "game = ${gameSession.game}">
+    <noscript th:replace="appFragments :: noscript"></noscript>
     <div class="container">
         <div th:replace="game/fragments :: header('Демо',0)"></div>
         <div id="phase-0" class="phase-container">

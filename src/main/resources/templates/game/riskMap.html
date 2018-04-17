@@ -7,7 +7,7 @@
     <link rel="stylesheet" th:href="@{/assets/css/game/projector.css}" th:if="${projectorMode}">
     <title>МОЗ | Карта рисков</title>
 </head>
-<body class="risk-map-body" th:with="mapType = ${gameSession.game.type.name}">
+<body class="risk-map-body" th:with="mapType = ${gameSession.game.type.name}, mapLayoutPage = ${'game/riskMapFragments/riskMap-' + mapType}">
     <div th:replace="appFragments :: preloader"></div>
     <div class="container">
         <div th:replace="game/fragments :: header(${commandName},${gameSession.currentRoundIndex})"></div>
@@ -25,28 +25,7 @@
                     <div class="popup">
                         <div class="popup-back"></div>
                         <div class="popup-content">
-                            <div class="how-it-scores-grid">
-                                <p class="how-it-scores-your-answer">Ваш ответ</p>
-                                <div class="no-answer how-it-scores-legend"></div>
-                                <div class="no-level how-it-scores-legend"></div>
-                                <div class="low-level how-it-scores-legend"></div>
-                                <div class="mid-level how-it-scores-legend"></div>
-                                <div class="high-level how-it-scores-legend"></div>
-
-                                <div class="grid-empty-space"></div>
-
-                                <p class="how-it-scores-correct-answer">Правильный ответ</p>
-                                <div class="no-answer how-it-scores-legend"></div>
-                                <p th:each="score : ${gameSession.game.getPossibleScore(-1)}" th:text="${score}">0</p>
-                                <div class="no-level how-it-scores-legend"></div>
-                                <p th:each="score : ${gameSession.game.getPossibleScore(0)}" th:text="${score}">0</p>
-                                <div class="low-level how-it-scores-legend"></div>
-                                <p th:each="score : ${gameSession.game.getPossibleScore(1)}" th:text="${score}">0</p>
-                                <div class="mid-level how-it-scores-legend"></div>
-                                <p th:each="score : ${gameSession.game.getPossibleScore(2)}" th:text="${score}">0</p>
-                                <div class="high-level how-it-scores-legend"></div>
-                                <p th:each="score : ${gameSession.game.getPossibleScore(3)}" th:text="${score}">0</p>
-                            </div>
+                            <div th:replace="${mapLayoutPage} :: howItScoresGrid"></div>
                         </div>
                     </div>
                 </div>
@@ -54,50 +33,16 @@
                     <div th:each="i, iter : ${gameSession.game.getAnswerInput(decision)}"
                          th:class="'risk-img-cell risk-img-cell-' + ${iter.index}">
                         <div class="small-img-wrapper">
-                            <!--<img th:src="@{|/assets/image/riskMap/low_2000/low_2000_${#numbers.formatInteger(iter.count, 2)}.jpg|}" alt=""
-                                 th:id="${iter.index / 4 + '' + iter.index % 4 + '-small-img'}"
-                                 class="risk-small-img animated scale-on-hover">-->
-                            <img th:fragment="smallImg"
-                                 th:src="@{|/assets/image/riskMap/temporal_new_office/low_2000/low_2000_${#numbers.formatInteger(iter.count, 2)}.jpg|}" alt=""
-                                 th:id="${iter.index / 4 + '' + iter.index % 4 + '-small-img'}"
-                                 class="risk-small-img animated scale-on-hover">
-                            <div class="risk-indicator hidden no-answer"
-                                 th:classappend="${i} == 0 ? 'no-level' : (${i} == 1 ? 'low-level' : (${i} == 2 ? 'mid-level' : (${i} == 3 ? 'high-level':'')))"></div>
+                            <img th:replace="${mapLayoutPage} :: smallImg">
+                            <div th:replace="${mapLayoutPage} :: riskIndicator(false)"></div>
                         </div>
                         <div class="popup-wrapper hidden">
                             <div class="answer-input-popup popup">
                                 <div class="popup-back"></div>
                                 <div class="popup-content">
                                     <p th:text="#{riskMap.phase1.answerPopup}"></p>
-                                    <!--<svg class="close-popup-btn" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z"></path></svg>-->
                                     <div class="img-placeholder"></div>
-                                    <div class="answer-inputs">
-                                        <div class="answer-input no-answer animated" th:classappend="${i} == -1 ? 'selected' : ''">
-                                            <svg class="selected-svg animated" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                                                <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
-                                            </svg>
-                                        </div>
-                                        <div class="answer-input no-level animated" th:classappend="${i} == 0 ? 'selected' : ''">
-                                            <svg class="selected-svg animated" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                                                <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
-                                            </svg>
-                                        </div>
-                                        <div class="answer-input low-level animated" th:classappend="${i} == 1 ? 'selected' : ''">
-                                            <svg class="selected-svg animated" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                                                <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
-                                            </svg>
-                                        </div>
-                                        <div class="answer-input mid-level animated" th:classappend="${i} == 2 ? 'selected' : ''">
-                                            <svg class="selected-svg animated" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                                                <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
-                                            </svg>
-                                        </div>
-                                        <div class="answer-input high-level animated" th:classappend="${i} == 3 ? 'selected' : ''">
-                                            <svg class="selected-svg animated" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                                                <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
-                                            </svg>
-                                        </div>
-                                    </div>
+                                    <div th:replace="${mapLayoutPage} :: answerInput"></div>
                                     <p class="close-popup-btn animated" >ОК</p>
                                 </div>
                             </div>
@@ -113,54 +58,23 @@
             <h2 th:unless="${projectorMode}">Вы заработали</h2>
             <h2 th:unless="${projectorMode}"><span id="score-text">0</span> баллов</h2>
             <p id="show-correct-answers-btn">Показать правильные ответы</p>
-            <div th:fragment="answerRiskGrid" class="risk-grid" th:with="correctAnswers = ${gameSession.game.correctAnswers}">
+            <div th:fragment="answerRiskGrid"
+                 class="risk-grid"
+                 th:with="correctAnswers = ${gameSession.game.correctAnswers}">
                 <div th:each="i, iter : ${gameSession.game.getAnswerInput(decision)}"
                      th:class="'risk-img-cell risk-img-cell-' + ${iter.index}"
                      th:with="ca = ${correctAnswers[iter.index]}">
                     <div class="small-img-wrapper">
-                        <!--<img th:src="@{|/assets/image/riskMap/low_2000/low_2000_${#numbers.formatInteger(iter.count, 2)}.jpg|}" alt=""
-                             th:id="${iter.index / 4 + '' + iter.index % 4 + '-small-img'}"
-                             class="risk-small-img animated scale-on-hover">-->
-                        <img th:replace="game/riskMap :: smallImg">
-                        <div class="risk-indicator hidden no-answer"
-                             th:classappend="${'correct-answer-risk-indicator-' + iter.index} + ${i} == 0 ? 'no-level' : (${i} == 1 ? 'low-level' : (${i} == 2 ? 'mid-level' : (${i} == 3 ? 'high-level':'')))">
-                            <svg class="correct-answer-icon hidden" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                                <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
-                            </svg>
-                        </div>
-                        <div class="correct-answer-cover hidden"
-                             th:if="${ca} >= 0"
-                             th:classappend="${ca} == 0 ? 'no-level' : (${ca} == 1 ? 'low-level' : (${ca} == 2 ? 'mid-level' : 'high-level'))">
-                            <p class="sector-score-text">0</p>
-                        </div>
+                        <img th:replace="${mapLayoutPage} :: smallImg">
+                        <div th:replace="${mapLayoutPage} :: riskIndicator(true)"></div>
+                        <div th:replace="${mapLayoutPage} :: correctAnswerCover"></div>
                     </div>
                     <div class="popup-wrapper hidden correct-answer-popup">
                         <div class="popup">
                             <div class="popup-back"></div>
                             <div class="popup-content">
                                 <div class="img-placeholder"></div>
-                                <div class="correct-answer-wrapper">
-                                    <p>Правильный ответ: </p>
-                                    <div class="correct-answer-circle" th:classappend="${ca == -1} ? 'no-answer' : (${ca} == 0 ? 'no-level' : (${ca} == 1 ? 'low-level' : (${ca} == 2 ? 'mid-level' : 'high-level')))"></div>
-                                </div>
-                                <p>Ваш ответ: </p>
-                                <div class="possible-results" th:with="possibleScores = ${gameSession.game.getPossibleScore(ca)}">
-                                    <div class="correct-answer-circle no-answer" th:classappend="${i == -1} ? 'selected'">
-                                        <p th:text="${possibleScores[0]}"></p>
-                                    </div>
-                                    <div class="correct-answer-circle no-level" th:classappend="${i == 0} ? 'selected'">
-                                        <p th:text="${possibleScores[1]}"></p>
-                                    </div>
-                                    <div class="correct-answer-circle low-level" th:classappend="${i == 1} ? 'selected'">
-                                        <p th:text="${possibleScores[2]}"></p>
-                                    </div>
-                                    <div class="correct-answer-circle mid-level" th:classappend="${i == 2} ? 'selected'">
-                                        <p th:text="${possibleScores[3]}"></p>
-                                    </div>
-                                    <div class="correct-answer-circle high-level" th:classappend="${i == 3} ? 'selected'">
-                                        <p th:text="${possibleScores[4]}"></p>
-                                    </div>
-                                </div>
+                                <div th:replace="${mapLayoutPage} :: correctAnswerPopupContent(${ca}, ${i})"></div>
                                 <p class="correct-answer-comment" th:text="${gameSession.game.getSectorComment(__${iter.index}__)}"></p>
                                 <p class="close-popup-btn" >Ок</p>
                                 <!--<svg class="close-popup-btn" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z"></path></svg>-->
@@ -175,15 +89,13 @@
     </div>
 
     <div class="heavy-images hidden">
-        <!--<img th:each="i, iter : ${gameSession.game.getAnswerInput(decision)}"
-             th:src="@{'/assets/image/riskMap/big_with_sectors/' + ${(__${iter.count == 2}__ ? 'animated.gif' : __${iter.count}__ + '.jpg')}}" alt=""
-             th:id="${iter.index / 4 + '' + iter.index % 4 + '-large-img'}">-->
-        <img th:replace="game/riskMapFragments/riskMap-${gameSession.game.type.name} :: bigImg">
+        <img th:replace="${mapLayoutPage} :: bigImg">
     </div>
     <div th:replace="game/fragments :: gameSettings(${gameSession})"></div>
     <div th:replace="game/fragments :: vendorScripts"></div>
     <script th:src="@{/assets/js/popup.js}"></script>
     <script th:src="@{/assets/js/game/gameController.js}"></script>
     <script th:src="@{/assets/js/game/riskMap.js}"></script>
+    <script th:src="@{|/assets/js/game/riskMap-${mapType}.js|}"></script>
 </body>
 </html>
