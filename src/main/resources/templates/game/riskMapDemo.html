@@ -53,8 +53,7 @@
         </div>
 
         <div class="phase-container hidden" id="phase-2">
-            <h2>Вы заработали</h2>
-            <h2><span id="score-text">0</span> баллов</h2>
+            <h2 th:unless="${projectorMode}">Вы заработали<br><span id="score-text">0</span> баллов</h2>
             <p class="congratulation-text">Поздравляем вы вошли в 20% лучших игроков!</p>
             <div th:replace="game/riskMap :: answerRiskGrid"></div>
             <p id="show-correct-answers-btn">Показать правильные ответы</p>

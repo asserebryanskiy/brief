@@ -31,6 +31,7 @@ body {
 
 #phase-2 > h2 {
     font-size: 29px;
+    line-height: 1.4;
 }
 
 .risk-grid {
@@ -81,7 +82,7 @@ img[id$='-large-img'] {
 .answer-inputs {
     display: flex;
     width: 300px;
-    justify-content: space-evenly;
+    justify-content: space-between;
     margin: 10px auto;
 }
 
@@ -312,6 +313,7 @@ img[id$='-large-img'] {
 
 .congratulation-text {
     font-family: "Circe Bold", serif;
+    line-height: 1.4;
     font-size: 18px;
     padding: 0 20px;
 }
