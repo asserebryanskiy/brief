@@ -37,8 +37,8 @@
 
     <div th:fragment="answerInput" class="answer-input"
          th:if="${gameSession.game.type.answerType == T(com.name.brief.model.games.riskmap.RiskMapAnswerType).SEVEN_ITEMS_SCALE}">
-        <svg th:replace="game/riskMapFragments/riskMap-hotel :: ${gameSession.game.answerClassNames.get(i)}"></svg>
         <input class="answer-input-slider" type="range" min="0" max="6" th:value="${i}" step="1" title="">
+        <svg th:replace="game/riskMapFragments/riskMap-hotel :: ${gameSession.game.answerClassNames.get(i)}"></svg>
     </div>
 
     <div th:fragment="riskIndicator(correctAnswerIcon)" class="risk-indicator"
