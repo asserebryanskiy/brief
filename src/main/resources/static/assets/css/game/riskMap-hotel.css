@@ -1,10 +1,49 @@
+.risk-indicator {
+    left: 5px;
+    right: 0;
+}
+
 .risk-indicator svg {
     margin: 0;
     width: 20px;
     height: 20px;
+    border-radius: 10px;
+    background-color: rgba(255,255,255,0.8);
+}
+
+.risk-indicator .level-2 {
+    background-color: rgba(12,12,12,0.3);
 }
 
 .answer-input input {
     margin: 10px auto;
     width: 100%;
+}
+
+.level-0 {
+    fill: tomato !important;
+}
+
+.level-1 {
+    fill: #ff8302 !important;
+}
+
+.level-2 {
+    fill: #efdf02 !important;
+}
+
+.level-3 {
+    fill: #959595 !important;
+}
+
+.level-4 {
+    fill: #839d80 !important;
+}
+
+.level-5 {
+    fill: #529d4e !important;
+}
+
+.level-6 {
+    fill: #2c9d1c !important;
 }

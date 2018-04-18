@@ -24,28 +24,6 @@ $('.answer-input').click((event) => {
  *       OVERRIDDEN FUNCTIONS       *
  ************************************/
 
-function toggleSelected(event) {
-    const $target = $(event.currentTarget);
-    // clear self-made radio-buttons
-    $target.siblings().removeClass('selected');
-
-    // toggle selection of clicked input
-    $target.toggleClass('selected');
-
-    // remove indicator from img-cell if any
-    const $indicator = $('.' + $target.parents('.risk-img-cell')[0].classList[1])
-        .find('.risk-indicator');
-    $indicator.removeClass('no-level low-level mid-level high-level');
-
-    if ($target.hasClass('selected')) {
-        // add new indicator to img-cell
-        const className = $target.hasClass('low-level') ? 'low-level'
-            : $target.hasClass('no-level') ? 'no-level'
-                : $target.hasClass('mid-level') ? 'mid-level' : 'high-level';
-        $indicator.addClass(className);
-    }
-}
-
 function onCorrectAnswerPhase() {
     const answerStr = getAnswerStr();
     const answerMatrix = getAnswerMatrix(answerStr);
@@ -106,6 +84,28 @@ function getAnswerStr() {
 /************************************
  *         HELPER FUNCTIONS         *
  ************************************/
+
+function toggleSelected(event) {
+    const $target = $(event.currentTarget);
+    // clear self-made radio-buttons
+    $target.siblings().removeClass('selected');
+
+    // toggle selection of clicked input
+    $target.toggleClass('selected');
+
+    // remove indicator from img-cell if any
+    const $indicator = $('.' + $target.parents('.risk-img-cell')[0].classList[1])
+        .find('.risk-indicator');
+    $indicator.removeClass('no-level low-level mid-level high-level');
+
+    if ($target.hasClass('selected')) {
+        // add new indicator to img-cell
+        const className = $target.hasClass('low-level') ? 'low-level'
+            : $target.hasClass('no-level') ? 'no-level'
+                : $target.hasClass('mid-level') ? 'mid-level' : 'high-level';
+        $indicator.addClass(className);
+    }
+}
 
 function getTotalScore(answerMatrix) {
     let score = 0;

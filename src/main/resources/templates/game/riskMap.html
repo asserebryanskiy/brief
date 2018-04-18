@@ -9,6 +9,7 @@
     <title>МОЗ | Карта рисков</title>
 </head>
 <body class="risk-map-body" th:with="mapType = ${gameSession.game.type.name}, mapLayoutPage = ${'game/riskMapFragments/riskMap-' + mapType}">
+    <noscript th:replace="appFragments :: noscript"></noscript>
     <div th:replace="appFragments :: preloader"></div>
     <div class="container">
         <div th:replace="game/fragments :: header(${commandName},${gameSession.currentRoundIndex})"></div>
@@ -89,6 +90,9 @@
 
     <div class="heavy-images hidden">
         <img th:replace="${mapLayoutPage} :: bigImg">
+    </div>
+    <div class="correct-answer-store hidden">
+        <p th:each="ca : ${gameSession.game.type.correctAnswers}" th:text="${ca}"></p>
     </div>
     <div th:replace="game/fragments :: gameSettings(${gameSession})"></div>
     <div th:replace="game/fragments :: vendorScripts"></div>
