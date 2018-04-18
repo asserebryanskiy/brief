@@ -8,6 +8,7 @@
     <title>МОЗ | Карта рисков</title>
 </head>
 <body class="risk-map-body">
+    <noscript th:replace="appFragments :: noscript"></noscript>
     <div th:replace="appFragments :: preloader"></div>
     <div class="container">
         <div th:replace="game/fragments :: header(${commandName},${gameSession.currentRoundIndex})"></div>
@@ -58,7 +59,7 @@
                                  th:id="${iter.index / 4 + '' + iter.index % 4 + '-small-img'}"
                                  class="risk-small-img animated scale-on-hover">-->
                             <img th:fragment="smallImg"
-                                 th:src="@{|/assets/image/riskMap/temporal_new_office/low_2000/low_2000_${#numbers.formatInteger(iter.count, 2)}.jpg|}" alt=""
+                                 th:src="@{|/assets/image/riskMap/office/low_2000/small_${#numbers.formatInteger(iter.count, 2)}.jpg|}" alt=""
                                  th:id="${iter.index / 4 + '' + iter.index % 4 + '-small-img'}"
                                  class="risk-small-img animated scale-on-hover">
                             <div class="risk-indicator hidden no-answer"
