@@ -12,7 +12,7 @@
          class="risk-small-img animated scale-on-hover">
     <img th:fragment="bigImg"
          th:each="i, iter : ${gameSession.game.getAnswerInput(decision)}"
-         th:src="@{|/assets/image/riskMap/hotel/big_with_sectors/_${#numbers.formatInteger(iter.count, 2)}.jpg|}" alt=""
+         th:src="@{|/assets/image/riskMap/hotel/big_with_sectors/${iter.count}-01.jpg|}" alt=""
          th:id="${iter.index / 4 + '' + iter.index % 4 + '-large-img'}">
     <div th:fragment="howItScoresGrid" class="how-it-scores-grid how-it-scores-grid-hotel"
          th:if="${gameSession.game.type.answerType == T(com.name.brief.model.games.riskmap.RiskMapAnswerType).SEVEN_ITEMS_SCALE}">

@@ -31,10 +31,11 @@ public enum RiskMapType {
     HOTEL(
             "hotel",
             "Отель",
+            // 0 - no violation
             new int[]{
-                    0,0,0,0,
-                    0,0,0,0,
-                    0,0,0,0
+                    1,0,1,0,
+                    1,1,1,0,
+                    1,0,1,1
             },
             RiskMapAnswerType.SEVEN_ITEMS_SCALE,
             new String[]{

@@ -45,7 +45,7 @@ function getTotalScore(answerMatrix) {
     let score = 0;
     for (let i = 0; i < 3; i++) {
         for (let j = 0; j < 4; j++) {
-            score += getScoreForSector(i, j, answerMatrix[i][j])
+            score += getScoreForSector(i, j, answerMatrix[i][j]);
         }
     }
 
@@ -58,77 +58,45 @@ const correctAnswers = [
     [0,0,0,0]
 ];
 $('.correct-answer-store').children().each((i, el) => {
-    const val = el.innerText;
-    console.log(Math.floor(i / 4));
-    correctAnswers[Math.floor(i / 4)][i % 4] = val;
+    correctAnswers[Math.floor(i / 4)][i % 4] = parseInt(el.innerText);
 });
 
 function getScoreForSector(row, column, answer) {
     // scoring varies depending on correct answer
+    console.log(answer);
     switch (correctAnswers[row][column]) {
-        case -1: return 0;
-        case 0:
+        case 0: // no violation
             switch (answer) {
-                case -1: return -100;
-                case 0: return 100;
-                case 1: return 50;
-                case 2: return 25;
-                case 3: return 0;
+                case 0: return -50;
+                case 1: return -25;
+                case 2: return -10;
+                case 3: return -5;
+                case 4: return 10;
+                case 5: return 20;
+                case 6: return 30;
             }
             break;
-        case 1:
+        case 1: // violation
             switch (answer) {
-                case -1: return -200;
-                case 0: return 50;
-                case 1: return 200;
-                case 2: return 100;
-                case 3: return 50;
+                case 0: return 30;
+                case 1: return 20;
+                case 2: return 10;
+                case 3: return -5;
+                case 4: return -10;
+                case 5: return -25;
+                case 6: return -50;
             }
-            break;
-        case 2:
-            switch (answer) {
-                case -1: return -300;
-                case 0: return 25;
-                case 1: return 100;
-                case 2: return 300;
-                case 3: return 150;
-            }
-            break;
-        case 3:
-            switch (answer) {
-                case -1: return -400;
-                case 0: return 0;
-                case 1: return 50;
-                case 2: return 150;
-                case 3: return 400;
-            }
-            break;
     }
 }
 
-function getAnswerMatrix(answer) {
-    const answerMatrix = new Array(3);
-    for (let i = 0; i < 3; i++) {
-        const inner = new Array(4);
-        inner.fill(-1);
-        answerMatrix[i] = inner;
-    }
-    if (answer.length === 0) return answerMatrix;
-    let acc = '';
-    let sector = 0;
-    for (let i = 0; i < answer.length; i++) {
-        const letter = answer.charAt(i);
-        if (letter === '-') {
-            sector = parseInt(acc);
-            acc = '';
-        } else if (letter === ',') {
-            answerMatrix[Math.floor(sector / 4)][sector % 4] = parseInt(acc);
-            acc = '';
-            sector = 0;
-        } else {
-            acc += letter;
-        }
-    }
-    answerMatrix[Math.floor(sector / 4)][sector % 4] = parseInt(acc);
+function getAnswerMatrix() {
+    const answerMatrix = [
+        [3,3,3,3],
+        [3,3,3,3],
+        [3,3,3,3]
+    ];
+    $('.answer-input-slider').each((i, el) => {
+        answerMatrix[Math.floor(i / 4)][i % 4] = parseInt(el.value);
+    });
     return answerMatrix;
 }
