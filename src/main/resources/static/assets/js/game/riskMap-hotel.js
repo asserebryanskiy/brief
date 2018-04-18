@@ -1,13 +1,3 @@
-function getAnswerStr() {
-    let answerStr = '';
-    $('.answer-input-slider').each((i, el) => {
-        answerStr += '' + i + '-' + $(el).val();
-        if (i !== 11) answerStr += ',';
-    });
-
-    return answerStr;
-}
-
 $('.answer-input-slider').on('input', null, null, (event) => {
     const $slider = $(event.currentTarget);
     const val = parseInt($slider.val());
@@ -22,3 +12,29 @@ $('.answer-input-slider').on('input', null, null, (event) => {
     $newSvg.clone().insertAfter($oldSvg);
     $oldSvg.remove();
 });
+
+/************************************
+ *       OVERRIDDEN FUNCTIONS       *
+ ************************************/
+
+function toggleSelected(event) {
+
+}
+
+function onCorrectAnswerPhase() {
+
+}
+
+function onRoundChange() {
+
+}
+
+function getAnswerStr() {
+    let answerStr = '';
+    $('.answer-input-slider').each((i, el) => {
+        answerStr += '' + i + '-' + $(el).val();
+        if (i !== 11) answerStr += ',';
+    });
+
+    return answerStr;
+}
