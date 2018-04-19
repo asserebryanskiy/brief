@@ -6,6 +6,29 @@
     <title>Title</title>
 </head>
 <body>
+    <div id="phase-0" class="phase-container" th:fragment="rulesPhase">
+        <div class="header-wrapper">
+            <h2>Демо-игра</h2>
+            <h2>"Карта рисков"</h2>
+        </div>
+        <div class="rules-container">
+            <p><b>Задача: </b>в каждом из секторов определить уровень риска получения сотрудниками травм.</p>
+            <ul>
+                <li><span class="no-answer-text">Серый</span> - риска нет.</li>
+                <li><span class="no-level-text">Зеленый</span> - риск приемлем и с ним не надо работать.</li>
+                <li><span class="low-level-text">Желтый</span> - средний уровень риска.</li>
+                <li><span class="mid-level-text">Оранжевый</span> - высокий уровень риска.</li>
+                <li><span class="high-level-text">Красный</span> - высочайший уровень риска.</li>
+            </ul>
+            <p>По умолчанию в каждом секторе выбран вариант "<span class="no-answer-text">риска нет</span>".</p>
+            <br>
+            <p>У вас будет <b>3 минуты</b> на решение задачи.</p>
+        </div>
+        <p class="how-it-scores-btn">Как считаются баллы?</p>
+        <div th:replace="game/riskMap :: howItScoresPopup"></div>
+        <button class="next-phase-btn">Начать</button>
+    </div>
+
     <img th:fragment="smallImg"
          th:src="@{|/assets/image/riskMap/hotel/low_2000/low_2000_${#numbers.formatInteger(iter.count, 2)}.jpg|}" alt=""
          th:id="${iter.index / 4 + '' + iter.index % 4 + '-small-img'}"

@@ -213,7 +213,7 @@ public class SecurityConfig {
         protected void configure(HttpSecurity http) throws Exception {
             http
                 .authorizeRequests()
-                    .antMatchers("/", "/E86CD2557B8F9C99").permitAll()
+                    .antMatchers("/", "/demo/**").permitAll()
                     .antMatchers("/game/**").hasRole("PLAYER")
                     .anyRequest().hasAnyRole("PLAYER", "ADMIN", "MODERATOR")
                     .and()

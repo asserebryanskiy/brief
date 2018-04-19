@@ -90,7 +90,7 @@
     <div class="heavy-images hidden">
         <img th:replace="${mapLayoutPage} :: bigImg">
     </div>
-    <div class="correct-answer-store hidden">
+    <div class="correct-answer-store hidden" th:fragment="correctAnswerStore">
         <p th:each="ca : ${gameSession.game.type.correctAnswers}" th:text="${ca}"></p>
     </div>
     <div th:replace="game/fragments :: gameSettings(${gameSession})"></div>
