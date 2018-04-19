@@ -58,7 +58,6 @@
     </div>
 
     <div th:fragment="answerInput" class="answer-input">
-        <input class="answer-input-slider" type="range" min="0" max="6" th:value="${i}" step="1" title="">
         <div class="answer-popup-status-wrapper">
             <svg th:replace="game/riskMapFragments/riskMap-hotel :: ${gameSession.game.answerClassNames.get(i)}"></svg>
             <div>
@@ -68,6 +67,7 @@
                 <p class="confidence-status" th:classappend="${i} == 3 ? 'hidden':''">Уверенность: <span class="confidence-level-span" th:text="(${i == 0} or ${i == 6}) ? 'Высокая' : ((${i == 1} or ${i == 5}) ? 'Средняя' : ((${i == 2} or ${i == 3}) ? 'Низкая' : ''))"></span></p>
             </div>
         </div>
+        <input class="answer-input-slider" type="range" min="0" max="6" th:value="${i}" step="1" title="">
     </div>
 
     <div th:fragment="riskIndicator(correctAnswerIcon)" class="risk-indicator"

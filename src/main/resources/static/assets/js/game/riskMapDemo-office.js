@@ -97,12 +97,12 @@ $('.next-phase-btn').click((event) => {
             sec--;
 
             // if only ten seconds left make timer red
-            if (min === 0 && sec < 11) {
+            if (min === 0 && sec < 31) {
                 $timer.addClass('last-ten-seconds');
             }
 
             // on last five seconds show big digits in the top of the screen
-            if (min === 0 && sec < 6) {
+            if (min === 0 && sec < 11) {
                 if (!$alertDigit.is(':visible')) $alertDigit.show();
                 $alertDigit.text(sec);
             }
