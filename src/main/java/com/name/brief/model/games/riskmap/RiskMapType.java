@@ -15,10 +15,10 @@ public enum RiskMapType {
             },
             RiskMapAnswerType.FIVE_ITEMS_SCALE,
             new String[]{
-                    RiskMap.DEFAULT_COMMENT,
+                    RiskMap.OFFICE_DEFAULT_COMMENT,
                     "Риск падения работника\n",
                     "Девушка на высоких каблуках в длинных брюках спускается по лестнице, говорит по телефону, в другой руке несет документы\n ",
-                    RiskMap.DEFAULT_COMMENT,
+                    RiskMap.OFFICE_DEFAULT_COMMENT,
                     "Коробками и батареями отопления перекрыт доступ к аварийному выходу – групповой смертельный случай\n",
                     "Использование тряпки на входе вместо коврика\n",
                     "Провод в местах прохода сотрудников\n",
@@ -26,7 +26,7 @@ public enum RiskMapType {
                     "Использование удлинителя рядом с кулером, возможность попадания воды и короткого замыкания\n",
                     "Вентилятор без защитной сетки\n",
                     "Надпись мокрый пол упала на пол",
-                    RiskMap.DEFAULT_COMMENT
+                    RiskMap.OFFICE_DEFAULT_COMMENT
             }),
     HOTEL(
             "hotel",
@@ -39,18 +39,18 @@ public enum RiskMapType {
             },
             RiskMapAnswerType.SEVEN_ITEMS_SCALE,
             new String[]{
-                    RiskMap.DEFAULT_COMMENT,
-                    RiskMap.DEFAULT_COMMENT,
-                    RiskMap.DEFAULT_COMMENT,
-                    RiskMap.DEFAULT_COMMENT,
-                    RiskMap.DEFAULT_COMMENT,
-                    RiskMap.DEFAULT_COMMENT,
-                    RiskMap.DEFAULT_COMMENT,
-                    RiskMap.DEFAULT_COMMENT,
-                    RiskMap.DEFAULT_COMMENT,
-                    RiskMap.DEFAULT_COMMENT,
-                    RiskMap.DEFAULT_COMMENT,
-                    RiskMap.DEFAULT_COMMENT
+                    "Не предоставлена помощь в перемещении багажа",
+                    RiskMap.HOTEL_DEFAULT_COMMENT,
+                    "Отсутствует табличка мокрый пол",
+                    RiskMap.HOTEL_DEFAULT_COMMENT,
+                    "Администратор начала разговор, несмотря на ожидающего гостя",
+                    "Администратор игнорирует гостя",
+                    "Пустая стойка для печатной продукции",
+                    RiskMap.HOTEL_DEFAULT_COMMENT,
+                    "Сломанный счетчик свободных мест в паркинге",
+                    RiskMap.HOTEL_DEFAULT_COMMENT,
+                    "Сотрудник на входе не приветствует гостя",
+                    "Официант не помог с выбором блюда"
             }
     );
 

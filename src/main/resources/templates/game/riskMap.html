@@ -12,7 +12,7 @@
     <noscript th:replace="appFragments :: noscript"></noscript>
     <div th:replace="appFragments :: preloader"></div>
     <div class="container">
-        <div th:replace="game/fragments :: header(${commandName},${gameSession.currentRoundIndex})"></div>
+        <div th:replace="game/fragments :: header(${commandName},-1)"></div>
         <div th:replace="game/fragments :: introPhase"></div>
         <div class="phase-container hidden" id="phase-1">
             <div class="projector-wrapper" th:if="${projectorMode}">
@@ -42,7 +42,7 @@
                             <div class="answer-input-popup popup">
                                 <div class="popup-back"></div>
                                 <div class="popup-content">
-                                    <p th:text="#{riskMap.phase1.answerPopup}"></p>
+                                    <p th:text="#{riskMap.__${mapType}__.phase1.answerPopup}"></p>
                                     <div class="img-placeholder"></div>
                                     <div th:replace="${mapLayoutPage} :: answerInput"></div>
                                     <p class="close-popup-btn animated" >ОК</p>
@@ -73,8 +73,7 @@
                             <div class="popup-back"></div>
                             <div class="popup-content">
                                 <div class="img-placeholder"></div>
-                                <div th:replace="${mapLayoutPage} :: correctAnswerPopupContent(${ca}, ${i})"></div>
-                                <p class="correct-answer-comment" th:text="${gameSession.game.getSectorComment(__${iter.index}__)}"></p>
+                                <div th:replace="${mapLayoutPage} :: correctAnswerPopupContent(${ca}, ${i}, ${iter.index})"></div>
                                 <p class="close-popup-btn" >Ок</p>
                                 <!--<svg class="close-popup-btn" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z"></path></svg>-->
                             </div>

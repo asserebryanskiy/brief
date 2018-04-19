@@ -30,8 +30,8 @@ body {
 }
 
 #phase-2 > h2 {
-    font-size: 29px;
-    line-height: 1.4;
+    font-size: 25px;
+    line-height: 1.1;
 }
 
 .risk-grid {
@@ -69,9 +69,8 @@ body {
 
 .risk-grid img,
 img[id$='-large-img'] {
-    width: inherit;
+    width: 100%;
     display: block;
-    margin: auto;
 }
 
 .answer-input-popup p {
@@ -238,7 +237,7 @@ img[id$='-large-img'] {
     font-family: "Circe Bold", serif;
     line-height: 1.4;
     font-size: 18px;
-    padding: 0 20px;
+    padding: 10px 20px 0;
 }
 
 /*********************************
@@ -374,7 +373,7 @@ img[id$='-large-img'] {
     }
 
     .popup-content {
-        width: 70%;
+        width: 50%;
     }
 }
 

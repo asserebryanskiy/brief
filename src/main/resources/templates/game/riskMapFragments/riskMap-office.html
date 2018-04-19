@@ -75,7 +75,7 @@
          th:classappend="${ca} == 0 ? 'no-level' : (${ca} == 1 ? 'low-level' : (${ca} == 2 ? 'mid-level' : 'high-level'))">
         <p class="sector-score-text">0</p>
     </div>
-    <div th:fragment="correctAnswerPopupContent(ca, i)" th:remove="tag">
+    <div th:fragment="correctAnswerPopupContent(ca, i, order)" th:remove="tag">
         <div class="correct-answer-wrapper">
             <p>Правильный ответ: </p>
             <div class="correct-answer-circle" th:classappend="${ca == -1} ? 'no-answer' : (${ca} == 0 ? 'no-level' : (${ca} == 1 ? 'low-level' : (${ca} == 2 ? 'mid-level' : 'high-level')))"></div>
@@ -98,6 +98,7 @@
                 <p th:text="${possibleScores[4]}"></p>
             </div>
         </div>
+        <p class="correct-answer-comment" th:text="${gameSession.game.getSectorComment(__${order}__)}"></p>
     </div>
 </body>
 </html>

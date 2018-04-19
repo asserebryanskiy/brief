@@ -9,7 +9,7 @@
         <img th:src="@{/assets/image/logo.png}" alt="logo">
         <div class="header-text-box">
             <p th:unless="${projectorMode}" th:text="'Команда ' + ${commandName}" class="command-name"></p>
-            <p th:unless="${demo}" id="round-name" th:text="'Раунд ' + ${round + 1}"></p>
+            <p th:unless="${demo} or ${round == -1}" id="round-name" th:text="'Раунд ' + ${round + 1}"></p>
         </div>
     </div>
 

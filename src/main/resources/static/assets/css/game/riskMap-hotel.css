@@ -15,36 +15,107 @@
     margin: 0 auto;
 }
 
-.risk-indicator .level-2 {
-    background-color: rgba(12,12,12,0.3);
-}
-
 .level-0 {
     fill: tomato !important;
+    color: tomato !important;
 }
 
 .level-1 {
     fill: #ff8302 !important;
+    color: #ff8302 !important;
 }
 
 .level-2 {
-    fill: #efdf02 !important;
+    fill: #ffa202 !important;
+    color: #ffa202 !important;
 }
 
 .level-3 {
     fill: #959595 !important;
+    color: #959595 !important;
 }
 
 .level-4 {
-    fill: #839d80 !important;
+    fill: #86bd72 !important;
+    color: #86bd72 !important;
 }
 
 .level-5 {
-    fill: #529d4e !important;
+    fill: #429d43 !important;
+    color: #429d43 !important;
 }
 
 .level-6 {
     fill: #2c9d1c !important;
+    color: #2c9d1c !important;
+}
+
+/*********************************
+*          ANSWER POPUP          *
+**********************************/
+
+.answer-popup-status-wrapper {
+    display: flex;
+    justify-content: space-between;
+    text-align: left;
+    align-items: center;
+}
+
+.answer-popup-status-wrapper svg,
+.answer-popup-status-wrapper p {
+    margin: 0 10px;
+}
+
+.violation-status {
+    width: 193px;
+}
+
+.confidence-status {
+    font-family: "Circe Light", serif;
+    line-height: 1.4;
+}
+
+.confidence-level-span {
+    min-width: 80px;
+}
+
+/*********************************
+*      CORRECT ANSWER POPUP      *
+**********************************/
+
+.correct-situation {
+    background-color: #4a9d61;
+    opacity: 0.6;
+}
+
+.wrong-situation {
+    background-color: tomato;
+    opacity: 0.6;
+}
+
+.correct-answer-text {
+    margin: 10px 0;
+}
+
+.answer-variants-grid {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+}
+
+.answer-variants-grid svg {
+    opacity: 0.2;
+    margin: 0 2px;
+    height: 50px;
+}
+
+.answer-variants-grid svg.selected {
+    opacity: 1;
+}
+
+.your-answer-wrapper h1 {
+    flex-grow: 1;
+    text-align: right;
 }
 
 /*********************************
@@ -65,7 +136,7 @@ input[type=range].answer-input-slider::-webkit-slider-runnable-track {
     cursor: pointer;
     box-shadow: 0.2px 0.2px 0.3px #000000, 0 0 0.2px #0d0d0d;
     background: #90798b;
-    border-radius: 0px;
+    border-radius: 10px;
     border: 0px solid #000101;
 }
 input[type=range].answer-input-slider::-webkit-slider-thumb {
@@ -88,7 +159,7 @@ input[type=range].answer-input-slider::-moz-range-track {
     cursor: pointer;
     box-shadow: 0.2px 0.2px 0.3px #000000, 0px 0px 0.2px #0d0d0d;
     background: #90798b;
-    border-radius: 0px;
+    border-radius: 10px;
     border: 0px solid #000101;
 }
 input[type=range].answer-input-slider::-moz-range-thumb {

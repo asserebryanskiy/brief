@@ -96,6 +96,10 @@ body {
     display: none;
 }
 
+.light-font {
+    font-family: "Circe Light", serif;
+}
+
 /*********************************
 *              POPUP             *
 **********************************/
