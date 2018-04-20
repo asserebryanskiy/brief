@@ -63,7 +63,7 @@
             <div>
                 <p class="violation-status"
                    th:classappend="${'level-' + i}"
-                   th:text="${i} < 3 ? 'Есть нарушение' : (${i} > 3 ? 'Нет нарушения' : 'Нет ответа')"></p>
+                   th:text="${i} < 3 ? 'Нарушение' : (${i} > 3 ? 'Все хорошо' : 'Нет ответа')"></p>
                 <p class="confidence-status" th:classappend="${i} == 3 ? 'hidden':''">Уверенность: <span class="confidence-level-span" th:text="(${i == 0} or ${i == 6}) ? 'Высокая' : ((${i == 1} or ${i == 5}) ? 'Средняя' : ((${i == 2} or ${i == 3}) ? 'Низкая' : ''))"></span></p>
             </div>
         </div>
@@ -83,7 +83,7 @@
     <div th:fragment="correctAnswerPopupContent(ca, i, order)" th:remove="tag">
         <p class="correct-answer-text">Правильный ответ: <span class="correct-answer-span"
                                                       th:classappend="${ca} == 0 ? 'level-6' : 'level-0'"
-                                                      th:text="${ca} == 0 ? 'Нарушения нет' : 'Есть нарушение'"></span></p>
+                                                      th:text="${ca} == 0 ? 'Все хорошо' : 'Нарушение'"></span></p>
         <p>Ваш результат: <span class="your-answer-span bold" th:with="score = ${gameSession.game.getPossibleScore(i)[ca]}" th:text="${score} < 0 ? ${score} : '+' + ${score}"></span></p>
         <div class="answer-variants-grid">
             <svg th:replace="game/riskMapFragments/riskMap-hotel :: ${gameSession.game.answerClassNames.get(0)}"></svg>

@@ -13,10 +13,10 @@ $('.answer-input-slider').on('input', null, null, (event) => {
     const $violationStatus = $statusWrapper.find('.violation-status');
     if (val < 3) {
         $confidenceStatus.show();
-        $violationStatus.text('Есть нарушение');
+        $violationStatus.text('Нарушение');
     } else if (val > 3) {
         $confidenceStatus.show();
-        $violationStatus.text('Нет нарушения');
+        $violationStatus.text('Все хорошо');
     }
     else {
         $confidenceStatus.hide();
