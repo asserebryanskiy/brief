@@ -9,6 +9,7 @@ import com.name.brief.model.games.Brief;
 import com.name.brief.model.games.Game;
 import com.name.brief.model.games.RiskMap;
 import com.name.brief.model.games.roleplay.RolePlay;
+import com.name.brief.model.games.riskmap.RiskMapType;
 import com.name.brief.repository.GameRepository;
 import com.name.brief.repository.UserRepository;
 import com.name.brief.service.GameSessionService;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 @Component
 @Profile({"dev", "localPostgre"})
@@ -52,10 +54,14 @@ public class DevDatabaseLoader implements ApplicationRunner {
                 .withUser(moderator1)
                 .build();
 
-        session.getPlayers().get(0).getDecision(0).setAnswer("A1A3");
-        session.getPlayers().get(2).getDecision(2).setAnswer("A3A1A4");
-        session.getPlayers().get(3).getDecision(3).setAnswer("A3A1A4D1D2");
-        session.getPlayers().get(4).getDecision(4).setAnswer("A3A1");
+        session.getPlayers().forEach(p -> {
+            String[] correctAnswers = (String[]) session.getGame().getCorrectAnswers();
+            String[] additions = {"", "A2", "A2A4", "A2A4B4", "A2A4B4C4"};
+            for (int i = 0; i < p.getDecisions().size(); i++) {
+                p.getDecisions().get(i).setAnswer(
+                        correctAnswers[i] + additions[new Random().nextInt(additions.length)]);
+            }
+        });
 
         GameSession session2 = new GameSession.GameSessionBuilder("testtest")
                 .withNumberOfCommands(3)

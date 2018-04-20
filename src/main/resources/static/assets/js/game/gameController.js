@@ -139,6 +139,13 @@ function GameController() {
         $('#phase-' + currentPhaseNumber).hide();
         $('#phase-' + newPhaseNumber).show();
         currentPhaseNumber = newPhaseNumber;
+
+        // if it is not first round and phase is zero change projector screen
+        if (projectorMode && newPhaseNumber === 0 && currentRoundIndex > 0) {
+            $('#phase-0 .projector-wrapper').hide();
+            $('.non-projector-intro-phase').show();
+        }
+
         const $timer = $('.timer');
         if ($timer.is(':visible')) {
             $timer.text(timerStr);
@@ -248,3 +255,13 @@ function notNull(obj) {
  ************************************************/
 
 // stompClient.onconnect(() => console.log('connected'));
+
+/***********************************************
+ *                                             *
+ *               ABSTRACT METHODS              *
+ *                                             *
+ ************************************************/
+
+function getAnswerStr() {
+    throw new Error("You must override this function!");
+}

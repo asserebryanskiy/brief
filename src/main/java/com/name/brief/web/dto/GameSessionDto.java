@@ -5,12 +5,14 @@ import com.name.brief.model.games.Brief;
 import com.name.brief.model.games.Game;
 import com.name.brief.model.games.roleplay.RolePlay;
 import com.name.brief.model.games.RiskMap;
+import com.name.brief.model.games.riskmap.RiskMapType;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +23,8 @@ public class GameSessionDto {
     public static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("ddMMyyyy");
 
     private final String[] gameTypes = new String[]{"Бриф", "Карта рисков", "Ролевая игра"};
+    private final RiskMapType[] riskMapTypes = RiskMapType.values();
+    private RiskMapType riskMapType = RiskMapType.OFFICE;
     private String oldStrId;
     private String newStrId;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -43,8 +47,11 @@ public class GameSessionDto {
         switch (gameType) {
             case "Бриф":
                 return new Brief();
-            case "Карта рисков":
-                return new RiskMap();
+            case "Карта рисков": {
+                RiskMap riskMap = new RiskMap();
+                riskMap.setType(riskMapType);
+                return riskMap;
+            }
             case "Ролевая игра":
                 return new RolePlay(numberOfCommands);
         }
