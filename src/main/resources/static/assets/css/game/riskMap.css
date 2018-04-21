@@ -384,7 +384,8 @@ img[id$='-large-img'] {
         max-width: 375px;
     }
 
-    #phase-1 h2 {
+    #phase-1 h2,
+    #phase-2 {
         margin-top: 40px;
     }
 }
