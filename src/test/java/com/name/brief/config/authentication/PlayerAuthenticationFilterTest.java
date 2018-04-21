@@ -5,11 +5,9 @@ import com.name.brief.service.PlayerAuthenticationService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.mock.web.MockHttpServletRequest;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.servlet.http.HttpServletRequest;
@@ -30,7 +28,7 @@ public class PlayerAuthenticationFilterTest {
 
     @Before
     public void setUp() throws Exception {
-        filter = new PlayerAuthenticationFilter(gameSessionService, playerAuthenticationService);
+        filter = new PlayerAuthenticationFilter(gameSessionService, playerAuthenticationService, messageSource);
     }
 
     @Test

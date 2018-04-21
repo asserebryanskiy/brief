@@ -39,4 +39,6 @@ public interface GameSessionService {
     void nullPlayersAnswers(Long gameSessionId);
 
     MoveToDto createMoveTo(Long gameSessionId);
+
+    boolean isSessionActive(String strId, LocalDate date);
 }

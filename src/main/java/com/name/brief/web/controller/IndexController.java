@@ -10,6 +10,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
@@ -45,13 +46,12 @@ public class IndexController {
 
         if (request.getSession(false) != null) {
             HttpSession session = request.getSession();
-            addFlashAttribute(model, session, "flash");
             // these attributes come from com.name.config.authentication.PlayerAuthenticationFilter.class
-            addFlashAttribute(model, session, "player");
-            addFlashAttribute(model, session, "org.springframework.validation.BindingResult.player");
+            addFlashAttribute(model, session, "flash");
+            addFlashAttribute(model, session, "gameSessionStrId");
         }
-        if (!model.containsAttribute("player")) {
-            model.addAttribute("player", new Player());
+        if (!model.containsAttribute("gameSessionStrId")) {
+            model.addAttribute("gameSessionStrId", "");
         }
 
         return "index";

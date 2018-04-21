@@ -20,7 +20,7 @@ public class RolePlay extends Game {
     private final String englishName = "rolePLay";
 
     private final String[] strategies = {
-            "Доктор - Торговый представитель"
+            "Доктор - Медицинский представитель"
     };
 
     @ElementCollection

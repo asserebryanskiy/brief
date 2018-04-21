@@ -150,4 +150,9 @@ public class GameSessionServiceImpl implements GameSessionService {
         dto.setRound(gameSessionRepository.findCurrentRoundIndexById(gameSessionId).getCurrentRoundIndex());
         return dto;
     }
+
+    @Override
+    public boolean isSessionActive(String strId, LocalDate date) {
+        return gameSessionRepository.findByStrIdAndActiveDate(strId, date) != null;
+    }
 }

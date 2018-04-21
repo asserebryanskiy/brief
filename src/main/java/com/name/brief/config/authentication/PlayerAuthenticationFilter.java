@@ -2,47 +2,73 @@ package com.name.brief.config.authentication;
 
 import com.name.brief.model.GameSession;
 import com.name.brief.model.Player;
+import com.name.brief.model.games.AuthenticationType;
 import com.name.brief.service.GameSessionService;
 import com.name.brief.service.PlayerAuthenticationService;
-import com.name.brief.validation.PlayerValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.stereotype.Component;
-import org.springframework.validation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.time.LocalDate;
 
 public class PlayerAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private final GameSessionService gameSessionService;
     private final PlayerAuthenticationService playerAuthenticationService;
 
+    private final MessageSource messageSource;
+
     @Autowired
     public PlayerAuthenticationFilter(GameSessionService gameSessionService,
-                                      PlayerAuthenticationService playerAuthenticationService) {
+                                      PlayerAuthenticationService playerAuthenticationService,
+                                      MessageSource messageSource) {
         this.gameSessionService = gameSessionService;
         this.playerAuthenticationService = playerAuthenticationService;
+        this.messageSource = messageSource;
     }
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
-        Player player = getPlayer(request);
+        // obtain provided gameSession code
+        String strId = request.getParameter("gameSessionStrId");
 
-        BindingResult result = new BeanPropertyBindingResult(player, "player");
-        Validator validator = new PlayerValidator(gameSessionService, playerAuthenticationService);
-        validator.validate(player, result);
+        // retrieve gameSession
+        GameSession gameSession = gameSessionService.getSession(strId, LocalDate.now());
 
-        if (result.hasErrors()) {
-            request.getSession().setAttribute("player", player);
-            request.getSession().setAttribute("org.springframework.validation.BindingResult.player", result);
-            throw new BadCredentialsException("Invalid gameSession id or command name");
+        // if code is not presented in DB return error
+        if (gameSession == null) {
+            request.getSession().setAttribute("gameSessionStrId", strId);
+            request.getSession().setAttribute("flash",
+                    messageSource.getMessage("player.validation.wrongGameSessionStrId", null, request.getLocale()));
+            sendRedirect("/", response);
+            return null;
         }
+
+        // if session needs to collect additional information, redirect to appropriate page
+        if (gameSession.authenticationType != AuthenticationType.CREATE_NEW) {
+            request.getSession().setAttribute("gameSessionStrId", strId);
+            request.getSession().setAttribute("authenticationType", gameSession.authenticationType);
+            sendRedirect("/login", response);
+            return null;
+        }
+
+        // if all information is present create and save new player if gameSession strategy demands it
+
+        // attempt authentication of created player object
         return super.attemptAuthentication(request, response);
+    }
+
+    private void sendRedirect(String path, HttpServletResponse response) {
+        try {
+            response.sendRedirect(path);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

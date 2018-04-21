@@ -7,6 +7,7 @@ import com.name.brief.service.PlayerService;
 import com.name.brief.service.UserService;
 import com.name.brief.web.FlashMessage;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -159,14 +160,17 @@ public class SecurityConfig {
         private final PlayerService playerService;
         private final GameSessionService gameSessionService;
         private final PlayerAuthenticationService playerAuthenticationService;
+        private final MessageSource messageSource;
 
         @Autowired
         public PlayerSecurityConfig(PlayerService playerService,
                                     GameSessionService gameSessionService,
-                                    PlayerAuthenticationService playerAuthenticationService) {
+                                    PlayerAuthenticationService playerAuthenticationService,
+                                    MessageSource messageSource) {
             this.playerService = playerService;
             this.gameSessionService = gameSessionService;
             this.playerAuthenticationService = playerAuthenticationService;
+            this.messageSource = messageSource;
         }
 
         @Override
@@ -181,9 +185,9 @@ public class SecurityConfig {
 
         @Bean
         public Filter playerAuthenticationFilter() throws Exception {
-            PlayerAuthenticationFilter filter = new PlayerAuthenticationFilter(gameSessionService, playerAuthenticationService);
+            PlayerAuthenticationFilter filter = new PlayerAuthenticationFilter(gameSessionService, playerAuthenticationService, messageSource);
             filter.setAuthenticationManager(authenticationManager());
-            filter.setRequiresAuthenticationRequestMatcher(new AntPathRequestMatcher("/","POST"));
+            filter.setRequiresAuthenticationRequestMatcher(new AntPathRequestMatcher("/login","POST"));
 
             // success authentication handler
             filter.setAuthenticationSuccessHandler(((request, response, authentication) ->
@@ -213,7 +217,7 @@ public class SecurityConfig {
         protected void configure(HttpSecurity http) throws Exception {
             http
                 .authorizeRequests()
-                    .antMatchers("/", "/demo/**").permitAll()
+                    .antMatchers("/", "/login", "/demo/**").permitAll()
                     .antMatchers("/game/**").hasRole("PLAYER")
                     .anyRequest().hasAnyRole("PLAYER", "ADMIN", "MODERATOR")
                     .and()

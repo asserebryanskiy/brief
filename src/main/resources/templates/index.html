@@ -8,15 +8,11 @@
 <body>
     <div class="container">
         <img th:src="@{/assets/image/logo.png}" alt="logo" >
-        <form th:action="@{/}" th:object="${player}" method="post">
+        <form th:action="@{/login}" method="post">
             <h1>Игратор</h1>
-            <input type="text" placeholder="Код игры" autocomplete="off" th:field="*{gameSession.strId}">
-            <div class="error-message" th:if="${#fields.hasErrors('gameSession')}" th:errors="*{gameSession}"></div>
-            <input type="text" placeholder="Номер команды" autocomplete="off" th:field="*{commandName}">
-            <div class="error-message" th:if="${#fields.hasErrors('commandName')}" th:errors="*{commandName}"></div>
-            <div class="error-message" th:if="${#fields.hasErrors('loggedIn')}" th:errors="*{loggedIn}"></div>
+            <p class="flash" th:if="${flash} != null" th:text="${flash}"></p>
+            <input type="text" placeholder="Код игры" autocomplete="off" th:value="${gameSessionStrId}" name="gameSessionStrId">
             <button type="submit">Войти</button>
-            <!--<a th:href="@{/demo}" class="demo-anchor">Демо</a>-->
             <a th:href="@{/login/admin}">Войти как администратор</a>
         </form>
     </div>

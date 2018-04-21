@@ -1,5 +1,6 @@
 package com.name.brief.model;
 
+import com.name.brief.model.games.AuthenticationType;
 import com.name.brief.model.games.Brief;
 import com.name.brief.model.games.Game;
 import com.name.brief.utils.TimeConverter;
@@ -36,6 +37,8 @@ public class GameSession extends BaseEntity{
     @ManyToOne
     @JoinColumn(name = "users_id")
     private User user;
+    @Enumerated
+    public AuthenticationType authenticationType = AuthenticationType.COMMAND_NAME;
 
     private int currentPhaseNumber;   // is used to track current status of game
     private int currentRoundIndex;    // is used to track current status of game
