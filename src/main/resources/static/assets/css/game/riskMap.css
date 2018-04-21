@@ -31,7 +31,7 @@ body {
 
 #phase-2 > h2 {
     font-size: 25px;
-    line-height: 1.1;
+    line-height: 1.3;
 }
 
 .risk-grid {
@@ -235,7 +235,7 @@ img[id$='-large-img'] {
 
 .congratulation-text {
     font-family: "Circe Bold", serif;
-    line-height: 1.4;
+    line-height: 1.3;
     font-size: 18px;
     padding: 10px 20px 0;
     max-width: 700px;
