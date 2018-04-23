@@ -58,7 +58,8 @@
 
         <div class="phase-container hidden" id="phase-2">
             <h2 th:unless="${projectorMode}">Вы заработали<br><span id="score-text">0</span> баллов</h2>
-            <p class="congratulation-text">Поздравляем вы вошли в 20% лучших игроков!</p>
+            <p th:unless="${projectorMode}"
+               class="congratulation-text">Поздравляем вы вошли в 20% лучших игроков!</p>
             <div th:fragment="answerRiskGrid" class="risk-grid" th:with="correctAnswers = ${gameSession.game.correctAnswers}">
                 <div th:each="i, iter : ${gameSession.game.getAnswerInput(decision)}"
                      th:class="'risk-img-cell risk-img-cell-' + ${iter.index}"
