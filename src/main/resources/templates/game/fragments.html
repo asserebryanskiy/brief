@@ -101,8 +101,8 @@
 
     <button th:fragment="sendResponsesBtn"
             th:unless="${projectorMode}" id="send-responses-btn"
-            th:text="${!gameSession.timerIsRunning()} ? #{game.sendAnswersBtn.sent} : (${decision.answer} == null ? #{game.sendAnswersBtn.new} : #{game.sendAnswersBtn.change})"
-            th:classappend="${gameSession.timerIsRunning() && decision.answer != null} ? 'change-answers' : ''"></button>
+            th:text="${!gameSession.timerIsRunning()} ? #{game.sendAnswersBtn.sent} : (${decision} == null ? #{game.sendAnswersBtn.new} : #{game.sendAnswersBtn.change})"
+            th:classappend="${gameSession.timerIsRunning() && decision != null} ? 'change-answers' : ''"></button>
 
     <div th:fragment="flash(message)" class="flash-placeholder">
         <p class="flash success hidden" th:text="${message}">Ответы отправлены!</p>
