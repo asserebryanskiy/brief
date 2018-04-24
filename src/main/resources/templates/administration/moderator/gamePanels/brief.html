@@ -30,12 +30,12 @@
                     <tr th:each="player, iter : ${gameSession.players}"
                         th:with="roundNumber = ${gameSession.currentRoundIndex}, decision=${player.getDecision(roundNumber)}"
                         class="animated"
-                        th:classappend="|${decision.answer != null ? 'received-answers' : ''} ${loggedInPlayers.contains(player.username)?'connected-row':''}|"
+                        th:classappend="|${decision != null ? 'received-answers' : ''} ${loggedInPlayers.contains(player.username)?'connected-row':''}|"
                         th:id="'player-row-' + ${player.username}">
                         <td class="place-td"></td>
                         <td th:text="${player.commandName}"></td>
                         <td class="answer-td"
-                            th:text="${decision.answer}">Response</td>
+                            th:text="${decision != null ? (decision.answer != null ? decision.answer : '-') : '-'}">Response</td>
                         <td class="current-score-td"
                             th:text="${player.getScoreForRound(roundNumber)}">CurrentScore</td>
                         <td class="total-score-td"

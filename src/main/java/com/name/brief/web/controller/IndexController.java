@@ -48,8 +48,8 @@ public class IndexController {
             }
         }
 
-        if (!model.containsAttribute("dto")) {
-            model.addAttribute("dto", new PlayerLoginDto());
+        if (!model.containsAttribute("playerLoginDto")) {
+            model.addAttribute("playerLoginDto", new PlayerLoginDto());
         }
 
         return "index";

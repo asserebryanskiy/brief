@@ -54,8 +54,13 @@ public class PlayerLoginController {
                                        HttpServletRequest request) {
         if (result.hasErrors()) {
             attributes.addFlashAttribute("playerLoginDto", dto);
-            attributes.addFlashAttribute("org.springframework.validation.BindingResult.playerLoginDto", result);
+
+            // request could be sent from the main page and we do not want to include errors
+            if (request.getHeader("referer").endsWith("/login")) {
+                attributes.addFlashAttribute("org.springframework.validation.BindingResult.playerLoginDto", result);
+            }
             if (result.hasFieldErrors("gameSessionStrId")) {
+                attributes.addFlashAttribute("org.springframework.validation.BindingResult.playerLoginDto", result);
                 return "redirect:/";
             }
 

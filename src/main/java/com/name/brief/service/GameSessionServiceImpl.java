@@ -146,12 +146,14 @@ public class GameSessionServiceImpl implements GameSessionService {
         gameSessionRepository.save(session);
 
         // set players username
+        player = getLastPlayer(session);    // cause only gameSession's player has id
         if (session.getAuthenticationType() == AuthenticationType.COMMAND_NAME) {
+            //noinspection ConstantConditions - because we've added player four lines upper
             player.setUsername(Player.constructUsername(
                     session.getStrId(), session.getActiveDate(), player.getCommandName()));
         } else {
             //noinspection ConstantConditions - because we've added player four lines upper
-            player.setUsername("player" + getLastPlayer(session).getId());
+            player.setUsername("player" + player.getId());
         }
         playerRepository.save(player);
 
