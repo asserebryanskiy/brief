@@ -56,20 +56,17 @@ public class GameSessionRepositoryTest {
         }
     }
 
-   
-
     @Test
-    public void update_withUpdatedCommandPersistsCommandAsWell() {
+    public void whenUpdatingSessionWithNewPlayerIdIsAssignedToPlayer() {
         GameSession session = createDefaultSession();
         entityManager.persist(session);
         entityManager.flush();
 
-        Player player = session.getPlayers().get(0);
-        player.setLoggedIn(true);
+        Player player = new Player(session);
+        session.getPlayers().add(player);
         repository.save(session);
-        GameSession found = repository.findOne(session.getId());
 
-        assertThat(found.getPlayers().get(0).isLoggedIn(), is(true));
+        assertThat(session.getPlayers().get(0).getId(), notNullValue(Long.class));
     }
 
     @Test

@@ -2,6 +2,7 @@ package com.name.brief.web.controller;
 
 import com.name.brief.model.Player;
 import com.name.brief.service.GameSessionService;
+import com.name.brief.service.PlayerAuthenticationService;
 import com.name.brief.validation.PlayerLoginDtoValidator;
 import com.name.brief.web.dto.PlayerLoginDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,7 @@ public class PlayerLoginController {
 
     private final PlayerLoginDtoValidator validator;
     private final GameSessionService gameSessionService;
+    private final PlayerAuthenticationService playerAuthenticationService;
 
     @InitBinder("playerLoginDto")
     protected void initBinder(WebDataBinder binder) {
@@ -32,14 +34,16 @@ public class PlayerLoginController {
 
     @Autowired
     public PlayerLoginController(PlayerLoginDtoValidator validator,
-                                 GameSessionService gameSessionService) {
+                                 GameSessionService gameSessionService,
+                                 PlayerAuthenticationService playerAuthenticationService) {
         this.validator = validator;
         this.gameSessionService = gameSessionService;
+        this.playerAuthenticationService = playerAuthenticationService;
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String getPlayerDetailsPage(Model model) {
-        if (!model.containsAttribute("dto")) return "redirect:/";
+        if (!model.containsAttribute("playerLoginDto")) return "redirect:/";
         return "playerDetails";
     }
 
@@ -49,51 +53,22 @@ public class PlayerLoginController {
                                        RedirectAttributes attributes,
                                        HttpServletRequest request) {
         if (result.hasErrors()) {
-            attributes.addFlashAttribute("dto", dto);
+            attributes.addFlashAttribute("playerLoginDto", dto);
             attributes.addFlashAttribute("org.springframework.validation.BindingResult.playerLoginDto", result);
             if (result.hasFieldErrors("gameSessionStrId")) {
                 return "redirect:/";
             }
 
             // if gameSessionStrID is correct set authentication type
-            dto.setAuthenticationType(
-                    gameSessionService.getSession(dto.getGameSessionStrId(), LocalDate.now()).getAuthenticationType());
+            if (dto.getAuthenticationType() == null) {
+                dto.setAuthenticationType(gameSessionService.getSession(
+                        dto.getGameSessionStrId(), LocalDate.now()).getAuthenticationType());
+            }
             return "redirect:/login";
         }
 
-        if (request.getParameter("gameSessionStrId").equals("brief")) {
-            try {
-                request.login(Player.constructUsername("brief", LocalDate.now(), "1"),
-                        "");
-            } catch (ServletException e) {
-                e.printStackTrace();
-            }
-        }
+        playerAuthenticationService.authenticate(dto, request);
 
         return "redirect:/game";
-
-        /*if (request.getSession(false) == null
-                || request.getSession().getAttribute("gameSessionStrId") == null
-                || request.getSession().getAttribute("authenticationType") == null) {
-            return "redirect:/";
-        }
-
-        model.addAttribute("strId", request.getSession().getAttribute("gameSessionStrId"));
-        Map<String, String> inputs = new HashMap<>();
-        switch ((AuthenticationType) request.getAttribute("authenticationType")) {
-            case COMMAND_NAME:
-                inputs.put("commandName", "Название команды");
-                break;
-            case NAME:
-                inputs.put("name", "Ваше имя");
-                break;
-            case NAME_SURNAME:
-                inputs.put("name", "Ваше имя");
-                inputs.put("surname", "Ваша фамилия");
-                break;
-        }
-        model.addAttribute("inputs", inputs);
-
-        return "playerDetails";*/
     }
 }

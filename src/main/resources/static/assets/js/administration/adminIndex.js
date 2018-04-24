@@ -86,10 +86,10 @@ $('.popup-submit-btn').click(() => {
 
 const $gameTypeSelect = $('.game-type-select');
 $gameTypeSelect.change(() => {
-    console.log('enetered');
     const $riskMapTypeSelect = $('.risk-map-type-select');
     const $riskMapTypeLabel = $('.risk-map-type-label');
-    if ($gameTypeSelect.find('option:selected').text() === 'Карта рисков') {
+    const gameType = $gameTypeSelect.find('option:selected').text();
+    if (gameType === 'Карта рисков') {
         $riskMapTypeLabel.slideDown();
         $riskMapTypeSelect.slideDown();
     } else {

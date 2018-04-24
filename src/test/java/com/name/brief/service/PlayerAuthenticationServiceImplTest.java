@@ -32,7 +32,6 @@ public class PlayerAuthenticationServiceImplTest {
 
     @Before
     public void setUp() throws Exception {
-        service.setSessionRegistry(registry);
     }
 
     @Test

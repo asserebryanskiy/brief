@@ -3,6 +3,8 @@ package com.name.brief.model.games;
 import com.name.brief.model.BaseEntity;
 import com.name.brief.model.Decision;
 import com.name.brief.utils.BriefUtils;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.persistence.Entity;
 import java.time.Duration;
@@ -11,7 +13,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
+@EqualsAndHashCode(callSuper = true)
 @Entity
+@Data
 public class Brief extends Game {
 
     private final int numberOfRounds = 5;

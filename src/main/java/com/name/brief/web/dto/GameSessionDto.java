@@ -1,6 +1,7 @@
 package com.name.brief.web.dto;
 
 import com.name.brief.model.GameSession;
+import com.name.brief.model.games.AuthenticationType;
 import com.name.brief.model.games.Brief;
 import com.name.brief.model.games.Game;
 import com.name.brief.model.games.roleplay.RolePlay;
@@ -23,24 +24,36 @@ public class GameSessionDto {
     public static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("ddMMyyyy");
 
     private final String[] gameTypes = new String[]{"Бриф", "Карта рисков", "Ролевая игра"};
-    private final RiskMapType[] riskMapTypes = RiskMapType.values();
-    private RiskMapType riskMapType = RiskMapType.OFFICE;
+    private final String[] authenticationTypes = Arrays.stream(AuthenticationType.values())
+            .map(AuthenticationType::getRussianName)
+            .toArray(String[]::new);
     private String oldStrId;
     private String newStrId;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate activeDate = LocalDate.now();
     private String gameType = gameTypes[0];
     private Long gameSessionId;
-    private int numberOfCommands = 5;
+    private String authenticationType;
+
+    // Game specific
+    private final RiskMapType[] riskMapTypes = RiskMapType.values();
+    private RiskMapType riskMapType = RiskMapType.OFFICE;
 
     public GameSession createGameSession() {
         GameSession session = new GameSession.GameSessionBuilder(getNewStrId())
                 .withActiveDate(getActiveDate())
-                .withNumberOfCommands(numberOfCommands)
+                .withAuthenticationType(computeAuthenticationType())
                 .withGame(createGame())
                 .build();
         if (gameSessionId != null) session.setId(gameSessionId);
         return session;
+    }
+
+    private AuthenticationType computeAuthenticationType() {
+        return Arrays.stream(AuthenticationType.values())
+                .filter(type -> type.getRussianName().equals(authenticationType))
+                .findAny()
+                .orElse(AuthenticationType.CREATE_NEW);
     }
 
     private Game createGame() {
@@ -53,7 +66,7 @@ public class GameSessionDto {
                 return riskMap;
             }
             case "Ролевая игра":
-                return new RolePlay(numberOfCommands);
+                return new RolePlay();
         }
         return new Brief();
     }
@@ -76,7 +89,13 @@ public class GameSessionDto {
         dto.setOldStrId(session.getStrId());
         dto.setActiveDate(session.getActiveDate());
         dto.setGameType(session.getGame().getEnglishName());
-        dto.setNumberOfCommands(session.getPlayers().size());
+        dto.setAuthenticationType(session.getAuthenticationType().getRussianName());
+        if (session.getGame() != null) {
+            Game game = session.getGame();
+            if (game instanceof RiskMap) {
+                dto.setRiskMapType(((RiskMap) game).getType());
+            }
+        }
         return dto;
     }
 }

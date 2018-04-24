@@ -10,6 +10,7 @@ import com.name.brief.repository.GameRepository;
 import com.name.brief.repository.GameSessionRepository;
 import com.name.brief.web.dto.GameSessionDto;
 import com.name.brief.web.dto.NextPhaseMessage;
+import com.name.brief.web.dto.PlayerLoginDto;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,7 @@ import static org.mockito.Mockito.*;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(GameSessionService.class)
-public class GameSessionServiceTest {
+public class GameSessionServiceImplTest {
     @Autowired
     private GameSessionService service;
 
@@ -106,44 +107,6 @@ public class GameSessionServiceTest {
     }
 
     @Test
-    public void update_createsNewPlayersIfNewAmountIsBigger() {
-        GameSession session = new GameSession.GameSessionBuilder("id").build();
-        GameSessionDto dto = GameSessionDto.createFrom(session);
-        dto.setNumberOfCommands(10);
-        when(repository.findOne(dto.getGameSessionId())).thenReturn(session);
-
-        service.update(dto);
-
-        assertThat(session.getPlayers(), hasSize(dto.getNumberOfCommands()));
-    }
-
-    @Test
-    public void update_createsNewPlayersWithNewStrIdAndActiveDate() {
-        GameSession session = new GameSession.GameSessionBuilder("id").build();
-        GameSessionDto dto = GameSessionDto.createFrom(session);
-        dto.setNumberOfCommands(10);
-        dto.setNewStrId("newId");
-        dto.setActiveDate(LocalDate.now().minusDays(1));
-        when(repository.findOne(dto.getGameSessionId())).thenReturn(session);
-
-        service.update(dto);
-
-        assertThat(session.getPlayers(), hasSize(dto.getNumberOfCommands()));
-    }
-
-    @Test
-    public void update_deletesPlayersIfNewAmountIsSmaller() {
-        GameSession session = new GameSession.GameSessionBuilder("id").build();
-        GameSessionDto dto = GameSessionDto.createFrom(session);
-        dto.setNumberOfCommands(2);
-        when(repository.findOne(dto.getGameSessionId())).thenReturn(session);
-
-        service.update(dto);
-
-        assertThat(session.getPlayers(), hasSize(dto.getNumberOfCommands()));
-    }
-
-    @Test
     public void delete_expiresAllGameSessionPlayers() {
         GameSession session = new GameSession.GameSessionBuilder("id").build();
         when(repository.findOne(session.getId())).thenReturn(session);
@@ -151,5 +114,19 @@ public class GameSessionServiceTest {
         service.delete(session.getId());
 
         session.getPlayers().forEach(p -> verify(playerAuthenticationService).logout(p));
+    }
+
+    @Test
+    public void addPlayer_givesPlayerUsername() {
+        GameSession session = new GameSession.GameSessionBuilder("id").build();
+        when(repository.findOne(session.getId())).thenReturn(session);
+        when(repository.save(session)).thenAnswer((s) -> {
+            session.getPlayers().get(0).setId(1L);
+            return null;
+        });
+
+        service.addPlayer(new PlayerLoginDto(), session);
+
+        assertThat(session.getPlayers().get(0).getUsername(), is("player1"));
     }
 }

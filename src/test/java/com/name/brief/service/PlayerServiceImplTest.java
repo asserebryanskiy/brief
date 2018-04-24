@@ -30,7 +30,7 @@ public class PlayerServiceImplTest {
     @Test
     public void addResponses_addsNewAnswerToAppropriateDecision() {
         GameSession session = new GameSession.GameSessionBuilder("id").build();
-        Player player = new Player(session, "name");
+        Player player = new Player(session);
 
         playerService.addResponses(player, "A1", 0);
 

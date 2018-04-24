@@ -4,6 +4,7 @@ import com.name.brief.model.GameSession;
 import com.name.brief.model.Player;
 import com.name.brief.model.games.Brief;
 import com.name.brief.web.dto.StatsList;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.time.LocalDate;
@@ -12,19 +13,19 @@ import static org.junit.Assert.*;
 import static org.hamcrest.Matchers.*;
 
 public class GameSessionTest {
-    @Test
-    public void onConstructionCreatesListOfCommands() {
-        GameSession session = new GameSession("unique", LocalDate.now(), new Brief(), 10, null);
 
-        assertThat(session.getPlayers(), hasItems(isA(Player.class)));
-        assertThat(session.getPlayers(), hasSize(10));
+    private GameSession session;
+
+    @Before
+    public void setUp() throws Exception {
+        session = new GameSession.GameSessionBuilder("id").build();
+        for (int i = 0; i < 3; i++) {
+            session.getPlayers().add(new Player(session));
+        }
     }
 
     @Test
     public void getStatsListOnPlayersWithMaxResultReturnsProperList() {
-        GameSession session = new GameSession.GameSessionBuilder("id")
-                .withNumberOfCommands(2)
-                .build();
         session.getPlayers().forEach(p -> p.getDecisions().forEach(d -> d.setAnswer("A3")));
 
         StatsList stats = session.getStatsList();
@@ -38,9 +39,6 @@ public class GameSessionTest {
 
     @Test
     public void getStatsListOnPlayersWithMinResultReturnsProperList() {
-        GameSession session = new GameSession.GameSessionBuilder("id")
-                .withNumberOfCommands(2)
-                .build();
         session.getPlayers().forEach(p -> p.getDecisions().forEach(d -> d.setAnswer("")));
 
         StatsList stats = session.getStatsList();
@@ -54,9 +52,6 @@ public class GameSessionTest {
 
     @Test
     public void getStatsListOnPlayersWithMiddleResultReturnsProperList() {
-        GameSession session = new GameSession.GameSessionBuilder("id")
-                .withNumberOfCommands(2)
-                .build();
         session.getPlayers().forEach(p -> p.getDecisions().forEach(d -> d.setAnswer("A3B2")));
 
         StatsList stats = session.getStatsList();

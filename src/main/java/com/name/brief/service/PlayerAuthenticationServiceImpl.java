@@ -1,17 +1,31 @@
 package com.name.brief.service;
 
+import com.name.brief.exception.PlayerAuthenticationFailedException;
+import com.name.brief.model.GameSession;
 import com.name.brief.model.Player;
+import com.name.brief.model.games.AuthenticationType;
+import com.name.brief.web.dto.PlayerLoginDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.session.SessionInformation;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDate;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
 public class PlayerAuthenticationServiceImpl implements PlayerAuthenticationService {
-    private SessionRegistry playerSessionRegistry;
+
+    private final SessionRegistry playerSessionRegistry;
+    private GameSessionService gameSessionService;
+
+    @Autowired
+    public PlayerAuthenticationServiceImpl(SessionRegistry playerSessionRegistry) {
+        this.playerSessionRegistry = playerSessionRegistry;
+    }
 
     @Override
     public Set<String> getAuthenticatedPlayersUsernames(Long gameSessionId) {
@@ -42,8 +56,23 @@ public class PlayerAuthenticationServiceImpl implements PlayerAuthenticationServ
                 .orElse(null) != null;
     }
 
+    @Autowired
+    public void setGameSessionService(GameSessionService gameSessionService) {
+        this.gameSessionService = gameSessionService;
+    }
+
     @Override
-    public void setSessionRegistry(SessionRegistry sessionRegistry) {
-        this.playerSessionRegistry = sessionRegistry;
+    public void authenticate(PlayerLoginDto dto, HttpServletRequest request) {
+        GameSession session = gameSessionService.getSession(dto.getGameSessionStrId(), LocalDate.now());
+        Player player = gameSessionService.addPlayer(dto, session);
+        login(player, request);
+    }
+
+    private void login(Player player, HttpServletRequest request) {
+        try {
+            request.login(player.getUsername(), player.getPassword());
+        } catch (ServletException e) {
+            e.printStackTrace();
+        }
     }
 }

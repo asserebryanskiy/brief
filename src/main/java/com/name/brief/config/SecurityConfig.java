@@ -1,12 +1,8 @@
 package com.name.brief.config;
 
-import com.name.brief.service.GameSessionService;
-import com.name.brief.service.PlayerAuthenticationService;
-import com.name.brief.service.PlayerService;
-import com.name.brief.service.UserService;
+import com.name.brief.service.*;
 import com.name.brief.web.FlashMessage;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -28,16 +24,11 @@ import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
-import org.springframework.security.web.authentication.session.*;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import javax.servlet.Filter;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 @Configuration
 @EnableWebSecurity

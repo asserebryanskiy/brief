@@ -5,9 +5,11 @@ import com.name.brief.exception.GameSessionNotFoundException;
 import com.name.brief.model.GameSession;
 import com.name.brief.model.Player;
 import com.name.brief.repository.GameSessionRepository;
+import com.name.brief.repository.PlayerRepository;
 import com.name.brief.utils.TimeConverter;
 import com.name.brief.web.dto.GameSessionDto;
 import com.name.brief.web.dto.MoveToDto;
+import com.name.brief.web.dto.PlayerLoginDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,12 +21,18 @@ import java.util.List;
 @Service
 public class GameSessionServiceImpl implements GameSessionService {
     private final GameSessionRepository gameSessionRepository;
-    private final PlayerAuthenticationService playerAuthenticationService;
+    private final PlayerRepository playerRepository;
+    private PlayerAuthenticationService playerAuthenticationService;
 
     @Autowired
     public GameSessionServiceImpl(GameSessionRepository gameSessionRepository,
-                                  PlayerAuthenticationService playerAuthenticationService) {
+                                  PlayerRepository playerRepository) {
         this.gameSessionRepository = gameSessionRepository;
+        this.playerRepository = playerRepository;
+    }
+
+    @Autowired
+    public void setPlayerAuthenticationService(PlayerAuthenticationService playerAuthenticationService) {
         this.playerAuthenticationService = playerAuthenticationService;
     }
 
@@ -101,23 +109,8 @@ public class GameSessionServiceImpl implements GameSessionService {
             current.setStrId(dto.getNewStrId());
             current.setActiveDate(dto.getActiveDate());
 
-            // update commands if needed
-            List<Player> players = current.getPlayers();
-            int currentSize = players.size();
-            int newSize = dto.getNumberOfCommands();
-            if (newSize < currentSize) {
-                for (int i = newSize; i < currentSize; i++) {
-                    players.get(newSize).setGameSession(null);
-                    players.remove(newSize);
-                }
-            }
-            if (newSize > currentSize) {
-                for (int i = currentSize; i < newSize; i++) {
-                    players.add(new Player(current, String.valueOf(i + 1)));
-                }
-            }
-
             // update players usernames
+            List<Player> players = current.getPlayers();
             players.forEach(player -> player.setUsername(Player.constructUsername(
                     current.getStrId(),
                     current.getActiveDate(),
@@ -154,5 +147,31 @@ public class GameSessionServiceImpl implements GameSessionService {
     @Override
     public boolean isSessionActive(String strId, LocalDate date) {
         return gameSessionRepository.findByStrIdAndActiveDate(strId, date) != null;
+    }
+
+    @Override
+    public Player addPlayer(PlayerLoginDto dto, GameSession session) {
+        // construct player
+        Player player = new Player();
+        player.setCommandName(dto.getCommandName());
+        player.setName(dto.getName());
+        player.setSurname(dto.getSurname());
+        player.setGameSession(session);
+
+        // update gameSession
+        session.getPlayers().add(player);
+        gameSessionRepository.save(session);
+
+        // set players username
+        //noinspection ConstantConditions - because we've added player two lines upper
+        player.setUsername("player" + getLastPlayer(session).getId());
+        playerRepository.save(player);
+
+        return player;
+    }
+
+    private Player getLastPlayer(GameSession session) {
+        return session.getPlayers().isEmpty() ? null
+                : session.getPlayers().get(session.getPlayers().size() - 1);
     }
 }

@@ -5,6 +5,7 @@ import com.name.brief.model.Decision;
 import com.name.brief.model.GameSession;
 import com.name.brief.model.Role;
 import com.name.brief.model.User;
+import com.name.brief.model.games.AuthenticationType;
 import com.name.brief.model.games.Brief;
 import com.name.brief.model.games.Game;
 import com.name.brief.model.games.RiskMap;
@@ -50,7 +51,7 @@ public class DevDatabaseLoader implements ApplicationRunner {
         userRepository.save(users);
 
         GameSession session = new GameSession.GameSessionBuilder("brief")
-                .withNumberOfCommands(5)
+                .withAuthenticationType(AuthenticationType.COMMAND_NAME)
                 .withUser(moderator1)
                 .build();
 
@@ -64,7 +65,6 @@ public class DevDatabaseLoader implements ApplicationRunner {
         });
 
         GameSession session2 = new GameSession.GameSessionBuilder("testtest")
-                .withNumberOfCommands(3)
                 .withUser(moderator1)
                 .build();
         GameSession session3 = new GameSession.GameSessionBuilder("otherUserSession")
@@ -76,6 +76,7 @@ public class DevDatabaseLoader implements ApplicationRunner {
                 .build();
         GameSession riskMap = new GameSession.GameSessionBuilder("risk")
                 .withGame(new RiskMap())
+                .withAuthenticationType(AuthenticationType.NAME)
                 .withUser(moderator1)
                 .build();
         GameSession rolePlay = new GameSession.GameSessionBuilder("role")

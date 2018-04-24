@@ -53,16 +53,15 @@ public class GameSession extends BaseEntity{
     public GameSession(String strId,
                        LocalDate activeDate,
                        Game game,
-                       int numberOfCommands,
+                       AuthenticationType authenticationType,
                        User user) {
         this();
         this.strId = strId.toLowerCase();
         this.activeDate = activeDate;
         this.game = game;
         game.setGameSession(this);
-        players = new ArrayList<>(numberOfCommands);
-        IntStream.range(0, numberOfCommands)
-                .forEach(i -> players.add(new Player(this, String.valueOf((i + 1)))));
+        this.authenticationType = authenticationType;
+        players = new ArrayList<>();
         rounds = new int[game.getNumberOfRounds()];
         this.user = user;
     }
@@ -81,8 +80,8 @@ public class GameSession extends BaseEntity{
         private String strId;
         private LocalDate activeDate;
         private Game game;
-        private int numberOfCommands;
         private User user;
+        private AuthenticationType authenticationType;
 
         public GameSessionBuilder(String strId) {
             this.strId = strId;
@@ -98,13 +97,13 @@ public class GameSession extends BaseEntity{
             return this;
         }
 
-        public GameSessionBuilder withNumberOfCommands(int numberOfCommands) {
-            this.numberOfCommands = numberOfCommands;
+        public GameSessionBuilder withUser(User user) {
+            this.user = user;
             return this;
         }
 
-        public GameSessionBuilder withUser(User user) {
-            this.user = user;
+        public GameSessionBuilder withAuthenticationType(AuthenticationType type) {
+            this.authenticationType = type;
             return this;
         }
 
@@ -113,7 +112,7 @@ public class GameSession extends BaseEntity{
                     this.strId,
                     this.activeDate == null ? LocalDate.now() : this.activeDate,
                     this.game == null ? new Brief() : this.game,
-                    this.numberOfCommands == 0 ? 5 : numberOfCommands,
+                    this.authenticationType == null ? AuthenticationType.CREATE_NEW : this.authenticationType,
                     this.user != null ? this.user : getDefaultUser()
             );
         }

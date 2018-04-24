@@ -6,7 +6,7 @@ img {
 }
 
 .container {
-    align-content: flex-start;
+    align-content: space-evenly;
 }
 
 h1 {

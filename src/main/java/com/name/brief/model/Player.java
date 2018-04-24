@@ -1,5 +1,6 @@
 package com.name.brief.model;
 
+import com.name.brief.web.dto.PlayerLoginDto;
 import lombok.Data;
 import lombok.ToString;
 import org.hibernate.annotations.LazyCollection;
@@ -24,33 +25,28 @@ import java.util.stream.IntStream;
 @ToString(exclude = "decisions")    // to overcome stackOverflow exception
 @Entity
 public class Player extends BaseEntity implements UserDetails{
+
     public static final String ROLE = "ROLE_PLAYER";
 
     @ManyToOne
     @NotNull
     private GameSession gameSession;
-    @NotNull
-    private String commandName;
-    private boolean loggedIn;
     @OneToMany(mappedBy = "player", cascade = CascadeType.ALL)
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<Decision> decisions;
     private String username;
+    private String name;
+    private String surname;
+    private String commandName;
 
     public Player() {
         super();
         decisions = new ArrayList<>();
     }
 
-    public Player(GameSession gameSession, String commandName) {
+    public Player(GameSession gameSession) {
         this();
         this.gameSession = gameSession;
-        this.commandName = commandName;
-        username = constructUsername(gameSession.getStrId(), gameSession.getActiveDate(), commandName);
-        int numberOfRounds = gameSession.getGame().getNumberOfRounds();
-        decisions = new ArrayList<>(numberOfRounds);
-        IntStream.range(0, numberOfRounds)
-                .forEach(i -> decisions.add(new Decision(this, i, null)));
     }
 
     public static String constructUsername(String strId, LocalDate activeDate, String commandName) {
