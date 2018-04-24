@@ -8,10 +8,10 @@
 <body>
     <div class="container">
         <img th:src="@{/assets/image/logo.png}" alt="logo" >
-        <form th:action="@{/login}" method="post">
+        <form th:action="@{/playerLogin}" th:object="${dto}" method="post">
             <h1>Игратор</h1>
             <p class="flash" th:if="${flash} != null" th:text="${flash}"></p>
-            <input type="text" placeholder="Код игры" autocomplete="off" th:value="${gameSessionStrId}" name="gameSessionStrId">
+            <input type="text" placeholder="Код игры" autocomplete="off" th:field="*{gameSessionStrId}">
             <button type="submit">Войти</button>
             <a th:href="@{/login/admin}">Войти как администратор</a>
         </form>

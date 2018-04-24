@@ -38,7 +38,7 @@ public class GameSession extends BaseEntity{
     @JoinColumn(name = "users_id")
     private User user;
     @Enumerated
-    public AuthenticationType authenticationType = AuthenticationType.COMMAND_NAME;
+    private AuthenticationType authenticationType = AuthenticationType.COMMAND_NAME;
 
     private int currentPhaseNumber;   // is used to track current status of game
     private int currentRoundIndex;    // is used to track current status of game

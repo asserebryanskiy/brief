@@ -5,6 +5,7 @@ import com.name.brief.model.Role;
 import com.name.brief.model.User;
 import com.name.brief.service.PlayerAuthenticationService;
 import com.name.brief.service.PlayerService;
+import com.name.brief.web.dto.PlayerLoginDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -17,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.security.Principal;
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Controller
 public class IndexController {
@@ -30,6 +32,8 @@ public class IndexController {
 
     @RequestMapping("/")
     public String getMain(HttpServletRequest request, Model model, Principal principal) {
+        // if user is already authenticated redirect it to appropriate page
+        System.out.println("entered " + LocalTime.now());
         Authentication authentication = (Authentication) principal;
         if (authentication != null) {
             Object user = authentication.getPrincipal();
@@ -44,14 +48,8 @@ public class IndexController {
             }
         }
 
-        if (request.getSession(false) != null) {
-            HttpSession session = request.getSession();
-            // these attributes come from com.name.config.authentication.PlayerAuthenticationFilter.class
-            addFlashAttribute(model, session, "flash");
-            addFlashAttribute(model, session, "gameSessionStrId");
-        }
-        if (!model.containsAttribute("gameSessionStrId")) {
-            model.addAttribute("gameSessionStrId", "");
+        if (!model.containsAttribute("dto")) {
+            model.addAttribute("dto", new PlayerLoginDto());
         }
 
         return "index";

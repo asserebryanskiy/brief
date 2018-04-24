@@ -1,6 +1,5 @@
 package com.name.brief.config;
 
-import com.name.brief.config.authentication.PlayerAuthenticationFilter;
 import com.name.brief.service.GameSessionService;
 import com.name.brief.service.PlayerAuthenticationService;
 import com.name.brief.service.PlayerService;
@@ -158,19 +157,10 @@ public class SecurityConfig {
     public static class PlayerSecurityConfig extends WebSecurityConfigurerAdapter {
 
         private final PlayerService playerService;
-        private final GameSessionService gameSessionService;
-        private final PlayerAuthenticationService playerAuthenticationService;
-        private final MessageSource messageSource;
 
         @Autowired
-        public PlayerSecurityConfig(PlayerService playerService,
-                                    GameSessionService gameSessionService,
-                                    PlayerAuthenticationService playerAuthenticationService,
-                                    MessageSource messageSource) {
+        public PlayerSecurityConfig(PlayerService playerService) {
             this.playerService = playerService;
-            this.gameSessionService = gameSessionService;
-            this.playerAuthenticationService = playerAuthenticationService;
-            this.messageSource = messageSource;
         }
 
         @Override
@@ -183,41 +173,11 @@ public class SecurityConfig {
             auth.userDetailsService(playerService);
         }
 
-        @Bean
-        public Filter playerAuthenticationFilter() throws Exception {
-            PlayerAuthenticationFilter filter = new PlayerAuthenticationFilter(gameSessionService, playerAuthenticationService, messageSource);
-            filter.setAuthenticationManager(authenticationManager());
-            filter.setRequiresAuthenticationRequestMatcher(new AntPathRequestMatcher("/login","POST"));
-
-            // success authentication handler
-            filter.setAuthenticationSuccessHandler(((request, response, authentication) ->
-                    response.sendRedirect("/game")));
-
-            // failure authentication handler
-            filter.setAuthenticationFailureHandler((request, response, exception) ->
-                    response.sendRedirect("/"));
-
-            // configure session authentication strategies
-            List<SessionAuthenticationStrategy> strategies = new ArrayList<>(6);
-            SessionRegistry sessionRegistry = sessionRegistry();
-
-            // set session registry also to playerAuthenticationService to give it an opportunity
-            // to programmatically logout players
-            playerAuthenticationService.setSessionRegistry(sessionRegistry);
-            strategies.add(new ConcurrentSessionControlAuthenticationStrategy(sessionRegistry));
-            strategies.add(new SessionFixationProtectionStrategy());
-            strategies.add(new RegisterSessionAuthenticationStrategy(sessionRegistry));
-            filter.setSessionAuthenticationStrategy(
-                    new CompositeSessionAuthenticationStrategy(strategies));
-
-            return filter;
-        }
-
         @Override
         protected void configure(HttpSecurity http) throws Exception {
             http
                 .authorizeRequests()
-                    .antMatchers("/", "/login", "/demo/**").permitAll()
+                    .antMatchers("/", "/playerLogin", "/login", "/demo/**").permitAll()
                     .antMatchers("/game/**").hasRole("PLAYER")
                     .anyRequest().hasAnyRole("PLAYER", "ADMIN", "MODERATOR")
                     .and()
@@ -228,8 +188,8 @@ public class SecurityConfig {
                     .logoutUrl("/game/logout")
                     .invalidateHttpSession(true)
                     .deleteCookies("JSESSIONID")
-                    .and()
-                .addFilterBefore(playerAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+                    .and();
+//                .addFilterBefore(playerAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
             http.sessionManagement().maximumSessions(1)
                     .maxSessionsPreventsLogin(true)

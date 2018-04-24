@@ -35,6 +35,14 @@ public class PlayerAuthenticationServiceImpl implements PlayerAuthenticationServ
     }
 
     @Override
+    public boolean isLoggedIn(String username) {
+        return playerSessionRegistry.getAllPrincipals().stream()
+                .filter(p -> ((Player) p).getUsername().equals(username) && isLoggedIn((Player) p))
+                .findAny()
+                .orElse(null) != null;
+    }
+
+    @Override
     public void setSessionRegistry(SessionRegistry sessionRegistry) {
         this.playerSessionRegistry = sessionRegistry;
     }

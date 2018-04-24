@@ -2,9 +2,18 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <div th:include="appFragments :: headContent" th:remove="tag"></div>
+    <link rel="stylesheet" th:href="@{/assets/css/login.css}">
     <title>МОЗ | Вход игрока</title>
 </head>
 <body>
-
+    <form th:action="@{/playerLogin}" method="post">
+        <input type="hidden" th:field="*{gameSessionStrId}">
+        <div th:each="inputArr : ${authenticationType.inputs}" th:remove="tag">
+            <p th:if="${#fields.hasErrors(__${inputArr[0]}__)}"></p>
+            <input type="text" th:placeholder="${inputArr[1]}" autocomplete="off" th:field="*{${inputArr[0]}}">
+        </div>
+        <button type="submit">Войти</button>
+        <a th:href="@{/}">На главную</a>
+    </form>
 </body>
 </html>

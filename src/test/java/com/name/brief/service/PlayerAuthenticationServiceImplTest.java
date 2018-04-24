@@ -2,6 +2,7 @@ package com.name.brief.service;
 
 import com.name.brief.model.GameSession;
 import com.name.brief.model.Player;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,11 @@ public class PlayerAuthenticationServiceImplTest {
     @MockBean
     private SessionRegistry registry;
 
+    @Before
+    public void setUp() throws Exception {
+        service.setSessionRegistry(registry);
+    }
+
     @Test
     public void getCurrentlyLoggedPlayers_returnsOnlyPlayersOfProvidedSession() {
         GameSession session = new GameSession.GameSessionBuilder("id").build();
@@ -39,7 +45,6 @@ public class PlayerAuthenticationServiceImplTest {
                 new ArrayList<>(session.getPlayers().size() + other.getPlayers().size());
         allPlayersList.addAll(session.getPlayers());
         allPlayersList.addAll(other.getPlayers());
-        service.setSessionRegistry(registry);
         when(registry.getAllPrincipals()).thenReturn(allPlayersList);
         when(registry.getAllSessions(session.getPlayers().get(0), false)).thenReturn(Collections.singletonList(null));
         when(registry.getAllSessions(session.getPlayers().get(1), false)).thenReturn(Collections.singletonList(null));
@@ -49,5 +54,25 @@ public class PlayerAuthenticationServiceImplTest {
         assertThat(result, hasSize(2));
         assertThat(result, hasItem(session.getPlayers().get(0).getUsername()));
         assertThat(result, hasItem(session.getPlayers().get(1).getUsername()));
+    }
+
+    @Test
+    public void isLoggedIn_returnsTrueIfPlayerWithProvidedUsernameIsLoggedIn() {
+        Player player = new Player();
+        String username = "username";
+        player.setUsername(username);
+        List<Object> allPrincipals = Collections.singletonList(player);
+        when(registry.getAllPrincipals()).thenReturn(allPrincipals);
+        when(registry.getAllSessions(player, false)).thenReturn(Collections.singletonList(null));
+
+        assertThat(service.isLoggedIn(username), is(true));
+    }
+
+    @Test
+    public void isLoggedIn_returnsFalseIfPlayerWithProvidedUsernameIsLoggedIn() {
+        List<Object> allPrincipals = Collections.emptyList();
+        when(registry.getAllPrincipals()).thenReturn(allPrincipals);
+
+        assertThat(service.isLoggedIn("any"), is(false));
     }
 }

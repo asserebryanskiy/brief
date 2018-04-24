@@ -10,5 +10,7 @@ public interface PlayerAuthenticationService {
     void logout(Player player);
     boolean isLoggedIn(Player player);
 
+    boolean isLoggedIn(String username);
+
     void setSessionRegistry(SessionRegistry sessionRegistry);
 }
