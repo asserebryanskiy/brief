@@ -41,6 +41,7 @@ public class PlayerAuthenticationServiceImpl implements PlayerAuthenticationServ
     public void logout(Player player) {
         playerSessionRegistry.getAllSessions(player, false)
                 .forEach(SessionInformation::expireNow);
+        gameSessionService.removePlayer(player);
     }
 
     @Override
@@ -66,6 +67,7 @@ public class PlayerAuthenticationServiceImpl implements PlayerAuthenticationServ
         GameSession session = gameSessionService.getSession(dto.getGameSessionStrId(), LocalDate.now());
         Player player = gameSessionService.addPlayer(dto, session);
         login(player, request);
+        playerSessionRegistry.registerNewSession(request.getSession().getId(), player);
     }
 
     private void login(Player player, HttpServletRequest request) {

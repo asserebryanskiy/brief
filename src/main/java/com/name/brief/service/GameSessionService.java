@@ -11,7 +11,6 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface GameSessionService {
-    boolean isSessionActive(GameSession gameSession);
     void save(GameSession gameSession) throws GameSessionAlreadyExistsException;
 
     GameSession getSession(String strId, LocalDate activeDate);
@@ -40,9 +39,7 @@ public interface GameSessionService {
 
     void nullPlayersAnswers(Long gameSessionId);
 
-    MoveToDto createMoveTo(Long gameSessionId);
-
-    boolean isSessionActive(String strId, LocalDate date);
-
     Player addPlayer(PlayerLoginDto dto, GameSession session);
+
+    void removePlayer(Player player);
 }

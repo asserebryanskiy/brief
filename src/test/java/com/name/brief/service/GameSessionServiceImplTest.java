@@ -38,14 +38,6 @@ public class GameSessionServiceImplTest {
     @MockBean
     private PlayerAuthenticationService playerAuthenticationService;
 
-    @Test
-    public void isSessionActive_returnsFalseIfNoSessionWithThisStrId() {
-        when(repository.findByStrIdAndActiveDate("non-existing-id", LocalDate.now()))
-                .thenReturn(null);
-
-        assertThat(service.isSessionActive(new GameSession.GameSessionBuilder("id").build()), is(false));
-    }
-
     @Test(expected = GameSessionAlreadyExistsException.class)
     public void save_alreadyExistingSessionResultsInException() {
         GameSession session = new GameSession();

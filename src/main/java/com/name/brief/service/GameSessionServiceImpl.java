@@ -4,6 +4,7 @@ import com.name.brief.exception.GameSessionAlreadyExistsException;
 import com.name.brief.exception.GameSessionNotFoundException;
 import com.name.brief.model.GameSession;
 import com.name.brief.model.Player;
+import com.name.brief.model.games.AuthenticationType;
 import com.name.brief.repository.GameSessionRepository;
 import com.name.brief.repository.PlayerRepository;
 import com.name.brief.utils.TimeConverter;
@@ -34,11 +35,6 @@ public class GameSessionServiceImpl implements GameSessionService {
     @Autowired
     public void setPlayerAuthenticationService(PlayerAuthenticationService playerAuthenticationService) {
         this.playerAuthenticationService = playerAuthenticationService;
-    }
-
-    @Override
-    public boolean isSessionActive(GameSession gameSession) {
-        return gameSessionRepository.findByStrIdAndActiveDate(gameSession.getStrId(), LocalDate.now()) != null;
     }
 
     @Override
@@ -137,19 +133,6 @@ public class GameSessionServiceImpl implements GameSessionService {
     }
 
     @Override
-    public MoveToDto createMoveTo(Long gameSessionId) {
-        MoveToDto dto = new MoveToDto();
-        dto.setPhase(gameSessionRepository.findCurrentPhaseNumberById(gameSessionId).getCurrentPhaseNumber());
-        dto.setRound(gameSessionRepository.findCurrentRoundIndexById(gameSessionId).getCurrentRoundIndex());
-        return dto;
-    }
-
-    @Override
-    public boolean isSessionActive(String strId, LocalDate date) {
-        return gameSessionRepository.findByStrIdAndActiveDate(strId, date) != null;
-    }
-
-    @Override
     public Player addPlayer(PlayerLoginDto dto, GameSession session) {
         // construct player
         Player player = new Player();
@@ -163,11 +146,23 @@ public class GameSessionServiceImpl implements GameSessionService {
         gameSessionRepository.save(session);
 
         // set players username
-        //noinspection ConstantConditions - because we've added player two lines upper
-        player.setUsername("player" + getLastPlayer(session).getId());
+        if (session.getAuthenticationType() == AuthenticationType.COMMAND_NAME) {
+            player.setUsername(Player.constructUsername(
+                    session.getStrId(), session.getActiveDate(), player.getCommandName()));
+        } else {
+            //noinspection ConstantConditions - because we've added player four lines upper
+            player.setUsername("player" + getLastPlayer(session).getId());
+        }
         playerRepository.save(player);
 
         return player;
+    }
+
+    @Override
+    public void removePlayer(Player player) {
+        GameSession gameSession = gameSessionRepository.findOne(player.getGameSession().getId());
+        gameSession.getPlayers().removeIf(p -> p.getId().equals(player.getId()));
+        gameSessionRepository.save(gameSession);
     }
 
     private Player getLastPlayer(GameSession session) {

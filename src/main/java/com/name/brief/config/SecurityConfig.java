@@ -171,25 +171,25 @@ public class SecurityConfig {
                     .antMatchers("/", "/playerLogin", "/login", "/demo/**").permitAll()
                     .antMatchers("/game/**").hasRole("PLAYER")
                     .anyRequest().hasAnyRole("PLAYER", "ADMIN", "MODERATOR")
-                    .and()
-                .formLogin()
+                .and().formLogin()
                     .loginPage("/")
+                .and().sessionManagement()
+                    .maximumSessions(1)
+                    .maxSessionsPreventsLogin(true)
+                    .sessionRegistry(playerSessionRegistry())
+                    .expiredUrl("/")
                     .and()
-                .logout()
+                .and().logout()
                     .logoutUrl("/game/logout")
                     .invalidateHttpSession(true)
                     .deleteCookies("JSESSIONID")
                     .and();
 //                .addFilterBefore(playerAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
-            http.sessionManagement().maximumSessions(1)
-                    .maxSessionsPreventsLogin(true)
-                    .sessionRegistry(sessionRegistry())
-                    .expiredUrl("/");
         }
 
         @Bean
-        public SessionRegistry sessionRegistry() {
+        public SessionRegistry playerSessionRegistry() {
             return new SessionRegistryImpl();
         }
 

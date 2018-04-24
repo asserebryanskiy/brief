@@ -121,19 +121,4 @@ public class WsController {
         GameSession session = gameSessionService.getSession(gameSessionId);
         return session.getStatsList();
     }
-
-
-    /**
-     * Sends MoveToDto object that contains current phase and current round of gameSession
-     * to currently authenticated player.
-     *
-     * @param principal - currently authenticated player
-     */
-    @MessageMapping("/whereI")
-    public void movePlayerToCurrentPosition(Principal principal) {
-        Player player = (Player) ((Authentication) principal).getPrincipal();
-
-        template.convertAndSend("/queue/" + player.getUsername() + "/moveTo",
-                gameSessionService.createMoveTo(player.getGameSession().getId()));
-    }
 }
