@@ -95,4 +95,13 @@ public class ModeratorController {
         service.delete(Long.valueOf(request.getParameter("gameSessionId")));
         return "redirect:/moderator";
     }
+
+    @RequestMapping(value = "/login/admin")
+    public String getLoginPage(HttpServletRequest request, Model model) {
+        if (request.getSession(false) != null) {
+            model.addAttribute("flash", request.getSession().getAttribute("flash"));
+            request.getSession().removeAttribute("flash");
+        }
+        return "administration/login";
+    }
 }

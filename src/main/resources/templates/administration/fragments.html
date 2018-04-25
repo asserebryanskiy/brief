@@ -97,7 +97,7 @@
                                 <p th:text="'Команда ' + ${player.commandName}"></p>
                                 <p>
                                     Ответ:
-                                    <span th:text="' ' + (${player.getDecision(__${iter.index}__) != null ? player.getDecision(__${iter.index}__).answer : '-'})"
+                                    <span th:text="' ' + (${player.getDecision(__${iter.index}__).answer}?:'-')"
                                           class="round-info-player-answer"></span>
                                 </p>
                                 <p>

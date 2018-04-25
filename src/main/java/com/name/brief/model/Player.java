@@ -47,10 +47,20 @@ public class Player extends BaseEntity implements UserDetails{
     public Player(GameSession gameSession) {
         this();
         this.gameSession = gameSession;
+        for (int i = 0; i < gameSession.getGame().getNumberOfRounds(); i++) {
+            decisions.add(new Decision(this, i, null));
+        }
     }
 
     public static String constructUsername(String strId, LocalDate activeDate, String commandName) {
         return String.format("%s%s%s", strId.toLowerCase(), activeDate.toString(), commandName);
+    }
+
+    public void setGameSession(GameSession gameSession) {
+        this.gameSession = gameSession;
+        for (int i = 0; i < gameSession.getGame().getNumberOfRounds(); i++) {
+            decisions.add(new Decision(this, i, null));
+        }
     }
 
     @Override
