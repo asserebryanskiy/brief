@@ -25,6 +25,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
+import org.springframework.security.web.authentication.session.ConcurrentSessionControlAuthenticationStrategy;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
 
 import javax.servlet.Filter;
@@ -186,6 +187,11 @@ public class SecurityConfig {
                     .and();
 //                .addFilterBefore(playerAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
+        }
+
+        @Bean
+        public ConcurrentSessionControlAuthenticationStrategy sas() {
+            return new ConcurrentSessionControlAuthenticationStrategy(playerSessionRegistry());
         }
 
         @Bean
