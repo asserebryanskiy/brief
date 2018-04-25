@@ -551,6 +551,7 @@ svg {
         opacity: 0.8;
         text-align: center;
         justify-content: center;
+        align-content: center;
         box-shadow: #524f55 1px 1px 10px 0;
         color: #4E3549;
     }

@@ -9,7 +9,7 @@
 <body>
     <div class="container">
         <img th:src="@{/assets/image/logo.png}" alt="logo" >
-        <form th:action="@{/playerLogin}" th:object="${playerLoginDto}" method="post">
+        <form th:action="@{/login}" th:object="${playerLoginDto}" method="post">
             <input type="hidden" th:field="*{gameSessionStrId}">
             <div th:each="inputArr : *{authenticationType.inputs}" th:remove="tag">
                 <p th:if="${#fields.hasErrors('__${inputArr[0]}__')}"

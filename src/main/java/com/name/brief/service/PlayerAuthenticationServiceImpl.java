@@ -26,20 +26,18 @@ import static com.name.brief.web.dto.PlayerConnectionDto.*;
 @Service
 public class PlayerAuthenticationServiceImpl implements PlayerAuthenticationService {
 
-    private final SessionRegistry playerSessionRegistry;
     private final SimpMessagingTemplate template;
+    private SessionRegistry sessionRegistry;
     private GameSessionService gameSessionService;
 
     @Autowired
-    public PlayerAuthenticationServiceImpl(SessionRegistry playerSessionRegistry,
-                                           SimpMessagingTemplate template) {
-        this.playerSessionRegistry = playerSessionRegistry;
+    public PlayerAuthenticationServiceImpl(SimpMessagingTemplate template) {
         this.template = template;
     }
 
     @Override
     public Set<String> getAuthenticatedPlayersUsernames(Long gameSessionId) {
-        return playerSessionRegistry.getAllPrincipals().stream()
+        return sessionRegistry.getAllPrincipals().stream()
                 .filter(p -> p instanceof Player
                         && isLoggedIn((Player) p)
                         && ((Player) p).getGameSession().getId().equals(gameSessionId))
@@ -49,12 +47,12 @@ public class PlayerAuthenticationServiceImpl implements PlayerAuthenticationServ
 
     @Override
     public void logout(Player player) {
-        playerSessionRegistry.getAllSessions(player, true)
+        sessionRegistry.getAllSessions(player, true)
                 .forEach(sessionInformation -> {
                     if (!sessionInformation.isExpired()) {
                         sessionInformation.expireNow();
                     }
-                    playerSessionRegistry.removeSessionInformation(sessionInformation.getSessionId());
+                    sessionRegistry.removeSessionInformation(sessionInformation.getSessionId());
                 });
         gameSessionService.removePlayer(player);
         sendToClient(PlayerConnectionInstruction.LOGOUT, player);
@@ -62,12 +60,12 @@ public class PlayerAuthenticationServiceImpl implements PlayerAuthenticationServ
 
     @Override
     public boolean isLoggedIn(Player player) {
-        return playerSessionRegistry.getAllSessions(player, false).size() > 0;
+        return sessionRegistry.getAllSessions(player, false).size() > 0;
     }
 
     @Override
     public boolean isLoggedIn(String username) {
-        return playerSessionRegistry.getAllPrincipals().stream()
+        return sessionRegistry.getAllPrincipals().stream()
                 .filter(p -> ((Player) p).getUsername().equals(username) && isLoggedIn((Player) p))
                 .findAny()
                 .orElse(null) != null;
@@ -79,11 +77,8 @@ public class PlayerAuthenticationServiceImpl implements PlayerAuthenticationServ
     }
 
     @Override
-    public void authenticate(PlayerLoginDto dto, HttpServletRequest request) {
-        GameSession session = gameSessionService.getSession(dto.getGameSessionStrId(), LocalDate.now());
-        Player player = gameSessionService.addPlayer(dto, session);
-        login(player, request);
-//        playerSessionRegistry.registerNewSession(request.getSession().getId(), player);
+    public void setSessionRegistry(SessionRegistry registry) {
+        this.sessionRegistry = registry;
     }
 
     @Component

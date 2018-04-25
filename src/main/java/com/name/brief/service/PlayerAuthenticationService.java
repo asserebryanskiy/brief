@@ -14,16 +14,5 @@ public interface PlayerAuthenticationService {
 
     boolean isLoggedIn(String username);
 
-    /**
-     * Authenticates request. Depending on authenticationType of dto it creates new player
-     * in appropriate gameSession and logs it in or just logs already created player in.
-     *
-     * Logging in is performed by request.login("username", "password"), where
-     * username is acquired by Player.constructUsername() or by taking username of already
-     * existing player and password is always an empty string.
-     *
-     * @param dto - PLayerLoginDto containing all necessary for logging in data
-     * @param request - HttpServletRequest, that will be authenticated
-     */
-    void authenticate(PlayerLoginDto dto, HttpServletRequest request);
+    void setSessionRegistry(SessionRegistry registry);
 }

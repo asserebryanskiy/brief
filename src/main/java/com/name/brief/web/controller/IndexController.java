@@ -1,5 +1,6 @@
 package com.name.brief.web.controller;
 
+import com.name.brief.config.authentication.PlayerAuthenticationFilter;
 import com.name.brief.model.Player;
 import com.name.brief.model.Role;
 import com.name.brief.model.User;
@@ -33,7 +34,6 @@ public class IndexController {
     @RequestMapping("/")
     public String getMain(HttpServletRequest request, Model model, Principal principal) {
         // if user is already authenticated redirect it to appropriate page
-        System.out.println("entered " + LocalTime.now());
         Authentication authentication = (Authentication) principal;
         if (authentication != null) {
             Object user = authentication.getPrincipal();
@@ -48,6 +48,9 @@ public class IndexController {
             }
         }
 
+        addFlashAttribute(PlayerAuthenticationFilter.DTO_ATTRIBUTE, model, request.getSession());
+        addFlashAttribute(PlayerAuthenticationFilter.ERRORS_ATTRIBUTE, model, request.getSession());
+
         if (!model.containsAttribute("playerLoginDto")) {
             model.addAttribute("playerLoginDto", new PlayerLoginDto());
         }
@@ -55,7 +58,16 @@ public class IndexController {
         return "index";
     }
 
-    private void addFlashAttribute(Model model, HttpSession session, String attr) {
+    @RequestMapping(value = "/login", method = RequestMethod.GET)
+    public String getPlayerDetailsPage(Model model, HttpServletRequest request) {
+        addFlashAttribute(PlayerAuthenticationFilter.DTO_ATTRIBUTE, model, request.getSession());
+        addFlashAttribute(PlayerAuthenticationFilter.ERRORS_ATTRIBUTE, model, request.getSession());
+
+        if (!model.containsAttribute("playerLoginDto")) return "redirect:/";
+        return "playerDetails";
+    }
+
+    private void addFlashAttribute(String attr, Model model, HttpSession session) {
         Object obj = session.getAttribute(attr);
         if (obj != null) {
             model.addAttribute(attr, obj);
