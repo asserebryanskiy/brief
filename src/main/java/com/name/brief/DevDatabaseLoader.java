@@ -1,10 +1,7 @@
 package com.name.brief;
 
 import com.name.brief.config.SecurityConfig;
-import com.name.brief.model.Decision;
-import com.name.brief.model.GameSession;
-import com.name.brief.model.Role;
-import com.name.brief.model.User;
+import com.name.brief.model.*;
 import com.name.brief.model.games.AuthenticationType;
 import com.name.brief.model.games.Brief;
 import com.name.brief.model.games.Game;
@@ -14,6 +11,7 @@ import com.name.brief.model.games.riskmap.RiskMapType;
 import com.name.brief.repository.GameRepository;
 import com.name.brief.repository.UserRepository;
 import com.name.brief.service.GameSessionService;
+import com.name.brief.web.dto.PlayerLoginDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -79,8 +77,10 @@ public class DevDatabaseLoader implements ApplicationRunner {
                 .withAuthenticationType(AuthenticationType.NAME)
                 .withUser(moderator1)
                 .build();
+        RolePlay game = new RolePlay();
+        game.setPhaseIndex(0);
         GameSession rolePlay = new GameSession.GameSessionBuilder("role")
-                .withGame(new RolePlay(5))
+                .withGame(game)
                 .withUser(moderator1)
                 .build();
         gameSessionService.save(session);
@@ -89,5 +89,9 @@ public class DevDatabaseLoader implements ApplicationRunner {
         gameSessionService.save(pastSession);
         gameSessionService.save(riskMap);
         gameSessionService.save(rolePlay);
+
+        PlayerLoginDto dto = new PlayerLoginDto();
+        dto.setGameSessionStrId(session.getStrId());
+        gameSessionService.addPlayer(dto, rolePlay);
     }
 }

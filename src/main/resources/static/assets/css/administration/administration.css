@@ -306,19 +306,27 @@ svg {
 
 .passed,
 .played,
-.previous {
+.previous,
+.inaccessible {
     background-color: #d7d7d7 !important;
     border-color: #d7d7d7 !important;
     color: #959595;
+}
+
+.passed,
+.played,
+.previous {
     cursor: pointer;
 }
 
-.next {
+.next,
+.fork-phase-choice {
     cursor: pointer !important;
     box-shadow: #524f55 2px 4px 2px -2px;
 }
 
-.next:hover {
+.next:hover,
+.fork-phase-choice:hover {
     background-color: #4158d0;
     color: white;
 }
@@ -501,7 +509,9 @@ svg {
         margin: auto ;
     }
 
-    .phase {
+    .phase,
+    .fork-phase {
+        width: 200px;
         height: 40px;
         display: flex;
         align-content: center;
@@ -514,24 +524,18 @@ svg {
         cursor: default;
     }
 
-    .phase, .add-30-sec-box {
-        width: 200px;
-    }
-
     .round-nav-and-commands h2 {
         margin: 20px 0 10px 0;
     }
 
-    .phase p {
-        margin: auto 0;
-    }
-
     .phase-name {
+        margin: auto 0;
         display: inline;
         flex-grow: 1;
     }
 
     .timer {
+        margin: auto;
         display: inline;
         padding: 0 10px;
     }

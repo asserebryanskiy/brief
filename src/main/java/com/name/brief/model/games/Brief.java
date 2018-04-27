@@ -31,16 +31,16 @@ public class Brief extends Game {
     public List<Phase> getPhases() {
         List<Phase> phases = new ArrayList<>(7);
         phases.addAll(Arrays.asList(
-                new Phase("Правила", false),
-                new Phase("Постановка задачи", true, Duration.ofSeconds(90)),
-                new Phase("Выдача полей", false),
-                new Phase("Внесение ответов", true, Duration.ofSeconds(90)),
-                new Phase("Правильный ответ", false),
-                new Phase("Результаты команд", false),
-                new Phase("Следующий раунд", false)
+                new Phase("Правила", "RULES", false),
+                new Phase("Постановка задачи", "SET_TASK", true, Duration.ofSeconds(90)),
+                new Phase("Выдача полей","ISSUE_FIELDS",  false),
+                new Phase("Внесение ответов","SEND_ANSWERS",  true, Duration.ofSeconds(90)),
+                new Phase("Правильный ответ","CORRECT_ANSWER",  false),
+                new Phase("Результаты команд", "RESULTS", false),
+                new Phase("Следующий раунд","NEXT_ROUND",  false)
         ));
         for (int i = 0; i < phases.size(); i++) {
-            phases.get(i).setId(String.valueOf(i));
+            phases.get(i).setId(i);
         }
         return phases;
     }

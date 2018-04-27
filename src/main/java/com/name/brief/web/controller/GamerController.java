@@ -40,6 +40,7 @@ public class GamerController {
         model.addAttribute("commandName", player.getCommandName());
         model.addAttribute("gameSession", gameSession);
         model.addAttribute("decision", decision);
+        model.addAttribute("playerId", player.getId());
         if (!gameSession.timerIsRunning()) {
             model.addAttribute("disableAnswerSend", true);
         }

@@ -9,7 +9,6 @@ import com.name.brief.repository.GameSessionRepository;
 import com.name.brief.repository.PlayerRepository;
 import com.name.brief.utils.TimeConverter;
 import com.name.brief.web.dto.GameSessionDto;
-import com.name.brief.web.dto.MoveToDto;
 import com.name.brief.web.dto.PlayerLoginDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -147,7 +146,7 @@ public class GameSessionServiceImpl implements GameSessionService {
 
         // set players username
         // cause only gameSession's player has id
-        player = getLastPlayer(gameSessionRepository.findOne(session.getId()));
+        player = getLastAddedPlayer(session.getId());
         if (session.getAuthenticationType() == AuthenticationType.COMMAND_NAME) {
             //noinspection ConstantConditions - because we've added player four lines upper
             player.setUsername(Player.constructUsername(
@@ -168,8 +167,9 @@ public class GameSessionServiceImpl implements GameSessionService {
         gameSessionRepository.save(gameSession);
     }
 
-    private Player getLastPlayer(GameSession session) {
-        return session.getPlayers().isEmpty() ? null
-                : session.getPlayers().get(session.getPlayers().size() - 1);
+    private Player getLastAddedPlayer(Long gameSessionId) {
+        GameSession found = gameSessionRepository.findOne(gameSessionId);
+        return found.getPlayers().isEmpty() ? null
+                : found.getPlayers().get(0);
     }
 }

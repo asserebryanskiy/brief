@@ -118,14 +118,15 @@
     </div>
 
     <div th:fragment="roundNav(phases, roundNumber)" class="round-nav" th:classappend="'round-nav-' + ${roundNumber}">
-        <div th:each="phase,iter : ${phases}">
-            <div th:class="'phase animated ' + 'phase-' + ${phase.id}"
+        <div th:each="phase,iter : ${phases}" class="phase-wrapper">
+            <div th:class="'phase animated ' + 'phase-' + ${phase.id} + ${phase.name == 'Undefined' ? ' fork-phase' : ''}"
                  th:with="currentPhase = ${gameSession.currentPhaseNumber}"
                  th:classappend="(${iter.index} == ${currentPhase} - 1? 'previous':(${iter.index} < ${currentPhase}? 'played':(${iter.index} == ${currentPhase}? 'active':(${iter.index} == ${currentPhase + 1}? 'next'))))">
-                <p class="phase-name" th:text="(${iter.index} == ${phases.size() - 1} and ${gameSession.currentRoundIndex} == ${gameSession.game.numberOfRounds - 1}) ? #{game.message.finish} : ${phase.name}"></p>
+                <p class="phase-name" th:text="${phase.name}"></p>
                 <p class="timer" th:if="${phase.hasTimer}" th:text="(${iter.index} == ${currentPhase} and ${gameSession.timerIsRunning()}) ? ${gameSession.getRemainingTimerTime()} : ${phase.getStrTimerDuration()}"></p>
                 <button class="add-30-sec-btn hidden" th:if="${phase.hasTimer}">+ 30с</button>
 
+                <p class="english-name hidden" th:text="${phase.englishName}"></p>
                 <p class="timer-original-value hidden" th:if="${phase.hasTimer}" th:text="${phase.getStrTimerDuration()}"></p>
                 <p class="timer-is-running hidden" th:if="${phase.hasTimer} and ${currentPhase} == ${iter.index} and ${gameSession.timerIsRunning()}"></p>
                 <p class="timer-finished hidden" th:if="${phase.hasTimer} and ${currentPhase} == ${iter.index} and ${!gameSession.timerIsRunning()}"></p>

@@ -12,7 +12,31 @@
     <div class="main-content">
         <div class="round-nav-and-commands">
             <h2 class="bold">Фазы раунда</h2>
-            <div th:replace="administration/fragments :: roundNav(${game.getPhases()}, 0)"></div>
+            <div class="round-nav" th:with="currentPhase = ${game.phaseIndex}">
+                <div th:each="phase,iter : ${game.phases}" class="phase-wrapper">
+                    <div th:class="'phase animated ' + 'phase-' + ${phase.id}"
+                         th:classappend="(${iter.index} == ${currentPhase} - 1? 'previous':(${iter.index} < ${currentPhase}? 'played':(${iter.index} == ${currentPhase}? 'active':(${iter.index} == ${currentPhase + 1}? 'next'))))">
+                        <p class="phase-name" th:text="${phase.name}"></p>
+                        <p class="timer" th:if="${phase.hasTimer}" th:text="${phase.getStrTimerDuration()}"></p>
+                        <button class="add-30-sec-btn hidden" th:if="${phase.hasTimer}">+ 30с</button>
+
+                        <p class="english-name hidden" th:text="${phase.englishName}"></p>
+                    </div>
+                    <div th:replace="administration/fragments :: confirmation-popup('Вернуться на предыдущую фазу?', 'previous-phase-popup-' + ${iter.index}, 'previous-phase-popup-btn')"></div>
+                </div>
+                <div class="fork-phase-container">
+                    <div class="fork-phase animated results-fork-phase" th:classappend="${currentPhase < 6} ? 'inaccessible' : 'next'">
+                        <p class="phase-name">Результаты</p>
+                    </div>
+                    <div class="fork-phase animated change-roles-fork-phase" th:classappend="${currentPhase < 6} ? 'inaccessible' : 'next'">
+                        <p class="phase-name">Смена ролей</p>
+                    </div>
+                    <div class="fork-phase animated next-doctor-fork-phase" th:classappend="${currentPhase < 6} ? 'inaccessible' : 'next'">
+                        <p class="phase-name">Следующий доктор</p>
+                    </div>
+                </div>
+
+            </div>
             <div class="players-wrapper">
                 <h2 class="bold">Команды</h2>
                 <div th:replace="administration/fragments :: players"></div>
@@ -33,10 +57,8 @@
         </div>
     </div>
 
+    <p class="hidden" id="round-index" th:text="${game.roundIndex}"></p>
     <p class="hidden" id="game-id" th:text="${game.id}"></p>
-    <div th:replace="administration/fragments :: vendorScripts"></div>
-    <script th:src="@{/assets/js/administration/moderator/timer.js}"></script>
-    <script th:src="@{/assets/js/administration/moderator/gameSessionController.js}"></script>
-    <script th:src="@{/assets/js/administration/moderator/rolePlay.js}"></script>
+    <script th:src="@{/assets/js/moderator.role-play-bundle.js}"></script>
 </body>
 </html>

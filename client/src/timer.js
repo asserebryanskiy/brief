@@ -1,11 +1,11 @@
-export function Timer(stompClient) {
-    // FIELDS
-    this.stompClient = stompClient;
-    this.timerId = 0;
-    this.timerSubscription = null;
+export default class Timer {
+    constructor(stompClient) {
+        this.stompClient = stompClient;
+        this.timerId = 0;
+        this.timerSubscription = null;
+    }
 
-    // METHODS
-    this.startTimer = ($timer, onFinishedCallback) => {
+    startTimer($timer, onFinishedCallback) {
         this.timerId = window.setInterval(() => {
             this.decreaseTimer($timer, onFinishedCallback);
         }, 1000);
@@ -15,7 +15,7 @@ export function Timer(stompClient) {
         this.stompClient.send('/app/' + gameSessionId + '/startTimer', {}, $timer.text())
     };
 
-    this.clearTimers = () => {
+    clearTimers() {
         window.clearInterval(this.timerId);
         const $timer = $('.timer');
         $timer.removeAttr('style');
@@ -24,7 +24,7 @@ export function Timer(stompClient) {
         if (this.timerSubscription != null) this.timerSubscription.unsubscribe();
     };
 
-    this.decreaseTimer = ($timer, onFinishedCallback) => {
+    decreaseTimer($timer, onFinishedCallback) {
         const timeStr = $timer.text();
         const dividerInd = timeStr.indexOf(':');
         let min = parseInt(timeStr.slice(0, dividerInd));

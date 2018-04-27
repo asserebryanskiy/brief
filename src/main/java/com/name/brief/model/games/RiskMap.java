@@ -34,13 +34,13 @@ public class RiskMap extends Game {
     public List<Phase> getPhases() {
         List<Phase> phases = new ArrayList<>(4);
         phases.addAll(Arrays.asList(
-                new Phase("Объяснение правил", false),
-                new Phase("Выбор ответа", true, Duration.ofSeconds(600)),
-                new Phase("Результаты", false),
-                new Phase("Начать заново", false)
+                new Phase("Объяснение правил", "RULES", false),
+                new Phase("Выбор ответа","SEND_ANSWERS", true, Duration.ofSeconds(600)),
+                new Phase("Результаты","RESULTS", false),
+                new Phase("Начать заново","START_AGAIN", false)
         ));
         for (int i = 0; i < phases.size(); i++) {
-            phases.get(i).setId(String.valueOf(i));
+            phases.get(i).setId(i);
         }
         return phases;
     }
