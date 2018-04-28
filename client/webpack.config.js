@@ -5,7 +5,7 @@ module.exports = {
         "moderator.role-play": './src/moderator.role-play.js',
         "game.role-play": './src/game.role-play.js'
     },
-    devtool: "inline-source-map",
+    // devtool: "inline-source-map",
     devServer: {
         contentBase: '../out/production/resources/static/assets/js'
     },

@@ -59,6 +59,10 @@ export default class RolePlayController extends GameSessionController {
         $('.phase').removeClass('previous played');
         $('.fork-phase').removeClass('next').addClass('inaccessible');
 
+        // this line must be before subsequent, because rolePlay round
+        // should be changed before phase change
+        this.wsService.sendToGame('nextRound', instruction);
+
         switch (instruction) {
             case 'changeRoles':
                 $crossingPhase.hide();
@@ -69,7 +73,5 @@ export default class RolePlayController extends GameSessionController {
                 this.changePhase(this.phases["CROSSING"]);
                 break;
         }
-
-        this.wsService.sendToGame('nextRound', instruction);
     }
 }

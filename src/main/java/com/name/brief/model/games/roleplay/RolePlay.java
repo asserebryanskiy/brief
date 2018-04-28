@@ -183,12 +183,14 @@ public class RolePlay extends Game {
             if (role == PharmaRole.SALESMAN) {
                 playersRoles.put(playerId, getNotPlayedDoctorRole(playerId));
             } else {
+                // change role
                 playersRoles.put(playerId, PharmaRole.SALESMAN);
+
+                // update last played doctor
+                int indexOfPartner = Arrays.binarySearch(allPlayersIds, getCurrentPairs().get(playerId));
+                lastPlayedDoctorIndex.put(playerId, indexOfPartner);
             }
         });
-
-        // clear last played indices
-        lastPlayedDoctorIndex.clear();
     }
 
     /**
@@ -203,7 +205,12 @@ public class RolePlay extends Game {
         Arrays.stream(allPlayersIds)
                 .forEach(id -> {
                     if (playersRoles.get(id) == PharmaRole.SALESMAN) {
-                        int counter = lastPlayedDoctorIndex.get(id) + 1;
+                        /*
+                        * У нас были 2 игрока: 0 - медпред, 1 - доктор. У медпреда был
+                        * lastPlayedDoctorIndex = 1.
+                        * */
+                        Integer lastDoctorInd = lastPlayedDoctorIndex.get(id);
+                        int counter = lastDoctorInd + 1;
                         for (int i = 0; i < allPlayersIds.length / 2; i++) {
                             if (counter >= allPlayersIds.length) counter = 0;
                             Long foundId = allPlayersIds[counter];
@@ -243,9 +250,7 @@ public class RolePlay extends Game {
 
     private PharmaRole getNotPlayedDoctorRole(Long id) {
         Set<PharmaRole> playedRoles = playedDoctorsRoles.get(id).getRoles();
-        PharmaRole[] availableRoles = Arrays.stream(PharmaRole.values())
-                .filter(PharmaRole::isDoctorRole)
-                .toArray(PharmaRole[]::new);
+        PharmaRole[] availableRoles = PharmaRole.getDoctorRoles();
         if (playedRoles.size() == availableRoles.length) playedRoles.clear();
         PharmaRole newRole = Arrays.stream(availableRoles)
                 .filter(role -> !playedRoles.contains(role))

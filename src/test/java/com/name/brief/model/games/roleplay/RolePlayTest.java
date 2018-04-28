@@ -82,6 +82,14 @@ public class RolePlayTest {
     }
 
     @Test
+    public void swapRoles_addLastPlayedDoctorToEveryNewSalesman() {
+        game.swapRoles();
+
+        assertThat(game.getLastPlayedDoctorIndex().get(1L), is(0));
+        assertThat(game.getLastPlayedDoctorIndex().get(3L), is(2));
+    }
+
+    @Test
     public void nextDoctor_changesDoctorForEverySalesman() {
         game.nextDoctor();
 
