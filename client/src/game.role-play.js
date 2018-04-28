@@ -39,4 +39,8 @@ function onWsConnect() {
 $('.phase-container').hide();
 $('.phase-container.active').show();
 
+$('.logout-text').click(() => {
+    $('.logout-popup').show();
+});
+
 wsService.connect(onWsConnect);

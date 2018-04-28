@@ -79,6 +79,26 @@
             <h1>Результаты</h1>
         </div>
 
+        <div th:fragment="logout" class="logout-wrapper">
+            <p class="logout-text"
+               th:unless="${projectorMode}">Выйти</p>
+            <div class="hidden logout-popup popup-wrapper">
+                <div class="popup">
+                    <div class="popup-back"></div>
+                    <div class="popup-content">
+                        <p th:text="#{player.logout.message}"></p>
+
+                        <form th:action="@{/game/logout}" method="post">
+                            <div class="popup-button-line">
+                                <button type="submit">Да</button>
+                                <button class="close-popup-btn">Нет</button>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div class="hidden">

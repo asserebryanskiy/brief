@@ -8,6 +8,10 @@ export default class WsService {
         this.stompClient = Stomp.over(socket);
     }
 
+    send(destination, message) {
+        this.stompClient.send(destination, {}, message);
+    }
+
     sendToGame(instruction, message) {
         this.stompClient.send(this.gamePath + instruction, {}, message);
     }
