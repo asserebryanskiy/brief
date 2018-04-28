@@ -8,6 +8,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.session.SessionInformation;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -29,21 +30,39 @@ public class PlayerAuthenticationServiceImplTest {
     private PlayerAuthenticationService service;
     @MockBean
     private SessionRegistry registry;
+    @MockBean
+    private SimpMessagingTemplate template;
+    @MockBean
+    private GameSessionService gameSessionService;
 
     @Before
     public void setUp() throws Exception {
+        service.setSessionRegistry(registry);
     }
 
     @Test
     public void getCurrentlyLoggedPlayers_returnsOnlyPlayersOfProvidedSession() {
+        // initialize gameSessions
         GameSession session = new GameSession.GameSessionBuilder("id").build();
         session.setId(1L);
         GameSession other = new GameSession.GameSessionBuilder("id2").build();
         other.setId(2L);
+        for (int i = 0; i < 5; i++) {
+            Player player = new Player(session);
+            player.setUsername("Session" + String.valueOf(i));
+            session.getPlayers().add(player);
+            Player otherPlayer = new Player(other);
+            otherPlayer.setUsername("Other" + String.valueOf(i));
+            other.getPlayers().add(otherPlayer);
+        }
+
+        // create players list to be tracked by registry
         List<Object> allPlayersList =
                 new ArrayList<>(session.getPlayers().size() + other.getPlayers().size());
         allPlayersList.addAll(session.getPlayers());
         allPlayersList.addAll(other.getPlayers());
+
+        // mock registry
         when(registry.getAllPrincipals()).thenReturn(allPlayersList);
         when(registry.getAllSessions(session.getPlayers().get(0), false)).thenReturn(Collections.singletonList(null));
         when(registry.getAllSessions(session.getPlayers().get(1), false)).thenReturn(Collections.singletonList(null));

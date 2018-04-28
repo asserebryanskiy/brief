@@ -91,14 +91,6 @@ public class WebSecurityTest {
                 .andExpect(model().attribute("answerTable", new boolean[5][5]));
     }*/
 
-    @Test
-    @WithMockUser(roles = {"ADMIN"})
-    public void usersWithAdminRoleAreAllowedToAdminPage() throws Exception {
-        mockMvc.perform(get("/admin"))
-                .andExpect(view().name("administration/admin/index"))
-                .andExpect(status().isOk());
-    }
-
     /*@Test
     public void usersWithModeratorRoleAreAllowedToModeratorPage() throws Exception {
         User moderator = new User();

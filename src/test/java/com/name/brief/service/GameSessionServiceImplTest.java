@@ -8,6 +8,7 @@ import com.name.brief.model.games.Brief;
 import com.name.brief.model.games.Game;
 import com.name.brief.repository.GameRepository;
 import com.name.brief.repository.GameSessionRepository;
+import com.name.brief.repository.PlayerRepository;
 import com.name.brief.web.dto.GameSessionDto;
 import com.name.brief.web.dto.NextPhaseMessage;
 import com.name.brief.web.dto.PlayerLoginDto;
@@ -34,6 +35,9 @@ public class GameSessionServiceImplTest {
 
     @MockBean
     private GameSessionRepository repository;
+
+    @MockBean
+    private PlayerRepository playerRepository;
 
     @MockBean
     private PlayerAuthenticationService playerAuthenticationService;

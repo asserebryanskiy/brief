@@ -9,6 +9,7 @@ import java.util.List;
 
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.*;
 
 public class RolePlayTest {
@@ -40,7 +41,7 @@ public class RolePlayTest {
             if (i % 2 == 0) {
                 assertThat(game.getPlayersRoles().get(game.getAllPlayersIds()[i]), is(PharmaRole.SALESMAN));
             } else {
-                assertThat(game.getPlayersRoles().get(game.getAllPlayersIds()[i]), instanceOf(DoctorRole.class));
+                assertThat(game.getPlayersRoles().get(game.getAllPlayersIds()[i]), not(PharmaRole.SALESMAN));
             }
         }
     }
@@ -73,7 +74,7 @@ public class RolePlayTest {
 
         for (int i = 0; i < players.size(); i++) {
             if (i % 2 == 0) {
-                assertThat(game.getPlayersRoles().get(game.getAllPlayersIds()[i]), instanceOf(DoctorRole.class));
+                assertThat(game.getPlayersRoles().get(game.getAllPlayersIds()[i]), not(PharmaRole.SALESMAN));
             } else {
                 assertThat(game.getPlayersRoles().get(game.getAllPlayersIds()[i]), is(PharmaRole.SALESMAN));
             }
@@ -124,7 +125,7 @@ public class RolePlayTest {
 
     @Test
     public void nextDoctor_givesDoctorsNewRolesEveryTime() {
-        DoctorRole[] roles = DoctorRole.values();
+        PharmaRole[] roles = PharmaRole.getDoctorRoles();
 
         for (int i = 0; i < roles.length; i++) {
             game.nextDoctor();

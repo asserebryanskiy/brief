@@ -1,5 +1,7 @@
 package com.name.brief.model.games.roleplay;
 
+import java.util.Arrays;
+
 public enum PharmaRole {
     DOCTOR_GOOD("Доктор",
             "Вы хороший доктор. Вы советуете своим пациентам те лекарства, " +
@@ -22,6 +24,12 @@ public enum PharmaRole {
         this.russianName = russianName;
         this.instruction = instruction;
         this.doctorRole = doctorRole;
+    }
+
+    public static PharmaRole[] getDoctorRoles() {
+        return Arrays.stream(PharmaRole.values())
+                .filter(PharmaRole::isDoctorRole)
+                .toArray(PharmaRole[]::new);
     }
 
     public String getRussianName() {

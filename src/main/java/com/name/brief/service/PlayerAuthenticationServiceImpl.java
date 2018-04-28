@@ -81,38 +81,7 @@ public class PlayerAuthenticationServiceImpl implements PlayerAuthenticationServ
         this.sessionRegistry = registry;
     }
 
-    @Component
-    public class PlayerAuthenticationEventListener implements ApplicationListener<ApplicationEvent> {
-
-        @Override
-        public void onApplicationEvent(ApplicationEvent event) {
-            if (event instanceof SessionConnectedEvent) {
-                Object principal = ((Authentication) ((SessionConnectedEvent) event).getUser())
-                        .getPrincipal();
-                if (principal instanceof Player) {
-                    sendToClient(PlayerConnectionInstruction.CONNECT, (Player) principal);
-                }
-            }
-            if (event instanceof SessionDisconnectEvent) {
-                Object principal = ((Authentication) ((SessionDisconnectEvent) event).getUser())
-                        .getPrincipal();
-                if (principal instanceof Player) {
-                    sendToClient(PlayerConnectionInstruction.DISCONNECT, (Player) principal);
-                }
-            }
-            /*if (event instanceof AuthenticationSuccessEvent) {
-                Authentication authentication = ((AuthenticationSuccessEvent) event).getAuthentication();
-                Object principal = authentication == null ? null : authentication.getPrincipal();
-                if (principal instanceof Player) {
-                    Long gameSessionId = ((Player) principal).getGameSession().getId();
-                    template.convertAndSend("/queue/" + gameSessionId + "/connection",
-                            "Login " + ((Player) principal).getUsername());
-                }
-            }*/
-        }
-    }
-
-    private void sendToClient(PlayerConnectionInstruction command, Player player) {
+    private void sendToClient(PlayerConnectionDto.PlayerConnectionInstruction command, Player player) {
         Long gameSessionId = player.getGameSession().getId();
         String destination = "/queue/" + gameSessionId + "/connection";
         PlayerConnectionDto dto = new PlayerConnectionDto(command, player.getUsername());
@@ -124,13 +93,5 @@ public class PlayerAuthenticationServiceImpl implements PlayerAuthenticationServ
                 dto.setIdentifierForModerator(String.valueOf(player.getId()));
         }
         template.convertAndSend(destination, dto);
-    }
-
-    private void login(Player player, HttpServletRequest request) {
-        try {
-            request.login(player.getUsername(), player.getPassword());
-        } catch (ServletException e) {
-            e.printStackTrace();
-        }
     }
 }

@@ -24,42 +24,4 @@ public class GameSessionTest {
         }
     }
 
-    @Test
-    public void getStatsListOnPlayersWithMaxResultReturnsProperList() {
-        session.getPlayers().forEach(p -> p.getDecisions().forEach(d -> d.setAnswer("A3")));
-
-        StatsList stats = session.getStatsList();
-
-        assertThat(stats.getStatistics(), hasSize(2));
-        stats.getStatistics().forEach(s -> {
-            assertThat(s.getRoundScoreMap().keySet(), hasSize(session.getGame().getNumberOfRounds()));
-//            assertThat(s.getRoundScoreMap().values(), everyItem(is(15)));
-        });
-    }
-
-    @Test
-    public void getStatsListOnPlayersWithMinResultReturnsProperList() {
-        session.getPlayers().forEach(p -> p.getDecisions().forEach(d -> d.setAnswer("")));
-
-        StatsList stats = session.getStatsList();
-
-        assertThat(stats.getStatistics(), hasSize(2));
-        stats.getStatistics().forEach(s -> {
-            assertThat(s.getRoundScoreMap().keySet(), hasSize(session.getGame().getNumberOfRounds()));
-            assertThat(s.getRoundScoreMap().values(), everyItem(is(0)));
-        });
-    }
-
-    @Test
-    public void getStatsListOnPlayersWithMiddleResultReturnsProperList() {
-        session.getPlayers().forEach(p -> p.getDecisions().forEach(d -> d.setAnswer("A3B2")));
-
-        StatsList stats = session.getStatsList();
-
-        assertThat(stats.getStatistics(), hasSize(2));
-        stats.getStatistics().forEach(s -> {
-            assertThat(s.getRoundScoreMap().keySet(), hasSize(session.getGame().getNumberOfRounds()));
-//            assertThat(s.getRoundScoreMap().values(), everyItem(is(10)));
-        });
-    }
 }
