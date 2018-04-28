@@ -95,6 +95,8 @@ public class RolePlayServiceImpl implements RolePlayService {
                 game.swapRoles();
                 // send to players their new roles and instructions
                 sendInstructions(game);
+                // change phase
+                sendToGame("changePhase", gameId, "SEND_INSTRUCTION");
                 break;
             case "nextDoctor":
                 game.nextDoctor();
@@ -103,14 +105,14 @@ public class RolePlayServiceImpl implements RolePlayService {
                         // send crossing message
                         PlayerLocation dto = game.getPlayerLocation(id);
                         sendToPlayer("crossing", id, dto);
-//                        template.convertAndSend("/queue/rolePlay/player/" + id + "/crossing", dto);
                     } else {
                         // send new doctor role
                         InstructionsDto dto = new InstructionsDto(role);
                         sendToPlayer("instructions", id, dto);
-//                        template.convertAndSend("/queue/rolePlay/player/" + id + "/instructions", dto);
                     }
                 });
+                // change phase
+                sendToGame("changePhase", gameId, "CROSSING");
                 break;
         }
 

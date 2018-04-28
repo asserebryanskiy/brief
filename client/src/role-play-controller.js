@@ -10,7 +10,7 @@ export default class RolePlayController extends GameSessionController {
         this.phases = phases;
     }
 
-    changePhase(phaseIndex) {
+    changePhase(phaseIndex, sendToServerFlag) {
         console.log(phaseIndex);
         // if phase is SEND_ROLES prevent starting new phase if number of players is odd
         if (phaseIndex === this.phases["SEND_ROLES"] && $('.player').not('.player-template').length % 2 !== 0) {
@@ -28,7 +28,8 @@ export default class RolePlayController extends GameSessionController {
 
         // timer will start from the server
         // save phase change on the server
-        this.wsService.sendToGame('changePhase', phaseIndex);
+        if (typeof sendToServerFlag === 'undefined' || sendToServerFlag)
+            this.wsService.sendToGame('changePhase', phaseIndex);
 
         // do phase specific stuff
         switch (phaseIndex) {
@@ -66,11 +67,11 @@ export default class RolePlayController extends GameSessionController {
         switch (instruction) {
             case 'changeRoles':
                 $crossingPhase.hide();
-                this.changePhase(this.phases["SEND_INSTRUCTION"]);
+                this.changePhase(this.phases["SEND_INSTRUCTION"], false);
                 break;
             case 'nextDoctor':
                 $crossingPhase.show();
-                this.changePhase(this.phases["CROSSING"]);
+                this.changePhase(this.phases["CROSSING"], false);
                 break;
         }
     }

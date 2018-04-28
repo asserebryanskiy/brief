@@ -19,7 +19,6 @@
                         <p class="phase-name" th:text="${phase.name}"></p>
                         <p class="timer" th:if="${phase.hasTimer}" th:text="${phase.getStrTimerDuration()}"></p>
                         <button class="add-30-sec-btn hidden" th:if="${phase.hasTimer}">+ 30с</button>
-
                         <p class="english-name hidden" th:text="${phase.englishName}"></p>
                     </div>
                     <div th:replace="administration/fragments :: confirmation-popup('Вернуться на предыдущую фазу?', 'previous-phase-popup-' + ${iter.index}, 'previous-phase-popup-btn')"></div>
