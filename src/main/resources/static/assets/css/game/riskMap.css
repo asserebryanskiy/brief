@@ -248,7 +248,7 @@ img[id$='-large-img'] {
 
 .how-it-scores-btn {
     font-family: "Circe Light", serif;
-    text-decoration: #4E3549 underline;
+    text-decoration: underline;
     cursor: pointer;
 }
 

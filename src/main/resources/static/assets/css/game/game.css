@@ -193,6 +193,7 @@ h1 {
 .logout-text {
     color: #4e3549;
     cursor: pointer;
+    text-decoration: underline;
 }
 
 .logout-text:hover {
