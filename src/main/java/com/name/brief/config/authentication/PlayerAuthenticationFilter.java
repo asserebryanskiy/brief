@@ -92,7 +92,7 @@ public class PlayerAuthenticationFilter extends UsernamePasswordAuthenticationFi
 
     private PlayerLoginDto getDto(HttpServletRequest request) {
         PlayerLoginDto dto = new PlayerLoginDto();
-        dto.setGameSessionStrId(request.getParameter("gameSessionStrId"));
+        dto.setGameSessionStrId(request.getParameter("gameSessionStrId").trim().toLowerCase());
         dto.setCommandName(request.getParameter("commandName"));
         dto.setName(request.getParameter("name"));
         dto.setSurname(request.getParameter("surname"));
