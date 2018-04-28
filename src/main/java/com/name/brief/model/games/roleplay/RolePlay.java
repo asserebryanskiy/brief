@@ -18,7 +18,7 @@ import java.util.*;
 public class RolePlay extends Game {
     private final int numberOfRounds = 1;
     private final String russianName = "Ролевая игра";
-    private final String englishName = "rolePLay";
+    private final String englishName = "rolePlay";
 
     private final String[] strategies = {
             "Доктор - Медицинский представитель"
