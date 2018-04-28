@@ -96,6 +96,7 @@ public class RolePlayServiceImpl implements RolePlayService {
                 // send to players their new roles and instructions
                 sendInstructions(game);
                 // change phase
+                game.setPhaseIndex(4);
                 sendToGame("changePhase", gameId, "SEND_INSTRUCTION");
                 break;
             case "nextDoctor":
@@ -112,6 +113,7 @@ public class RolePlayServiceImpl implements RolePlayService {
                     }
                 });
                 // change phase
+                game.setPhaseIndex(3);
                 sendToGame("changePhase", gameId, "CROSSING");
                 break;
         }
