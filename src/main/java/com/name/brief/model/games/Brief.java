@@ -1,6 +1,5 @@
 package com.name.brief.model.games;
 
-import com.name.brief.model.BaseEntity;
 import com.name.brief.model.Decision;
 import com.name.brief.utils.BriefUtils;
 import lombok.Data;
@@ -40,7 +39,7 @@ public class Brief extends Game {
                 new Phase("Следующий раунд","NEXT_ROUND",  false)
         ));
         for (int i = 0; i < phases.size(); i++) {
-            phases.get(i).setId(i);
+            phases.get(i).setOrderIndex(i);
         }
         return phases;
     }

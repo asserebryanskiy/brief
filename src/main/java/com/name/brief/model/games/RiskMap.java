@@ -1,11 +1,9 @@
 package com.name.brief.model.games;
 
 import com.name.brief.model.Decision;
-import com.name.brief.model.games.riskmap.RiskMapAnswerType;
 import com.name.brief.model.games.riskmap.RiskMapType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.ToString;
 
 import javax.persistence.Entity;
 import java.time.Duration;
@@ -40,7 +38,7 @@ public class RiskMap extends Game {
                 new Phase("Начать заново","START_AGAIN", false)
         ));
         for (int i = 0; i < phases.size(); i++) {
-            phases.get(i).setId(i);
+            phases.get(i).setOrderIndex(i);
         }
         return phases;
     }

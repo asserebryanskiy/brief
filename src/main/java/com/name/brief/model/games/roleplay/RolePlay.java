@@ -1,7 +1,6 @@
 package com.name.brief.model.games.roleplay;
 
 import com.name.brief.exception.NoPlayersAddedException;
-import com.name.brief.model.BaseEntity;
 import com.name.brief.model.Decision;
 import com.name.brief.model.Player;
 import com.name.brief.model.games.Game;
@@ -19,6 +18,31 @@ public class RolePlay extends Game {
     private final int numberOfRounds = 1;
     private final String russianName = "Ролевая игра";
     private final String englishName = "rolePlay";
+    private static final List<Phase> phases = formPhases();
+
+    private static List<Phase> formPhases() {
+        List<Phase> phases = new ArrayList<>(13);
+        phases.addAll(Arrays.asList(
+                new Phase("Формирование игры","FORM_GAME", false),
+                new Phase("Подключение участников","CONNECT_PLAYERS", false),
+                new Phase("Распределение ролей","SEND_ROLES", false),
+                new Phase("Инструкция","SEND_INSTRUCTION", false),
+                new Phase("Переход участников","CROSSING", false),
+                new Phase("Игра", "GAME", true, Duration.ofSeconds(300)),
+                new Phase("Анкета", "SURVEY", true, Duration.ofSeconds(120)),
+                new Phase("Переход участников","CROSSING", false),
+                new Phase("Игра", "GAME", true, Duration.ofSeconds(300)),
+                new Phase("Анкета", "SURVEY", true, Duration.ofSeconds(120)),
+                new Phase("Результаты", "RESULTS", false),
+                new Phase("Обсуждение в командах", "DISCUSSION", false),
+                new Phase("Смена ролей", "CHANGE_ROLES", false)
+        ));
+        for (int i = 0; i < phases.size(); i++) {
+            phases.get(i).setOrderIndex(i);
+        }
+
+        return phases;
+    }
 
     private final String[] strategies = {
             "Доктор - Медицинский представитель"
@@ -115,35 +139,6 @@ public class RolePlay extends Game {
 
     @Override
     public List<Phase> getPhases() {
-        List<Phase> phases;
-        if (roundIndex == 0) {
-            phases = new ArrayList<>(7);
-            phases.addAll(Arrays.asList(
-                    new Phase("Формирование игры","FORM_GAME", false),
-                    new Phase("Подключение участников","CONNECT_PLAYERS", false),
-                    new Phase("Распределение ролей","SEND_ROLES", false),
-                    new Phase("Инструкция","SEND_INSTRUCTION", false),
-                    new Phase("Переход участников","CROSSING", false),
-                    new Phase("Игра", "GAME", true, Duration.ofSeconds(300)),
-                    new Phase("Анкета", "SURVEY", false)
-            ));
-            for (int i = 0; i < phases.size(); i++) {
-                phases.get(i).setId(i);
-            }
-        } else {
-            phases = new ArrayList<>(4);
-            phases.addAll(Arrays.asList(
-                    new Phase("Переход участников","CROSSING", false),
-                    new Phase("Инструкция","SEND_INSTRUCTION", false),
-                    new Phase("Игра", "GAME", true, Duration.ofSeconds(300)),
-                    new Phase("Анкета", "SURVEY", false)
-            ));
-            for (int i = 0; i < phases.size(); i++) {
-                // cause first three phases were deleted after round 0 in front end
-                phases.get(i).setId(i + 3);
-            }
-        }
-
         return phases;
     }
 
@@ -242,7 +237,7 @@ public class RolePlay extends Game {
 
     public String getPhaseNameByIndex(int phaseIndex) {
         return getPhases().stream()
-                .filter(phase -> phase.getId() == phaseIndex)
+                .filter(phase -> phase.getOrderIndex() == phaseIndex)
                 .map(Phase::getEnglishName)
                 .findAny()
                 .orElseThrow(() -> new IllegalArgumentException(String.valueOf(phaseIndex)));

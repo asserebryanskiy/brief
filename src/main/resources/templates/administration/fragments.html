@@ -119,7 +119,7 @@
 
     <div th:fragment="roundNav(phases, roundNumber)" class="round-nav" th:classappend="'round-nav-' + ${roundNumber}">
         <div th:each="phase,iter : ${phases}" class="phase-wrapper">
-            <div th:class="'phase animated ' + 'phase-' + ${phase.id} + ${phase.name == 'Undefined' ? ' fork-phase' : ''}"
+            <div th:class="'phase animated ' + 'phase-' + ${phase.orderIndex} + ${phase.name == 'Undefined' ? ' fork-phase' : ''}"
                  th:with="currentPhase = ${gameSession.currentPhaseNumber}"
                  th:classappend="(${iter.index} == ${currentPhase} - 1? 'previous':(${iter.index} < ${currentPhase}? 'played':(${iter.index} == ${currentPhase}? 'active':(${iter.index} == ${currentPhase + 1}? 'next'))))">
                 <p class="phase-name" th:text="${phase.name}"></p>

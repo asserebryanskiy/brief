@@ -10,7 +10,7 @@ import java.time.Duration;
 public class Phase {
     private final String name;
     private final boolean hasTimer;
-    private int id;
+    private int orderIndex;
     private Duration timerDuration;         // in seconds
     private String englishName;
 

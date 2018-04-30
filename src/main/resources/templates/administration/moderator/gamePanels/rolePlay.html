@@ -14,7 +14,7 @@
             <h2 class="bold">Фазы раунда</h2>
             <div class="round-nav" th:with="currentPhase = ${game.phaseIndex}">
                 <div th:each="phase,iter : ${game.phases}" class="phase-wrapper">
-                    <div th:class="'phase animated ' + 'phase-' + ${phase.id}"
+                    <div th:class="'phase animated ' + 'phase-' + ${phase.orderIndex}"
                          th:classappend="(${iter.index} == ${currentPhase} - 1? 'previous':(${iter.index} < ${currentPhase}? 'played':(${iter.index} == ${currentPhase}? 'active':(${iter.index} == ${currentPhase + 1}? 'next'))))">
                         <p class="phase-name" th:text="${phase.name}"></p>
                         <p class="timer" th:if="${phase.hasTimer}" th:text="${phase.getStrTimerDuration()}"></p>
