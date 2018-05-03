@@ -8,6 +8,7 @@ import com.name.brief.service.GameSessionService;
 import com.name.brief.web.dto.Answers;
 import com.name.brief.web.dto.NextPhaseMessage;
 import com.name.brief.web.dto.StatsList;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
@@ -21,6 +22,7 @@ public class BriefController {
     private final GameSessionService gameSessionService;
     private final BriefService briefService;
 
+    @Autowired
     public BriefController(GameSessionService gameSessionService,
                            BriefService briefService) {
         this.gameSessionService = gameSessionService;

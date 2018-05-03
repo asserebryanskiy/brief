@@ -2,7 +2,10 @@ import $ from "jquery";
 
 export default class GameSessionUtils {
     static getPhaseOrder($phase) {
-        return parseInt($phase[0].className.substr($phase[0].className.indexOf('phase-') + 6, 1));
+        const classList = $phase[0].className;
+        const start = classList.indexOf('phase-') + 6;
+        const end = classList.indexOf(' ', start);
+        return parseInt(classList.slice(start, end === -1 ? classList.length : end));
     }
 
     static getCurrentRoundIndex() {

@@ -2,77 +2,43 @@ import $ from "jquery";
 import SockJS from "sockjs-client"
 import Stomp from "@stomp/stompjs"
 import GameSessionController from '../game-session-controller'
+import GameSessionUtils from "../game-session-utils";
 
-export default class RolePlayController extends GameSessionController {
+export default class RolePlayController {
     constructor(wsService, phases) {
-        super(wsService);
         this.wsService = wsService;
         this.phases = phases;
     }
 
-    changePhase(phaseIndex, sendToServerFlag) {
-        console.log(phaseIndex);
-        // if phase is SEND_ROLES prevent starting new phase if number of players is odd
-        if (phaseIndex === this.phases["SEND_ROLES"] && $('.player').not('.player-template').length % 2 !== 0) {
-            $('.odd-number-of-players-popup').show();
-            return;
-        }
-
+    static changePhase(phaseIndex) {
         // remove classes from all phases
-        $('.phase').add('.fork-phase').removeClass('active next previous');
+        $('.phase').removeClass('active next previous played');
 
-        // add next, active, previous classes
-        $('.phase-' + phaseIndex).removeClass('played').addClass('active');
-        $('.phase-' + (phaseIndex + 1)).addClass('next');
-        $('.phase-' + (phaseIndex - 1)).addClass('played previous');
+        // add next, active, previous and played classes
+        for (let i = 0; i < phaseIndex + 2; i++) {
+            const $phase = $('.phase-' + i);
+            if (i === phaseIndex - 1)  $phase.addClass('previous');
+            else if (i < phaseIndex)   $phase.addClass('played');
+            else if (i === phaseIndex) $phase.addClass('active');
+            else                       $phase.addClass('next');
+        }
 
         // timer will start from the server
-        // save phase change on the server
-        if (typeof sendToServerFlag === 'undefined' || sendToServerFlag)
-            this.wsService.sendToGame('changePhase', phaseIndex);
-
-        // do phase specific stuff
-        switch (phaseIndex) {
-            case this.phases["SURVEY"]:
-                $('.fork-phase').removeClass('inaccessible').addClass('next');
-                break;
-        }
     }
 
-    nextRound(instruction) {
-        const $phase0 = $('.phase-0');
-        const $crossingPhase = $('.phase-' + this.phases["CROSSING"]);
-        if ($phase0.length) {
-            $phase0.add('.phase-1').add('.phase-2').parents('.phase-wrapper').remove();
+    handlePhaseClick(event) {
+        const $phase = $(event.currentTarget);
+        if ($phase.hasClass('next') || $phase.hasClass('previous')) {
+            // if phase is SEND_ROLES prevent starting new phase if number of players is odd
+            console.log($phase);
+            console.log(this.phases);
+            if (GameSessionUtils.getPhaseOrder($phase) === this.phases["SEND_ROLES"]
+                && $('.player').not('.player-template').length % 2 !== 0) {
+                $('.odd-number-of-players-popup').show();
+                return;
+            }
 
-            // change order of phases
-            const instrInd = this.phases["SEND_INSTRUCTION"];
-            const crossInd = this.phases["CROSSING"];
-            const $instructionsPhase = $('.phase-' + instrInd);
-            $crossingPhase.parents('.phase-wrapper').insertBefore(
-                $instructionsPhase.parents('.phase-wrapper'));
-            $crossingPhase.removeClass('phase-' + crossInd).addClass('phase-' + instrInd);
-            $instructionsPhase.removeClass('phase-' + instrInd).addClass('phase-' + crossInd);
-            this.phases["SEND_INSTRUCTION"] = crossInd;
-            this.phases["CROSSING"] = instrInd;
-        }
-
-        $('.phase').removeClass('previous played');
-        $('.fork-phase').removeClass('next').addClass('inaccessible');
-
-        // this line must be before subsequent, because rolePlay round
-        // should be changed before phase change
-        this.wsService.sendToGame('nextRound', instruction);
-
-        switch (instruction) {
-            case 'changeRoles':
-                $crossingPhase.hide();
-                this.changePhase(this.phases["SEND_INSTRUCTION"], false);
-                break;
-            case 'nextDoctor':
-                $crossingPhase.show();
-                this.changePhase(this.phases["CROSSING"], false);
-                break;
+            this.wsService.sendToApp('changePhase', GameSessionUtils.getPhaseOrder($phase));
         }
     }
 }

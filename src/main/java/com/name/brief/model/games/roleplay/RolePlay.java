@@ -6,6 +6,8 @@ import com.name.brief.model.Player;
 import com.name.brief.model.games.Game;
 import com.name.brief.model.games.Phase;
 import lombok.*;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import java.time.Duration;
@@ -28,6 +30,8 @@ public class RolePlay extends Game {
             "Доктор - Медицинский представитель"
     };
 
+    @OneToMany(cascade = CascadeType.ALL)
+    @LazyCollection(LazyCollectionOption.FALSE)
     private List<PlayerData> playersData = new ArrayList<>();
     private int strategyNumber;
     private int phaseIndex;

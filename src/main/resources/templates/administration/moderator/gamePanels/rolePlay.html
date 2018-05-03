@@ -23,17 +23,6 @@
                     </div>
                     <div th:replace="administration/fragments :: confirmation-popup('Вернуться на предыдущую фазу?', 'previous-phase-popup-' + ${iter.index}, 'previous-phase-popup-btn')"></div>
                 </div>
-                <div class="fork-phase-container">
-                    <div class="fork-phase animated results-fork-phase" th:classappend="${currentPhase < 6} ? 'inaccessible' : 'next'">
-                        <p class="phase-name">Результаты</p>
-                    </div>
-                    <div class="fork-phase animated change-roles-fork-phase" th:classappend="${currentPhase < 6} ? 'inaccessible' : 'next'">
-                        <p class="phase-name">Смена ролей</p>
-                    </div>
-                    <div class="fork-phase animated next-doctor-fork-phase" th:classappend="${currentPhase < 6} ? 'inaccessible' : 'next'">
-                        <p class="phase-name">Следующий доктор</p>
-                    </div>
-                </div>
 
             </div>
             <div class="players-wrapper">

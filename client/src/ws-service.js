@@ -12,7 +12,7 @@ export default class WsService {
         this.stompClient.send(destination, {}, message);
     }
 
-    sendToGame(instruction, message) {
+    sendToApp(instruction, message) {
         this.stompClient.send(this.gamePath + instruction, {}, message);
     }
 

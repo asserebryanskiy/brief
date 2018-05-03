@@ -23,7 +23,7 @@ export default class BriefModeratorController extends GameSessionController {
 
         // if new phase is SEND_STATISTICS send statistics to players and projector
         if (phaseIndex === this.phases["RESULTS"]) {
-            this.wsService.sendToGame('sendStatistics', '');
+            this.wsService.sendToApp('sendStatistics', '');
         }
 
         /// remove classes from all phases
@@ -35,7 +35,7 @@ export default class BriefModeratorController extends GameSessionController {
         $('.phase-' + (phaseIndex - 1)).addClass('played previous');
 
         // timer will start on the server
-        this.wsService.sendToGame('changePhase', phaseIndex);
+        this.wsService.sendToApp('changePhase', phaseIndex);
     }
 
     nextRound() {
@@ -76,7 +76,7 @@ export default class BriefModeratorController extends GameSessionController {
             $nextRound.addClass('next');
 
             // send to server
-            this.wsService.sendToGame('changeRound', roundIndex);
+            this.wsService.sendToApp('changeRound', roundIndex);
         }
 
         $('.phase').removeClass('previous played');
@@ -91,6 +91,6 @@ export default class BriefModeratorController extends GameSessionController {
 
     finishGame() {
         // ToDo: catch this in player.brief-controller
-        this.wsService.sendToGame('finishGame', '');
+        this.wsService.sendToApp('finishGame', '');
     }
 }
