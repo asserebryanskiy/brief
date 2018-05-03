@@ -54,7 +54,7 @@ public class DevDatabaseLoader implements ApplicationRunner {
                 .build();
 
         session.getPlayers().forEach(p -> {
-            String[] correctAnswers = (String[]) session.getGame().getCorrectAnswers();
+            String[] correctAnswers = ((Brief) session.getGame()).getCorrectAnswers();
             String[] additions = {"", "A2", "A2A4", "A2A4B4", "A2A4B4C4"};
             for (int i = 0; i < p.getDecisions().size(); i++) {
                 p.getDecisions().get(i).setAnswer(

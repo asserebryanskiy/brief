@@ -1,6 +1,6 @@
 import $ from 'jquery';
-import WsService from "./ws-service";
-import GameSessionUtils from "./game-session-utils";
+import WsService from "../ws-service";
+import GameSessionUtils from "../game-session-utils";
 import RolePlayController from "./game.role-play-controller";
 
 const gameId = GameSessionUtils.getGameId();

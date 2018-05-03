@@ -32,7 +32,7 @@ public class GameSession extends BaseEntity{
     @OneToOne(mappedBy = "gameSession", cascade = CascadeType.ALL)
     private Game game;
     @OneToMany(mappedBy = "gameSession", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Player> players;
+    private List<Player> players = new ArrayList<>();
     private int[] rounds;   // are represented by array to simplify thymeleaf processing
     @ManyToOne
     @JoinColumn(name = "users_id")
@@ -61,7 +61,6 @@ public class GameSession extends BaseEntity{
         this.game = game;
         game.setGameSession(this);
         this.authenticationType = authenticationType;
-        players = new ArrayList<>();
         rounds = new int[game.getNumberOfRounds()];
         this.user = user;
     }

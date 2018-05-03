@@ -45,11 +45,6 @@ public class Brief extends Game {
     }
 
     @Override
-    public List<Phase> getPhases(int roundNumber) {
-        return getPhases();
-    }
-
-    @Override
     public int getScore(Decision decision) {
         if (decision == null || decision.getAnswer() == null)
             return 0;
@@ -75,29 +70,11 @@ public class Brief extends Game {
     }
 
     @Override
-    public String getRussianName() {
-        return russianName;
-    }
-
-    @Override
     public String getEnglishName() {
         return englishName;
     }
 
-    @Override
-    public String getCorrectAnswer(int numberOfRound) {
-        return correctAnswers[numberOfRound];
-    }
-
-    @Override
     public String[] getCorrectAnswers() {
         return correctAnswers.clone();
     }
-
-    @Override
-    public Object getAnswerInput(Decision decision) {
-        if (decision == null) return new boolean[5][5];
-        else return BriefUtils.getAnswerMatrix(decision);
-    }
-
 }

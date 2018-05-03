@@ -1,9 +1,9 @@
 import $ from 'jquery'
 import SockJS from "sockjs-client"
 import Stomp from "@stomp/stompjs"
-import RolePlayController from "./role-play-controller";
-import GameSessionUtils from "./game-session-utils";
-import WsService from "./ws-service";
+import RolePlayController from "./moderator.role-play-controller";
+import GameSessionUtils from "../game-session-utils";
+import WsService from "../ws-service";
 
 /*
 * Если текущий раунд не 0, то убираем фазы "Покдлючение участников" и "Распределение ролей"

@@ -29,13 +29,8 @@ export default class GameSessionUtils {
     static getPhases() {
         const phases = {};
         $('.phase').each((i, el) => {
-            console.log($(el).find('.english-name').text());
-            console.log(this.getPhaseOrder($(el)));
             phases[$(el).find('.english-name').text()] = this.getPhaseOrder($(el));
         });
-        /*$('.phase').find('.english-name').((i, el) => {
-            phases[el.innerHTML] = parseInt(i);
-        });*/
         return phases;
     }
 

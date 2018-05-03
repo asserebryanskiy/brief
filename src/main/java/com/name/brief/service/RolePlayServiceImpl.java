@@ -17,6 +17,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static com.name.brief.utils.RolePlayUtils.*;
+
 @Service
 public class RolePlayServiceImpl implements RolePlayService {
 
@@ -50,13 +52,33 @@ public class RolePlayServiceImpl implements RolePlayService {
         RolePlay game = getRolePlayGame(gameId);
 
         // do phase specific stuff
-        String phaseName = game.getPhaseNameByIndex(phaseIndex);
+        String phaseName = getPhaseNameByIndex(phaseIndex);
         switch (phaseName) {
             case "SEND_ROLES":
                 List<Player> players = game.getGameSession().getPlayers();
                 if (players.size() % 2 != 0) throw new OddNumberOfPlayersException();
-                game.addPlayers(players);
+                addPlayers(players, game);
                 sendInstructions(game);
+                break;
+            case "CROSSING":
+                game.getPlayersData().forEach(data ->
+                        sendToPlayer("crossing", data.getPlayer().getId(), data.getLocation()));
+                break;
+            case "CROSSING_2":
+                setNextPartnerForEachPlayer(game);
+
+                // change location for each Salesman and send new info to him
+                game.getPlayersData().stream()
+                        .filter(data -> data.getRole() == PharmaRole.SALESMAN)
+                        .forEach(data -> {
+                            // set partners location to new salesman location
+                            PlayerLocation location = findPlayerData(
+                                    data.getCurrentPartnerId(), game.getPlayersData()).getLocation();
+                            data.setLocation(location);
+                            // send new location to player
+                            sendToPlayer("crossing", data.getPlayer().getId(), data.getLocation());
+                        });
+                break;
         }
 
         // change RolePlay phase
@@ -65,58 +87,18 @@ public class RolePlayServiceImpl implements RolePlayService {
         // start timer if new phase has it
 
         // send to subscribers instruction to change to proper phase
-        if (phaseName.equals("SURVEY")) {
-            game.getPlayersRoles().forEach((id, role) -> {
-                if (role == PharmaRole.SALESMAN) {
-                    sendToPlayer("changePhase", id,"SURVEY_EXPECTATION");
+        if (phaseName.startsWith("SURVEY")) {
+            game.getPlayersData().forEach(data -> {
+                Long playerId = data.getPlayer().getId();
+                if (data.getRole() == PharmaRole.SALESMAN) {
+                    sendToPlayer("changePhase", playerId,"SURVEY_SALESMAN");
                 } else {
-                    sendToPlayer("changePhase", id,"SURVEY");
+                    sendToPlayer("changePhase", playerId,"SURVEY_DOCTOR");
                 }
             });
-        } else {
-            sendToGame("changePhase", gameId, phaseName);
         }
 
-        // save game
-        gameRepository.save(game);
-    }
-
-    @Override
-    public void nextRound(String instruction, Long gameId) throws WrongGameTypeException {
-        // retrieve game
-        RolePlay game = getRolePlayGame(gameId);
-
-        // change RolePlay phase
-        game.setRoundIndex(game.getRoundIndex() + 1);
-
-        // depending on instruction work with players
-        switch (instruction) {
-            case "changeRoles":
-                game.swapRoles();
-                // send to players their new roles and instructions
-                sendInstructions(game);
-                // change phase
-                game.setPhaseIndex(4);
-                sendToGame("changePhase", gameId, "SEND_INSTRUCTION");
-                break;
-            case "nextDoctor":
-                game.nextDoctor();
-                game.getPlayersRoles().forEach((id, role) -> {
-                    if (role == PharmaRole.SALESMAN) {
-                        // send crossing message
-                        PlayerLocation dto = game.getPlayerLocation(id);
-                        sendToPlayer("crossing", id, dto);
-                    } else {
-                        // send new doctor role
-                        InstructionsDto dto = new InstructionsDto(role);
-                        sendToPlayer("instructions", id, dto);
-                    }
-                });
-                // change phase
-                game.setPhaseIndex(3);
-                sendToGame("changePhase", gameId, "CROSSING");
-                break;
-        }
+        sendToGameTopic("changePhase", gameId, phaseName);
 
         // save game
         gameRepository.save(game);
@@ -126,13 +108,13 @@ public class RolePlayServiceImpl implements RolePlayService {
         template.convertAndSend("/queue/rolePlay/player/" + playerId + "/" + destination, payload);
     }
 
-    private void sendToGame(String destination, Long gameId, Object payload) {
+    private void sendToGameTopic(String destination, Long gameId, Object payload) {
         template.convertAndSend("/topic/game/" + gameId + "/" + destination, payload);
     }
 
     private void sendInstructions(RolePlay game) {
-        game.getPlayersRoles().forEach((id, role) ->
-                sendToPlayer("instructions", id, new InstructionsDto(role)));
+        game.getPlayersData().forEach(data ->
+                sendToPlayer("instructions", data.getPlayer().getId(), new InstructionsDto(data.getRole())));
     }
 
     private RolePlay getRolePlayGame(Long gameId) throws WrongGameTypeException {

@@ -90,13 +90,6 @@ public class GameSessionServiceImpl implements GameSessionService {
     }
 
     @Override
-    public String getCorrectAnswerForCurrentRound(Long gameSessionId) {
-        GameSession gameSession = gameSessionRepository.findOne(gameSessionId);
-        if (gameSession == null) throw new GameSessionNotFoundException();
-        return gameSession.getGame().getCorrectAnswer(gameSession.getCurrentRoundIndex());
-    }
-
-    @Override
     public void update(GameSessionDto dto) {
         GameSession current = gameSessionRepository.findOne(dto.getGameSessionId());
         if (current != null) {

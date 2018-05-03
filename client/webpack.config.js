@@ -2,8 +2,8 @@ const path = require('path');
 
 module.exports = {
     entry: {
-        "moderator.role-play": './src/moderator.role-play.js',
-        "game.role-play": './src/game.role-play.js'
+        "moderator.role-play": './src/roleplay/moderator.role-play.js',
+        "game.role-play": './src/roleplay/game.role-play.js'
     },
     // devtool: "inline-source-map",
     devServer: {

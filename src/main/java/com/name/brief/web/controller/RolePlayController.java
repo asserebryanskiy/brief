@@ -45,10 +45,4 @@ public class RolePlayController {
                             @DestinationVariable Long gameId) throws WrongGameTypeException, OddNumberOfPlayersException {
         rolePlayService.changePhase(phaseIndex, gameId);
     }
-
-    @MessageMapping("/rolePlay/{gameId}/nextRound")
-    public void nextRound(String instruction,
-                          @DestinationVariable Long gameId) throws WrongGameTypeException {
-        rolePlayService.nextRound(instruction, gameId);
-    }
 }

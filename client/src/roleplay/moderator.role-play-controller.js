@@ -1,7 +1,7 @@
 import $ from "jquery";
 import SockJS from "sockjs-client"
 import Stomp from "@stomp/stompjs"
-import GameSessionController from './game-session-controller'
+import GameSessionController from '../game-session-controller'
 
 export default class RolePlayController extends GameSessionController {
     constructor(wsService, phases) {

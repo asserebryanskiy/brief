@@ -60,19 +60,6 @@ public class GameSessionServiceImplTest {
     }
 
     @Test
-    public void getCorrectAnswerForCurrentRound_returnsProperValue() {
-        GameSession session = new GameSession();
-        session.setCurrentRoundIndex(2);
-        Game game = new Brief();
-        session.setGame(game);
-        when(repository.findOne(0L)).thenReturn(session);
-
-        String found = service.getCorrectAnswerForCurrentRound(0L);
-
-        assertThat(found, is(game.getCorrectAnswer(2)));
-    }
-
-    @Test
     public void update_updatesDateInPlayersUsernames() {
         GameSession session = new GameSession.GameSessionBuilder("id").build();
         GameSessionDto dto = GameSessionDto.createFrom(session);

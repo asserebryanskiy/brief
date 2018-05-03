@@ -55,7 +55,12 @@ public class PlayerAuthenticationServiceImpl implements PlayerAuthenticationServ
                     sessionRegistry.removeSessionInformation(sessionInformation.getSessionId());
                 });
         gameSessionService.removePlayer(player);
+
+        // send to moderator info about player logout
         sendToClient(PlayerConnectionInstruction.LOGOUT, player);
+
+        // send to player instruction (if he is still in game) to return to index page
+        template.convertAndSend("/queue/" + player.getUsername() + "/logout", "");
     }
 
     @Override

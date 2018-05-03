@@ -8,6 +8,4 @@ public interface RolePlayService {
     void setUp(Long gameId, RolePlaySettingsDto dto) throws WrongGameTypeException;
 
     void changePhase(int phaseIndex, Long gameId) throws WrongGameTypeException, OddNumberOfPlayersException;
-
-    void nextRound(String instruction, Long gameId) throws WrongGameTypeException;
 }

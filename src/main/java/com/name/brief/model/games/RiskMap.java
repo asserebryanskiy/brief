@@ -44,11 +44,6 @@ public class RiskMap extends Game {
     }
 
     @Override
-    public List<Phase> getPhases(int roundNumber) {
-        return getPhases();
-    }
-
-    @Override
     public int getScore(Decision decision) {
         return 0;
     }
@@ -59,21 +54,10 @@ public class RiskMap extends Game {
     }
 
     @Override
-    public String getRussianName() {
-        return russianName;
-    }
-
-    @Override
     public String getEnglishName() {
         return englishName;
     }
 
-    @Override
-    public String getCorrectAnswer(int numberOfRound) {
-        return "A1";
-    }
-
-    @Override
     public Object getCorrectAnswers() {
         return type.getCorrectAnswers();
     }
@@ -87,7 +71,6 @@ public class RiskMap extends Game {
         };
     }*/
 
-    @Override
     public Object getAnswerInput(Decision decision) {
         int[] input = new int[12];
         switch (type) {

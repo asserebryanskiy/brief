@@ -7,11 +7,9 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.MappedSuperclass;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 @EqualsAndHashCode(callSuper = true)
@@ -32,16 +30,7 @@ public abstract class Game extends BaseEntity implements Serializable {
     }
 
     public abstract List<Phase> getPhases();
-    public abstract List<Phase> getPhases(int roundNumber);
     public abstract int getScore(Decision decision);
     public abstract int getNumberOfRounds();
-    public abstract String getRussianName();
     public abstract String getEnglishName();
-    public abstract String getCorrectAnswer(int numberOfRound);
-    public abstract Object getCorrectAnswers();
-    public abstract Object getAnswerInput(Decision decision);
-
-
-
-
 }

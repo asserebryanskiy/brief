@@ -31,8 +31,6 @@ public interface GameSessionService {
 
     void changeRound(Long gameSessionId, int nextRoundIndex);
 
-    String getCorrectAnswerForCurrentRound(Long gameSessionId);
-
     void update(GameSessionDto dto);
 
     void delete(Long gameSessionId);
