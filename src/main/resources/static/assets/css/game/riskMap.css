@@ -88,6 +88,11 @@ img[id$='-large-img'] {
     top: 5px;
 }
 
+.risk-indicator svg {
+    width: inherit;
+    height: inherit;
+}
+
 .popup-content {
     width: 95%;
 }
