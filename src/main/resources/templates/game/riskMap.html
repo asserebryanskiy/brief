@@ -5,7 +5,7 @@
     <link rel="stylesheet" th:href="@{/assets/css/game/game.css}">
     <link rel="stylesheet" th:href="@{/assets/css/game/riskMap.css}">
     <link rel="stylesheet" th:href="@{|/assets/css/game/riskMap-${gameSession.game.type.name}.css|}">
-    <link rel="stylesheet" th:href="@{/assets/css/game/projector.css}" th:if="${projectorMode}">
+    <link rel="stylesheet" th:href="@{/assets/css/game/projector_0.0.1.css}" th:if="${projectorMode}">
     <title>МОЗ | Карта рисков</title>
 </head>
 <body class="risk-map-body" th:with="mapType = ${gameSession.game.type.name}, mapLayoutPage = ${'game/riskMapFragments/riskMap-' + mapType}">
