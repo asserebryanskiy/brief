@@ -91,7 +91,7 @@ public class DevDatabaseLoader implements ApplicationRunner {
                 .withGame(game)
                 .withUser(moderator1)
                 .build();
-        game.setPhaseIndex(10);
+        game.setPhaseIndex(12);
         gameSessionService.save(session);
         gameSessionService.save(session2);
         gameSessionService.save(session3);
