@@ -1,8 +1,6 @@
 import $ from "jquery";
-import SockJS from "sockjs-client"
-import Stomp from "@stomp/stompjs"
-import GameSessionController from '../game-session-controller'
 import GameSessionUtils from "../game-session-utils";
+import TimerUtils from "./TimerUtils";
 
 export default class RolePlayController {
     constructor(wsService, phases) {
@@ -38,5 +36,31 @@ export default class RolePlayController {
 
             this.wsService.sendToApp('changePhase', GameSessionUtils.getPhaseOrder($phase));
         }
+    }
+
+    static handleTimerMessageReceived(message) {
+        const $timer = $('.phase.active .timer');
+        const $30secBtn = $('.phase.active .add-30-sec-btn');
+        if (!$timer.is(':visible')) {
+            $timer.show();
+            $30secBtn.hide();
+        }
+
+        // parse incoming data
+        let sec = TimerUtils.getSeconds(message.body);
+        let min = TimerUtils.getMinutes(message.body);
+
+        // check if timer ended and if true react
+        if (min === 0 && sec === 0) {
+            $timer.hide();
+            $30secBtn.show();
+        }
+
+        // change timer text
+        $timer.text(TimerUtils.convertToTimerString(min, sec));
+    }
+
+    handle30secBtnClick() {
+        this.wsService.sendToApp('add30sec', '');
     }
 }

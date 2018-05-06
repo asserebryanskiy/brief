@@ -6,12 +6,11 @@ import com.name.brief.model.games.AuthenticationType;
 import com.name.brief.model.games.Brief;
 import com.name.brief.model.games.RiskMap;
 import com.name.brief.model.games.roleplay.RolePlay;
-import com.name.brief.model.games.roleplay.SalesmanCompetency;
 import com.name.brief.repository.GameRepository;
 import com.name.brief.repository.UserRepository;
 import com.name.brief.service.GameSessionService;
 import com.name.brief.service.RolePlayService;
-import com.name.brief.web.dto.DoctorAnswerDto;
+import com.name.brief.utils.TimerTaskScheduler;
 import com.name.brief.web.dto.PlayerLoginDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
@@ -32,14 +31,19 @@ public class DevDatabaseLoader implements ApplicationRunner {
     private final UserRepository userRepository;
     private final GameRepository gameRepository;
     private final RolePlayService rolePlayService;
+    private final TimerTaskScheduler scheduler;
 
     @Autowired
     public DevDatabaseLoader(GameSessionService gameSessionService,
-                             UserRepository userRepository, GameRepository gameRepository, RolePlayService rolePlayService) {
+                             UserRepository userRepository,
+                             GameRepository gameRepository,
+                             RolePlayService rolePlayService,
+                             TimerTaskScheduler scheduler) {
         this.gameSessionService = gameSessionService;
         this.userRepository = userRepository;
         this.gameRepository = gameRepository;
         this.rolePlayService = rolePlayService;
+        this.scheduler = scheduler;
     }
 
     @Override

@@ -1,5 +1,6 @@
 import $ from "jquery";
 import AnswerService from "./answer-service";
+import TimerUtils from "./TimerUtils";
 
 export default class RolePlayController {
     constructor(wsService) {
@@ -203,5 +204,20 @@ export default class RolePlayController {
         } else {
             $('.timer').removeClass('fixed-to-top');
         }
+    }
+
+    static handleTimerMessageReceived(message) {
+        const $timer = $('.timer');
+
+        // parse incoming data
+        let sec = TimerUtils.getSeconds(message.body);
+        let min = TimerUtils.getMinutes(message.body);
+
+        // if timer is finishing make it red
+        if (min === 0 && sec < 11) $timer.addClass('last-ten-seconds');
+        else $timer.removeClass('last-ten-seconds');
+
+        // change timer text
+        $timer.text(TimerUtils.convertToTimerString(min, sec));
     }
 }

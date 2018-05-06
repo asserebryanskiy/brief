@@ -17,4 +17,6 @@ public interface RolePlayService {
     void saveSalesmanAnswers(Long gameId, SalesmanAnswerDto dto, Long playerId) throws WrongGameTypeException;
 
     void saveDrugDistribution(Long gameId, DrugDistributionDto dto, Long id) throws WrongGameTypeException;
+
+    void add30sec(Long gameId);
 }

@@ -74,4 +74,9 @@ public class RolePlayController {
                 ((Player) ((Authentication) principal).getPrincipal()).getId()
         );
     }
+
+    @MessageMapping("/rolePlay/{gameId}/add30sec")
+    public void add30secondsToTimer(@DestinationVariable Long gameId) {
+        rolePlayService.add30sec(gameId);
+    }
 }

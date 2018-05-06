@@ -37,6 +37,10 @@ function onWsConnect() {
         RolePlayController.handleAverageAnswersReceived(message);
     });
 
+    wsService.subscribe('/topic/game/' + gameId + '/timer', (message) => {
+        RolePlayController.handleTimerMessageReceived(message);
+    });
+
     // subscribe on results
 
     $('.preloader').fadeOut();

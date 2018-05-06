@@ -5,15 +5,18 @@ import com.name.brief.exception.OddNumberOfPlayersException;
 import com.name.brief.exception.WrongGameTypeException;
 import com.name.brief.model.Player;
 import com.name.brief.model.games.Game;
+import com.name.brief.model.games.Phase;
 import com.name.brief.model.games.roleplay.*;
 import com.name.brief.repository.GameRepository;
 import com.name.brief.repository.PlayerDataRepository;
 import com.name.brief.utils.RolePlayUtils;
+import com.name.brief.utils.TimerTaskScheduler;
 import com.name.brief.web.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.util.List;
 
 import static com.name.brief.utils.RolePlayStatisticsUtils.createAverageStatisticsDto;
@@ -26,14 +29,17 @@ public class RolePlayServiceImpl implements RolePlayService {
     private final GameRepository gameRepository;
     private final PlayerDataRepository playerDataRepository;
     private final SimpMessagingTemplate template;
+    private final TimerTaskScheduler timerScheduler;
 
     @Autowired
     public RolePlayServiceImpl(GameRepository gameRepository,
                                PlayerDataRepository playerDataRepository,
-                               SimpMessagingTemplate template) {
+                               SimpMessagingTemplate template,
+                               TimerTaskScheduler timerScheduler) {
         this.gameRepository = gameRepository;
         this.playerDataRepository = playerDataRepository;
         this.template = template;
+        this.timerScheduler = timerScheduler;
     }
 
     @Override
@@ -52,11 +58,18 @@ public class RolePlayServiceImpl implements RolePlayService {
     @Override
     public void changePhase(int phaseIndex, Long gameId)
             throws WrongGameTypeException, OddNumberOfPlayersException {
+        Phase phase = RolePlay.phases.get(phaseIndex);
+
         // retrieve game
         RolePlay game = getRolePlayGame(gameId);
 
+        // if current phase has timer, stop it
+        if (RolePlay.phases.get(game.getPhaseIndex()).isHasTimer()) {
+            timerScheduler.stopTimer(gameId);
+        }
+
         // do phase specific stuff
-        String phaseName = getPhaseNameByIndex(phaseIndex);
+        String phaseName = phase.getEnglishName();
         switch (phaseName) {
             case "SEND_ROLES":
                 List<Player> players = game.getGameSession().getPlayers();
@@ -121,6 +134,9 @@ public class RolePlayServiceImpl implements RolePlayService {
         game.setPhaseIndex(phaseIndex);
 
         // start timer if new phase has it
+        if (phase.isHasTimer()) {
+            timerScheduler.setUpTimer(gameId, phase.getTimerDuration());
+        }
 
         // send to subscribers instruction to change to proper phase
         sendToGameTopic("changePhase", gameId, phaseName);
@@ -181,6 +197,11 @@ public class RolePlayServiceImpl implements RolePlayService {
 
         // save game
         gameRepository.save(game);
+    }
+
+    @Override
+    public void add30sec(Long gameId) {
+        timerScheduler.setUpTimer(gameId, Duration.ofSeconds(30));
     }
 
     private void sendToPlayer(String destination, Long playerId, Object payload) {

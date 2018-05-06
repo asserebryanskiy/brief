@@ -1,6 +1,4 @@
 import $ from 'jquery'
-import SockJS from "sockjs-client"
-import Stomp from "@stomp/stompjs"
 import RolePlayController from "./moderator.role-play-controller";
 import GameSessionUtils from "../game-session-utils";
 import WsService from "../ws-service";
@@ -18,6 +16,10 @@ function onWsConnect() {
         RolePlayController.changePhase(phases[message.body]);
     });
 
+    wsService.subscribe('/topic/game/' + gameId + '/timer', (message) => {
+        RolePlayController.handleTimerMessageReceived(message);
+    });
+
     playerConnectionService.subscribe(wsService);
 
     $('.preloader').fadeOut();
@@ -26,4 +28,5 @@ function onWsConnect() {
 wsService.connect(onWsConnect);
 
 $('.phase').click((event) => controller.handlePhaseClick(event));
+$('.phase.active .add-30-sec-btn').click(() => controller.handle30secBtnClick())
 
