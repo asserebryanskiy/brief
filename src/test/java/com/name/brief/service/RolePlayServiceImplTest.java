@@ -10,7 +10,9 @@ import com.name.brief.model.games.roleplay.PlayerData;
 import com.name.brief.model.games.roleplay.PlayerLocation;
 import com.name.brief.model.games.roleplay.RolePlay;
 import com.name.brief.repository.GameRepository;
+import com.name.brief.repository.PlayerDataRepository;
 import com.name.brief.utils.RolePlayUtils;
+import com.name.brief.utils.TimerTaskScheduler;
 import com.name.brief.web.dto.InstructionsDto;
 import com.name.brief.web.dto.RolePlaySettingsDto;
 import org.junit.Test;
@@ -44,6 +46,12 @@ public class RolePlayServiceImplTest {
 
     @MockBean
     private SimpMessagingTemplate template;
+
+    @MockBean
+    private PlayerDataRepository playerDataRepository;
+
+    @MockBean
+    private TimerTaskScheduler scheduler;
 
     @Test
     public void setUp_changesRolePLayStrategyToProvidedInDto() throws Exception {
