@@ -99,9 +99,9 @@ public class DevDatabaseLoader implements ApplicationRunner {
         gameSessionService.save(riskMap);
         gameSessionService.save(rolePlay);
 
-        PlayerLoginDto dto = new PlayerLoginDto();
-        dto.setGameSessionStrId(session.getStrId());
-        gameSessionService.addPlayer(dto, rolePlay);
+//        PlayerLoginDto dto = new PlayerLoginDto();
+//        dto.setGameSessionStrId(session.getStrId());
+//        gameSessionService.addPlayer(dto, rolePlay);
 //        gameSessionService.addPlayer(dto, rolePlay);
 //
 //        rolePlayService.changePhase(2, rolePlay.getGame().getId());

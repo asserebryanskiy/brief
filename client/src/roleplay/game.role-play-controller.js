@@ -48,9 +48,12 @@ export default class RolePlayController {
                 break;
             case "SURVEY_SALESMAN":
                 phaseId = 'salesman-survey-phase';
+                $('#' + phaseId + ' input').val('');
                 break;
             case "SURVEY_DOCTOR":
                 phaseId = 'doctor-survey-phase';
+                $('.ee-answer-variant').removeClass('selected');
+                $('.comments-input').val('');
                 break;
             case "RESULTS_AVERAGE":
                 phaseId = 'average-results-phase';
@@ -93,7 +96,8 @@ export default class RolePlayController {
     static handleInstructionMessageReceived(message) {
         const json = JSON.parse(message.body);
         $('.role-name').text(json['roleName']);
-        $('.instruction').add($.parseHTML(json['instruction']));
+        $('.instruction').empty()
+            .append($.parseHTML(json['instruction']));
     }
 
     handleSalesmanAnswerSend() {

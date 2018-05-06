@@ -75,7 +75,6 @@
                th:utext="${role.instruction}"></div>
         </div>
 
-
         <!-- CROSSING PHASE -->
         <div class="phase-container centered-phase-container"
              th:classappend="(${game.phaseIndex} == 4 or ${game.phaseIndex} == 7) ? 'active' : ''"
@@ -121,7 +120,7 @@
                              and (${game.phaseIndex} == 6 or ${game.phaseIndex} == 9)) ? 'active' : ''"
              th:with="roundIndex = ${game.phaseIndex == 6 ? 0 : 1}"
              id="doctor-survey-phase">
-            <h2 class="timer">05:00</h2>
+            <h2 class="timer">02:00</h2>
             <div class="survey">
                 <div th:each="competency : ${T(com.name.brief.model.games.roleplay.SalesmanCompetency).values()}"
                      th:class="${'expertise-estimation expertise-estimation-' + competency.cssClassName}">
