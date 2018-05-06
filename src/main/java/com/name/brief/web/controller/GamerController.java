@@ -16,6 +16,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import static com.name.brief.utils.RolePlayUtils.findPlayerData;
+
 @Controller
 public class GamerController {
 
@@ -51,30 +53,14 @@ public class GamerController {
         }
 
         if (gameSession.getGame() instanceof RolePlay) {
-            PlayerData data = new PlayerData();
-            data.setRole(DoctorRole.DOCTOR_1);
+            PlayerData data = findPlayerData(player.getId(), ((RolePlay) gameSession.getGame()).getPlayersData());
+            if (data == null) {
+                data = new PlayerData();
+                data.setRole(SalesmanRole.SALESMAN_1);
+            }
             model.addAttribute("playerData", data);
         }
 
         return "game/" + gameSession.getGame().getEnglishName();
-//        String commandName = player.getCommandName();
-//        int currentRoundIndex = gameSession.getCurrentRoundIndex();
-//        int currentPhase = gameSession.getCurrentPhaseNumber();
-
-        /*model.addAttribute("commandName", commandName);
-        model.addAttribute("round", currentRoundIndex);
-        model.addAttribute("gameSessionId", gameSession.getId());
-        model.addAttribute("currentPhaseNumber", currentPhase);
-        model.addAttribute("correctAnswer", gameSession.getGame()
-                .getCorrectAnswer(currentRoundIndex));
-        model.addAttribute("statsList", gameSession.getStatsList());*/
-
-        // if player already sent decision add it to the answer matrix and block decisions sending
-//        model.addAttribute("answerTable", gameSession.getGame().getAnswerInput(decision));
-       /* if (decision.getAnswer() != null) {
-        } else {
-            model.addAttribute("answerTable", new boolean[5][5]);
-        }*/
-        // if currently timer is not active make answer send impossible
     }
 }
