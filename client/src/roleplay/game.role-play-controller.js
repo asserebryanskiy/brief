@@ -196,4 +196,12 @@ export default class RolePlayController {
                 .addClass('error-' + dto.averageErrorCssClass[answerType]);
         }
     }
+
+    static handleScroll() {
+        if ($(window).scrollTop() > 35) {
+            $('.timer').addClass('fixed-to-top');
+        } else {
+            $('.timer').removeClass('fixed-to-top');
+        }
+    }
 }

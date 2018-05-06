@@ -57,6 +57,7 @@ $('.drugs-distribution-help-btn').click(() => RolePlayController.handleOpenDrugD
 $('.popup-back').click(() => $('.popup-wrapper').hide());
 $('.close-popup-btn').click(() => $('.popup-wrapper').hide());
 $('.drugs-distribution-input').on('input', (event) => controller.handleDrugsDistributionInputChange(event));
-$('.drugs-distribution-send-responses-btn').click(() => controller.sendDrugsDistribution())
+$('.drugs-distribution-send-responses-btn').click(() => controller.sendDrugsDistribution());
+$(window).scroll((event) => RolePlayController.handleScroll())
 
 wsService.connect(onWsConnect);

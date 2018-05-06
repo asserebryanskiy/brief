@@ -14,6 +14,13 @@
     transform: translateX(-50%);
 }
 
+.fixed-to-top {
+    width: calc(100vw - 30px);
+    text-align: center;
+    background-color: #f3eaf1;
+    top: 0;
+}
+
 .instant-message {
     position: fixed;
     top: 0;
@@ -30,9 +37,15 @@
     color: white;
 }
 
-#send-roles-phase, #send-instructions-phase {
+#send-roles-phase,
+#send-instructions-phase,
+#game-phase {
     text-align: left;
     padding: 20px;
+}
+
+#game-phase .instruction {
+    margin-top: 0;
 }
 
 #send-roles-phase svg {

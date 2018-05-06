@@ -83,11 +83,11 @@ public class DevDatabaseLoader implements ApplicationRunner {
                 .withUser(moderator1)
                 .build();
         RolePlay game = new RolePlay();
-        game.setPhaseIndex(0);
         GameSession rolePlay = new GameSession.GameSessionBuilder("role")
                 .withGame(game)
                 .withUser(moderator1)
                 .build();
+        game.setPhaseIndex(4);
         gameSessionService.save(session);
         gameSessionService.save(session2);
         gameSessionService.save(session3);
@@ -95,9 +95,9 @@ public class DevDatabaseLoader implements ApplicationRunner {
         gameSessionService.save(riskMap);
         gameSessionService.save(rolePlay);
 
-//        PlayerLoginDto dto = new PlayerLoginDto();
-//        dto.setGameSessionStrId(session.getStrId());
-//        gameSessionService.addPlayer(dto, rolePlay);
+        PlayerLoginDto dto = new PlayerLoginDto();
+        dto.setGameSessionStrId(session.getStrId());
+        gameSessionService.addPlayer(dto, rolePlay);
 //        gameSessionService.addPlayer(dto, rolePlay);
 //
 //        rolePlayService.changePhase(2, rolePlay.getGame().getId());

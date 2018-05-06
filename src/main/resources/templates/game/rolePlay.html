@@ -88,6 +88,9 @@
              th:classappend="(${game.phaseIndex} == 5 or ${game.phaseIndex} == 8) ? 'active' : ''"
              id="game-phase">
             <h2 class="timer">05:00</h2>
+            <div class="instruction middle-font-size light-font"
+                 th:with="role = ${playerData == null ? T(com.name.brief.model.games.roleplay.DoctorRole).DOCTOR_1 : playerData.role}"
+                 th:utext="${role.instruction}"></div>
         </div>
 
         <!-- SURVEY SALESMAN PHASE -->
