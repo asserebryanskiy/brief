@@ -2,9 +2,7 @@ package com.name.brief.utils;
 
 import com.name.brief.exception.OddNumberOfPlayersException;
 import com.name.brief.model.Player;
-import com.name.brief.model.games.roleplay.PharmaRole;
-import com.name.brief.model.games.roleplay.PlayerData;
-import com.name.brief.model.games.roleplay.RolePlay;
+import com.name.brief.model.games.roleplay.*;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -76,9 +74,13 @@ public class RolePlayUtilsTest {
 
             for (int j = 0; j < i; j++) {
                 if (j % 2 == 0) {
-                    assertThat(game.getPlayersData().get(j).getRole(), is(PharmaRole.SALESMAN));
+                    if (j % 4 == 0) {
+                        assertThat(game.getPlayersData().get(j).getRole(), is(DoctorRole.DOCTOR_2));
+                    } else {
+                        assertThat(game.getPlayersData().get(j).getRole(), is(DoctorRole.DOCTOR_1));
+                    }
                 } else {
-                    assertThat(game.getPlayersData().get(j).getRole().isDoctorRole(), is(true));
+                    assertThat(game.getPlayersData().get(j).getRole(), is(SalesmanRole.SALESMAN_1));
                 }
             }
 
@@ -105,48 +107,48 @@ public class RolePlayUtilsTest {
     @Test(expected = AssertionError.class)
     public void findNewPartner_notAllowsPlayerDataWithDoctorRole() {
         PlayerData data = new PlayerData();
-        data.setRole(PharmaRole.DOCTOR_GOOD);
+        data.setRole(DoctorRole.DOCTOR_1);
         findNewPartner(new HashSet<>(), new ArrayList<>(), data);
     }
 
     @Test
     public void findNewPartner_returnsNotOccupiedDoctor() {
         Set<Long> occupiedDoctors = new HashSet<>();
-        occupiedDoctors.add(1L);
+        occupiedDoctors.add(0L);
         List<PlayerData> playersData = createPlayersData(4);
 
-        assertThat(findNewPartner(occupiedDoctors, playersData, playersData.get(0)).getPlayer().getId(),
-                is(3L));
+        assertThat(findNewPartner(occupiedDoctors, playersData, playersData.get(1)).getPlayer().getId(),
+                is(2L));
     }
 
     @Test
     public void findNewPartner_returnsNotPlayedDoctor() {
         List<PlayerData> playersData = createPlayersData(4);
-        PlayerData data = playersData.get(0);
-        data.getPlayedPlayers().add(1L);
+        PlayerData data = playersData.get(1);
+        data.getPlayedPlayers().add(0L);
 
         assertThat(findNewPartner(new HashSet<>(), playersData, data).getPlayer().getId(),
-                is(3L));
+                is(2L));
     }
 
     @Test
     public void findNewPartner_returnsNotPlayedAndNotOccupiedDoctor() {
         List<PlayerData> playersData = createPlayersData(6);
-        PlayerData data = playersData.get(0);
-        data.getPlayedPlayers().add(1L);
+        PlayerData data = playersData.get(1);
+        data.getPlayedPlayers().add(0L);
         HashSet<Long> occupiedDoctorsIds = new HashSet<>();
-        occupiedDoctorsIds.add(3L);
+        occupiedDoctorsIds.add(2L);
 
         assertThat(findNewPartner(occupiedDoctorsIds, playersData, data).getPlayer().getId(),
-                is(5L));
+                is(4L));
     }
 
     @Test
     public void findNewPartner_clearsPlayedPlayersListIfItIsOverwhelmed() {
         List<PlayerData> playersData = createPlayersData(4);
-        PlayerData data = playersData.get(0);
-        data.getPlayedPlayers().add(1L);
-        data.getPlayedPlayers().add(3L);
+        PlayerData data = playersData.get(1);
+        data.getPlayedPlayers().add(0L);
+        data.getPlayedPlayers().add(2L);
 
         findNewPartner(new HashSet<>(), playersData, data);
 
@@ -172,7 +174,7 @@ public class RolePlayUtilsTest {
             Player player = new Player();
             player.setId((long) i);
             PlayerData data = new PlayerData(player);
-            data.setRole(i % 2 == 0 ? PharmaRole.SALESMAN : PharmaRole.DOCTOR_GOOD);
+            data.setRole(i % 2 == 0 ? DoctorRole.DOCTOR_1 : SalesmanRole.SALESMAN_1);
             playersData.add(data);
         }
         return playersData;

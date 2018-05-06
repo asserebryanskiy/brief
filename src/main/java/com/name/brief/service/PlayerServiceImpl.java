@@ -54,7 +54,5 @@ public class PlayerServiceImpl implements PlayerService {
     @Override
     public void delete(List<Player> players) {
         playerRepository.delete(players);
-
-        System.out.println();
     }
 }

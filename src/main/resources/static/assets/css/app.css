@@ -72,6 +72,10 @@ body {
     opacity: 0.7;
 }
 
+.underlined {
+    text-decoration: underline;
+}
+
 .inline {
     display: inline-block;
 }
@@ -96,8 +100,24 @@ body {
     display: none;
 }
 
+/*********************************
+*         FONT DECORATION        *
+**********************************/
+
 .light-font {
     font-family: "Circe Light", serif;
+}
+
+.small-font-size {
+    font-size: 16px;
+}
+
+.middle-font-size {
+    font-size: 20px;
+}
+
+.big-font-size {
+    font-size: 40px;
 }
 
 /*********************************

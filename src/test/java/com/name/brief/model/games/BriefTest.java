@@ -3,6 +3,7 @@ package com.name.brief.model.games;
 import com.name.brief.model.Decision;
 import com.name.brief.model.games.Brief;
 import com.name.brief.model.games.Game;
+import com.name.brief.model.games.roleplay.DoctorRole;
 import org.junit.Before;
 import org.junit.Test;
 

@@ -18,7 +18,7 @@ import java.util.*;
 @Data
 public class RolePlay extends Game {
     @Transient
-    private final int numberOfRounds = 1;
+    private final int numberOfRounds = 2;
     @Transient
     private final String russianName = "Ролевая игра";
     @Transient
@@ -54,6 +54,7 @@ public class RolePlay extends Game {
                 new Phase("Переход участников","CROSSING_2", false),
                 new Phase("Игра", "GAME_2", true, Duration.ofSeconds(300)),
                 new Phase("Анкета", "SURVEY_2", true, Duration.ofSeconds(120)),
+                new Phase("Распределение упаковок", "DRUGS_DISTRIBUTION", true, Duration.ofSeconds(120)),
                 new Phase("Результаты", "RESULTS", false),
                 new Phase("Обсуждение в командах", "DISCUSSION", false),
                 new Phase("Смена ролей", "CHANGE_ROLES", false)

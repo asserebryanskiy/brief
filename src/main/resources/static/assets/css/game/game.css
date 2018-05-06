@@ -203,7 +203,8 @@ h1 {
 *        SEND RESPONSES BTN      *
 **********************************/
 
-#send-responses-btn {
+#send-responses-btn,
+.send-responses-btn {
     margin: 10px 0;
     font-size: 1em;
     padding: 5px 10px;

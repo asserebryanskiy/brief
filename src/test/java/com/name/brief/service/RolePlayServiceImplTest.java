@@ -5,6 +5,7 @@ import com.name.brief.exception.WrongGameTypeException;
 import com.name.brief.model.GameSession;
 import com.name.brief.model.Player;
 import com.name.brief.model.games.Brief;
+import com.name.brief.model.games.roleplay.DoctorRole;
 import com.name.brief.model.games.roleplay.PlayerData;
 import com.name.brief.model.games.roleplay.PlayerLocation;
 import com.name.brief.model.games.roleplay.RolePlay;
@@ -116,11 +117,11 @@ public class RolePlayServiceImplTest {
         service.changePhase(getPhaseIndexByName("CROSSING_2"), game.getId());
 
         verify(template, times(1)).convertAndSend(
-                eq("/queue/rolePlay/player/0/crossing"),
+                eq("/queue/rolePlay/player/1/crossing"),
                 any(PlayerLocation.class)
         );
         verify(template, times(1)).convertAndSend(
-                eq("/queue/rolePlay/player/2/crossing"),
+                eq("/queue/rolePlay/player/3/crossing"),
                 any(PlayerLocation.class)
         );
     }
@@ -131,8 +132,8 @@ public class RolePlayServiceImplTest {
 
         service.changePhase(getPhaseIndexByName("CROSSING_2"), game.getId());
 
-        assertThat(game.getPlayersData().get(0).getLocation().getRoom(), is(1));
-        assertThat(game.getPlayersData().get(2).getLocation().getRoom(), is(0));
+        assertThat(game.getPlayersData().get(1).getLocation().getRoom(), is(1));
+        assertThat(game.getPlayersData().get(3).getLocation().getRoom(), is(0));
     }
 
     @Test
@@ -144,7 +145,7 @@ public class RolePlayServiceImplTest {
         for (int i = 0; i < 4; i++) {
             verify(template, times(1)).convertAndSend(
                     "/queue/rolePlay/player/" + i + "/changePhase",
-                    game.getPlayersData().get(i).getRole().isDoctorRole() ? "SURVEY_DOCTOR" : "SURVEY_SALESMAN"
+                    game.getPlayersData().get(i).getRole() instanceof DoctorRole ? "SURVEY_DOCTOR" : "SURVEY_SALESMAN"
             );
         }
 

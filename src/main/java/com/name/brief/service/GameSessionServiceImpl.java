@@ -126,12 +126,15 @@ public class GameSessionServiceImpl implements GameSessionService {
 
     @Override
     public Player addPlayer(PlayerLoginDto dto, GameSession session) {
+        session = gameSessionRepository.findOne(session.getId());
+
         // construct player
         Player player = new Player();
         player.setCommandName(dto.getCommandName());
         player.setName(dto.getName());
         player.setSurname(dto.getSurname());
         player.setGameSession(session);
+        player.setLastAdded(true);
 
         // update gameSession
         session.getPlayers().add(player);
@@ -140,6 +143,7 @@ public class GameSessionServiceImpl implements GameSessionService {
         // set players username
         // cause only gameSession's player has id
         player = getLastAddedPlayer(session.getId());
+        player.setLastAdded(false);
         if (session.getAuthenticationType() == AuthenticationType.COMMAND_NAME) {
             //noinspection ConstantConditions - because we've added player four lines upper
             player.setUsername(Player.constructUsername(
@@ -161,8 +165,9 @@ public class GameSessionServiceImpl implements GameSessionService {
     }
 
     private Player getLastAddedPlayer(Long gameSessionId) {
-        GameSession found = gameSessionRepository.findOne(gameSessionId);
-        return found.getPlayers().isEmpty() ? null
-                : found.getPlayers().get(0);
+        return gameSessionRepository.findOne(gameSessionId).getPlayers().stream()
+                .filter(Player::isLastAdded)
+                .findAny()
+                .orElseThrow(() -> new IllegalArgumentException("no last added players found"));
     }
 }

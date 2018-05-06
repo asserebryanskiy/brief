@@ -10,6 +10,7 @@
 <body th:with="game = ${gameSession.game}">
     <noscript th:replace="appFragments :: noscript"></noscript>
     <div th:replace="appFragments :: preloader"></div>
+    <p class="instant-message middle-font-size hidden"></p>
 
     <div class="container">
         <div class="header">
@@ -21,7 +22,11 @@
                    th:text="'Раунд ' + ${game.roundIndex + 1}"></p>
             </div>
         </div>
-        <div class="phase-container" th:classappend="${game.phaseIndex} == 0? 'active' : ''" id="phase-0">
+
+        <!-- FORM GAME PHASE -->
+        <div class="phase-container centered-phase-container"
+             th:classappend="${game.phaseIndex} == 0? 'active' : ''"
+             id="form-game-phase">
             <div class="non-projector-intro-phase"
                  th:classappend="(${projectorMode} and ${game.roundIndex} == 0) ? 'hidden'">
                 <h2 th:text="#{player.intro.message}"></h2>
@@ -37,45 +42,213 @@
                 </div>
             </div>
         </div>
-        <div class="phase-container" th:classappend="${game.phaseIndex} == 1? 'active' : ''" id="phase-1">
+
+        <!-- CONNECT PLAYERS PHASE -->
+        <div class="phase-container centered-phase-container"
+             th:classappend="${game.phaseIndex} == 1? 'active' : ''"
+             id="connect-players-phase">
             <h2 th:text="#{player.intro.message}"></h2>
             <!--<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M18.513 7.119c.958-1.143 1.487-2.577 1.487-4.036v-3.083h-16v3.083c0 1.459.528 2.892 1.487 4.035l3.087 3.68c.566.677.57 1.625.009 2.306l-3.13 3.794c-.937 1.136-1.453 2.555-1.453 3.995v3.107h16v-3.107c0-1.44-.517-2.858-1.453-3.994l-3.13-3.794c-.562-.681-.558-1.629.009-2.306l3.087-3.68zm-.513-4.12c0 1.101-.363 2.05-1.02 2.834l-.978 1.167h-8.004l-.978-1.167c-.66-.785-1.02-1.736-1.02-2.834h12zm-.996 15.172c.652.791.996 1.725.996 2.829h-1.061c-1.939-2-4.939-2-4.939-2s-3 0-4.939 2h-1.061c0-1.104.344-2.039.996-2.829l3.129-3.793c.342-.415.571-.886.711-1.377h.164v1h2v-1h.163c.141.491.369.962.711 1.376l3.13 3.794zm-6.004-1.171h2v1h-2v-1zm0-2h2v1h-2v-1z"></path></svg>-->
             <svg xmlns="http://www.w3.org/2000/svg" version="1.1" x="0px" y="0px" width="800px" height="800px" viewBox="0 0 800 800" xml:space="preserve"><g><path d="M318.161,84.755c0-46.82,37.125-84.755,82.93-84.755c45.804,0,82.971,37.935,82.971,84.755   c0,46.843-37.167,84.755-82.971,84.755C355.286,169.51,318.161,131.598,318.161,84.755z M492.344,209.462   c-12.062-9.548-24.588-17.72-39.101-22.851c-13.48-4.775-27.684-7.444-41.884-8.431l21.408,229.697L401.864,444.9l-35.332-37.023   l26.824-230.023c-15.502,0.532-31.077,3.071-45.708,8.41c-5.974,2.17-11.807,4.818-17.296,8.094   c-9.625,5.751-18.476,12.695-26.845,20.28c-41.346,37.424-63.733,102.398-68.47,198.622c-0.816,16.504,11.612,30.557,27.758,31.38   c0.505,0.033,0.998,0.044,1.503,0.044c15.49,0,28.424-12.411,29.208-28.405c3.212-65.182,15.866-113.782,36.643-142.72   c-1.494,30.328-4.137,85.34-6.5,141.536c-0.15,1.021-0.431,1.985-0.506,3.028L299.75,756.1   c-1.482,21.364,14.266,39.897,35.17,41.416c0.914,0.064,1.826,0.099,2.718,0.099c19.744,0,36.396-15.614,37.812-36.046   l18.423-266.092c2.9-0.825,5.758-1.562,8.218-1.562c2.911,0,5.703,0.529,8.528,0.889l17.038,268.936   C428.955,784.245,445.648,800,465.488,800c0.816,0,1.654-0.021,2.493-0.076c20.914-1.388,36.759-19.835,35.417-41.21   l-20.239-319.356c-0.106-1.78-0.505-3.461-0.826-5.146c-1.698-48.894-7.176-121.278-10.323-160.611   c21.205,28.982,33.15,77.083,34.449,141.786c0.333,16.31,13.365,29.297,29.874,29.286c16.157-0.336,28.994-13.998,28.661-30.521   C563.007,314.877,538.557,246.007,492.344,209.462z"></path></g></svg>
         </div>
-        <div class="phase-container" th:classappend="${game.phaseIndex} == 2? 'active' : ''" id="phase-2">
-            <p class="middle-font-size light-font">Ваша роль: <span class="role-name big-font-size">Доктор</span></p>
+
+        <!-- SEND ROLES PHASE -->
+        <div class="phase-container centered-phase-container"
+             th:classappend="${game.phaseIndex} == 2? 'active' : ''"
+             th:with="role = ${playerData == null ? T(com.name.brief.model.games.roleplay.DoctorRole).DOCTOR_1 : playerData.role}"
+             id="send-roles-phase">
+            <p th:replace=":: roleText">Ваша роль: доктор Терапевт</p>
             <svg viewBox="0 0 24 24" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M8.816 1.321c.815-.816 1.941-1.321 3.184-1.321 1.251 0 2.384.512 3.2 1.338 4.056.308 5.687 1.739 7.382 8.486.664.463 1.418 1.436 1.418 3.489 0 1.765-.986 3.991-3.139 4.906-2.348 3.731-5.484 5.781-8.861 5.781-3.377 0-6.513-2.05-8.862-5.781-2.153-.915-3.138-3.141-3.138-4.906 0-2.053.753-3.026 1.417-3.489 1.732-6.779 3.38-8.213 7.399-8.503zm5.584 16.679h-4.8c.004.012.682 1.884 2.4 1.884 1.782 0 2.396-1.872 2.4-1.884zm5.235-11h-3.894c-.807 1.206-2.182 2-3.741 2-1.559 0-2.934-.794-3.741-2h-3.923c-.222.631-.412 1.304-.58 2-.179.746.964.954.917 1.733-.044.722-.76.953-1.421.661-.184-.082-.469-.079-.673.053-1 .651-.893 4.184 1.554 5.012 1 .339 2.579 3.361 4.288.432.591-1.012 2.455-1.126 3.579-.322 1.123-.804 2.988-.69 3.578.322 1.709 2.929 3.288-.093 4.288-.432 2.448-.828 2.554-4.361 1.554-5.012-.235-.152-.531-.115-.672-.053-.661.293-1.36.094-1.374-.629-.016-.818 1.114-.871.89-1.765-.168-.669-.389-1.356-.629-2zm-3.885 2c-1.124 0-2.094.629-2.607 1.546-.373-.116-.744-.174-1.143-.174s-.77.058-1.143.174c-.513-.917-1.483-1.546-2.607-1.546-1.654 0-3 1.346-3 3s1.346 3 3 3c1.231 0 2.285-.748 2.747-1.811.245-.566.394-1.301 1.003-1.301.609 0 .758.735 1.003 1.301.462 1.063 1.516 1.811 2.747 1.811 1.654 0 3-1.346 3-3s-1.346-3-3-3zm0 4.5c-.828 0-1.5-.672-1.5-1.5s.672-1.5 1.5-1.5 1.5.672 1.5 1.5-.672 1.5-1.5 1.5zm-7.5 0c-.828 0-1.5-.672-1.5-1.5s.672-1.5 1.5-1.5 1.5.672 1.5 1.5-.672 1.5-1.5 1.5zm3.75-11.5c1.38 0 2.5 1.12 2.5 2.5s-1.12 2.5-2.5 2.5-2.5-1.12-2.5-2.5 1.12-2.5 2.5-2.5z"></path></svg>
         </div>
-        <div class="phase-container" th:classappend="${game.phaseIndex} == 3? 'active' : ''" id="phase-3">
-            <p class="middle-font-size light-font">Ваша роль: <span class="role-name middle-font-size">Доктор</span></p>
-            <p class="instruction middle-font-size light-font">Вы плохой доктор. Вы советуете своим пациентам те лекарства, которые дадут вам наибольшую комиссию.</p>
+
+        <!-- SEND INSTRUCTION PHASE -->
+        <div class="phase-container"
+             th:classappend="${game.phaseIndex} == 3? 'active' : ''"
+             th:with="role = ${playerData == null ? T(com.name.brief.model.games.roleplay.DoctorRole).DOCTOR_1 : playerData.role}"
+             id="send-instructions-phase">
+            <p class="middle-font-size light-font" th:fragment="roleText">
+                Ваша роль: <span class="role-name middle-font-size bold"
+                                 th:text="${role.russianName}">Доктор</span>
+            </p>
+            <div class="instruction middle-font-size light-font"
+               th:fragment="roleInstruction"
+               th:utext="${role.instruction}"></div>
         </div>
-        <div class="phase-container" th:classappend="${game.phaseIndex} == 4? 'active' : ''" id="phase-4">
+
+        <!-- CROSSING PHASE -->
+        <div class="phase-container centered-phase-container"
+             th:classappend="(${game.phaseIndex} == 4 or ${game.phaseIndex} == 7) ? 'active' : ''"
+             id="crossing-phase">
             <p class="middle-font-size light-font">Направляйтесь в</p>
             <p class="middle-font-size light-font">Поликлинику <span class="hospital-number big-font-size">1</span>, кабинет <span class="room-number big-font-size">2</span></p>
         </div>
-        <div class="phase-container" th:classappend="${game.phaseIndex} == 5? 'active' : ''" id="phase-5">
+
+        <!-- GAME PHASE -->
+        <div class="phase-container"
+             th:classappend="(${game.phaseIndex} == 5 or ${game.phaseIndex} == 8) ? 'active' : ''"
+             id="game-phase">
             <h2 class="timer">05:00</h2>
         </div>
-        <div class="phase-container" th:classappend="${game.phaseIndex} == 6? 'active' : ''" id="phase-6">
+
+        <!-- SURVEY SALESMAN PHASE -->
+        <div class="phase-container"
+             th:classappend="((${playerData} != null and ${playerData.role.class.simpleName == 'SalesmanRole'})
+                             and (${game.phaseIndex} == 6 or ${game.phaseIndex} == 9)) ? 'active' : ''"
+             id="salesman-survey-phase">
             <h2 class="timer">05:00</h2>
             <p class="direction-instruction"></p>
-            <div class="survey">
-                <p class="middle-font-size light-font">Оцените качество работы мед преда</p>
-                <input type="range" min="0" max="10" step="1" value="5">
-                <p class="middle-font-size light-font">Оцените качество работы мед преда</p>
-                <input type="range" min="0" max="10" step="1" value="5">
-                <p class="middle-font-size light-font">Оцените качество работы мед преда</p>
-                <input type="range" min="0" max="10" step="1" value="5">
-                <p class="middle-font-size light-font">Оцените качество работы мед преда</p>
-                <input type="range" min="0" max="10" step="1" value="5">
+            <div class="survey survey-salesman">
+                <p class="survey-heading">Контрольные вопросы</p>
+                <div th:each="salesManAnswer : ${T(com.name.brief.model.games.roleplay.SalesmanAnswerType).values()}"
+                     th:remove="tag">
+                    <p class="light-font"
+                       th:text="${salesManAnswer.russianQuestion}"></p>
+                    <input type="number" max="100" min="0"
+                           th:class="${salesManAnswer.cssClassName + '-input big-font-size'}">
+                </div>
             </div>
-            <button id="send-responses-btn">Отправить</button>
+            <button class="send-responses-btn salesman-send-responses-btn">Отправить</button>
         </div>
-        <div class="phase-container" th:classappend="${game.phaseIndex} == 7? 'active' : ''" id="phase-7">
-            <p class="middle-font-size">Ожидайте пока на вас заполнят очень важную анкету.</p>
+
+
+        <!-- SURVEY DOCTOR PHASE -->
+        <div class="phase-container"
+             th:classappend="((${playerData} != null and ${playerData.role.class.simpleName == 'DoctorRole'})
+                             and (${game.phaseIndex} == 6 or ${game.phaseIndex} == 9)) ? 'active' : ''"
+             th:with="roundIndex = ${game.phaseIndex == 6 ? 0 : 1}"
+             id="doctor-survey-phase">
+            <h2 class="timer">05:00</h2>
+            <div class="survey">
+                <div th:each="competency : ${T(com.name.brief.model.games.roleplay.SalesmanCompetency).values()}"
+                     th:class="${'expertise-estimation expertise-estimation-' + competency.cssClassName}">
+                    <div class="expertise-estimation-heading">
+                        <p th:text="${competency.russianName}" class="middle-font-size"></p>
+                        <div class="back-line"></div>
+                    </div>
+                    <div class="expertise-estimation-answer-variants">
+                        <div class="ee-answer-variant low middle-font-size animated">-1</div>
+                        <div class="ee-answer-variant mid middle-font-size animated">0</div>
+                        <div class="ee-answer-variant high middle-font-size animated">1</div>
+                    </div>
+                </div>
+                <textarea class="comments-input middle-font-size" placeholder="Пожелания к улучшению (не обязательно)"></textarea>
+            </div>
+            <button class="send-responses-btn doctor-send-responses-btn">Отправить</button>
         </div>
-        <div class="phase-container" id="results-chart">
+
+        <!-- DRUGS DISTRIBUTION PHASE -->
+        <div class="phase-container centered-phase-container"
+             th:classappend="(${playerData} != null and ${playerData.role.class.simpleName == 'DoctorRole'})
+                             and ${game.phaseIndex} == 10 ? 'active' : ''"
+             id="drugs-distribution-phase">
+            <p class="light-font middle-font-size">Распределите упаковки между медицинскими представителями</p>
+            <p class="bold underlined middle-font-size drugs-distribution-help-btn">Инструкция</p>
+            <div class="popup-wrapper hidden drugs-distribution-help-popup">
+                <div class="popup">
+                    <div class="popup-back"></div>
+                    <div class="popup-content">
+                        <p class="middle-font-size light-font">Распределите 12 упаковок между медицинскими представителями, которые сегодня к вам приходили.</p>
+                        <br>
+                        <p class="middle-font-size light-font">Общая сумма может и не достигать 12. Например, первому МП вы можете отдать 0 упаковок, а второму 4.</p>
+                        <br>
+                        <p class="middle-font-size light-font">Общая сумма не может быть больше 12.</p>
+                        <p class="middle-font-size light-font close-popup-btn">Ок</p>
+                    </div>
+                </div>
+            </div>
+            <div class="drugs-distribution-grid">
+                <div th:each="i : ${#numbers.sequence(0, __${game.numberOfRounds - 1}__)}"
+                     th:remove="tag">
+                    <p class="middle-font-size light-font" th:text="${'Визит ' + (i + 1)}"></p>
+                    <input class="big-font-size drugs-distribution-input" type="number" max="12" min="0">
+                </div>
+            </div>
+            <button class="send-responses-btn drugs-distribution-send-responses-btn">Отправить</button>
+        </div>
+
+        <!-- EXPECTATION PHASE -->
+        <div class="phase-container"
+             th:classappend="(${playerData} != null and ${playerData.role.class.simpleName == 'SalesmanRole'})
+                             and ${game.phaseIndex} == 10 ? 'active' : ''"
+             id="expectation-phase">
+        </div>
+
+        <!-- SALESMAN RESULTS PHASE -->
+        <div class="phase-container"
+             th:classappend="(${playerData} != null and ${playerData.role.class.simpleName == 'SalesmanRole'})
+                             and ${game.phaseIndex} == 11 ? 'active' : ''"
+             id="salesman-results-phase">
+            <p class="middle-font-size light-font">Вы заработали <span class="big-font-size bold">42</span> балла</p>
+            <p class="middle-font-size bold">Компетенции</p>
+            <div class="competencies-results-grid">
+                <div th:each="competency : ${T(com.name.brief.model.games.roleplay.SalesmanCompetency).values()}"
+                     th:remove="tag">
+                    <p class="middle-font-size light-font"
+                       th:text="${competency.russianName + ': '}"></p>
+                    <p th:class="'middle-font-size bold ' + ${competency.cssClassName} + '-result'"
+                       th:text="${T(com.name.brief.utils.RolePlayStatisticsUtils).getAverageOnCompetencyFormatted(competency, playerData)}"></p>
+                </div>
+            </div>
+            <div class="round-results-wrapper">
+                <div class="round-results-slider">
+                    <div th:each="roundIndex : ${#numbers.sequence(0, __${game.numberOfRounds - 1}__)}"
+                         th:class="'round-results round-results-' + ${roundIndex}">
+                        <p class="middle-font-size bold" th:text="${'Раунд ' + (roundIndex + 1)}"></p>
+                        <div th:each="salesmanAnswerType : ${T(com.name.brief.model.games.roleplay.SalesmanAnswerType).values()}"
+                             th:remove="tag">
+                            <p class="middle-font-size bold" th:text="${salesmanAnswerType.russianName}"></p>
+                            <div class="salesman-answer-result-grid">
+                                <p class="small-font-size light-font">Ваш ответ:</p>
+                                <p th:class="'light-font middle-font-size ' + ${salesmanAnswerType.cssClassName + '-player-answer'}"
+                                   th:text="${T(com.name.brief.utils.RolePlayStatisticsUtils)
+                                            .getPlayerAnswer(salesmanAnswerType, playerData, roundIndex)}">Ваш ответ:</p>
+                                <p class="small-font-size light-font">Правильный ответ:</p>
+                                <p th:class="'light-font middle-font-size ' + ${salesmanAnswerType.cssClassName + '-correct-answer'}"
+                                   th:text="${T(com.name.brief.utils.RolePlayStatisticsUtils)
+                                            .getCorrectAnswerFormatted(salesmanAnswerType, playerData, roundIndex)}">Правильный ответ:</p>
+                                <p class="light-font light-font">Процент попадания:</p>
+                                <p class="light-font small-font-size success-rate-wrapper"
+                                   th:classappend="${'success-rate-' + T(com.name.brief.utils.RolePlayStatisticsUtils)
+                                            .getCssClassOfSuccessRate(salesmanAnswerType, playerData, roundIndex)}">
+                                <span th:class="'light-font middle-font-size ' + ${salesmanAnswerType.cssClassName + '-success-rate'}"
+                                      th:text="${T(com.name.brief.utils.RolePlayStatisticsUtils)
+                                            .getSuccessRate(salesmanAnswerType, playerData, roundIndex)}"></span>%</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="comments">
+                <p class="bold middle-font-size">Комментарии докторов:</p>
+                <p class="light-font middle-font-size comment comment-template hidden"></p>
+                <p class="light-font middle-font-size comment"
+                   th:each="comment : ${playerData.comments}"
+                   th:if="${comment.text != ''}"
+                   th:text="${comment.text}"></p>
+                <p class="light-font small-font-size comment">Комментарий первого доктора о моей прическе</p>
+                <p class="light-font small-font-size comment">Комментарий второго доктора о моих навыках продаж</p>
+            </div>
+        </div>
+
+        <!-- AVERAGE RESULTS PHASE -->
+        <div class="phase-container"
+             th:classappend="(${playerData} != null and ${playerData.role.class.simpleName == 'DoctorRole'})
+                             and ${game.phaseIndex} == 11 ? 'active' : ''"
+             id="average-results-phase">
+
+        </div>
+
+        <!-- DISCUSSION PHASE -->
+        <div class="phase-container"
+             th:classappend="${game.phaseIndex} == 12 ? 'active' : ''"
+             id="discussion-phase">
+            <h1>Результаты</h1>
+        </div>
+
+        <!-- CHANGE ROLES PHASE -->
+        <div class="phase-container"
+             th:classappend="${game.phaseIndex} == 13 ? 'active' : ''"
+             id="change-roles-phase">
             <h1>Результаты</h1>
         </div>
 
@@ -91,7 +264,7 @@
                         <form th:action="@{/game/logout}" method="post">
                             <div class="popup-button-line">
                                 <button type="submit">Да</button>
-                                <button class="close-popup-btn">Нет</button>
+                                <button type="button" class="close-popup-btn">Нет</button>
                             </div>
                         </form>
 

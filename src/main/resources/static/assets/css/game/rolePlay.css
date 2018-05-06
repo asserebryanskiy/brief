@@ -1,23 +1,41 @@
 .phase-container {
     display: block;
+    margin-top: 80px;
 }
 
-#phase-2, #phase-3 {
+.centered-phase-container {
+    margin: auto;
+}
+
+.timer {
+    position: fixed;
+    top: 45px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.instant-message {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 30px 10px;
+    z-index: 10;
+    text-align: left;
+    background-color: #bcb3bb;
+}
+
+.instant-message.success {
+    background-color: #4a9d61;
+    color: white;
+}
+
+#send-roles-phase, #send-instructions-phase {
     text-align: left;
     padding: 20px;
 }
 
-#phase-2 p,
-#phase-3 p {
-    font-family: "Circe Light", serif;
-}
-
-#phase-2 .role-name,
-#phase-3 .role-name {
-    font-family: "Circe Bold", serif;
-}
-
-#phase-2 svg {
+#send-roles-phase svg {
     width: 100%;
     height: 100px;
     margin: 50px auto 0;
@@ -25,14 +43,6 @@
 
 #phase-6 {
     margin-top: 80px;
-}
-
-.big-font-size {
-    font-size: 40px;
-}
-
-.middle-font-size {
-    font-size: 20px;
 }
 
 .instruction {
@@ -47,102 +57,252 @@
     color: #2c9d1c;
 }
 
-.survey {
-    padding: 0 30px;
-}
-
-.survey p {
-    margin-top: 20px;
-}
-
 #send-responses-btn {
     margin-top: 20px;
 }
 
-input[type=range] {
-    -webkit-appearance: none;
-    width: 100%;
-    margin: 7.3px 0;
-}
-input[type=range]:focus {
-    outline: none;
-}
-input[type=range]::-webkit-slider-runnable-track {
-    width: 100%;
-    height: 8.4px;
-    cursor: pointer;
-    box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
-    background: #3071a9;
-    border-radius: 1.3px;
-    border: 0.2px solid #010101;
-}
-input[type=range]::-webkit-slider-thumb {
-    box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
-    border: 1px solid #000000;
-    height: 23px;
-    width: 16px;
-    border-radius: 3px;
-    background: #ffffff;
-    cursor: pointer;
-    -webkit-appearance: none;
-    margin-top: -7.5px;
-}
-input[type=range]:focus::-webkit-slider-runnable-track {
-    background: #367ebd;
-}
-input[type=range]::-moz-range-track {
-    width: 100%;
-    height: 8.4px;
-    cursor: pointer;
-    box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
-    background: #3071a9;
-    border-radius: 1.3px;
-    border: 0.2px solid #010101;
-}
-input[type=range]::-moz-range-thumb {
-    box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
-    border: 1px solid #000000;
-    height: 23px;
-    width: 16px;
-    border-radius: 3px;
-    background: #ffffff;
-    cursor: pointer;
-}
-input[type=range]::-ms-track {
-    width: 100%;
-    height: 8.4px;
-    cursor: pointer;
-    background: transparent;
-    border-color: transparent;
-    color: transparent;
-}
-input[type=range]::-ms-fill-lower {
-    background: #2a6495;
-    border: 0.2px solid #010101;
-    border-radius: 2.6px;
-    box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
-}
-input[type=range]::-ms-fill-upper {
-    background: #3071a9;
-    border: 0.2px solid #010101;
-    border-radius: 2.6px;
-    box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
-}
-input[type=range]::-ms-thumb {
-    box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
-    border: 1px solid #000000;
-    height: 23px;
-    width: 16px;
-    border-radius: 3px;
-    background: #ffffff;
-    cursor: pointer;
-    height: 8.4px;
-}
-input[type=range]:focus::-ms-fill-lower {
-    background: #3071a9;
-}
-input[type=range]:focus::-ms-fill-upper {
-    background: #367ebd;
+/*********************************
+*            SURVEY              *
+**********************************/
+
+.survey .survey-heading {
+    text-align: center;
+    margin: 10px;
 }
 
+/*********************************
+*       SALESMAN'S SURVEY        *
+**********************************/
 
+.survey-salesman {
+    text-align: left;
+    width: 100%;
+    padding: 10px;
+}
+
+.survey-salesman input {
+    width: 100px;
+    border: none;
+    border-bottom: #4e3549 1px solid;
+    text-align: center;
+    color: #4e3549;
+    margin: 0 auto 10px;
+    display: block;
+}
+
+/*********************************
+*      EXPERTISE-ESTIMATION      *
+**********************************/
+
+.expertise-estimation {
+    padding: 10px 10px 0;
+    width: 100%;
+}
+
+.expertise-estimation-heading {
+    position: relative;
+}
+
+.expertise-estimation-heading p {
+    padding: 0 10px;
+    position: relative;
+    z-index: 1;
+    background: #fff;
+    display: inline-block;
+}
+
+.expertise-estimation-heading .back-line {
+    height: 1px;
+    background-color: #4e3549;
+    width: 100%;
+    position: absolute;
+    top: 50%;
+}
+
+.expertise-estimation-answer-variants {
+    display: flex;
+    padding: 10px 0;
+}
+
+.ee-answer-variant {
+    padding: 5px;
+    flex-grow: 1;
+    text-align: center;
+    opacity: 0.35;
+}
+
+.ee-answer-variant:first-child {
+    border-radius: 4px 0 0 4px;
+}
+
+.ee-answer-variant:last-child {
+    border-radius: 0 4px 4px 0;
+}
+
+.low {
+    background-color: tomato;
+    color: white;
+}
+
+.mid {
+    background-color: #fff11f;
+}
+
+.high {
+    background-color: #4a9d61;
+}
+
+.ee-answer-variant.selected {
+    opacity: 1;
+}
+
+.comments-input {
+    width: calc(100% - 20px);
+    padding: 10px;
+    margin: 20px 10px 10px;
+    height: 100px;
+    background-color: #e3dae2;
+    color: #4e3549;
+    border-radius: 2px;
+}
+
+/*********************************
+*       DRUGS DISTRIBUTION       *
+**********************************/
+
+#drugs-distribution-phase {
+    padding: 10px 20px;
+    text-align: left;
+}
+
+.drugs-distribution-help-btn {
+    text-align: center;
+    margin: 20px;
+}
+
+.drugs-distribution-help-popup .popup-content {
+    width: 90%;
+    text-align: left;
+}
+
+.drugs-distribution-help-popup .close-popup-btn {
+    padding: 10px 0;
+    border: #4e3549 1px solid;
+    margin: 20px auto 0;
+    text-align: center;
+    border-radius: 4px;
+    width: 100px;
+}
+
+.drugs-distribution-grid {
+    max-width: 200px;
+    margin: 20px auto;
+    display: grid;
+    grid-template-columns: 1fr 70px;
+    grid-row-gap: 10px;
+    align-items: center;
+}
+
+.drugs-distribution-grid input {
+    text-align: center;
+    border: none;
+    border-bottom: #4e3549 1px solid;
+    color: #4e3549;
+}
+
+#drugs-distribution-phase .send-responses-btn {
+    margin: 30px auto;
+    display: block;
+}
+
+/*********************************
+*            RESULTS             *
+**********************************/
+
+#salesman-results-phase {
+    padding: 0 10px;
+}
+
+.competencies-results-grid {
+    margin-top: 10px;
+    display: grid;
+    grid-template-rows: repeat(4, auto);
+    grid-template-columns: 1fr 50px;
+    text-align: left;
+    grid-column-gap: 20px;
+}
+
+.salesman-answer-result-grid {
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-columns: repeat(3, 32%);
+    grid-template-rows: repeat(2, auto);
+    width: calc(100vw - 40px);
+    flex: 0 0 auto;
+}
+
+.round-results-wrapper {
+    margin-top: 10px;
+    width: calc(100vw - 50px);
+    position: relative;
+}
+
+.round-results-slider {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+}
+
+.success-rate-top {
+    color: goldenrod;
+}
+
+.success-rate-high {
+    color: #4a9d61;
+}
+
+.success-rate-nearly-high {
+    color: #86bd72;
+}
+
+.success-rate-mid {
+    color: #efdf02;
+}
+
+.success-rate-low {
+    color: #E86444;
+}
+
+.success-rate-very-low {
+    color: #e80404;
+}
+
+.comments {
+    text-align: left;
+    margin-top: 10px;
+}
+
+.comment:not(:last-child) {
+    border-bottom: #4e3549 1px solid;
+    margin-bottom: 10px;
+}
+
+/*********************************
+*          MEDIA QUERIES         *
+**********************************/
+
+@media (min-width: 500px) {
+    .survey {
+        max-width: 400px;
+    }
+
+    #phase-6-0, #phase-6-1 {
+        margin: auto;
+    }
+}
+
+@media (max-height: 630px) {
+    #drugs-distribution-phase {
+        margin-top: 80px;
+    }
+}

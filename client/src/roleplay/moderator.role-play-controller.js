@@ -30,8 +30,6 @@ export default class RolePlayController {
         const $phase = $(event.currentTarget);
         if ($phase.hasClass('next') || $phase.hasClass('previous')) {
             // if phase is SEND_ROLES prevent starting new phase if number of players is odd
-            console.log($phase);
-            console.log(this.phases);
             if (GameSessionUtils.getPhaseOrder($phase) === this.phases["SEND_ROLES"]
                 && $('.player').not('.player-template').length % 2 !== 0) {
                 $('.odd-number-of-players-popup').show();

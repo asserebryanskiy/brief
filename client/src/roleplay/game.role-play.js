@@ -10,24 +10,27 @@ const controller = new RolePlayController(wsService);
 
 function onWsConnect() {
     // subscribe to: instructions, phase change
-    wsService.subscribe('/queue/rolePlay/player/' + playerId + '/instructions', (message) => {
-        const json = JSON.parse(message.body);
-        $('.role-name').text(json['roleName']);
-        $('.instruction').text(json['instruction']);
+    const playerQueue = '/queue/rolePlay/player/' + playerId;
+    wsService.subscribe(playerQueue + '/instructions', (message) => {
+        RolePlayController.handleInstructionMessageReceived(message);
     });
 
-    wsService.subscribe('/queue/rolePlay/player/' + playerId + '/crossing', (message) => {
+    wsService.subscribe(playerQueue + '/crossing', (message) => {
         const json = JSON.parse(message.body);
         $('.hospital-number').text(parseInt(json['hospital']) + 1);
         $('.room-number').text(parseInt(json['room']) + 1);
     });
 
     wsService.subscribe('/topic/game/' + gameId + '/changePhase', (message) => {
-        controller.changePhaseByName(message.body);
+        RolePlayController.changePhaseByName(message.body);
     });
 
-    wsService.subscribe('/queue/rolePlay/player/' + playerId + '/changePhase', (message) => {
-        controller.changePhaseByName(message.body);
+    wsService.subscribe(playerQueue + '/changePhase', (message) => {
+        RolePlayController.changePhaseByName(message.body);
+    });
+
+    wsService.subscribe(playerQueue + '/yourResults', (message) => {
+        RolePlayController.handleSalesmanResultsReceived(message);
     });
 
     // subscribe on results
@@ -42,5 +45,14 @@ $('.phase-container.active').show();
 $('.logout-text').click(() => {
     $('.logout-popup').show();
 });
+
+$('.ee-answer-variant').click((event) => controller.handleEeAnswerVariantClick(event));
+$('.doctor-send-responses-btn').click(() => controller.handleDoctorAnswerSend());
+$('.salesman-send-responses-btn').click(() => controller.handleSalesmanAnswerSend());
+$('.drugs-distribution-help-btn').click(() => RolePlayController.handleOpenDrugDistributionHelpPopup());
+$('.popup-back').click(() => $('.popup-wrapper').hide());
+$('.close-popup-btn').click(() => $('.popup-wrapper').hide());
+$('.drugs-distribution-input').on('input', (event) => controller.handleDrugsDistributionInputChange(event));
+$('.drugs-distribution-send-responses-btn').click(() => controller.sendDrugsDistribution())
 
 wsService.connect(onWsConnect);

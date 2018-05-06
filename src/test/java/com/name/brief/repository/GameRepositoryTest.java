@@ -5,7 +5,7 @@ import com.name.brief.model.Player;
 import com.name.brief.model.Role;
 import com.name.brief.model.games.Brief;
 import com.name.brief.model.games.Game;
-import com.name.brief.model.games.roleplay.DoctorRolesSet;
+import com.name.brief.model.games.roleplay.PlayerData;
 import com.name.brief.model.games.roleplay.RolePlay;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,6 +15,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static org.hamcrest.Matchers.hasSize;
@@ -41,5 +42,16 @@ public class GameRepositoryTest {
         entityManager.persist(session);
 
         assertThat(repository.findOne(game.getId()).getGameSession().getPlayers(), hasSize(1));
+    }
+
+    @Test
+    public void name() {
+        RolePlay game = new RolePlay();
+        game.getPlayersData().add(new PlayerData());
+
+        repository.save(game);
+
+        List<PlayerData> playersData = ((RolePlay) repository.findOne(game.getId())).getPlayersData();
+        assertThat(playersData.get(0).getDoctorEstimation().keySet(), hasSize(4));
     }
 }

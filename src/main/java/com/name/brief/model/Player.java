@@ -38,6 +38,7 @@ public class Player extends BaseEntity implements UserDetails{
     private String name;
     private String surname;
     private String commandName;
+    private boolean lastAdded;
 
     public Player() {
         super();

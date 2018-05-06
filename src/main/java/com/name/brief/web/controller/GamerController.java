@@ -3,8 +3,13 @@ package com.name.brief.web.controller;
 import com.name.brief.model.Decision;
 import com.name.brief.model.GameSession;
 import com.name.brief.model.Player;
+import com.name.brief.model.games.roleplay.DoctorRole;
+import com.name.brief.model.games.roleplay.PlayerData;
+import com.name.brief.model.games.roleplay.RolePlay;
+import com.name.brief.model.games.roleplay.SalesmanRole;
 import com.name.brief.service.GameSessionService;
 import com.name.brief.service.PlayerAuthenticationService;
+import com.name.brief.utils.RolePlayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -43,6 +48,12 @@ public class GamerController {
         model.addAttribute("playerId", player.getId());
         if (!gameSession.timerIsRunning()) {
             model.addAttribute("disableAnswerSend", true);
+        }
+
+        if (gameSession.getGame() instanceof RolePlay) {
+            PlayerData data = new PlayerData();
+            data.setRole(DoctorRole.DOCTOR_1);
+            model.addAttribute("playerData", data);
         }
 
         return "game/" + gameSession.getGame().getEnglishName();

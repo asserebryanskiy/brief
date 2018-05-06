@@ -4,13 +4,14 @@ import com.name.brief.config.SecurityConfig;
 import com.name.brief.model.*;
 import com.name.brief.model.games.AuthenticationType;
 import com.name.brief.model.games.Brief;
-import com.name.brief.model.games.Game;
 import com.name.brief.model.games.RiskMap;
 import com.name.brief.model.games.roleplay.RolePlay;
-import com.name.brief.model.games.riskmap.RiskMapType;
+import com.name.brief.model.games.roleplay.SalesmanCompetency;
 import com.name.brief.repository.GameRepository;
 import com.name.brief.repository.UserRepository;
 import com.name.brief.service.GameSessionService;
+import com.name.brief.service.RolePlayService;
+import com.name.brief.web.dto.DoctorAnswerDto;
 import com.name.brief.web.dto.PlayerLoginDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
@@ -29,12 +30,16 @@ public class DevDatabaseLoader implements ApplicationRunner {
 
     private final GameSessionService gameSessionService;
     private final UserRepository userRepository;
+    private final GameRepository gameRepository;
+    private final RolePlayService rolePlayService;
 
     @Autowired
     public DevDatabaseLoader(GameSessionService gameSessionService,
-                             UserRepository userRepository) {
+                             UserRepository userRepository, GameRepository gameRepository, RolePlayService rolePlayService) {
         this.gameSessionService = gameSessionService;
         this.userRepository = userRepository;
+        this.gameRepository = gameRepository;
+        this.rolePlayService = rolePlayService;
     }
 
     @Override
@@ -90,8 +95,20 @@ public class DevDatabaseLoader implements ApplicationRunner {
         gameSessionService.save(riskMap);
         gameSessionService.save(rolePlay);
 
-        PlayerLoginDto dto = new PlayerLoginDto();
-        dto.setGameSessionStrId(session.getStrId());
-        gameSessionService.addPlayer(dto, rolePlay);
+//        PlayerLoginDto dto = new PlayerLoginDto();
+//        dto.setGameSessionStrId(session.getStrId());
+//        gameSessionService.addPlayer(dto, rolePlay);
+//        gameSessionService.addPlayer(dto, rolePlay);
+//
+//        rolePlayService.changePhase(2, rolePlay.getGame().getId());
+//        rolePlayService.changePhase(3, rolePlay.getGame().getId());
+//        DoctorAnswerDto doctorAnswerDto = new DoctorAnswerDto();
+//        doctorAnswerDto.getExpertiseEstimations().put(SalesmanCompetency.KNOWLEDGE.getCssClassName(), "high");
+//        rolePlayService.saveDoctorAnswers(
+//                rolePlay.getGame().getId(),
+//                doctorAnswerDto,
+//                gameSessionService.getSession(rolePlay.getId()).getPlayers().get(0).getId()
+//        );
+
     }
 }
