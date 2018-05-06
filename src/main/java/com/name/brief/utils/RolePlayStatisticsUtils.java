@@ -1,9 +1,7 @@
 package com.name.brief.utils;
 
-import com.name.brief.model.games.roleplay.PlayerData;
-import com.name.brief.model.games.roleplay.RolePlayComment;
-import com.name.brief.model.games.roleplay.SalesmanAnswerType;
-import com.name.brief.model.games.roleplay.SalesmanCompetency;
+import com.name.brief.model.games.roleplay.*;
+import com.name.brief.web.dto.AverageStatisticsDto;
 import com.name.brief.web.dto.SalesmanStatisticsDto;
 
 import java.util.ArrayList;
@@ -17,6 +15,10 @@ public class RolePlayStatisticsUtils {
                 .average()
                 .orElse(0.0);
 
+        return formatAverage(average);
+    }
+
+    private static String formatAverage(double average) {
         return String.format("%.2f", average);
     }
 
@@ -47,30 +49,14 @@ public class RolePlayStatisticsUtils {
         return new int[]{bottomBorder, topBorder};
     }
 
-    public static int getSuccessRate(SalesmanAnswerType answerType, PlayerData data, int roundIndex) {
-        int correctAnswer = getCorrectAnswer(answerType, data, roundIndex);
+    public static int getError(SalesmanAnswerType answerType, PlayerData data, int roundIndex) {
         int playerAnswer = getPlayerAnswer(answerType, data, roundIndex);
-        if (playerAnswer == correctAnswer) {
-            return 100;
-        }
+        int[] correctAnswerBorders = getCorrectAnswerBorders(answerType, data, roundIndex);
 
-        // compute difference between correct answer and given one
-        int diff = Math.abs(correctAnswer - playerAnswer);
-
-        // compute and return the relation
-        if (correctAnswer == 0 || diff == 0) {
-            if (diff == 1) return 80;
-            if (diff == 2) return 60;
-            if (diff < 5) return 40;
-            if (diff < 7) return 20;
-            else return 0;
-        } else {
-            return 100 - Math.round(((float) diff / (float) correctAnswer) * 100);
-        }
-    }
-
-    private static int getCorrectAnswer(SalesmanAnswerType answerType, PlayerData data, int roundIndex) {
-        return data.getAnswersAsSalesman().get(answerType).getCorrectAnswersPerRound().get(roundIndex);
+        if (playerAnswer > correctAnswerBorders[0] && playerAnswer < correctAnswerBorders[1])
+            return 0;
+        if (playerAnswer < correctAnswerBorders[0]) return correctAnswerBorders[0] - playerAnswer;
+        else return playerAnswer - correctAnswerBorders[1];
     }
 
     /**
@@ -84,13 +70,13 @@ public class RolePlayStatisticsUtils {
      * @param data - player data, that contains answers and correct answers
      * @return css class appropriate to player's error rate.
      */
-    public static String getCssClassOfSuccessRate(SalesmanAnswerType answerType, PlayerData data, int roundIndex) {
+    public static String getCssClassOfError(SalesmanAnswerType answerType, PlayerData data, int roundIndex) {
         int playerAnswer = getPlayerAnswer(answerType, data, roundIndex);
         int[] correctAnswerBoundaries = getCorrectAnswerBorders(answerType, data, roundIndex);
 
         // top level is one that lies in correct answer boundaries
         if (playerAnswer >= correctAnswerBoundaries[0]
-                && playerAnswer <= correctAnswerBoundaries[1]) return "top";
+                && playerAnswer <= correctAnswerBoundaries[1]) return "very-low";
 
         // compute difference from given answer and nearest boundary
         int diff;
@@ -99,15 +85,75 @@ public class RolePlayStatisticsUtils {
         else diff = playerAnswer - correctAnswerBoundaries[1];
 
         // depending on diff apply class
-        return getSuccessRateCssClass(diff);
+        return getErrorCssClass(diff);
     }
 
-    private static String getSuccessRateCssClass(int diff) {
-        if (diff == 1) return "high";
-        if (diff == 2) return "nearly-high";
-        if (diff < 5) return "mid";
-        if (diff < 7) return "low";
-        else return "very-low";
+    public static int getAverageError(SalesmanAnswerType answerType, RolePlay game) {
+        double average = game.getPlayersData().stream()
+                .filter(data -> data.getRole() instanceof SalesmanRole)
+                .mapToDouble(data -> {
+                    int sumOfRoundAvg = 0;
+                    int numberOfRounds = game.getNumberOfRounds();
+                    for (int i = 0; i < numberOfRounds; i++) {
+                        sumOfRoundAvg += getError(answerType, data, i);
+                    }
+                    return (double) sumOfRoundAvg / (double) numberOfRounds;
+                }).average().orElse(0.0);
+
+        return (int) Math.round(average);
+    }
+
+    public static String getAverageErrorCssClass(SalesmanAnswerType answerType, RolePlay game) {
+        int avg = getAverageError(answerType, game);
+
+        if (avg <= 1) return "very-low";
+        if (avg == 2) return "low";
+        if (avg == 3) return "mid";
+        if (avg < 5) return "nearly-high";
+        if (avg < 7) return "high";
+        else return "very-high";
+    }
+
+    public static String getAverageAmongAllFormatted(SalesmanCompetency competency, RolePlay game) {
+        double average = game.getPlayersData().stream()
+                .filter(data -> data.getRole() instanceof SalesmanRole)
+                .map(data -> data.getDoctorEstimation().get(competency))
+                .flatMap(data -> data.getResults().stream())
+                .mapToInt(i -> i)
+                .average()
+                .orElse(0.0);
+
+        return formatAverage(average);
+    }
+
+    private static String getErrorCssClass(int diff) {
+        if (diff == 1) return "low";
+        if (diff == 2) return "mid";
+        if (diff < 5) return "nearly-high";
+        if (diff < 7) return "high";
+        else return "very-high";
+    }
+
+    public static AverageStatisticsDto createAverageStatisticsDto(RolePlay game) {
+        AverageStatisticsDto dto = new AverageStatisticsDto();
+
+        Arrays.stream(SalesmanCompetency.values()).forEach(competency ->
+                dto.getAverageCompetenciesResults().put(
+                        competency.getCssClassName(),
+                        getAverageAmongAllFormatted(competency, game))
+        );
+
+        Arrays.stream(SalesmanAnswerType.values()).forEach(answerType -> {
+                dto.getAverageError().put(
+                        answerType.getCssClassName(),
+                        getAverageError(answerType, game));
+                dto.getAverageErrorCssClass().put(
+                        answerType.getCssClassName(),
+                        getAverageErrorCssClass(answerType, game));
+                }
+        );
+
+        return dto;
     }
 
     public static SalesmanStatisticsDto createSalesmanStatisticsDto(PlayerData playerData) {
@@ -126,8 +172,8 @@ public class RolePlayStatisticsUtils {
             // initialize data structures
             List<Integer> playerAnswers = new ArrayList<>(numberOfRounds);
             List<String> correctAnswers = new ArrayList<>(numberOfRounds);
-            List<Integer> successRate = new ArrayList<>(numberOfRounds);
-            List<String> successRateCssClass = new ArrayList<>(numberOfRounds);
+            List<Integer> error = new ArrayList<>(numberOfRounds);
+            List<String> errorCssClass = new ArrayList<>(numberOfRounds);
 
             // add data for every round
             for (int i = 0; i < numberOfRounds; i++) {
@@ -138,17 +184,17 @@ public class RolePlayStatisticsUtils {
                 correctAnswers.add(getCorrectAnswerFormatted(answerType, playerData, i));
 
                 // add success percentage
-                successRate.add(getSuccessRate(answerType, playerData, i));
+                error.add(getError(answerType, playerData, i));
 
                 // add success percentage result css class
-                successRateCssClass.add(getCssClassOfSuccessRate(answerType, playerData, i));
+                errorCssClass.add(getCssClassOfError(answerType, playerData, i));
             }
 
             // add to dto
             dto.getPlayerAnswersPerRound().put(answerType.getCssClassName(), playerAnswers);
             dto.getCorrectAnswersPerRound().put(answerType.getCssClassName(), correctAnswers);
-            dto.getSuccessRatePerRound().put(answerType.getCssClassName(), successRate);
-            dto.getSuccessRateCssClassPerRound().put(answerType.getCssClassName(), successRateCssClass);
+            dto.getErrorPerRound().put(answerType.getCssClassName(), error);
+            dto.getErrorCssClassPerRound().put(answerType.getCssClassName(), errorCssClass);
         });
 
         // add comments

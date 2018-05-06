@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static com.name.brief.utils.RolePlayStatisticsUtils.createAverageStatisticsDto;
 import static com.name.brief.utils.RolePlayStatisticsUtils.createSalesmanStatisticsDto;
 import static com.name.brief.utils.RolePlayUtils.*;
 
@@ -107,6 +108,7 @@ public class RolePlayServiceImpl implements RolePlayService {
                     Long playerId = data.getPlayer().getId();
                     if (data.getRole() instanceof DoctorRole) {
                         sendToPlayer("changePhase", playerId,"RESULTS_AVERAGE");
+                        sendToPlayer("averageResults", playerId, createAverageStatisticsDto(game));
                     } else {
                         sendToPlayer("yourResults", playerId, createSalesmanStatisticsDto(data));
                         sendToPlayer("changePhase", playerId, "RESULTS_SALESMAN");

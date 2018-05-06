@@ -33,6 +33,10 @@ function onWsConnect() {
         RolePlayController.handleSalesmanResultsReceived(message);
     });
 
+    wsService.subscribe(playerQueue + '/averageResults', (message) => {
+        RolePlayController.handleAverageAnswersReceived(message);
+    });
+
     // subscribe on results
 
     $('.preloader').fadeOut();

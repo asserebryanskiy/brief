@@ -173,6 +173,7 @@
              id="expectation-phase">
         </div>
 
+
         <!-- SALESMAN RESULTS PHASE -->
         <div class="phase-container"
              th:classappend="(${playerData} != null and ${playerData.role.class.simpleName == 'SalesmanRole'})
@@ -185,7 +186,7 @@
                      th:remove="tag">
                     <p class="middle-font-size light-font"
                        th:text="${competency.russianName + ': '}"></p>
-                    <p th:class="'middle-font-size bold ' + ${competency.cssClassName} + '-result'"
+                    <p th:class="'middle-font-size bold ' + ${competency.cssClassName} + '-player-result'"
                        th:text="${T(com.name.brief.utils.RolePlayStatisticsUtils).getAverageOnCompetencyFormatted(competency, playerData)}"></p>
                 </div>
             </div>
@@ -206,13 +207,13 @@
                                 <p th:class="'light-font middle-font-size ' + ${salesmanAnswerType.cssClassName + '-correct-answer'}"
                                    th:text="${T(com.name.brief.utils.RolePlayStatisticsUtils)
                                             .getCorrectAnswerFormatted(salesmanAnswerType, playerData, roundIndex)}">Правильный ответ:</p>
-                                <p class="light-font light-font">Процент попадания:</p>
-                                <p class="light-font small-font-size success-rate-wrapper"
-                                   th:classappend="${'success-rate-' + T(com.name.brief.utils.RolePlayStatisticsUtils)
-                                            .getCssClassOfSuccessRate(salesmanAnswerType, playerData, roundIndex)}">
-                                <span th:class="'light-font middle-font-size ' + ${salesmanAnswerType.cssClassName + '-success-rate'}"
-                                      th:text="${T(com.name.brief.utils.RolePlayStatisticsUtils)
-                                            .getSuccessRate(salesmanAnswerType, playerData, roundIndex)}"></span>%</p>
+                                <p class="light-font light-font">Ошибка:</p>
+                                <p th:class="'light-font middle-font-size ' + ${salesmanAnswerType.cssClassName + '-error'}"
+                                   th:text="${T(com.name.brief.utils.RolePlayStatisticsUtils)
+                                            .getError(salesmanAnswerType, playerData, roundIndex)}"
+                                   th:classappend="${'error-' + T(com.name.brief.utils.RolePlayStatisticsUtils)
+                                            .getCssClassOfError(salesmanAnswerType, playerData, roundIndex)}">
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -235,7 +236,28 @@
              th:classappend="(${playerData} != null and ${playerData.role.class.simpleName == 'DoctorRole'})
                              and ${game.phaseIndex} == 11 ? 'active' : ''"
              id="average-results-phase">
-
+            <p class="bold middle-font-size">Средний балл по компетенциям</p>
+            <div class="competencies-results-grid">
+                <div th:each="competency : ${T(com.name.brief.model.games.roleplay.SalesmanCompetency).values()}"
+                     th:remove="tag">
+                    <p class="middle-font-size light-font"
+                       th:text="${competency.russianName + ': '}"></p>
+                    <p th:class="'middle-font-size bold ' + ${competency.cssClassName} + '-average-result'"
+                       th:text="${T(com.name.brief.utils.RolePlayStatisticsUtils).getAverageAmongAllFormatted(competency, game)}"></p>
+                </div>
+            </div>
+            <p class="bold middle-font-size">Средняя ошибка</p>
+            <div class="average-results-grid">
+                <div th:each="salesmanAnswerType : ${T(com.name.brief.model.games.roleplay.SalesmanAnswerType).values()}"
+                     th:remove="tag">
+                    <p class="light-font middle-font-size" th:text="${salesmanAnswerType.russianName}"></p>
+                    <p th:class="'bold middle-font-size ' + ${salesmanAnswerType.cssClassName + '-average-error'}"
+                       th:classappend="${'error-' + T(com.name.brief.utils.RolePlayStatisticsUtils)
+                                            .getAverageErrorCssClass(salesmanAnswerType, game)}"
+                       th:text="${T(com.name.brief.utils.RolePlayStatisticsUtils)
+                                            .getAverageError(salesmanAnswerType, game)}"></p>
+                </div>
+            </div>
         </div>
 
         <!-- DISCUSSION PHASE -->

@@ -219,17 +219,24 @@
 *            RESULTS             *
 **********************************/
 
-#salesman-results-phase {
+#salesman-results-phase,
+#average-results-phase {
     padding: 0 10px;
 }
 
-.competencies-results-grid {
+#average-results-phase > p {
+    margin-top: 10px;
+}
+
+.competencies-results-grid,
+.average-results-grid {
     margin-top: 10px;
     display: grid;
     grid-template-rows: repeat(4, auto);
     grid-template-columns: 1fr 50px;
     text-align: left;
     grid-column-gap: 20px;
+    align-items: center;
 }
 
 .salesman-answer-result-grid {
@@ -253,28 +260,28 @@
     overflow-x: auto;
 }
 
-.success-rate-top {
-    color: goldenrod;
+.error-very-high {
+    color: #e80404;
 }
 
-.success-rate-high {
-    color: #4a9d61;
-}
-
-.success-rate-nearly-high {
-    color: #86bd72;
-}
-
-.success-rate-mid {
-    color: #efdf02;
-}
-
-.success-rate-low {
+.error-high {
     color: #E86444;
 }
 
-.success-rate-very-low {
-    color: #e80404;
+.error-nearly-high {
+    color: #ff8302;
+}
+
+.error-mid {
+    color: #efdf02;
+}
+
+.error-low {
+    color: #86bd72;
+}
+
+.error-very-low {
+    color: #4a9d61;
 }
 
 .comments {

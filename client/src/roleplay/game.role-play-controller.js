@@ -147,7 +147,7 @@ export default class RolePlayController {
 
         // set competencies average
         for (let competency in dto.competenciesAverage) {
-            $('.' + competency + '-result').text(dto.competenciesAverage[competency]);
+            $('.' + competency + '-player-result').text(dto.competenciesAverage[competency]);
         }
 
         // set survey answers
@@ -159,12 +159,11 @@ export default class RolePlayController {
                     .text(dto.playerAnswersPerRound[answerType][i]);
                 $roundResults.find('.' + answerType + '-correct-answer')
                     .text(dto.correctAnswersPerRound[answerType][i]);
-                const $successRate = $roundResults.find('.' + answerType + '-success-rate');
-                $successRate.text(dto.successRatePerRound[answerType][i])
-                    .parents('.success-rate-wrapper')
-                    .removeClass('success-rate-top success-rate-high success-rate-nearly-high success-rate-mid ' +
-                        'success-rate-low success-rate-very-low')
-                    .addClass('success-rate-' + dto.successRateCssClassPerRound[answerType][i]);
+                $roundResults.find('.' + answerType + '-error')
+                    .text(dto.errorPerRound[answerType][i])
+                    .removeClass('error-very-high error-high error-nearly-high error-mid ' +
+                        'error-low error-very-low')
+                    .addClass('error-' + dto.errorCssClassPerRound[answerType][i]);
             }
         }
 
@@ -179,5 +178,22 @@ export default class RolePlayController {
                     .removeClass('hidden comment-template');
             }
         })
+    }
+
+    static handleAverageAnswersReceived(message) {
+        const dto = JSON.parse(message.body);
+
+        // set competencies average
+        for (let competency in dto.averageCompetenciesResults) {
+            $('.' + competency + '-average-result').text(dto.averageCompetenciesResults[competency]);
+        }
+
+        // set success rates average
+        for (let answerType in dto.averageError) {
+            $('.' + answerType + '-average-error').text(dto.averageError[answerType])
+                .removeClass('error-very-high error-high error-nearly-high error-mid ' +
+                    'error-low error-very-low')
+                .addClass('error-' + dto.averageErrorCssClass[answerType]);
+        }
     }
 }
