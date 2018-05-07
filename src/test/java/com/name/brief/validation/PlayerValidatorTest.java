@@ -72,7 +72,6 @@ public class PlayerValidatorTest {
 
     @Test
     public void construction_withLoggedInCommandNameResultsInConstraintsViolation() {
-        player.setLoggedIn(true);
         List<Player> players = Collections.singletonList(player);
         session.setPlayers(players);
         given(service.getSession(session.getStrId(), session.getActiveDate())).willReturn(session);

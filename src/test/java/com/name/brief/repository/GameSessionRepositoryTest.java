@@ -65,11 +65,11 @@ public class GameSessionRepositoryTest {
         entityManager.flush();
 
         Player player = session.getPlayers().get(0);
-        player.setLoggedIn(true);
+        player.setUsername("user");
         repository.save(session);
         GameSession found = repository.findOne(session.getId());
 
-        assertThat(found.getPlayers().get(0).isLoggedIn(), is(true));
+        assertThat(found.getPlayers().get(0).getUsername(), is("user"));
     }
 
     @Test
