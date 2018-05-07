@@ -144,7 +144,8 @@
              th:classappend="(${playerData} != null and ${playerData.role.class.simpleName == 'DoctorRole'})
                              and ${game.phaseIndex} == 10 ? 'active' : ''"
              id="drugs-distribution-phase">
-            <p class="light-font middle-font-size">Распределите упаковки между медицинскими представителями</p>
+            <h2 class="timer">00:00</h2>
+            <p class="light-font middle-font-size">Распределите 12 упаковок между медицинскими представителями</p>
             <p class="bold underlined middle-font-size drugs-distribution-help-btn">Инструкция</p>
             <div class="popup-wrapper hidden drugs-distribution-help-popup">
                 <div class="popup">
@@ -183,7 +184,7 @@
              th:classappend="(${playerData} != null and ${playerData.role.class.simpleName == 'SalesmanRole'})
                              and ${game.phaseIndex} == 11 ? 'active' : ''"
              id="salesman-results-phase">
-            <p class="middle-font-size light-font">Вы заработали <span class="big-font-size bold">42</span> балла</p>
+            <!--<p class="middle-font-size light-font">Вы заработали <span class="big-font-size bold">42</span> балла</p>-->
             <p class="middle-font-size bold">Компетенции</p>
             <div class="competencies-results-grid">
                 <div th:each="competency : ${T(com.name.brief.model.games.roleplay.SalesmanCompetency).values()}"
@@ -240,7 +241,7 @@
              th:classappend="(${playerData} != null and ${playerData.role.class.simpleName == 'DoctorRole'})
                              and ${game.phaseIndex} == 11 ? 'active' : ''"
              id="average-results-phase">
-            <p class="bold middle-font-size">Средний балл по компетенциям</p>
+            <p class="bold middle-font-size">Средний балл по компетенциям всех медицнских представителей</p>
             <div class="competencies-results-grid">
                 <div th:each="competency : ${T(com.name.brief.model.games.roleplay.SalesmanCompetency).values()}"
                      th:remove="tag">
