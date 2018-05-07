@@ -21,7 +21,9 @@ export default class RolePlayController {
             else                       $phase.addClass('next');
         }
 
-        // timer will start from the server
+        // hide add-30-sec buttons and show timers
+        $('.add-30-sec-btn').hide();
+        $('.timer').show();
     }
 
     handlePhaseClick(event) {
@@ -60,7 +62,9 @@ export default class RolePlayController {
         $timer.text(TimerUtils.convertToTimerString(min, sec));
     }
 
-    handle30secBtnClick() {
-        this.wsService.sendToApp('add30sec', '');
+    handle30secBtnClick(event) {
+        if ($(event.currentTarget).parents('phase').hasClass('active')) {
+            this.wsService.sendToApp('add30sec', '');
+        }
     }
 }

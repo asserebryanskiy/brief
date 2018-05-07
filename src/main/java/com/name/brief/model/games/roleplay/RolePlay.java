@@ -47,7 +47,7 @@ public class RolePlay extends Game {
                 new Phase("Формирование игры","FORM_GAME", false),
                 new Phase("Подключение участников","CONNECT_PLAYERS", false),
                 new Phase("Распределение ролей","SEND_ROLES", false),
-                new Phase("Инструкция","SEND_INSTRUCTION", false),
+                new Phase("Инструкция","SEND_INSTRUCTION", true, Duration.ofSeconds(420)),
                 new Phase("Переход участников","CROSSING", false),
                 new Phase("Игра", "GAME", true, Duration.ofSeconds(300)),
                 new Phase("Анкета", "SURVEY", true, Duration.ofSeconds(120)),

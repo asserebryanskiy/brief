@@ -66,6 +66,7 @@
              th:classappend="${game.phaseIndex} == 3? 'active' : ''"
              th:with="role = ${playerData == null ? T(com.name.brief.model.games.roleplay.DoctorRole).DOCTOR_1 : playerData.role}"
              id="send-instructions-phase">
+            <h2 class="timer">00:00</h2>
             <p class="middle-font-size light-font" th:fragment="roleText">
                 Ваша роль: <span class="role-name middle-font-size bold"
                                  th:text="${role.russianName}">Доктор</span>
@@ -87,7 +88,7 @@
         <div class="phase-container"
              th:classappend="(${game.phaseIndex} == 5 or ${game.phaseIndex} == 8) ? 'active' : ''"
              id="game-phase">
-            <h2 class="timer">05:00</h2>
+            <h2 class="timer">00:00</h2>
             <div class="instruction middle-font-size light-font"
                  th:with="role = ${playerData == null ? T(com.name.brief.model.games.roleplay.DoctorRole).DOCTOR_1 : playerData.role}"
                  th:utext="${role.instruction}"></div>
@@ -98,7 +99,7 @@
              th:classappend="((${playerData} != null and ${playerData.role.class.simpleName == 'SalesmanRole'})
                              and (${game.phaseIndex} == 6 or ${game.phaseIndex} == 9)) ? 'active' : ''"
              id="salesman-survey-phase">
-            <h2 class="timer">05:00</h2>
+            <h2 class="timer">00:00</h2>
             <p class="direction-instruction"></p>
             <div class="survey survey-salesman">
                 <p class="survey-heading">Контрольные вопросы</p>
@@ -120,7 +121,7 @@
                              and (${game.phaseIndex} == 6 or ${game.phaseIndex} == 9)) ? 'active' : ''"
              th:with="roundIndex = ${game.phaseIndex == 6 ? 0 : 1}"
              id="doctor-survey-phase">
-            <h2 class="timer">02:00</h2>
+            <h2 class="timer">00:00</h2>
             <div class="survey">
                 <div th:each="competency : ${T(com.name.brief.model.games.roleplay.SalesmanCompetency).values()}"
                      th:class="${'expertise-estimation expertise-estimation-' + competency.cssClassName}">

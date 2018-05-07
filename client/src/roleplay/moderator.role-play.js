@@ -28,5 +28,5 @@ function onWsConnect() {
 wsService.connect(onWsConnect);
 
 $('.phase').click((event) => controller.handlePhaseClick(event));
-$('.phase.active .add-30-sec-btn').click(() => controller.handle30secBtnClick())
+$('.add-30-sec-btn').click((event) => controller.handle30secBtnClick(event));
 
