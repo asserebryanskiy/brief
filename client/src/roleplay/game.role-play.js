@@ -41,6 +41,10 @@ function onWsConnect() {
         RolePlayController.handleTimerMessageReceived(message);
     });
 
+    wsService.subscribe(playerQueue + '/logout', (message) => {
+        RolePlayController.handleLogout();
+    });
+
     // subscribe on results
 
     $('.preloader').fadeOut();

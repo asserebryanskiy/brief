@@ -3,9 +3,6 @@ package com.name.brief.web.controller;
 import com.name.brief.exception.OddNumberOfPlayersException;
 import com.name.brief.exception.WrongGameTypeException;
 import com.name.brief.model.Player;
-import com.name.brief.model.games.Phase;
-import com.name.brief.model.games.roleplay.RolePlay;
-import com.name.brief.service.GameSessionService;
 import com.name.brief.service.RolePlayService;
 import com.name.brief.web.dto.DoctorAnswerDto;
 import com.name.brief.web.dto.DrugDistributionDto;
@@ -14,7 +11,7 @@ import com.name.brief.web.dto.SalesmanAnswerDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 
@@ -24,10 +21,13 @@ import java.security.Principal;
 public class RolePlayController {
 
     private final RolePlayService rolePlayService;
+    private final SimpMessagingTemplate template;
 
     @Autowired
-    public RolePlayController(RolePlayService rolePlayService) {
+    public RolePlayController(RolePlayService rolePlayService,
+                              SimpMessagingTemplate template) {
         this.rolePlayService = rolePlayService;
+        this.template = template;
     }
 
     @MessageMapping("/rolePlay/{gameId}/rolePlaySettings")
@@ -78,5 +78,11 @@ public class RolePlayController {
     @MessageMapping("/rolePlay/{gameId}/add30sec")
     public void add30secondsToTimer(@DestinationVariable Long gameId) {
         rolePlayService.add30sec(gameId);
+    }
+
+    @MessageMapping("/rolePlay/{gameId}/logoutPlayer")
+    public void logoutPlayer(@DestinationVariable Long gameId, String username) {
+        String id = username.substring(6);
+        template.convertAndSend("/queue/rolePlay/player/" + id + "/logout", "");
     }
 }

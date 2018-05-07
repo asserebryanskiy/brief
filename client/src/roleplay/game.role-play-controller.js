@@ -252,4 +252,8 @@ export default class RolePlayController {
         const $timer = $('.timer:visible');
         return $timer.length && $timer.text() !== '00:00';
     }
+
+    static handleLogout() {
+        $('.logout-form').submit();
+    }
 }

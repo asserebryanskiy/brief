@@ -65,7 +65,8 @@ public class PlayerAuthenticationServiceImpl implements PlayerAuthenticationServ
 
     @Override
     public boolean isLoggedIn(Player player) {
-        return sessionRegistry.getAllSessions(player, false).size() > 0;
+        return sessionRegistry.getAllSessions(
+                player, false).size() > 0;
     }
 
     @Override

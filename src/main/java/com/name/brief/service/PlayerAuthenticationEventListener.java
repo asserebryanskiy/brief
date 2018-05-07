@@ -7,18 +7,25 @@ import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.session.SessionDestroyedEvent;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.messaging.SessionConnectedEvent;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
+
+import java.util.List;
 
 @Component
 public class PlayerAuthenticationEventListener implements ApplicationListener<ApplicationEvent> {
 
     private final SimpMessagingTemplate template;
+    private final GameSessionService gameSessionService;
 
     @Autowired
-    public PlayerAuthenticationEventListener(SimpMessagingTemplate template) {
+    public PlayerAuthenticationEventListener(SimpMessagingTemplate template,
+                                             GameSessionService gameSessionService) {
         this.template = template;
+        this.gameSessionService = gameSessionService;
     }
 
     @Override
@@ -35,6 +42,15 @@ public class PlayerAuthenticationEventListener implements ApplicationListener<Ap
                     .getPrincipal();
             if (principal instanceof Player) {
                 sendToClient(PlayerConnectionDto.PlayerConnectionInstruction.DISCONNECT, (Player) principal);
+            }
+        }
+        if (event instanceof SessionDestroyedEvent) {
+            List<SecurityContext> contexts = ((SessionDestroyedEvent) event).getSecurityContexts();
+            if (!contexts.isEmpty()) {
+                Object principal = contexts.get(0).getAuthentication().getPrincipal();
+                if (principal instanceof Player) {
+                    gameSessionService.removePlayer((Player) principal);
+                }
             }
         }
             /*if (event instanceof AuthenticationSuccessEvent) {

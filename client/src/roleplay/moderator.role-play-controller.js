@@ -67,4 +67,11 @@ export default class RolePlayController {
             this.wsService.sendToApp('add30sec', '');
         }
     }
+
+    handleLogoutPlayer(event) {
+        const id = event.currentTarget.id;
+        console.log(id);
+        const playerId = id.slice(0, id.indexOf('-logout'));
+        this.wsService.sendToApp('logoutPlayer', playerId);
+    }
 }

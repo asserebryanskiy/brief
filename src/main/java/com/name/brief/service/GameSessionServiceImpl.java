@@ -5,6 +5,9 @@ import com.name.brief.exception.GameSessionNotFoundException;
 import com.name.brief.model.GameSession;
 import com.name.brief.model.Player;
 import com.name.brief.model.games.AuthenticationType;
+import com.name.brief.model.games.Game;
+import com.name.brief.model.games.roleplay.RolePlay;
+import com.name.brief.repository.GameRepository;
 import com.name.brief.repository.GameSessionRepository;
 import com.name.brief.repository.PlayerRepository;
 import com.name.brief.utils.TimeConverter;
@@ -23,12 +26,15 @@ public class GameSessionServiceImpl implements GameSessionService {
     private final GameSessionRepository gameSessionRepository;
     private final PlayerRepository playerRepository;
     private PlayerAuthenticationService playerAuthenticationService;
+    private final GameRepository gameRepository;
 
     @Autowired
     public GameSessionServiceImpl(GameSessionRepository gameSessionRepository,
-                                  PlayerRepository playerRepository) {
+                                  PlayerRepository playerRepository,
+                                  GameRepository gameRepository) {
         this.gameSessionRepository = gameSessionRepository;
         this.playerRepository = playerRepository;
+        this.gameRepository = gameRepository;
     }
 
     @Autowired
@@ -161,6 +167,11 @@ public class GameSessionServiceImpl implements GameSessionService {
     public void removePlayer(Player player) {
         GameSession gameSession = gameSessionRepository.findOne(player.getGameSession().getId());
         gameSession.getPlayers().removeIf(p -> p.getId().equals(player.getId()));
+        Game game = gameSession.getGame();
+        if (game instanceof RolePlay) {
+            ((RolePlay) game).getPlayersData().removeIf(data ->
+                    data.getPlayer().getId().equals(player.getId()));
+        }
         gameSessionRepository.save(gameSession);
     }
 

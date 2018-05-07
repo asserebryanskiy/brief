@@ -30,7 +30,7 @@ public class RolePlay extends Game {
             "Доктор - Медицинский представитель"
     };
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<PlayerData> playersData = new ArrayList<>();
     private int strategyNumber;
