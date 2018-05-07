@@ -2,4 +2,3 @@
 applications:
 # Application
 — name: igrator
-  command: java -jar build/libs/brief-0.0.1-SNAPSHOT.jar
