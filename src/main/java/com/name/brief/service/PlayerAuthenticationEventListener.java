@@ -19,12 +19,15 @@ import java.util.List;
 public class PlayerAuthenticationEventListener implements ApplicationListener<ApplicationEvent> {
 
     private final SimpMessagingTemplate template;
-    private final GameSessionService gameSessionService;
+    private GameSessionService gameSessionService;
 
     @Autowired
-    public PlayerAuthenticationEventListener(SimpMessagingTemplate template,
-                                             GameSessionService gameSessionService) {
+    public PlayerAuthenticationEventListener(SimpMessagingTemplate template) {
         this.template = template;
+    }
+
+    @Autowired
+    public void setGameSessionService(GameSessionService gameSessionService) {
         this.gameSessionService = gameSessionService;
     }
 
