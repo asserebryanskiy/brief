@@ -14,7 +14,7 @@
             <div class="error-message" th:if="${#fields.hasErrors('gameSession')}" th:errors="*{gameSession}"></div>
             <input type="text" placeholder="Номер команды" autocomplete="off" th:field="*{commandName}">
             <div class="error-message" th:if="${#fields.hasErrors('commandName')}" th:errors="*{commandName}"></div>
-            <div class="error-message" th:if="${#fields.hasErrors('loggedIn')}" th:errors="*{loggedIn}"></div>
+            <div class="error-message" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></div>
             <button type="submit">Войти</button>
             <!--<a th:href="@{/demo}" class="demo-anchor">Демо</a>-->
             <a th:href="@{/login/admin}">Войти как администратор</a>

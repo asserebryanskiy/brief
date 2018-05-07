@@ -31,7 +31,6 @@ public class Player extends BaseEntity implements UserDetails{
     private GameSession gameSession;
     @NotNull
     private String commandName;
-    private boolean loggedIn;
     @OneToMany(mappedBy = "player", cascade = CascadeType.ALL)
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<Decision> decisions;

@@ -47,7 +47,7 @@ public class PlayerValidator implements Validator {
                         .orElse(null);  // ignore because we've already checked that player exists
                 //noinspection ConstantConditions
                 if (playerAuthenticationService.isLoggedIn(found)) {
-                    errors.rejectValue("loggedIn", "player.validation.commandIsLoggedIn");
+                    errors.rejectValue("username", "player.validation.commandIsLoggedIn");
                 }
             }
         }
