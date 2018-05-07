@@ -53,7 +53,7 @@ public class RolePlay extends Game {
                 new Phase("Анкета", "SURVEY", true, Duration.ofSeconds(120)),
                 new Phase("Переход участников","CROSSING_2", false),
                 new Phase("Игра", "GAME_2", true, Duration.ofSeconds(300)),
-                new Phase("Анкета", "SURVEY_2", true, Duration.ofSeconds(120)),
+                new Phase("Анкета", "SURVEY_2", true, Duration.ofSeconds(10)),
                 new Phase("Распределение упаковок", "DRUGS_DISTRIBUTION", true, Duration.ofSeconds(120)),
                 new Phase("Результаты", "RESULTS", false),
                 new Phase("Обсуждение в командах", "DISCUSSION", false),

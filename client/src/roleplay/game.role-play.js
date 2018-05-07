@@ -55,13 +55,17 @@ $('.logout-text').click(() => {
 });
 
 $('.ee-answer-variant').click((event) => controller.handleEeAnswerVariantClick(event));
-$('.doctor-send-responses-btn').click(() => controller.handleDoctorAnswerSend());
-$('.salesman-send-responses-btn').click(() => controller.handleSalesmanAnswerSend());
 $('.drugs-distribution-help-btn').click(() => RolePlayController.handleOpenDrugDistributionHelpPopup());
 $('.popup-back').click(() => $('.popup-wrapper').hide());
 $('.close-popup-btn').click(() => $('.popup-wrapper').hide());
 $('.drugs-distribution-input').on('input', (event) => controller.handleDrugsDistributionInputChange(event));
-$('.drugs-distribution-send-responses-btn').click(() => controller.sendDrugsDistribution());
-$(window).scroll((event) => RolePlayController.handleScroll())
+
+// on answer-send
+$('.doctor-send-responses-btn').click(() => controller.handleDoctorAnswerSend());
+$('.salesman-send-responses-btn').click(() => controller.handleSalesmanAnswerSend());
+$('.drugs-distribution-send-responses-btn').click(() => controller.handleDrugsDistributionSend());
+
+// on scroll
+$(window).scroll(() => RolePlayController.handleScroll());
 
 wsService.connect(onWsConnect);

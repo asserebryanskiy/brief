@@ -32,13 +32,18 @@
     left: 0;
     width: 100%;
     padding: 30px 10px;
-    z-index: 10;
+    z-index: 11;
     text-align: left;
     background-color: #bcb3bb;
 }
 
 .instant-message.success {
     background-color: #4a9d61;
+    color: white;
+}
+
+.instant-message.failure {
+    background-color: tomato;
     color: white;
 }
 

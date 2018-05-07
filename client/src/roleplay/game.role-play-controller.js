@@ -5,6 +5,7 @@ import TimerUtils from "./TimerUtils";
 export default class RolePlayController {
     constructor(wsService) {
         this.wsService = wsService;
+        this.TIME_HAS_ENDED_TEXT = 'Время вышло. Отправка ответов заблокирована.';
     }
 
     static changePhaseByName(phaseName) {
@@ -78,10 +79,15 @@ export default class RolePlayController {
     }
 
     handleEeAnswerVariantClick(event) {
-        const $variant = $(event.currentTarget);
-        $variant.siblings('.ee-answer-variant').removeClass('selected');
-        $variant.addClass('selected');
-        this.sendDoctorAnswers();
+        console.log(RolePlayController.timerIsRunning());
+        if (RolePlayController.timerIsRunning()) {
+            const $variant = $(event.currentTarget);
+            $variant.siblings('.ee-answer-variant').removeClass('selected');
+            $variant.addClass('selected');
+            this.sendDoctorAnswers();
+        } else {
+            RolePlayController.addInstantMessage('Время вышло. Невозможно изменить ответы.', 'failure');
+        }
     }
 
     sendDoctorAnswers() {
@@ -89,8 +95,12 @@ export default class RolePlayController {
     }
 
     handleDoctorAnswerSend() {
-        this.sendDoctorAnswers();
-        RolePlayController.addInstantMessage('Ответы отправлены');
+        if (RolePlayController.timerIsRunning()) {
+            this.sendDoctorAnswers();
+            RolePlayController.addInstantMessage('Ответы отправлены', 'success');
+        } else {
+            RolePlayController.addInstantMessage(this.TIME_HAS_ENDED_TEXT, 'failure');
+        }
     }
 
     static handleInstructionMessageReceived(message) {
@@ -101,14 +111,19 @@ export default class RolePlayController {
     }
 
     handleSalesmanAnswerSend() {
-        this.wsService.sendToApp('salesman/answer', AnswerService.createSalesmanAnswerJson());
-        RolePlayController.addInstantMessage('Ответы отправлены');
+        if (RolePlayController.timerIsRunning()) {
+            this.wsService.sendToApp('salesman/answer', AnswerService.createSalesmanAnswerJson());
+            RolePlayController.addInstantMessage('Ответы отправлены', 'success');
+        } else {
+            RolePlayController.addInstantMessage(this.TIME_HAS_ENDED_TEXT, 'failure');
+        }
     }
 
-    static addInstantMessage(message) {
+    static addInstantMessage(message, statusClass) {
         $('.instant-message')
             .text(message)
-            .addClass('success')
+            .removeClass('success failure')
+            .addClass(statusClass)
             .slideDown()
             .delay(2000)
             .slideUp();
@@ -132,6 +147,14 @@ export default class RolePlayController {
         }
     }
 
+    handleDrugsDistributionSend() {
+        if (RolePlayController.timerIsRunning()) {
+            this.sendDrugsDistribution();
+        } else {
+            RolePlayController.addInstantMessage(this.TIME_HAS_ENDED_TEXT, 'failure');
+        }
+    }
+
     sendDrugsDistribution() {
         let dto = {
             drugPackages: []
@@ -143,7 +166,7 @@ export default class RolePlayController {
         });
 
         this.wsService.sendToApp('drugDistribution', JSON.stringify(dto));
-        RolePlayController.addInstantMessage('Ответы отправлены')
+        RolePlayController.addInstantMessage('Ответы отправлены', 'success')
     }
 
     static handleSalesmanResultsReceived(message) {
@@ -223,5 +246,10 @@ export default class RolePlayController {
 
         // change timer text
         $timer.text(TimerUtils.convertToTimerString(min, sec));
+    }
+
+    static timerIsRunning() {
+        const $timer = $('.timer:visible');
+        return $timer.length && $timer.text() !== '00:00';
     }
 }
