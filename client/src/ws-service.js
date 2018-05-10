@@ -21,9 +21,10 @@ export default class WsService {
     }
 
     connect(onConnectionCallback) {
+        let stompClient = this.stompClient;
         function reconnect() {
-            location.reload();
-            /*let connected = false;
+            // location.reload();
+            let connected = false;
             let reconInv = setInterval(() => {
                 const socket = new SockJS('/websocket');
                 stompClient = Stomp.over(socket);
@@ -36,7 +37,7 @@ export default class WsService {
                         reconnect();
                     }
                 });
-            }, 1000);*/
+            }, 1000);
         }
 
         this.stompClient.connect({}, onConnectionCallback, () => reconnect());

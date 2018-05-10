@@ -64,6 +64,12 @@
     margin: 50px auto 0;
 }
 
+#send-roles-phase img {
+    display: block;
+    max-width: 200px;
+    margin: 10px auto;
+}
+
 #discussion-phase {
     padding: 0 10px;
 }
