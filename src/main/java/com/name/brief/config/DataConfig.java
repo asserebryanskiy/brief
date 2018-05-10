@@ -51,7 +51,7 @@ public class DataConfig {
     }
 
     @Bean
-    @Profile({"dev", "localPostgre", "none"})
+    @Profile({"dev", "localPostgre", "none", "ubuntu"})
     public DataSource dataSource() {
         BasicDataSource ds = new BasicDataSource();
         ds.setDriverClassName(env.getProperty("brief.db.driver"));

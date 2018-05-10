@@ -21,6 +21,10 @@ jar {
     version = '0.0.1-SNAPSHOT'
 }
 
+springBoot {
+    executable = true
+}
+
 //war {
 //    baseName = 'brief'
 //    version = '0.0.1-SNAPSHOT'
@@ -31,6 +35,8 @@ sourceCompatibility = 1.8
 repositories {
     mavenCentral()
 }
+
+def developmentMode = false
 
 dependencies {
     // spring boot
@@ -52,7 +58,6 @@ dependencies {
     compile 'org.hibernate:hibernate-core:5.2.13.Final'
     compile 'org.hibernate:hibernate-entitymanager:5.2.13.Final'
     compile 'org.hibernate:hibernate-java8:5.2.13.Final'
-//    compile 'org.postgresql:postgresql:42.2.1'
     compile 'org.apache.tomcat:tomcat-dbcp:8.0.30'
     compile 'org.apache.tomcat.embed:tomcat-embed-websocket:8.5.11'
     compile 'org.projectlombok:lombok:1.16.20'
@@ -60,9 +65,17 @@ dependencies {
     compile 'org.thymeleaf.extras:thymeleaf-extras-springsecurity4:2.1.2.RELEASE'
     compile 'org.thymeleaf.extras:thymeleaf-extras-java8time:2.1.0.RELEASE'
 
-    runtime 'com.h2database:h2'
+    // database
+    if (developmentMode) {
+        compile 'com.h2database:h2'
+    } else {
+        testCompile 'com.h2database:h2'
+        compile 'org.postgresql:postgresql:42.2.1'
+    }
+
     runtime 'javax.transaction:jta:1.1'
     runtime 'org.aspectj:aspectjweaver:1.8.7'
+
 
     testCompile 'junit:junit:4.12'
     testCompile 'org.hamcrest:hamcrest-all:1.3'
