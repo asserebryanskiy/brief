@@ -6,3 +6,4 @@
 /src/main/resources/static/assets/css/game/test.css
 /src/main/resources/templates/game/riskMapPages.html
 #/src/main/java/com/name/brief/HerokuDatabaseLoader.java
+/src/main/resources/application-ubuntu.properties
