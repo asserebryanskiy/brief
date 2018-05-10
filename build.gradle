@@ -52,7 +52,7 @@ dependencies {
     compile 'org.hibernate:hibernate-core:5.2.13.Final'
     compile 'org.hibernate:hibernate-entitymanager:5.2.13.Final'
     compile 'org.hibernate:hibernate-java8:5.2.13.Final'
-    compile 'org.postgresql:postgresql:42.2.1'
+//    compile 'org.postgresql:postgresql:42.2.1'
     compile 'org.apache.tomcat:tomcat-dbcp:8.0.30'
     compile 'org.apache.tomcat.embed:tomcat-embed-websocket:8.5.11'
     compile 'org.projectlombok:lombok:1.16.20'

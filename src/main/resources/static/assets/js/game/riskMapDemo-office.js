@@ -187,7 +187,8 @@ function toggleSelected(event) {
     if ($target.hasClass('selected')) {
         // add new indicator to img-cell
         const className = $target.hasClass('low-level') ? 'low-level'
-            : $target.hasClass('no-level') ? 'no-level'
+                : $target.hasClass('no-answer') ? 'no-answer'
+                : $target.hasClass('no-level') ? 'no-level'
                 : $target.hasClass('mid-level') ? 'mid-level' : 'high-level';
         $indicator.addClass(className);
     }
