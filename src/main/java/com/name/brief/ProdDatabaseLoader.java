@@ -10,11 +10,11 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 @Component
-@Profile("vm")
-public class VmDatabaseLoader implements ApplicationRunner {
+@Profile({"vm", "prod", "ubuntu"})
+public class ProdDatabaseLoader implements ApplicationRunner {
     private final UserRepository userRepository;
 
-    public VmDatabaseLoader(UserRepository userRepository) {
+    public ProdDatabaseLoader(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
