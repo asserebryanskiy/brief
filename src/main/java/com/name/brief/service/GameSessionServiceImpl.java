@@ -26,15 +26,12 @@ public class GameSessionServiceImpl implements GameSessionService {
     private final GameSessionRepository gameSessionRepository;
     private final PlayerRepository playerRepository;
     private PlayerAuthenticationService playerAuthenticationService;
-    private final PlayerDataRepository playerDataRepositoty;
 
     @Autowired
     public GameSessionServiceImpl(GameSessionRepository gameSessionRepository,
-                                  PlayerRepository playerRepository,
-                                  PlayerDataRepository playerDataRepositoty) {
+                                  PlayerRepository playerRepository) {
         this.gameSessionRepository = gameSessionRepository;
         this.playerRepository = playerRepository;
-        this.playerDataRepositoty = playerDataRepositoty;
     }
 
     @Autowired

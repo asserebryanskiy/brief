@@ -75,9 +75,9 @@ public class RolePlayUtilsTest {
             for (int j = 0; j < i; j++) {
                 if (j % 2 == 0) {
                     if (j % 4 == 0) {
-                        assertThat(game.getPlayersData().get(j).getRole(), is(DoctorRole.DOCTOR_2));
-                    } else {
                         assertThat(game.getPlayersData().get(j).getRole(), is(DoctorRole.DOCTOR_1));
+                    } else {
+                        assertThat(game.getPlayersData().get(j).getRole(), is(DoctorRole.DOCTOR_2));
                     }
                 } else {
                     assertThat(game.getPlayersData().get(j).getRole(), is(SalesmanRole.SALESMAN_1));
