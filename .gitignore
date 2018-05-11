@@ -7,3 +7,4 @@
 /src/main/resources/templates/game/riskMapPages.html
 #/src/main/java/com/name/brief/HerokuDatabaseLoader.java
 /src/main/resources/application-ubuntu.properties
+/src/main/java/com/name/brief/ProdDatabaseLoader.java
