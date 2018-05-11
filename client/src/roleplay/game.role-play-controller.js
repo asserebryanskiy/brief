@@ -1,6 +1,7 @@
 import $ from "jquery";
 import AnswerService from "./answer-service";
 import TimerUtils from "./TimerUtils";
+import * as M from "../../../src/main/resources/static/assets/materialize/js/materialize";
 
 export default class RolePlayController {
     constructor(wsService) {
@@ -55,6 +56,7 @@ export default class RolePlayController {
                 phaseId = 'doctor-survey-phase';
                 $('.ee-answer-variant').removeClass('selected');
                 $('.comments-input').val('');
+                M.textareaAutoResize($('#doctor-comments-textarea'));
                 break;
             case "RESULTS_AVERAGE":
                 phaseId = 'average-results-phase';
@@ -108,6 +110,8 @@ export default class RolePlayController {
         $('.role-name').text(json['roleName']);
         $('.instruction').empty()
             .append($.parseHTML(json['instruction']));
+        $('.game-start-text').text(json['gameStartText']);
+        $('.crossing-text').text(json['crossingText']);
     }
 
     handleSalesmanAnswerSend() {

@@ -5,7 +5,7 @@ import lombok.Data;
 import javax.persistence.Embeddable;
 
 @Embeddable
-public enum DoctorRole implements GameRole {
+public enum DoctorRole implements GameRole, PharmaRole {
     DOCTOR_1(
             "доктор Терапевт",
             "<p class=\"bold\">Кейс</p>Вы довольно часто назначаете для лечения и профилактики респираторных заболеваний травяные сборы, так как считаете, что естественные природные средства лучше воспринимаются организмом. При этом вы предпочитаете назначать смеси трав от другого производителя т.к. считаете, что их состав более стабилен и сбалансирован.\n" +
@@ -85,5 +85,15 @@ public enum DoctorRole implements GameRole {
 
     public int getRecipeStDeviation() {
         return recipeStDeviation;
+    }
+
+    @Override
+    public String getGameStartText() {
+        return "Примите медицинского представителя";
+    }
+
+    @Override
+    public String getCrossingText() {
+        return "Ожидайте медицинского представителя в";
     }
 }

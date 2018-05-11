@@ -2,6 +2,7 @@ import $ from 'jquery';
 import WsService from "../ws-service";
 import GameSessionUtils from "../game-session-utils";
 import RolePlayController from "./game.role-play-controller";
+import * as M from "../../vendor/materialize";
 
 const gameId = GameSessionUtils.getGameId();
 const playerId = GameSessionUtils.getPlayerId();
@@ -73,3 +74,9 @@ $('.drugs-distribution-send-responses-btn').click(() => controller.handleDrugsDi
 $(window).scroll(() => RolePlayController.handleScroll());
 
 wsService.connect(onWsConnect);
+
+// materialize initialization
+document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.modal');
+    var instances = M.Modal.init(elems, {});
+});

@@ -3,10 +3,7 @@ package com.name.brief.web.controller;
 import com.name.brief.model.Decision;
 import com.name.brief.model.GameSession;
 import com.name.brief.model.Player;
-import com.name.brief.model.games.roleplay.DoctorRole;
-import com.name.brief.model.games.roleplay.PlayerData;
-import com.name.brief.model.games.roleplay.RolePlay;
-import com.name.brief.model.games.roleplay.SalesmanRole;
+import com.name.brief.model.games.roleplay.*;
 import com.name.brief.service.GameSessionService;
 import com.name.brief.service.PlayerAuthenticationService;
 import com.name.brief.utils.RolePlayUtils;
@@ -57,6 +54,7 @@ public class GamerController {
             if (data == null) {
                 data = new PlayerData();
                 data.setRole(SalesmanRole.SALESMAN_1);
+                data.setLocation(new PlayerLocation(0,0));
             }
             model.addAttribute("playerData", data);
         }

@@ -10,14 +10,14 @@ h1 {
     font-size: 2em;
 }
 
-.container {
+/*.container {
     flex-direction: column;
     align-content: center;
     justify-content: center;
     overflow-x: auto;
     color: #4e3549;
     fill: #4E3549;
-}
+}*/
 
 /*********************************
 *             HEADER             *

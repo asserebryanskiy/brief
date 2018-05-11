@@ -2,17 +2,19 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <div th:include="appFragments :: headContent" th:remove="tag"></div>
+    <link rel="stylesheet" th:href="@{/assets/materialize/css/materialize.min.css}">
     <link rel="stylesheet" th:href="@{/assets/css/game/game.css}">
     <link rel="stylesheet" th:href="@{/assets/css/game/rolePlay.css}">
     <link rel="stylesheet" th:href="@{/assets/css/game/projector.css}" th:if="${projectorMode}">
     <title>МОЗ | Ролевая игра</title>
 </head>
-<body th:with="game = ${gameSession.game}">
+<body th:with="game = ${gameSession.game},
+               role = ${playerData == null ? T(com.name.brief.model.games.roleplay.DoctorRole).DOCTOR_1 : playerData.role}">
     <noscript th:replace="appFragments :: noscript"></noscript>
     <div th:replace="appFragments :: preloader"></div>
-    <p class="instant-message middle-font-size hidden"></p>
+    <p class="instant-message flow-text bold hidden"></p>
 
-    <div class="container">
+    <div class="page-content-wrapper">
         <div class="header">
             <img th:src="@{/assets/image/logo.png}" alt="logo">
             <div class="header-text-box">
@@ -55,7 +57,6 @@
         <!-- SEND ROLES PHASE -->
         <div class="phase-container centered-phase-container"
              th:classappend="${game.phaseIndex} == 2? 'active' : ''"
-             th:with="role = ${playerData == null ? T(com.name.brief.model.games.roleplay.DoctorRole).DOCTOR_1 : playerData.role}"
              id="send-roles-phase">
             <p th:replace=":: roleText">Ваша роль: доктор Терапевт</p>
             <img th:src="@{/assets/image/rolePlay/doctor_bad.jpeg}" alt="Доктор">
@@ -65,24 +66,33 @@
         <!-- SEND INSTRUCTION PHASE -->
         <div class="phase-container"
              th:classappend="${game.phaseIndex} == 3? 'active' : ''"
-             th:with="role = ${playerData == null ? T(com.name.brief.model.games.roleplay.DoctorRole).DOCTOR_1 : playerData.role}"
              id="send-instructions-phase">
             <h2 class="timer">00:00</h2>
-            <p class="middle-font-size light-font" th:fragment="roleText">
-                Ваша роль: <span class="role-name middle-font-size bold"
-                                 th:text="${role.russianName}">Доктор</span>
-            </p>
-            <div class="instruction middle-font-size light-font"
-               th:fragment="roleInstruction"
-               th:utext="${role.instruction}"></div>
+            <div class="container" th:fragment="roleAndInstruction">
+                <p class="flow-text light-font"
+                   th:fragment="roleText">
+                    Ваша роль: <span class="role-name flow-text bold"
+                                     th:text="${role.russianName}">Доктор</span>
+                </p>
+                <br>
+                <div class="instruction flow-text light-font"
+                     th:fragment="roleInstruction"
+                     th:utext="${role.instruction}"></div>
+            </div>
         </div>
 
         <!-- CROSSING PHASE -->
-        <div class="phase-container centered-phase-container"
+        <div class="phase-container centered-phase-container container"
              th:classappend="(${game.phaseIndex} == 4 or ${game.phaseIndex} == 7) ? 'active' : ''"
              id="crossing-phase">
-            <p class="middle-font-size light-font">Направляйтесь в</p>
-            <p class="middle-font-size light-font">Поликлинику <span class="hospital-number big-font-size">1</span>, кабинет <span class="room-number big-font-size">2</span></p>
+            <span class="flow-text light-font crossing-text"
+               th:text="${role.crossingText}">
+            </span>
+            <span class="hospital-number big-font-size"
+                  th:text="${playerData.location.hospital + 1}"></span>
+            <span class="flow-text light-font">, кабинет</span>
+            <span class="room-number big-font-size"
+                  th:text="${playerData.location.room + 1}">2</span>
         </div>
 
         <!-- GAME PHASE -->
@@ -90,9 +100,19 @@
              th:classappend="(${game.phaseIndex} == 5 or ${game.phaseIndex} == 8) ? 'active' : ''"
              id="game-phase">
             <h2 class="timer">00:00</h2>
-            <div class="instruction middle-font-size light-font"
-                 th:with="role = ${playerData == null ? T(com.name.brief.model.games.roleplay.DoctorRole).DOCTOR_1 : playerData.role}"
-                 th:utext="${role.instruction}"></div>
+            <div class="container">
+                <p th:text="${role.gameStartText}" class="left-align light-font flow-text game-start-text"></p>
+                <br>
+                <p class="flow-text light-font"
+                   th:fragment="roleText">
+                    Ваша роль: <span class="role-name flow-text bold"
+                                     th:text="${role.russianName}">Доктор</span>
+                </p>
+                <br>
+                <div class="instruction flow-text light-font"
+                     th:fragment="roleInstruction"
+                     th:utext="${role.instruction}"></div>
+            </div>
         </div>
 
         <!-- SURVEY SALESMAN PHASE -->
@@ -103,10 +123,10 @@
             <h2 class="timer">00:00</h2>
             <p class="direction-instruction"></p>
             <div class="survey survey-salesman">
-                <p class="survey-heading">Контрольные вопросы</p>
+                <p class="survey-heading flow-text bold">Контрольные вопросы</p>
                 <div th:each="salesManAnswer : ${T(com.name.brief.model.games.roleplay.SalesmanAnswerType).values()}"
                      th:remove="tag">
-                    <p class="light-font"
+                    <p class="light-font flow-text"
                        th:text="${salesManAnswer.russianQuestion}"></p>
                     <input type="number" max="100" min="0"
                            th:class="${salesManAnswer.cssClassName + '-input big-font-size'}">
@@ -116,26 +136,40 @@
         </div>
 
         <!-- SURVEY DOCTOR PHASE -->
-        <div class="phase-container"
+        <div class="phase-container container"
              th:classappend="((${playerData} != null and ${playerData.role.class.simpleName == 'DoctorRole'})
                              and (${game.phaseIndex} == 6 or ${game.phaseIndex} == 9)) ? 'active' : ''"
              th:with="roundIndex = ${game.phaseIndex == 6 ? 0 : 1}"
              id="doctor-survey-phase">
             <h2 class="timer">00:00</h2>
+            <p class="flow-text light-font left-aligned">Оцените компетенции МП по шкале от 1 до 3</p>
+            <a class="flow-text light-font underlined modal-trigger"
+               href="#doctor-survey-scale-description">Описание шкалы</a>
+            <div class="modal" id="doctor-survey-scale-description">
+                <div class="modal-content">
+                    <p class="light-font left-align">1 - компетенция развита слабо</p>
+                    <p class="light-font left-align">2 - компетенция развита хорошо</p>
+                    <p class="light-font left-align">3 - компетенция развита отлично</p>
+                </div>
+            </div>
             <div class="survey">
                 <div th:each="competency : ${T(com.name.brief.model.games.roleplay.SalesmanCompetency).values()}"
                      th:class="${'expertise-estimation expertise-estimation-' + competency.cssClassName}">
                     <div class="expertise-estimation-heading">
-                        <p th:text="${competency.russianName}" class="middle-font-size"></p>
+                        <p th:text="${competency.russianName}" class="flow-text bold"></p>
                         <div class="back-line"></div>
                     </div>
                     <div class="expertise-estimation-answer-variants">
-                        <div class="ee-answer-variant low middle-font-size animated">-1</div>
-                        <div class="ee-answer-variant mid middle-font-size animated">0</div>
-                        <div class="ee-answer-variant high middle-font-size animated">1</div>
+                        <div class="ee-answer-variant low flow-text animated">1</div>
+                        <div class="ee-answer-variant mid flow-text animated">2</div>
+                        <div class="ee-answer-variant high flow-text animated">3</div>
                     </div>
                 </div>
-                <textarea class="comments-input middle-font-size" placeholder="Пожелания к улучшению (не обязательно)"></textarea>
+                <div class="input-field">
+                    <textarea id="doctor-comments-textarea"
+                              class="comments-input flow-text materialize-textarea"></textarea>
+                    <label for="doctor-comments-textarea">Пожелания к улучшению (не обязательно)</label>
+                </div>
             </div>
             <button class="send-responses-btn doctor-send-responses-btn">Отправить</button>
         </div>
@@ -146,29 +180,43 @@
                              and ${game.phaseIndex} == 10 ? 'active' : ''"
              id="drugs-distribution-phase">
             <h2 class="timer">00:00</h2>
-            <p class="light-font middle-font-size">Распределите 12 упаковок между медицинскими представителями</p>
-            <p class="bold underlined middle-font-size drugs-distribution-help-btn">Инструкция</p>
-            <div class="popup-wrapper hidden drugs-distribution-help-popup">
-                <div class="popup">
-                    <div class="popup-back"></div>
-                    <div class="popup-content">
-                        <p class="middle-font-size light-font">Распределите 12 упаковок между медицинскими представителями, которые сегодня к вам приходили.</p>
+            <div class="container">
+                <p class="light-font flow-text center-align">Распределите 12 упаковок между медицинскими представителями</p>
+                <a class="bold underlined flow-text center-align modal-trigger" href="#drugs-distribution-modal">Инструкция</a>
+                <div class="modal" id="drugs-distribution-modal">
+                    <div class="modal-content">
+                        <p class="flow-text light-font left-align">Распределите 12 упаковок между медицинскими представителями, которые сегодня к вам приходили.</p>
                         <br>
-                        <p class="middle-font-size light-font">Общая сумма может и не достигать 12. Например, первому МП вы можете отдать 0 упаковок, а второму 4.</p>
+                        <p class="flow-text light-font left-align">Общая сумма может и не достигать 12. Например, первому МП вы можете отдать 0 упаковок, а второму 4.</p>
                         <br>
-                        <p class="middle-font-size light-font">Общая сумма не может быть больше 12.</p>
-                        <p class="middle-font-size light-font close-popup-btn">Ок</p>
+                        <p class="flow-text light-font left-align">Общая сумма не может быть больше 12.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <p class="flow-text light-font modal-close center-align">Ок</p>
                     </div>
                 </div>
-            </div>
-            <div class="drugs-distribution-grid">
-                <div th:each="i : ${#numbers.sequence(0, __${game.numberOfRounds - 1}__)}"
-                     th:remove="tag">
-                    <p class="middle-font-size light-font" th:text="${'Визит ' + (i + 1)}"></p>
-                    <input class="big-font-size drugs-distribution-input" type="number" max="12" min="0">
+                <div class="popup-wrapper hidden drugs-distribution-help-popup">
+                    <div class="popup">
+                        <div class="popup-back"></div>
+                        <div class="popup-content">
+                            <p class="flow-text light-font">Распределите 12 упаковок между медицинскими представителями, которые сегодня к вам приходили.</p>
+                            <br>
+                            <p class="flow-text light-font">Общая сумма может и не достигать 12. Например, первому МП вы можете отдать 0 упаковок, а второму 4.</p>
+                            <br>
+                            <p class="flow-text light-font">Общая сумма не может быть больше 12.</p>
+                            <p class="flow-text light-font close-popup-btn">Ок</p>
+                        </div>
+                    </div>
                 </div>
+                <div class="drugs-distribution-grid">
+                    <div th:each="i : ${#numbers.sequence(0, __${game.numberOfRounds - 1}__)}"
+                         th:remove="tag">
+                        <p class="flow-text light-font" th:text="${'Визит ' + (i + 1)}"></p>
+                        <input class="big-font-size drugs-distribution-input" type="number" max="12" min="0">
+                    </div>
+                </div>
+                <button class="send-responses-btn drugs-distribution-send-responses-btn">Отправить</button>
             </div>
-            <button class="send-responses-btn drugs-distribution-send-responses-btn">Отправить</button>
         </div>
 
         <!-- EXPECTATION PHASE -->
@@ -176,7 +224,7 @@
              th:classappend="(${playerData} != null and ${playerData.role.class.simpleName == 'SalesmanRole'})
                              and ${game.phaseIndex} == 10 ? 'active' : ''"
              id="expectation-phase">
-            <p class="middle-font-size">Короткое, короткое ожидание..</p>
+            <p class="flow-text">Короткое, короткое ожидание..</p>
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M18.513 7.119c.958-1.143 1.487-2.577 1.487-4.036v-3.083h-16v3.083c0 1.459.528 2.892 1.487 4.035l3.087 3.68c.566.677.57 1.625.009 2.306l-3.13 3.794c-.937 1.136-1.453 2.555-1.453 3.995v3.107h16v-3.107c0-1.44-.517-2.858-1.453-3.994l-3.13-3.794c-.562-.681-.558-1.629.009-2.306l3.087-3.68zm-.513-4.12c0 1.101-.363 2.05-1.02 2.834l-.978 1.167h-8.004l-.978-1.167c-.66-.785-1.02-1.736-1.02-2.834h12zm-.996 15.172c.652.791.996 1.725.996 2.829h-1.061c-1.939-2-4.939-2-4.939-2s-3 0-4.939 2h-1.061c0-1.104.344-2.039.996-2.829l3.129-3.793c.342-.415.571-.886.711-1.377h.164v1h2v-1h.163c.141.491.369.962.711 1.376l3.13 3.794zm-6.004-1.171h2v1h-2v-1zm0-2h2v1h-2v-1z"></path></svg>
         </div>
 
@@ -185,55 +233,54 @@
              th:classappend="(${playerData} != null and ${playerData.role.class.simpleName == 'SalesmanRole'})
                              and ${game.phaseIndex} == 11 ? 'active' : ''"
              id="salesman-results-phase">
-            <!--<p class="middle-font-size light-font">Вы заработали <span class="big-font-size bold">42</span> балла</p>-->
-            <p class="middle-font-size bold">Компетенции</p>
-            <div class="competencies-results-grid">
-                <div th:each="competency : ${T(com.name.brief.model.games.roleplay.SalesmanCompetency).values()}"
-                     th:remove="tag">
-                    <p class="middle-font-size light-font"
-                       th:text="${competency.russianName + ': '}"></p>
-                    <p th:class="'middle-font-size bold ' + ${competency.cssClassName} + '-player-result'"
-                       th:text="${T(com.name.brief.utils.RolePlayStatisticsUtils).getAverageOnCompetencyFormatted(competency, playerData)}"></p>
+            <div class="container">
+                <p class="flow-text bold">Компетенции</p>
+                <div class="competencies-results-grid">
+                    <div th:each="competency : ${T(com.name.brief.model.games.roleplay.SalesmanCompetency).values()}"
+                         th:remove="tag">
+                        <p class="flow-text light-font"
+                           th:text="${competency.russianName + ': '}"></p>
+                        <p th:class="'flow-text bold ' + ${competency.cssClassName} + '-player-result'"
+                           th:text="${T(com.name.brief.utils.RolePlayStatisticsUtils).getAverageOnCompetencyFormatted(competency, playerData)}"></p>
+                    </div>
                 </div>
-            </div>
-            <div class="round-results-wrapper">
-                <div class="round-results-slider">
-                    <div th:each="roundIndex : ${#numbers.sequence(0, __${game.numberOfRounds - 1}__)}"
-                         th:class="'round-results round-results-' + ${roundIndex}">
-                        <p class="middle-font-size bold" th:text="${'Раунд ' + (roundIndex + 1)}"></p>
-                        <div th:each="salesmanAnswerType : ${T(com.name.brief.model.games.roleplay.SalesmanAnswerType).values()}"
-                             th:remove="tag">
-                            <p class="middle-font-size bold" th:text="${salesmanAnswerType.russianName}"></p>
-                            <div class="salesman-answer-result-grid">
-                                <p class="small-font-size light-font">Ваш ответ:</p>
-                                <p th:class="'light-font middle-font-size ' + ${salesmanAnswerType.cssClassName + '-player-answer'}"
-                                   th:text="${T(com.name.brief.utils.RolePlayStatisticsUtils)
+                <div class="round-results-wrapper">
+                    <div class="round-results-slider">
+                        <div th:each="roundIndex : ${#numbers.sequence(0, __${game.numberOfRounds - 1}__)}"
+                             th:class="'round-results round-results-' + ${roundIndex}">
+                            <p class="flow-text bold" th:text="${'Раунд ' + (roundIndex + 1)}"></p>
+                            <div th:each="salesmanAnswerType : ${T(com.name.brief.model.games.roleplay.SalesmanAnswerType).values()}"
+                                 th:remove="tag">
+                                <p class="flow-text bold" th:text="${salesmanAnswerType.russianName}"></p>
+                                <div class="salesman-answer-result-grid">
+                                    <p class="small-font-size light-font">Ваш ответ:</p>
+                                    <p th:class="'light-font flow-text ' + ${salesmanAnswerType.cssClassName + '-player-answer'}"
+                                       th:text="${T(com.name.brief.utils.RolePlayStatisticsUtils)
                                             .getPlayerAnswer(salesmanAnswerType, playerData, roundIndex)}">Ваш ответ:</p>
-                                <p class="small-font-size light-font">Правильный ответ:</p>
-                                <p th:class="'light-font middle-font-size ' + ${salesmanAnswerType.cssClassName + '-correct-answer'}"
-                                   th:text="${T(com.name.brief.utils.RolePlayStatisticsUtils)
+                                    <p class="small-font-size light-font">Правильный ответ:</p>
+                                    <p th:class="'light-font flow-text ' + ${salesmanAnswerType.cssClassName + '-correct-answer'}"
+                                       th:text="${T(com.name.brief.utils.RolePlayStatisticsUtils)
                                             .getCorrectAnswerFormatted(salesmanAnswerType, playerData, roundIndex)}">Правильный ответ:</p>
-                                <p class="light-font light-font">Ошибка:</p>
-                                <p th:class="'light-font middle-font-size ' + ${salesmanAnswerType.cssClassName + '-error'}"
-                                   th:text="${T(com.name.brief.utils.RolePlayStatisticsUtils)
+                                    <p class="light-font light-font">Отклонение:</p>
+                                    <p th:class="'light-font flow-text ' + ${salesmanAnswerType.cssClassName + '-error'}"
+                                       th:text="${T(com.name.brief.utils.RolePlayStatisticsUtils)
                                             .getError(salesmanAnswerType, playerData, roundIndex)}"
-                                   th:classappend="${'error-' + T(com.name.brief.utils.RolePlayStatisticsUtils)
+                                       th:classappend="${'error-' + T(com.name.brief.utils.RolePlayStatisticsUtils)
                                             .getCssClassOfError(salesmanAnswerType, playerData, roundIndex)}">
-                                </p>
+                                    </p>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="comments">
-                <p class="bold middle-font-size">Комментарии докторов:</p>
-                <p class="light-font middle-font-size comment comment-template hidden"></p>
-                <p class="light-font middle-font-size comment"
-                   th:each="comment : ${playerData.comments}"
-                   th:if="${comment.text != ''}"
-                   th:text="${comment.text}"></p>
-                <p class="light-font small-font-size comment">Комментарий первого доктора о моей прическе</p>
-                <p class="light-font small-font-size comment">Комментарий второго доктора о моих навыках продаж</p>
+                <div class="comments">
+                    <p class="bold flow-text">Комментарии докторов:</p>
+                    <p class="light-font flow-text comment comment-template hidden"></p>
+                    <p class="light-font flow-text comment"
+                       th:each="comment : ${playerData.comments}"
+                       th:if="${comment.text != ''}"
+                       th:text="${comment.text}"></p>
+                </div>
             </div>
         </div>
 
@@ -242,26 +289,28 @@
              th:classappend="(${playerData} != null and ${playerData.role.class.simpleName == 'DoctorRole'})
                              and ${game.phaseIndex} == 11 ? 'active' : ''"
              id="average-results-phase">
-            <p class="bold middle-font-size">Средний балл по компетенциям всех медицнских представителей</p>
-            <div class="competencies-results-grid">
-                <div th:each="competency : ${T(com.name.brief.model.games.roleplay.SalesmanCompetency).values()}"
-                     th:remove="tag">
-                    <p class="middle-font-size light-font"
-                       th:text="${competency.russianName + ': '}"></p>
-                    <p th:class="'middle-font-size bold ' + ${competency.cssClassName} + '-average-result'"
-                       th:text="${T(com.name.brief.utils.RolePlayStatisticsUtils).getAverageAmongAllFormatted(competency, game)}"></p>
+            <div class="container">
+                <p class="bold flow-text">Средний балл по компетенциям всех медицнских представителей</p>
+                <div class="competencies-results-grid">
+                    <div th:each="competency : ${T(com.name.brief.model.games.roleplay.SalesmanCompetency).values()}"
+                         th:remove="tag">
+                        <p class="flow-text light-font"
+                           th:text="${competency.russianName + ': '}"></p>
+                        <p th:class="'flow-text bold ' + ${competency.cssClassName} + '-average-result'"
+                           th:text="${T(com.name.brief.utils.RolePlayStatisticsUtils).getAverageAmongAllFormatted(competency, game)}"></p>
+                    </div>
                 </div>
-            </div>
-            <p class="bold middle-font-size">Средняя ошибка</p>
-            <div class="average-results-grid">
-                <div th:each="salesmanAnswerType : ${T(com.name.brief.model.games.roleplay.SalesmanAnswerType).values()}"
-                     th:remove="tag">
-                    <p class="light-font middle-font-size" th:text="${salesmanAnswerType.russianName}"></p>
-                    <p th:class="'bold middle-font-size ' + ${salesmanAnswerType.cssClassName + '-average-error'}"
-                       th:classappend="${'error-' + T(com.name.brief.utils.RolePlayStatisticsUtils)
+                <p class="bold flow-text">Средняя ошибка</p>
+                <div class="average-results-grid">
+                    <div th:each="salesmanAnswerType : ${T(com.name.brief.model.games.roleplay.SalesmanAnswerType).values()}"
+                         th:remove="tag">
+                        <p class="light-font flow-text" th:text="${salesmanAnswerType.russianName}"></p>
+                        <p th:class="'bold flow-text ' + ${salesmanAnswerType.cssClassName + '-average-error'}"
+                           th:classappend="${'error-' + T(com.name.brief.utils.RolePlayStatisticsUtils)
                                             .getAverageErrorCssClass(salesmanAnswerType, game)}"
-                       th:text="${T(com.name.brief.utils.RolePlayStatisticsUtils)
+                           th:text="${T(com.name.brief.utils.RolePlayStatisticsUtils)
                                             .getAverageError(salesmanAnswerType, game)}"></p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -270,7 +319,7 @@
         <div class="phase-container centered-phase-container"
              th:classappend="${game.phaseIndex} == 12 ? 'active' : ''"
              id="discussion-phase">
-            <p class="middle-font-size">Возвращайтесь за стол своей команды для обсуждения</p>
+            <p class="flow-text">Возвращайтесь за стол своей команды для обсуждения</p>
             <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill-rule="evenodd" clip-rule="evenodd"><path d="M6.72 20.492c1.532.956 3.342 1.508 5.28 1.508 1.934 0 3.741-.55 5.272-1.503l1.24 1.582c-1.876 1.215-4.112 1.921-6.512 1.921-2.403 0-4.642-.708-6.52-1.926l1.24-1.582zm6.405-.992l-.594.391c-.077.069-.19.109-.307.109h-.447c-.118 0-.231-.04-.308-.109l-.594-.391h2.25zm10.875-.5h-6c0-1.105.895-2 2-2h2c.53 0 1.039.211 1.414.586s.586.883.586 1.414zm-18 0h-6c0-1.105.895-2 2-2h2c.53 0 1.039.211 1.414.586s.586.883.586 1.414zm7.146-.5c.138 0 .25.112.25.25s-.112.25-.25.25h-2.279c-.138 0-.25-.112-.25-.25s.112-.25.25-.25h2.279zm.247-.5c0-2.002 1.607-2.83 1.607-4.614 0-1.86-1.501-2.886-3.001-2.886s-2.999 1.024-2.999 2.886c0 1.784 1.607 2.639 1.607 4.614h2.786zm7.607-6c1.242 0 2.25 1.008 2.25 2.25s-1.008 2.25-2.25 2.25-2.25-1.008-2.25-2.25 1.008-2.25 2.25-2.25zm-18 0c1.242 0 2.25 1.008 2.25 2.25s-1.008 2.25-2.25 2.25-2.25-1.008-2.25-2.25 1.008-2.25 2.25-2.25zm12.87 2.385l1.349.612-.413.911-1.298-.588c.15-.3.275-.608.362-.935zm-7.739 0c.087.332.208.631.36.935l-1.296.588-.414-.911 1.35-.612zm9.369-1.885v1h-1.501c.01-.335-.02-.672-.093-1h1.594zm-9.406 0c-.072.327-.102.663-.092.997v.003h-1.502v-1h1.594zm6.928-1.714l1.242-.882.579.816-1.252.888c-.146-.291-.335-.566-.569-.822zm-6.044-.001c-.23.252-.418.525-.569.823l-1.251-.888.578-.816 1.242.881zm4.435-1.046l.663-1.345.897.443-.664 1.345c-.278-.184-.58-.332-.896-.443zm-2.826-.001c-.315.11-.618.258-.897.442l-.663-1.343.897-.443.663 1.344zm-2.587-9.054v2.149c-2.938 1.285-5.141 3.942-5.798 7.158l-2.034-.003c.732-4.328 3.785-7.872 7.832-9.304zm8 0c4.047 1.432 7.1 4.976 7.832 9.304l-2.034.003c-.657-3.216-2.86-5.873-5.798-7.158v-2.149zm-3.5 8.846c-.334-.039-.654-.041-1-.001v-1.529h1v1.53zm2.5-2.53h-6c0-1.105.895-2 2-2h2c.53 0 1.039.211 1.414.586s.586.884.586 1.414zm-3-7c1.242 0 2.25 1.008 2.25 2.25s-1.008 2.25-2.25 2.25-2.25-1.008-2.25-2.25 1.008-2.25 2.25-2.25z"></path></svg>
         </div>
 
@@ -283,7 +332,7 @@
         </div>
 
         <div th:fragment="logout" class="logout-wrapper">
-            <p class="logout-text"
+            <p class="logout-text flow-text"
                th:unless="${projectorMode}">Выйти</p>
             <div class="hidden logout-popup popup-wrapper">
                 <div class="popup">
@@ -308,6 +357,7 @@
         <p id="player-id" th:text="${playerId}"></p>
     </div>
 
+    <script th:src="@{/assets/materialize/js/materialize.min.js}"></script>
     <script th:src="@{/assets/js/game.role-play-bundle.js}"></script>
 
 </body>
