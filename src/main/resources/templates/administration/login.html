@@ -2,20 +2,19 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <div th:include="appFragments :: headContent" th:remove="tag"></div>
+    <link rel="stylesheet" th:href="@{/assets/materialize/css/materialize.css}">
     <link rel="stylesheet" th:href="@{/assets/css/login.css}">
     <title>МОЗ | Панель администратора</title>
 </head>
 <body>
-    <div class="container">
+    <div class="content-wrapper">
         <img th:src="@{/assets/image/logo.png}" alt="logo" >
         <form th:action="@{/login/admin}" method="post">
             <div th:replace="administration/fragments :: flash"></div>
-            <input type="text" name="username" placeholder="Имя пользователя" autocomplete="off" >
-            <input type="password" name="password" placeholder="Пароль" autocomplete="off" >
-            <!--<div class="error-message" ></div>-->
-            <!--<div class="error-message" ></div>-->
-            <button type="submit">Войти</button>
-            <a th:href="@{/}">Войти как игрок</a>
+            <input class="center-align" type="text" name="username" placeholder="Имя пользователя" autocomplete="off" >
+            <input class="center-align" type="password" name="password" placeholder="Пароль" autocomplete="off" >
+            <button class="waves-effect waves-light btn-large" type="submit">Войти</button>
+            <a class="center-align underlined" th:href="@{/}">Войти как игрок</a>
         </form>
     </div>
 </body>

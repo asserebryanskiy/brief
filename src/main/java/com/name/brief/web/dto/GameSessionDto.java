@@ -23,7 +23,8 @@ import java.util.Map;
 public class GameSessionDto {
     public static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("ddMMyyyy");
 
-    private final String[] gameTypes = new String[]{"Бриф", "Карта рисков", "Ролевая игра"};
+    private final String[] gameTypes = new String[]{"Ролевая игра"};
+//    private final String[] gameTypes = new String[]{"Бриф", "Карта рисков", "Ролевая игра"};
     private final String[] authenticationTypes = Arrays.stream(AuthenticationType.values())
             .map(AuthenticationType::getRussianName)
             .toArray(String[]::new);

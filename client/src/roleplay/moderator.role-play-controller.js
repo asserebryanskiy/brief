@@ -63,7 +63,7 @@ export default class RolePlayController {
     }
 
     handle30secBtnClick(event) {
-        if ($(event.currentTarget).parents('phase').hasClass('active')) {
+        if ($(event.currentTarget).parents('.phase').hasClass('active')) {
             this.wsService.sendToApp('add30sec', '');
         }
     }

@@ -117,7 +117,7 @@ body {
 }
 
 .big-font-size {
-    font-size: 40px;
+    font-size: 40px !important;
 }
 
 .left-aligned {

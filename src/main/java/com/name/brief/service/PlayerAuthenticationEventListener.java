@@ -15,6 +15,8 @@ import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 
 import java.util.List;
 
+import static com.name.brief.web.dto.PlayerConnectionDto.PlayerConnectionInstruction.LOGOUT;
+
 @Component
 public class PlayerAuthenticationEventListener implements ApplicationListener<ApplicationEvent> {
 
@@ -53,6 +55,7 @@ public class PlayerAuthenticationEventListener implements ApplicationListener<Ap
                 Object principal = contexts.get(0).getAuthentication().getPrincipal();
                 if (principal instanceof Player) {
                     gameSessionService.removePlayer((Player) principal);
+                    sendToClient(LOGOUT, (Player) principal);
                 }
             }
         }

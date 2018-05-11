@@ -2,21 +2,20 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <div th:include="appFragments :: headContent" th:remove="tag"></div>
+    <link rel="stylesheet" th:href="@{/assets/materialize/css/materialize.css}">
     <link rel="stylesheet" th:href="@{/assets/css/login.css}">
     <title>МОЗ | Игратор</title>
 </head>
 <body>
-    <div class="container">
-        <img th:src="@{/assets/image/logo.png}" alt="logo" >
+    <div class="content-wrapper">
+        <img  th:src="@{/assets/image/logo.png}" alt="logo" >
         <form th:action="@{/login}" th:object="${playerLoginDto}" method="post">
-            <h1>Игратор</h1>
+            <h3>Цифровой тренер</h3>
             <p class="flash error-message" th:if="${#fields.hasErrors('gameSessionStrId')}" th:errors="*{gameSessionStrId}"></p>
-            <input type="text" placeholder="Код игры" autocomplete="off" th:field="*{gameSessionStrId}">
-            <button type="submit">Войти</button>
-            <a th:href="@{/login/admin}">Войти как администратор</a>
+            <input class="center-align" type="text" placeholder="Код игры" autocomplete="off" th:field="*{gameSessionStrId}">
+            <button class="waves-effect waves-light btn-large" type="submit">Войти</button>
+            <a class="center-align underlined" th:href="@{/login/admin}">Войти как администратор</a>
         </form>
     </div>
-
-    <script th:src="@{/assets/js/role-play-bundle.js}"></script>
 </body>
 </html>

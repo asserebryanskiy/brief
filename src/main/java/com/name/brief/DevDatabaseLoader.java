@@ -103,8 +103,9 @@ public class DevDatabaseLoader implements ApplicationRunner {
 //        dto.setGameSessionStrId(session.getStrId());
 //        gameSessionService.addPlayer(dto, rolePlay);
 //        gameSessionService.addPlayer(dto, rolePlay);
-//
+////
 //        rolePlayService.changePhase(2, rolePlay.getGame().getId());
+//        gameSessionService.delete(rolePlay.getId());
 //        rolePlayService.changePhase(3, rolePlay.getGame().getId());
 //        DoctorAnswerDto doctorAnswerDto = new DoctorAnswerDto();
 //        doctorAnswerDto.getExpertiseEstimations().put(SalesmanCompetency.KNOWLEDGE.getCssClassName(), "high");

@@ -62,11 +62,12 @@ public class RolePlayUtils {
         // create PlayerData objects for every player
         for (int i = 0; i < players.size(); i++) {
             PlayerData data = new PlayerData(players.get(i));
+            data.setOrderNumber(i + 1);
             Player partner;
             if (i % 2 == 0) {
                 partner = players.get(i + 1);
-                if (i % 4 == 0) data.setRole(DoctorRole.DOCTOR_2);
-                else            data.setRole(DoctorRole.DOCTOR_1);
+                if (i % 4 == 0) data.setRole(DoctorRole.DOCTOR_1);
+                else            data.setRole(DoctorRole.DOCTOR_2);
             } else {
                 partner = players.get(i - 1);
                 data.setRole(SalesmanRole.SALESMAN_1);

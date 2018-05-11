@@ -26,7 +26,7 @@ export default class PlayerConnectionService {
                     PlayerConnectionService.indicateDisconnection(username);
                     break;
                 case 'LOGOUT':
-                    PlayerConnectionService.removeLoggedOutPlayer();
+                    PlayerConnectionService.removeLoggedOutPlayer(username);
                     break;
             }
         });
@@ -43,10 +43,9 @@ export default class PlayerConnectionService {
         $playerRow.removeClass('connected').addClass('disconnected');
     }
 
-    static removeLoggedOutPlayer($player, $playerRow) {
-        $player.removeClass('connected');
-        $playerRow.removeClass('connected-row');
-        $playerRow.children('.connection-td').text('Disconnected');
+    static removeLoggedOutPlayer(username) {
+        $('#' + username).remove();
+        $('#player-row-' + username).remove();
     }
 
     static indicateConnection(username, identifierForModerator) {

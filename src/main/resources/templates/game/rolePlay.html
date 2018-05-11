@@ -6,6 +6,7 @@
     <link rel="stylesheet" th:href="@{/assets/css/game/game.css}">
     <link rel="stylesheet" th:href="@{/assets/css/game/rolePlay.css}">
     <link rel="stylesheet" th:href="@{/assets/css/game/projector.css}" th:if="${projectorMode}">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <title>МОЗ | Ролевая игра</title>
 </head>
 <body th:with="game = ${gameSession.game},
@@ -85,6 +86,7 @@
                 <div class="instruction flow-text light-font"
                      th:fragment="roleInstruction"
                      th:utext="${role.instruction}"></div>
+                <a class="btn ready-btn waves-effect right-align" href="#">Кейс прочитан</a>
             </div>
         </div>
 
@@ -100,6 +102,7 @@
             <span class="flow-text light-font">, кабинет</span>
             <span class="room-number big-font-size"
                   th:text="${playerData.location.room + 1}">2</span>
+            <a class="btn ready-btn waves-effect" href="#">В кабинете</a>
         </div>
 
         <!-- GAME PHASE -->
@@ -133,7 +136,7 @@
                            th:class="${salesManAnswer.cssClassName + '-input big-font-size'}">
                 </div>
             </div>
-            <button class="send-responses-btn salesman-send-responses-btn">Отправить</button>
+            <button class="send-responses-btn salesman-send-responses-btn new-answers">Отправить</button>
         </div>
 
         <!-- SURVEY DOCTOR PHASE -->
@@ -143,7 +146,7 @@
              th:with="roundIndex = ${game.phaseIndex == 6 ? 0 : 1}"
              id="doctor-survey-phase">
             <h2 class="timer">00:00</h2>
-            <p class="flow-text light-font left-aligned">Оцените компетенции МП по шкале от 1 до 3</p>
+            <p class="flow-text light-font center-align">Оцените компетенции МП по шкале от 1 до 3</p>
             <a class="flow-text light-font underlined modal-trigger"
                href="#doctor-survey-scale-description">Описание шкалы</a>
             <div class="modal" id="doctor-survey-scale-description">
@@ -172,7 +175,7 @@
                     <label for="doctor-comments-textarea">Пожелания к улучшению (не обязательно)</label>
                 </div>
             </div>
-            <button class="send-responses-btn doctor-send-responses-btn">Отправить</button>
+            <button class="send-responses-btn doctor-send-responses-btn new-answers">Отправить</button>
         </div>
 
         <!-- DRUGS DISTRIBUTION PHASE -->
@@ -193,7 +196,7 @@
                         <p class="flow-text light-font left-align">Общая сумма не может быть больше 12.</p>
                     </div>
                     <div class="modal-footer">
-                        <p class="flow-text light-font modal-close center-align">Ок</p>
+                        <p class="btn-flat light-font modal-close center-align">Ок</p>
                     </div>
                 </div>
                 <div class="popup-wrapper hidden drugs-distribution-help-popup">
@@ -216,7 +219,7 @@
                         <input class="big-font-size drugs-distribution-input" type="number" max="12" min="0">
                     </div>
                 </div>
-                <button class="send-responses-btn drugs-distribution-send-responses-btn">Отправить</button>
+                <button class="send-responses-btn drugs-distribution-send-responses-btn new-answers">Отправить</button>
             </div>
         </div>
 
@@ -333,8 +336,8 @@
         </div>
 
         <div th:fragment="logout" class="logout-wrapper">
-            <p class="logout-text flow-text"
-               th:unless="${projectorMode}">Выйти</p>
+            <i class="logout-text material-icons small"
+               th:unless="${projectorMode}">directions_run</i>
             <div class="hidden logout-popup popup-wrapper">
                 <div class="popup">
                     <div class="popup-back"></div>
@@ -358,8 +361,6 @@
         <p id="player-id" th:text="${playerId}"></p>
     </div>
 
-    <script th:src="@{/assets/materialize/js/materialize.min.js}"></script>
     <script th:src="@{/assets/js/game.role-play-bundle.js}"></script>
-
 </body>
 </html>

@@ -1,9 +1,9 @@
-body {
-    background: none;
-}
-
 a {
     color: #4e3549 !important;
+}
+
+body {
+    background: none;
 }
 
 .page-content-wrapper {
@@ -123,6 +123,20 @@ a {
     margin-top: 20px;
 }
 
+.ready-btn {
+    background-color: #4a9d61 !important;
+    color: white !important;
+    margin: 20px auto;
+    display: block;
+}
+
+#crossing-phase .ready-btn {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
 /*********************************
 *            SURVEY              *
 **********************************/
@@ -151,6 +165,17 @@ a {
     margin: 0 auto 10px !important;
     font-size: 40px !important;
     display: block;
+}
+
+.send-responses-btn.change-answers {
+    background-color: transparent;
+    border-color: #4a9d61;
+    color: #4e3549;
+}
+
+.send-responses-btn.new-answers {
+    background-color: #4a9d61;
+    color: white;
 }
 
 /*********************************
@@ -231,6 +256,7 @@ a {
 
 .send-responses-btn {
     font-family: "Circe Bold", serif !important;
+    background: none;
 }
 
 /*********************************
@@ -367,6 +393,7 @@ a {
 @media (min-width: 500px) {
     .survey {
         max-width: 400px;
+        margin: auto;
     }
 
     #phase-6-0, #phase-6-1 {

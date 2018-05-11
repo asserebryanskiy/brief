@@ -20,10 +20,11 @@ import java.util.*;
 @ToString(exclude = {"player", "playedPlayers", "comments"})
 public class PlayerData extends BaseEntity {
 
-    @NotNull
     @ManyToOne
     private Player player;
-    private int score;
+
+    private int orderNumber;
+
     @ElementCollection
     @LazyCollection(LazyCollectionOption.FALSE)
     private Set<Long> playedPlayers = new HashSet<>();

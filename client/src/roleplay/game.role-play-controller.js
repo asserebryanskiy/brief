@@ -100,6 +100,7 @@ export default class RolePlayController {
         if (RolePlayController.timerIsRunning()) {
             this.sendDoctorAnswers();
             RolePlayController.addInstantMessage('Ответы отправлены', 'success');
+            RolePlayController.changeSendResponsesBtn('Изменить ответы');
         } else {
             RolePlayController.addInstantMessage(this.TIME_HAS_ENDED_TEXT, 'failure');
         }
@@ -118,6 +119,7 @@ export default class RolePlayController {
         if (RolePlayController.timerIsRunning()) {
             this.wsService.sendToApp('salesman/answer', AnswerService.createSalesmanAnswerJson());
             RolePlayController.addInstantMessage('Ответы отправлены', 'success');
+            RolePlayController.changeSendResponsesBtn('Изменить ответы');
         } else {
             RolePlayController.addInstantMessage(this.TIME_HAS_ENDED_TEXT, 'failure');
         }
@@ -139,7 +141,7 @@ export default class RolePlayController {
 
     handleDrugsDistributionInputChange(event) {
         const $input = $(event.currentTarget);
-        const val = parseInt($input.val());
+        let val = $input.val().length === 0 ? 0 : parseInt($input.val());
         let total = 0;
         $('.drugs-distribution-input').each((i, el) => {
             const inputVal = $(el).val();
@@ -148,12 +150,17 @@ export default class RolePlayController {
         if (total > 12) {
             const diff = total - 12;
             $input.val(val - diff);
+            RolePlayController.addInstantMessage(
+                'Невозможно распределить более 12 упаковок. Установлено максимально возможное значение',
+                'failure'
+            );
         }
     }
 
     handleDrugsDistributionSend() {
         if (RolePlayController.timerIsRunning()) {
             this.sendDrugsDistribution();
+            RolePlayController.changeSendResponsesBtn('Изменить ответы');
         } else {
             RolePlayController.addInstantMessage(this.TIME_HAS_ENDED_TEXT, 'failure');
         }
@@ -248,6 +255,11 @@ export default class RolePlayController {
         if (min === 0 && sec < 11) $timer.addClass('last-ten-seconds');
         else $timer.removeClass('last-ten-seconds');
 
+        // if time has ended notify user
+        if (min === 0 && sec === 0) {
+            RolePlayController.addInstantMessage('Время вышло. Отправка ответов заблокирована.', 'failure')
+        }
+
         // change timer text
         $timer.text(TimerUtils.convertToTimerString(min, sec));
     }
@@ -259,5 +271,12 @@ export default class RolePlayController {
 
     static handleLogout() {
         $('.logout-form').submit();
+    }
+
+    static changeSendResponsesBtn(text) {
+        const $btn = $('.phase-container.active .send-responses-btn');
+        $btn.text(text);
+        if (text === 'Изменить ответы') $btn.removeClass('new-answers').addClass('change-answers');
+        else $btn.removeClass('change-answers').addClass('new-answers');
     }
 }

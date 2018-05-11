@@ -7,8 +7,8 @@ import com.name.brief.model.Player;
 import com.name.brief.model.games.AuthenticationType;
 import com.name.brief.model.games.Game;
 import com.name.brief.model.games.roleplay.RolePlay;
-import com.name.brief.repository.GameRepository;
 import com.name.brief.repository.GameSessionRepository;
+import com.name.brief.repository.PlayerDataRepository;
 import com.name.brief.repository.PlayerRepository;
 import com.name.brief.utils.TimeConverter;
 import com.name.brief.web.dto.GameSessionDto;
@@ -26,12 +26,15 @@ public class GameSessionServiceImpl implements GameSessionService {
     private final GameSessionRepository gameSessionRepository;
     private final PlayerRepository playerRepository;
     private PlayerAuthenticationService playerAuthenticationService;
+    private final PlayerDataRepository playerDataRepositoty;
 
     @Autowired
     public GameSessionServiceImpl(GameSessionRepository gameSessionRepository,
-                                  PlayerRepository playerRepository) {
+                                  PlayerRepository playerRepository,
+                                  PlayerDataRepository playerDataRepositoty) {
         this.gameSessionRepository = gameSessionRepository;
         this.playerRepository = playerRepository;
+        this.playerDataRepositoty = playerDataRepositoty;
     }
 
     @Autowired

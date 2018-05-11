@@ -75,8 +75,19 @@ $(window).scroll(() => RolePlayController.handleScroll());
 
 wsService.connect(onWsConnect);
 
+// forbid dash in inputs of number type
+$('input[type="number"]').on('keydown', (event) => {
+    console.log(event.keyCode);
+    if (event.keyCode === 189) event.preventDefault();
+});
+
 // materialize initialization
 document.addEventListener('DOMContentLoaded', function() {
-    var elems = document.querySelectorAll('.modal');
-    var instances = M.Modal.init(elems, {});
+    const modals = document.querySelectorAll('.modal');
+    M.Modal.init(modals, {});
+
+    const collapsible = document.querySelectorAll('.collapsible');
+    M.Collapsible.init(collapsible, {
+        accordion: false
+    });
 });
