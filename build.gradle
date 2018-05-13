@@ -36,7 +36,7 @@ repositories {
     mavenCentral()
 }
 
-def developmentMode = false
+def developmentMode = true
 
 dependencies {
     // spring boot

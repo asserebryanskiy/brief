@@ -44,5 +44,28 @@ public class DevDatabaseLoader implements ApplicationRunner {
         User moderator1 = new User("moderator1", password, Role.MODERATOR.getRole());
         users.add(moderator1);
         userRepository.save(users);
+
+//        addBriefWithAnswers(moderator1);
+    }
+
+    private void addBriefWithAnswers(User moderator1) {
+        GameSession brief = new GameSession.GameSessionBuilder("brief")
+                .withGame(new Brief())
+                .withUser(moderator1)
+                .build();
+        brief.setCurrentPhaseNumber(5);
+
+        String[] correctAnswers = (String[]) brief.getGame().getCorrectAnswers();
+        String[] addition = new String[]{"","A4","A4B4","A4B4C4","A4B4C4A2"};
+
+        for (int i = 0; i < brief.getGame().getNumberOfRounds(); i++) {
+            final int ind = i;
+            brief.getPlayers().forEach(p -> {
+                p.getDecision(ind).setAnswer(correctAnswers[ind]
+                        + addition[new Random().nextInt(correctAnswers.length)]);
+            });
+        }
+
+        gameSessionService.save(brief);
     }
 }
