@@ -9,7 +9,7 @@
     <div class="container">
         <img th:src="@{/assets/image/logo.png}" alt="logo" >
         <form th:action="@{/}" th:object="${player}" method="post">
-            <h1>Игратор</h1>
+            <h1>Цифровой тренер</h1>
             <input type="text" placeholder="Код игры" autocomplete="off" th:field="*{gameSession.strId}">
             <div class="error-message" th:if="${#fields.hasErrors('gameSession')}" th:errors="*{gameSession}"></div>
             <input type="text" placeholder="Номер команды" autocomplete="off" th:field="*{commandName}">
