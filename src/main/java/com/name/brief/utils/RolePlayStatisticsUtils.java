@@ -31,32 +31,18 @@ public class RolePlayStatisticsUtils {
             return String.valueOf(data.getAnswersAsSalesman().get(answerType)
                     .getCorrectAnswersPerRound().get(roundIndex));
 
-        int[] correctAnswerBorders = getCorrectAnswerBorders(answerType, data, roundIndex);
-
-        // if boundaries are equal there is no need to return range
-        if (correctAnswerBorders[0] == correctAnswerBorders[1])
-            return String.valueOf(correctAnswerBorders[0]);
-
-        return String.format("%d-%d", correctAnswerBorders[0], correctAnswerBorders[1]);
+        return String.valueOf(getCorrectAnswer(answerType, data, roundIndex));
     }
 
-    private static int[] getCorrectAnswerBorders(SalesmanAnswerType answerType, PlayerData data, int roundIndex) {
-        int correctAnswer = data.getAnswersAsSalesman().get(answerType).getCorrectAnswersPerRound().get(roundIndex);
-        int stDeviation = data.getAnswersAsSalesman().get(answerType).getStDeviationPerRound().get(roundIndex);
-        int bottomBorder = (correctAnswer - stDeviation);
-        int topBorder = (correctAnswer + stDeviation);
-
-        return new int[]{bottomBorder, topBorder};
+    private static int getCorrectAnswer(SalesmanAnswerType answerType, PlayerData data, int roundIndex) {
+        return data.getAnswersAsSalesman().get(answerType).getCorrectAnswersPerRound().get(roundIndex);
     }
 
     public static int getError(SalesmanAnswerType answerType, PlayerData data, int roundIndex) {
         int playerAnswer = getPlayerAnswer(answerType, data, roundIndex);
-        int[] correctAnswerBorders = getCorrectAnswerBorders(answerType, data, roundIndex);
+        int correctAnswer = getCorrectAnswer(answerType, data, roundIndex);
 
-        if (playerAnswer > correctAnswerBorders[0] && playerAnswer < correctAnswerBorders[1])
-            return 0;
-        if (playerAnswer < correctAnswerBorders[0]) return correctAnswerBorders[0] - playerAnswer;
-        else return playerAnswer - correctAnswerBorders[1];
+        return Math.abs(playerAnswer - correctAnswer);
     }
 
     /**
@@ -71,21 +57,8 @@ public class RolePlayStatisticsUtils {
      * @return css class appropriate to player's error rate.
      */
     public static String getCssClassOfError(SalesmanAnswerType answerType, PlayerData data, int roundIndex) {
-        int playerAnswer = getPlayerAnswer(answerType, data, roundIndex);
-        int[] correctAnswerBoundaries = getCorrectAnswerBorders(answerType, data, roundIndex);
-
-        // top level is one that lies in correct answer boundaries
-        if (playerAnswer >= correctAnswerBoundaries[0]
-                && playerAnswer <= correctAnswerBoundaries[1]) return "very-low";
-
-        // compute difference from given answer and nearest boundary
-        int diff;
-        if (playerAnswer < correctAnswerBoundaries[0])
-            diff = correctAnswerBoundaries[0] - playerAnswer;
-        else diff = playerAnswer - correctAnswerBoundaries[1];
-
         // depending on diff apply class
-        return getErrorCssClass(diff);
+        return getErrorCssClass(getError(answerType, data, roundIndex));
     }
 
     public static int getAverageError(SalesmanAnswerType answerType, RolePlay game) {
@@ -169,6 +142,7 @@ public class RolePlayStatisticsUtils {
         );
 
         Arrays.stream(SalesmanAnswerType.values()).forEach(answerType -> {
+
             // initialize data structures
             List<Integer> playerAnswers = new ArrayList<>(numberOfRounds);
             List<String> correctAnswers = new ArrayList<>(numberOfRounds);

@@ -64,6 +64,7 @@ $('.drugs-distribution-help-btn').click(() => RolePlayController.handleOpenDrugD
 $('.popup-back').click(() => $('.popup-wrapper').hide());
 $('.close-popup-btn').click(() => $('.popup-wrapper').hide());
 $('.drugs-distribution-input').on('input', (event) => controller.handleDrugsDistributionInputChange(event));
+$('.ready-btn').click((event) => controller.handleReadyBtnClick(event));
 
 // on answer-send
 $('.doctor-send-responses-btn').click(() => controller.handleDoctorAnswerSend());

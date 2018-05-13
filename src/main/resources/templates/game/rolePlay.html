@@ -86,7 +86,7 @@
                 <div class="instruction flow-text light-font"
                      th:fragment="roleInstruction"
                      th:utext="${role.instruction}"></div>
-                <a class="btn ready-btn waves-effect right-align" href="#">Кейс прочитан</a>
+                <button class="btn ready-btn waves-effect right-align">Кейс прочитан</button>
             </div>
         </div>
 
@@ -102,7 +102,7 @@
             <span class="flow-text light-font">, кабинет</span>
             <span class="room-number big-font-size"
                   th:text="${playerData.location.room + 1}">2</span>
-            <a class="btn ready-btn waves-effect" href="#">В кабинете</a>
+            <button class="btn ready-btn waves-effect" href="#">В кабинете</button>
         </div>
 
         <!-- GAME PHASE -->

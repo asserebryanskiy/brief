@@ -118,17 +118,14 @@ public class RolePlayUtils {
             // set answer of salesman
             salesmanAnswersResults.getAnswersPerRound().set(roundIndex, answer);
 
-            // set correct answer and standard deviation depending on doctor role
+            // set correct answer depending on doctor role
             List<Integer> correctAnswersPerRound = salesmanAnswersResults.getCorrectAnswersPerRound();
-            List<Integer> stDeviationPerRound = salesmanAnswersResults.getStDeviationPerRound();
             switch (salesmanAnswerType) {
                 case NUMBER_OF_PATIENTS:
                     correctAnswersPerRound.set(roundIndex, partnerRole.getPatientsAverage());
-                    stDeviationPerRound.set(roundIndex, partnerRole.getPatientsStDeviation());
                     break;
                 case NUMBER_OF_RECIPES:
                     correctAnswersPerRound.set(roundIndex, partnerRole.getRecipeAverage());
-                    stDeviationPerRound.set(roundIndex, partnerRole.getRecipeStDeviation());
                     break;
 
             }
@@ -139,9 +136,9 @@ public class RolePlayUtils {
         if (answer == null) return 0;
 
         switch (answer) {
-            case "low": return -1;
-            case "mid": return 0;
-            case "high": return 1;
+            case "low": return 1;
+            case "mid": return 2;
+            case "high": return 3;
             default: return 0;
         }
     }

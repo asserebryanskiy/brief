@@ -3,6 +3,7 @@
     flex-direction: column;
     justify-content: center;
     height: 100vh;
+    min-height: 500px;
 }
 
 h3 {
@@ -39,6 +40,9 @@ form > button {
     background-color: #4a9d61 !important;
     margin: 20px auto !important;
     align-self: end !important;
+    padding: 20px 40px 18px;
+    box-shadow: black 0 5px 10px -2px;
+    text-transform: uppercase;
 }
 
 form > a {

@@ -279,4 +279,8 @@ export default class RolePlayController {
         if (text === 'Изменить ответы') $btn.removeClass('new-answers').addClass('change-answers');
         else $btn.removeClass('change-answers').addClass('new-answers');
     }
+
+    handleReadyBtnClick(event) {
+        $(event.currentTarget).prop('disabled', true);
+    }
 }
