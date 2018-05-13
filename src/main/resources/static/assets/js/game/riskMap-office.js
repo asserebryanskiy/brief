@@ -17,6 +17,7 @@ $('#show-correct-answers-btn').click(() => {
 $('.answer-input').click((event) => {
     if (answerSendingEnabled) {
         toggleSelected(event);
+        stompClient.send('/app/responses', {}, JSON.stringify({'username':username, 'answerStr':getAnswerStr()}));
     }
 });
 
