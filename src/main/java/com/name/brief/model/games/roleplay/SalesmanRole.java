@@ -3,7 +3,7 @@ package com.name.brief.model.games.roleplay;
 import javax.persistence.Embeddable;
 
 @Embeddable
-public enum SalesmanRole implements GameRole, PharmaRole {
+public enum SalesmanRole implements GameRole {
     SALESMAN_1(
             "Медицинский представитель",
                      "<p class=\"bold\">Описание роли</p>Вы продвигаете лечебные сборы алтайских трав, выпускаемые компанией «Алтай-трава». \n" +
@@ -36,13 +36,4 @@ public enum SalesmanRole implements GameRole, PharmaRole {
         return instruction;
     }
 
-    @Override
-    public String getGameStartText() {
-        return "Представьтесь доктору и начните диалог";
-    }
-
-    @Override
-    public String getCrossingText() {
-        return "Направляйтесь в поликлинику";
-    }
 }

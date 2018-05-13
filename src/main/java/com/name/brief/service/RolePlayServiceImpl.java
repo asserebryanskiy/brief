@@ -56,6 +56,7 @@ public class RolePlayServiceImpl implements RolePlayService {
     }
 
     @Override
+    // ToDo: add some kind of PhaseProcessor interface that will have method process() and different phases will realize it
     public void changePhase(int phaseIndex, Long gameId)
             throws WrongGameTypeException, OddNumberOfPlayersException {
         Phase phase = RolePlay.phases.get(phaseIndex);
@@ -78,34 +79,22 @@ public class RolePlayServiceImpl implements RolePlayService {
                 sendInstructions(game);
                 break;
             case "CROSSING":
-                game.getPlayersData().forEach(data ->
-                        sendToPlayer("crossing", data.getPlayer().getId(), data.getLocation()));
+                sendCrossingMessage(game);
                 break;
             case "CROSSING_2":
                 setNextPartnerForEachPlayer(game);
-
-                // change location for each Salesman and send new info to him
-                game.getPlayersData().stream()
-                        .filter(data -> data.getRole() instanceof SalesmanRole)
-                        .forEach(data -> {
-                            // set partners location to new salesman location
-                            PlayerLocation location = findPlayerData(
-                                    data.getCurrentPartnerId(), game.getPlayersData()).getLocation();
-                            data.setLocation(location);
-                            // send new location to player
-                            sendToPlayer("crossing", data.getPlayer().getId(), data.getLocation());
-                        });
+                changePlayersLocation(game);
+                sendCrossingMessage(game);
                 break;
             case "SURVEY":
             case "SURVEY_2":
-                game.getPlayersData().forEach(data -> {
-                    Long playerId = data.getPlayer().getId();
-                    if (data.getRole() instanceof SalesmanRole) {
-                        sendToPlayer("changePhase", playerId,"SURVEY_SALESMAN");
-                    } else {
-                        sendToPlayer("changePhase", playerId,"SURVEY_DOCTOR");
-                    }
-                });
+                game.getPlayersData().forEach(data ->
+                        sendChangePhaseMessageByRole(data, "SURVEY"));
+                break;
+            case "GAME":
+            case "GAME_2":
+                game.getPlayersData().forEach(data ->
+                        sendChangePhaseMessageByRole(data, "GAME"));
                 break;
             case "DRUGS_DISTRIBUTION":
                 game.getPlayersData().forEach(data -> {
@@ -143,6 +132,37 @@ public class RolePlayServiceImpl implements RolePlayService {
 
         // save game
         gameRepository.save(game);
+    }
+
+    private void sendChangePhaseMessageByRole(PlayerData data, String phaseName) {
+        String phase;
+        if (data.getRole() instanceof SalesmanRole) {
+            phase = phaseName.toUpperCase() + "_SALESMAN";
+        } else {
+            phase = phaseName.toUpperCase() + "_DOCTOR";
+        }
+        sendToPlayer("changePhase", data.getPlayer().getId(), phase);
+    }
+
+    private void changePlayersLocation(RolePlay game) {
+        // change location for each Salesman and send new info to him
+        game.getPlayersData().stream()
+                .filter(data -> data.getRole() instanceof SalesmanRole)
+                .forEach(data -> {
+                    // set partners location to new salesman location
+                    PlayerLocation location = findPlayerData(
+                            data.getCurrentPartnerId(), game.getPlayersData()).getLocation();
+                    data.setLocation(location);
+                    // send new location to player
+                });
+    }
+
+    private void sendCrossingMessage(RolePlay game) {
+        game.getPlayersData().forEach(data -> {
+            sendToPlayer("crossing", data.getPlayer().getId(), data.getLocation());
+            sendChangePhaseMessageByRole(data, "CROSSING");
+        });
+
     }
 
     @Override
@@ -214,7 +234,9 @@ public class RolePlayServiceImpl implements RolePlayService {
 
     private void sendInstructions(RolePlay game) {
         game.getPlayersData().forEach(data ->
-                sendToPlayer("instructions", data.getPlayer().getId(), new InstructionsDto(data.getRole())));
+                sendToPlayer("instructions",
+                                        data.getPlayer().getId(),
+                                        new InstructionsDto(data.getRole())));
     }
 
     private RolePlay getRolePlayGame(Long gameId) throws WrongGameTypeException {

@@ -77,44 +77,89 @@
              id="send-instructions-phase">
             <h2 class="timer">00:00</h2>
             <div class="container" th:fragment="roleAndInstruction">
-                <p class="flow-text light-font"
+                <p class="flow-text light-font left-align"
                    th:fragment="roleText">
                     Ваша роль: <span class="role-name flow-text bold"
                                      th:text="${role.russianName}">Доктор</span>
                 </p>
-                <br>
-                <div class="instruction flow-text light-font"
+                <div class="instruction flow-text light-font left-align"
                      th:fragment="roleInstruction"
                      th:utext="${role.instruction}"></div>
                 <button class="btn ready-btn waves-effect right-align">Кейс прочитан</button>
             </div>
         </div>
 
-        <!-- CROSSING PHASE -->
+        <!-- CROSSING PHASE SALESMAN -->
         <div class="phase-container centered-phase-container container"
-             th:classappend="(${game.phaseIndex} == 4 or ${game.phaseIndex} == 7) ? 'active' : ''"
-             id="crossing-phase">
-            <span class="flow-text light-font crossing-text"
-               th:text="${role.crossingText}">
-            </span>
-            <span class="hospital-number big-font-size"
-                  th:text="${playerData.location.hospital + 1}"></span>
-            <span class="flow-text light-font">, кабинет</span>
-            <span class="room-number big-font-size"
-                  th:text="${playerData.location.room + 1}">2</span>
-            <button class="btn ready-btn waves-effect" href="#">В кабинете</button>
+             th:classappend="((${playerData} != null and ${playerData.role.class.simpleName == 'SalesmanRole'})
+                             and ${game.phaseIndex} == 4 or ${game.phaseIndex} == 7) ? 'active' : ''"
+             th:with="isDoctor = ${role.class.simpleName == 'DoctorRole'}"
+             id="salesman-crossing-phase">
+
+            <p class="flow-text crossing-salesman left-align light-font">
+                <span>Направляйтесь в</span>
+                <br>
+                <i class="material-icons">business</i>
+                <span>Поликлинику</span>
+                <span class="hospital-number big-font-size"
+                      th:text="${' ' + (playerData.location.hospital + 1)}"></span>
+                <br>
+                <i class="material-icons">room</i>
+                <span>Кабинет</span>
+                <span class="room-number big-font-size"
+                      th:text="${' ' + (playerData.location.room + 1)}"></span>
+            </p>
+
+            <button class="btn ready-btn waves-effect">В кабинете</button>
         </div>
 
-        <!-- GAME PHASE -->
+        <!-- CROSSING PHASE DOCTOR-->
+        <div class="phase-container centered-phase-container container"
+             th:classappend="((${playerData} != null and ${playerData.role.class.simpleName == 'DoctorRole'})
+                             and ${game.phaseIndex} == 4 or ${game.phaseIndex} == 7) ? 'active' : ''"
+             id="doctor-crossing-phase">
+
+            <p class="flow-text crossing-doctor light-font">
+                <span>Ожидайте медицинского представителя в</span>
+                <br>
+                <i class="material-icons">business</i>
+                <span>Поликлинике</span>
+                <span class="hospital-number big-font-size"
+                      th:text="${' ' + (playerData.location.hospital + 1)}"></span>
+                <br>
+                <i class="material-icons">room</i>
+                <span>Кабинете</span>
+                <span class="room-number big-font-size"
+                      th:text="${' ' + (playerData.location.room + 1)}"></span>
+            </p>
+
+            <button class="btn ready-btn waves-effect">В кабинете</button>
+        </div>
+
+        <!-- GAME SALESMAN PHASE -->
         <div class="phase-container"
-             th:classappend="(${game.phaseIndex} == 5 or ${game.phaseIndex} == 8) ? 'active' : ''"
-             id="game-phase">
+             th:classappend="((${playerData} != null and ${playerData.role.class.simpleName == 'SalesmanRole'})
+                             and ${game.phaseIndex} == 5 or ${game.phaseIndex} == 8) ? 'active' : ''"
+             id="salesman-game-phase">
             <h2 class="timer">00:00</h2>
             <div class="container">
-                <p th:text="${role.gameStartText}" class="left-align light-font flow-text game-start-text"></p>
+                <p class="left-align light-font flow-text game-start-text">Представьтесь и начните диалог</p>
                 <br>
                 <p th:replace=":: roleText"></p>
+                <div th:replace=":: roleInstruction"></div>
+            </div>
+        </div>
+
+        <!-- GAME DOCTOR PHASE -->
+        <div class="phase-container"
+             th:classappend="((${playerData} != null and ${playerData.role.class.simpleName == 'DoctorRole'})
+                             and ${game.phaseIndex} == 5 or ${game.phaseIndex} == 8) ? 'active' : ''"
+             id="doctor-game-phase">
+            <h2 class="timer">00:00</h2>
+            <div class="container">
+                <p class="left-align light-font flow-text game-start-text">Примите медицинского представителя</p>
                 <br>
+                <p th:replace=":: roleText"></p>
                 <div th:replace=":: roleInstruction"></div>
             </div>
         </div>

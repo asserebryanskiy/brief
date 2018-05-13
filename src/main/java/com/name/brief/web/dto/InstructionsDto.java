@@ -8,15 +8,9 @@ import lombok.Data;
 public class InstructionsDto {
     private String roleName;
     private String instruction;
-    private String gameStartText;
-    private String crossingText;
 
     public InstructionsDto(GameRole role) {
         this.roleName = role.getRussianName();
         this.instruction = role.getInstruction();
-        if (role instanceof PharmaRole) {
-            this.gameStartText = ((PharmaRole) role).getGameStartText();
-            this.crossingText = ((PharmaRole) role).getCrossingText();
-        }
     }
 }

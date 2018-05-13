@@ -34,19 +34,17 @@ export default class RolePlayController {
             case "SEND_INSTRUCTION":
                 phaseId = 'send-instructions-phase';
                 break;
-            case "CROSSING":
-            case "CROSSING_2":
-                phaseId = 'crossing-phase';
+            case "CROSSING_SALESMAN":
+                phaseId = 'salesman-crossing-phase';
                 break;
-            case "GAME":
-            case "GAME_2":
-                phaseId = 'game-phase';
+            case "CROSSING_DOCTOR":
+                phaseId = 'doctor-crossing-phase';
                 break;
-            case "SURVEY":
-            case "SURVEY_2":
-            case "RESULTS":
-            case "DRUGS_DISTRIBUTION":
-                phaseId = -1;
+            case "GAME_SALESMAN":
+                phaseId = 'salesman-game-phase';
+                break;
+            case "GAME_DOCTOR":
+                phaseId = 'doctor-game-phase';
                 break;
             case "SURVEY_SALESMAN":
                 phaseId = 'salesman-survey-phase';
@@ -76,6 +74,8 @@ export default class RolePlayController {
             case "EXPECTATION":
                 phaseId = 'expectation-phase';
                 break;
+            default:
+                phaseId = -1;
         }
         return phaseId;
     }
