@@ -33,6 +33,7 @@ export default class RolePlayController {
                 break;
             case "SEND_INSTRUCTION":
                 phaseId = 'send-instructions-phase';
+                $('.ready-btn').prop('disabled', false);
                 break;
             case "CROSSING_SALESMAN":
                 phaseId = 'salesman-crossing-phase';
@@ -42,6 +43,10 @@ export default class RolePlayController {
                 break;
             case "GAME_SALESMAN":
                 phaseId = 'salesman-game-phase';
+                break;
+            case "CROSSING":
+            case "CROSSING_2":
+                $('.ready-btn').prop('disabled', false);
                 break;
             case "GAME_DOCTOR":
                 phaseId = 'doctor-game-phase';
@@ -55,6 +60,10 @@ export default class RolePlayController {
                 $('.ee-answer-variant').removeClass('selected');
                 $('.comments-input').val('');
                 M.textareaAutoResize($('#doctor-comments-textarea'));
+                break;
+            case "SURVEY":
+            case "SURVEY_2":
+                this.changeSendResponsesBtn('Отправить ответы');
                 break;
             case "RESULTS_AVERAGE":
                 phaseId = 'average-results-phase';
@@ -108,11 +117,23 @@ export default class RolePlayController {
 
     static handleInstructionMessageReceived(message) {
         const json = JSON.parse(message.body);
-        $('.role-name').text(json['roleName']);
+        $('.role-name').text(json['russianRoleName']);
         $('.instruction').empty()
             .append($.parseHTML(json['instruction']));
-        $('.game-start-text').text(json['gameStartText']);
-        $('.crossing-text').text(json['crossingText']);
+
+        // show proper image
+        $('.role-img').hide();
+        switch (json['englishRoleName']) {
+            case 'DOCTOR_1':
+                $('.doctor-1-img').show();
+                break;
+            case 'DOCTOR_2':
+                $('.doctor-2-img').show();
+                break;
+            case 'SALESMAN_1':
+                $('.salesman-img').show();
+                break;
+        }
     }
 
     handleSalesmanAnswerSend() {
@@ -274,7 +295,7 @@ export default class RolePlayController {
     }
 
     static changeSendResponsesBtn(text) {
-        const $btn = $('.phase-container.active .send-responses-btn');
+        const $btn = $('.send-responses-btn:visible');
         $btn.text(text);
         if (text === 'Изменить ответы') $btn.removeClass('new-answers').addClass('change-answers');
         else $btn.removeClass('change-answers').addClass('new-answers');

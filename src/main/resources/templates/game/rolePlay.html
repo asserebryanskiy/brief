@@ -61,12 +61,15 @@
              id="send-roles-phase">
             <p th:replace=":: roleText">Ваша роль: доктор Терапевт</p>
             <img th:src="@{/assets/image/rolePlay/doctor_1.jpeg}"
+                 class="doctor-1-img role-img"
                  th:classappend="${role.name() != 'DOCTOR_1'} ? 'hide'"
                  alt="Доктор">
             <img th:src="@{/assets/image/rolePlay/doctor_2.jpeg}"
+                 class="doctor-2-img role-img"
                  th:classappend="${role.name() != 'DOCTOR_2'} ? 'hide'"
                  alt="Доктор">
-            <img th:src="@{/assets/image/rolePlay/salesman.jpeg}"
+            <img th:src="@{/assets/image/rolePlay/salesman.jpg}"
+                 class="salesman-img role-img"
                  th:classappend="${role.name() != 'SALESMAN_1'} ? 'hide'"
                  alt="Доктор">
         </div>
@@ -96,7 +99,7 @@
              th:with="isDoctor = ${role.class.simpleName == 'DoctorRole'}"
              id="salesman-crossing-phase">
 
-            <p class="flow-text crossing-salesman left-align light-font">
+            <p class="flow-text crossing-salesman center-align light-font">
                 <span>Направляйтесь в</span>
                 <br>
                 <i class="material-icons">business</i>
@@ -183,6 +186,7 @@
             </div>
             <button class="send-responses-btn salesman-send-responses-btn new-answers">Отправить</button>
         </div>
+        
 
         <!-- SURVEY DOCTOR PHASE -->
         <div class="phase-container container"
@@ -339,7 +343,7 @@
                              and ${game.phaseIndex} == 11 ? 'active' : ''"
              id="average-results-phase">
             <div class="container">
-                <p class="bold flow-text">Средний балл по компетенциям всех медицнских представителей</p>
+                <p class="bold flow-text">Средний балл по компетенциям всех медицинских представителей</p>
                 <div class="competencies-results-grid">
                     <div th:each="competency : ${T(com.name.brief.model.games.roleplay.SalesmanCompetency).values()}"
                          th:remove="tag">

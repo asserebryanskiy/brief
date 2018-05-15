@@ -6,11 +6,13 @@ import lombok.Data;
 
 @Data
 public class InstructionsDto {
-    private String roleName;
+    private String englishRoleName;
+    private String russianRoleName;
     private String instruction;
 
     public InstructionsDto(GameRole role) {
-        this.roleName = role.getRussianName();
+        this.englishRoleName = role.toString();
+        this.russianRoleName = role.getRussianName();
         this.instruction = role.getInstruction();
     }
 }
