@@ -23,8 +23,8 @@ import java.io.IOException;
 import java.time.LocalDate;
 
 public class PlayerAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
-    public static final String DTO_ATTRIBUTE = "playerLoginDto";
-    public static final String ERRORS_ATTRIBUTE = "org.springframework.validation.BindingResult.playerLoginDto";
+    public static final String DTO_ATTRIBUTE_NAME = "playerLoginDto";
+    public static final String ERRORS_ATTRIBUTE_NAME = "org.springframework.validation.BindingResult.playerLoginDto";
     private final GameSessionService gameSessionService;
     private final PlayerAuthenticationService playerAuthenticationService;
     private Player player;
@@ -34,11 +34,6 @@ public class PlayerAuthenticationFilter extends UsernamePasswordAuthenticationFi
                                       PlayerAuthenticationService playerAuthenticationService) {
         this.gameSessionService = gameSessionService;
         this.playerAuthenticationService = playerAuthenticationService;
-    }
-
-    @Override
-    public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
-        super.doFilter(req, res, chain);
     }
 
     @Override
@@ -55,15 +50,15 @@ public class PlayerAuthenticationFilter extends UsernamePasswordAuthenticationFi
             try {
                 if (result.hasFieldErrors("gameSessionStrId")) {
                     response.sendRedirect("/");
-                    request.getSession().setAttribute(ERRORS_ATTRIBUTE, result);
+                    request.getSession().setAttribute(ERRORS_ATTRIBUTE_NAME, result);
                 } else {
                     response.sendRedirect("/login");
                     if (request.getHeader("referer").endsWith("/login")) {
-                        request.getSession().setAttribute(ERRORS_ATTRIBUTE, result);
+                        request.getSession().setAttribute(ERRORS_ATTRIBUTE_NAME, result);
                     }
                     playerLoginDto.setAuthenticationType(session.getAuthenticationType());
                 }
-                request.getSession().setAttribute(DTO_ATTRIBUTE, playerLoginDto);
+                request.getSession().setAttribute(DTO_ATTRIBUTE_NAME, playerLoginDto);
             } catch (IOException e) {
                 e.printStackTrace();
             }

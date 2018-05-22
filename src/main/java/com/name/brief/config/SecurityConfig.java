@@ -15,6 +15,11 @@ import org.springframework.core.annotation.Order;
 import org.springframework.data.repository.query.spi.EvaluationContextExtension;
 import org.springframework.data.repository.query.spi.EvaluationContextExtensionSupport;
 import org.springframework.security.access.expression.SecurityExpressionRoot;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.ProviderManager;
+import org.springframework.security.authentication.RememberMeAuthenticationProvider;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -27,10 +32,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.authentication.AuthenticationFailureHandler;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.*;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
+import org.springframework.security.web.authentication.rememberme.*;
 import org.springframework.security.web.authentication.session.*;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
@@ -39,6 +43,7 @@ import javax.servlet.Filter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
 
 @Configuration
 @EnableWebSecurity
@@ -87,7 +92,7 @@ public class SecurityConfig {
                     .invalidateHttpSession(true)
                     .deleteCookies("JSESSIONID")
                 .and().rememberMe()
-                    .useSecureCookie(true)
+                    .useSecureCookie(false)
                     .tokenValiditySeconds(86940)
                     .alwaysRemember(true);
 
@@ -161,6 +166,7 @@ public class SecurityConfig {
         private final GameSessionService gameSessionService;
         private final PlayerAuthenticationService playerAuthenticationService;
         private final MessageSource messageSource;
+        private final String rememberMeKey = UUID.randomUUID().toString();
 
         @Autowired
         public PlayerSecurityConfig(PlayerService playerService,
@@ -186,12 +192,11 @@ public class SecurityConfig {
         @Bean
         public Filter playerAuthenticationFilter() throws Exception {
             PlayerAuthenticationFilter filter = new PlayerAuthenticationFilter(gameSessionService, playerAuthenticationService);
-            filter.setAuthenticationManager(authenticationManager());
+            filter.setAuthenticationManager(playerAuthenticationManager());
             filter.setRequiresAuthenticationRequestMatcher(new AntPathRequestMatcher("/login","POST"));
 
             // success authentication handler
-            filter.setAuthenticationSuccessHandler(((request, response, authentication) ->
-                    response.sendRedirect("/game")));
+            filter.setAuthenticationSuccessHandler(authenticationSuccessHandler());
 
             // failure authentication handler
             filter.setAuthenticationFailureHandler((request, response, exception) ->
@@ -209,9 +214,32 @@ public class SecurityConfig {
             strategies.add(new RegisterSessionAuthenticationStrategy(sessionRegistry));
             filter.setSessionAuthenticationStrategy(
                     new CompositeSessionAuthenticationStrategy(strategies));
+            filter.setRememberMeServices(playerRememberMeServices());
 
             return filter;
         }
+
+        private AuthenticationSuccessHandler authenticationSuccessHandler() {
+            return (request, response, authentication) ->
+                    response.sendRedirect("/game");
+        }
+
+        @Bean
+        public RememberMeServices playerRememberMeServices() {
+            TokenBasedRememberMeServices rememberMeServices = new TokenBasedRememberMeServices(
+                    rememberMeKey,
+                    playerService
+            );
+            rememberMeServices.setAlwaysRemember(true);
+            rememberMeServices.setUseSecureCookie(false);
+            rememberMeServices.setTokenValiditySeconds(3600);
+            return rememberMeServices;
+        }
+
+        /*@Bean
+        public PersistentTokenRepository tokenRepository() {
+            return new InMemoryTokenRepositoryImpl();
+        }*/
 
         @Override
         protected void configure(HttpSecurity http) throws Exception {
@@ -229,12 +257,32 @@ public class SecurityConfig {
                     .invalidateHttpSession(true)
                     .deleteCookies("JSESSIONID")
                     .and()
-                .addFilterBefore(playerAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(playerAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(rememberMeAuthenticationFilter(), AnonymousAuthenticationFilter.class);
 
             http.sessionManagement().maximumSessions(1)
                     .maxSessionsPreventsLogin(true)
                     .sessionRegistry(sessionRegistry())
                     .expiredUrl("/");
+        }
+
+        private RememberMeAuthenticationFilter rememberMeAuthenticationFilter() {
+            RememberMeAuthenticationFilter filter = new RememberMeAuthenticationFilter(
+                    playerAuthenticationManager(),
+                    playerRememberMeServices()
+            );
+            filter.setAuthenticationSuccessHandler(authenticationSuccessHandler());
+            return filter;
+        }
+
+        @Bean
+        public AuthenticationManager playerAuthenticationManager() {
+            List<AuthenticationProvider> providers = new ArrayList<>(2);
+            DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
+            daoAuthenticationProvider.setUserDetailsService(playerService);
+            providers.add(daoAuthenticationProvider);
+            providers.add(new RememberMeAuthenticationProvider(rememberMeKey));
+            return new ProviderManager(providers);
         }
 
         @Bean

@@ -73,7 +73,7 @@ public class Player extends BaseEntity implements UserDetails{
 
     @Override
     public String getPassword() {
-        return "";
+        return "password";
     }
 
     @Override
