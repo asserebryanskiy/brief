@@ -15,7 +15,7 @@
     </div>
 
     <div th:fragment="header" class="header v-centered">
-        <h1 class="inline">Мои игры</h1>
+        <h1 class="inline">Мои сессии</h1>
         <div class="header-center-content">
             <form class="search-field inline v-centered">
                 <svg id="input-search-icon" xmlns="http://www.w3.org/2000/svg" class="inline"><title>search</title><path d="M19.427 20.427c-1.39 0.99-3.090 1.573-4.927 1.573-4.694 0-8.5-3.806-8.5-8.5s3.806-8.5 8.5-8.5c4.694 0 8.5 3.806 8.5 8.5 0 2.347-0.951 4.472-2.49 6.010l5.997 5.997c0.275 0.275 0.268 0.716-0.008 0.992-0.278 0.278-0.72 0.28-0.992 0.008l-6.081-6.081zM14.5 21c4.142 0 7.5-3.358 7.5-7.5s-3.358-7.5-7.5-7.5c-4.142 0-7.5 3.358-7.5 7.5s3.358 7.5 7.5 7.5v0z"></path></svg>
@@ -40,7 +40,7 @@
         <div class="game-nav">
             <a th:href="@{/moderator}">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M5 3l3.057-3 11.943 12-11.943 12-3.057-3 9-9z"></path></svg>
-                <span>Мои игры</span>
+                <span>Мои сессии</span>
             </a>
             <div class="game-nav-views">
                 <a th:href="@{|/moderator/gameSession/${gameSession.id}|}" th:classappend="${dashboardView}?'selected':''">Модератор</a>
@@ -170,11 +170,11 @@
         </div>
         <input type="hidden" th:field="*{oldStrId}">
         <input type="hidden" th:field="*{gameSessionId}">
-        <p>Код игры</p>
+        <p>Код сессии</p>
         <input type="text" name="newStrId" th:value="*{__${createNew ? 'newStrId' : 'oldStrId'}__}">
         <p>Дата проведения</p>
         <input type="date" th:field="*{activeDate}">
-        <label th:if="${createNew}">Тип игры</label>
+        <label th:if="${createNew}">Тип активности</label>
         <select th:if="${createNew}"
                 class="game-type-select"
                 th:field="*{gameType}">

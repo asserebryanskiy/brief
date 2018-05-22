@@ -10,12 +10,12 @@
     <div th:replace="appFragments :: preloader"></div>
     <div th:replace="administration/fragments :: header"></div>
     <div class="new-session-wrapper">
-        <button id="new-session-btn">Создать новую игру</button>
+        <button id="new-session-btn">Создать новую сессию</button>
         <div class="popup-wrapper" th:classappend="${showPopup == null or !showPopup ? 'hidden' : ''}">
             <div class="popup">
                 <div class="popup-back"></div>
                 <div class="popup-content">
-                    <div th:replace="administration/fragments :: popupHeader('Создать новую игру')"></div>
+                    <div th:replace="administration/fragments :: popupHeader('Создать новую сессию')"></div>
                     <div class="popup-form-wrapper">
                         <form th:action="@{/moderator}"
                               th:object="${gameSessionDto}" method="post">
