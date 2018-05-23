@@ -9,13 +9,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class DemoController {
-    @RequestMapping("/demo/E86CD2557B8F9C99")
+    @RequestMapping("/demo/Du6R14Qj")
     public String getOfficeRiskMapDemo(Model model) {
         prepare(model, RiskMapType.OFFICE);
         return "game/riskMapDemo";
     }
 
-    @RequestMapping("/demo/515996F5F5433")
+    @RequestMapping("/demo/Kz2sY3R6")
     public String getHotelRiskMapDemo(Model model) {
         prepare(model, RiskMapType.HOTEL);
         return "game/riskMapDemo";
