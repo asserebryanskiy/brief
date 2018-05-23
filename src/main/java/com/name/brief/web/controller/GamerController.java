@@ -22,7 +22,8 @@ public class GamerController {
     private final PlayerAuthenticationService playerAuthenticationService;
 
     @Autowired
-    public GamerController(GameSessionService service, PlayerAuthenticationService playerAuthenticationService) {
+    public GamerController(GameSessionService service,
+                           PlayerAuthenticationService playerAuthenticationService) {
         this.service = service;
         this.playerAuthenticationService = playerAuthenticationService;
     }
@@ -40,6 +41,8 @@ public class GamerController {
             playerAuthenticationService.logout(principal);
             return "redirect:/";
         }
+
+
         Decision decision = player.getDecision(gameSession.getCurrentRoundIndex());
         model.addAttribute("commandName", player.getCommandName());
         model.addAttribute("gameSession", gameSession);

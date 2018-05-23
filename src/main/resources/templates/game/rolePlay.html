@@ -21,7 +21,7 @@
         <div class="header">
             <img th:src="@{/assets/image/logo.png}" alt="logo">
             <div class="header-text-box">
-                <p th:unless="${projectorMode}" th:text="'Игрок ' + ${playerId}" class="command-name"></p>
+                <p th:unless="${projectorMode}" th:text="'Игрок ' + ${playerData.orderNumber}" class="command-name"></p>
                 <p th:unless="${demo} or ${round == -1}"
                    id="round-name"
                    th:text="'Раунд ' + ${game.roundIndex + 1}"></p>

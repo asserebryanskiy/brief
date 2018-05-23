@@ -1,6 +1,7 @@
 package com.name.brief.web.dto;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * Is sent by PlayerAuthenticationService by websocket to the client side.
@@ -12,13 +13,11 @@ import lombok.Data;
  *  - player disconnected from websocket
  */
 @Data
+@NoArgsConstructor
 public class PlayerConnectionDto {
     private PlayerConnectionInstruction instruction;
     private String username;
     private String identifierForModerator;  // what moderator will see as player identifier when player displays
-
-    public PlayerConnectionDto() {
-    }
 
     public PlayerConnectionDto(PlayerConnectionInstruction instruction, String username) {
         this.instruction = instruction;
