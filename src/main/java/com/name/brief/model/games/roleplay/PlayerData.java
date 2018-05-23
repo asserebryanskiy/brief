@@ -29,7 +29,7 @@ public class PlayerData extends BaseEntity {
     @LazyCollection(LazyCollectionOption.FALSE)
     private Set<Long> playedPlayers = new HashSet<>();
     @Embedded
-    private PlayerLocation location;
+    private PlayerLocation location = new PlayerLocation();
 
     @OneToMany(cascade = CascadeType.ALL)
     @LazyCollection(LazyCollectionOption.FALSE)

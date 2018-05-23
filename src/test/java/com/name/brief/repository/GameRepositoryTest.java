@@ -45,7 +45,7 @@ public class GameRepositoryTest {
     }
 
     @Test
-    public void name() {
+    public void savingRolePlayCreatesDoctorEstimationMapsForItsPlayerData() {
         RolePlay game = new RolePlay();
         game.getPlayersData().add(new PlayerData());
 
