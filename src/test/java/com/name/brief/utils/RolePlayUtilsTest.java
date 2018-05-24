@@ -156,6 +156,45 @@ public class RolePlayUtilsTest {
     }
 
     @Test
+    public void setNextPartnerForEachPlayer_properlyDistributesSixPlayersInTheSecondRound() throws OddNumberOfPlayersException {
+        RolePlay rolePlay = new RolePlay();
+        addPlayers(createPlayers(6), rolePlay);
+        List<PlayerData> playersData = rolePlay.getPlayersData();
+
+        setNextPartnerForEachPlayer(rolePlay);
+
+        assertThat(playersData.get(1).getCurrentPartnerId(), is(2L));
+        assertThat(playersData.get(3).getCurrentPartnerId(), is(4L));
+        assertThat(playersData.get(5).getCurrentPartnerId(), is(0L));
+    }
+
+    @Test
+    public void setNextPartnerForEachPlayer_properlyDistributesFourPlayersInTheSecondRound() throws OddNumberOfPlayersException {
+        RolePlay rolePlay = new RolePlay();
+        addPlayers(createPlayers(4), rolePlay);
+        List<PlayerData> playersData = rolePlay.getPlayersData();
+
+        setNextPartnerForEachPlayer(rolePlay);
+
+        assertThat(playersData.get(1).getCurrentPartnerId(), is(2L));
+        assertThat(playersData.get(3).getCurrentPartnerId(), is(0L));
+    }
+
+    @Test
+    public void setNextPartnerForEachPlayer_properlyDistributesHeightPlayersInTheSecondRound() throws OddNumberOfPlayersException {
+        RolePlay rolePlay = new RolePlay();
+        addPlayers(createPlayers(8), rolePlay);
+        List<PlayerData> playersData = rolePlay.getPlayersData();
+
+        setNextPartnerForEachPlayer(rolePlay);
+
+        assertThat(playersData.get(1).getCurrentPartnerId(), is(2L));
+        assertThat(playersData.get(3).getCurrentPartnerId(), is(4L));
+        assertThat(playersData.get(5).getCurrentPartnerId(), is(6L));
+        assertThat(playersData.get(7).getCurrentPartnerId(), is(0L));
+    }
+
+    @Test
     public void setNextPartnerForEachPlayer_worksCorrectly() throws OddNumberOfPlayersException {
         RolePlay game = new RolePlay();
         addPlayers(createPlayers(4), game);

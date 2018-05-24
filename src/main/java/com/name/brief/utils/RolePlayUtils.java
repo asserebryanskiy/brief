@@ -49,12 +49,32 @@ public class RolePlayUtils {
         if (data.getPlayedPlayers().size() >= playersData.size() / 2)
             data.getPlayedPlayers().clear();
 
+        Long playedPlayerId = getAnyPlayedPlayerId(data);
+        if (playedPlayerId != null) {
+            int indexOfPlayedPlayer = playersData.indexOf(findPlayerData(playedPlayerId, playersData));
+            for (int i = indexOfPlayedPlayer + 1; i != indexOfPlayedPlayer; i++) {
+                // if we reached an end of the list, start from the beggining
+                if (i == playersData.size()) i = 0;
+
+                PlayerData partnerData = playersData.get(i);
+                if (partnerData.getRole() instanceof DoctorRole
+                        && !occupiedDoctorsIds.contains(partnerData.getPlayer().getId())
+                        && !data.getPlayedPlayers().contains(partnerData.getPlayer().getId()))
+                    return partnerData;
+            }
+        }
+        // if playedPlayerId is null it means that it is first round and we can orient only on occupiedDoctors
         return playersData.stream()
-                .filter(partnerData -> partnerData.getRole() instanceof DoctorRole)
-                .filter(partnerData -> !occupiedDoctorsIds.contains(partnerData.getPlayer().getId()))
-                .filter(partnerData -> !data.getPlayedPlayers().contains(partnerData.getPlayer().getId()))
-                .findAny()
-                .orElseThrow(() -> new IllegalArgumentException("All doctors are occupied"));
+                    .filter(partnerData -> partnerData.getRole() instanceof DoctorRole)
+                    .filter(partnerData -> !occupiedDoctorsIds.contains(partnerData.getPlayer().getId()))
+                    .findAny()
+                    .orElseThrow(() -> new IllegalArgumentException("All doctors are occupied"));
+    }
+
+    private static Long getAnyPlayedPlayerId(PlayerData data) {
+        return data.getPlayedPlayers().size() > 0 ?
+                data.getPlayedPlayers().iterator().next() :
+                null;
     }
 
     public static void addPlayers(List<Player> players, RolePlay game) throws OddNumberOfPlayersException {
@@ -73,7 +93,7 @@ public class RolePlayUtils {
                 data.setRole(SalesmanRole.SALESMAN_1);
             }
             data.setCurrentPartnerId(partner.getId());
-            data.getPlayedPlayers().add(partner.getId());
+//            data.getPlayedPlayers().add(partner.getId());
             data.setLocation(new PlayerLocation(0, i / 2));
             game.getPlayersData().add(data);
         }
