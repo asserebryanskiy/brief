@@ -65,15 +65,15 @@
                 <p th:replace=":: roleText">Ваша роль: доктор Терапевт</p>
                 <img th:src="@{/assets/image/rolePlay/doctor_1.jpeg}"
                      class="doctor-1-img role-img"
-                     th:classappend="${role.name() != 'DOCTOR_1'} ? 'hide'"
+                     th:classappend="${role.name() != 'DOCTOR_1'} ? 'hidden'"
                      alt="Доктор">
                 <img th:src="@{/assets/image/rolePlay/doctor_2.jpeg}"
                      class="doctor-2-img role-img"
-                     th:classappend="${role.name() != 'DOCTOR_2'} ? 'hide'"
+                     th:classappend="${role.name() != 'DOCTOR_2'} ? 'hidden'"
                      alt="Доктор">
                 <img th:src="@{/assets/image/rolePlay/salesman.jpg}"
                      class="salesman-img role-img"
-                     th:classappend="${role.name() != 'SALESMAN_1'} ? 'hide'"
+                     th:classappend="${role.name() != 'SALESMAN_1'} ? 'hidden'"
                      alt="Доктор">
             </div>
 
