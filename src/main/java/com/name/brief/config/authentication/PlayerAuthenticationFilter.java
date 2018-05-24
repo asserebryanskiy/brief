@@ -65,9 +65,17 @@ public class PlayerAuthenticationFilter extends UsernamePasswordAuthenticationFi
             return null;
         }
 
-        player = gameSessionService.addPlayer(playerLoginDto, session);
+        player = gameSessionService.addPlayer(createPlayer(playerLoginDto), session);
 
         return super.attemptAuthentication(request, response);
+    }
+
+    private Player createPlayer(PlayerLoginDto dto) {
+        Player player = new Player();
+        player.setCommandName(dto.getCommandName());
+        player.setName(dto.getName());
+        player.setSurname(dto.getSurname());
+        return player;
     }
 
     @Override

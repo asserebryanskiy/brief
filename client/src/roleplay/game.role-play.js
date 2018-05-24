@@ -46,6 +46,10 @@ function onWsConnect() {
         RolePlayController.handleLogout();
     });
 
+    wsService.subscribe('/queue/player/' + playerId + '/goToIndex', () => {
+        window.location.href = location.protocol + '//' +  window.location.host;
+    });
+
     // subscribe on results
 
     $('.preloader').fadeOut();

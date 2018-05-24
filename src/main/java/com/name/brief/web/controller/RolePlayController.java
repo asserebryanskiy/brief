@@ -3,6 +3,7 @@ package com.name.brief.web.controller;
 import com.name.brief.exception.OddNumberOfPlayersException;
 import com.name.brief.exception.WrongGameTypeException;
 import com.name.brief.model.Player;
+import com.name.brief.service.PlayerAuthenticationService;
 import com.name.brief.service.RolePlayService;
 import com.name.brief.web.dto.DoctorAnswerDto;
 import com.name.brief.web.dto.DrugDistributionDto;
@@ -22,12 +23,15 @@ public class RolePlayController {
 
     private final RolePlayService rolePlayService;
     private final SimpMessagingTemplate template;
+    private final PlayerAuthenticationService playerAuthenticationService;
 
     @Autowired
     public RolePlayController(RolePlayService rolePlayService,
-                              SimpMessagingTemplate template) {
+                              SimpMessagingTemplate template,
+                              PlayerAuthenticationService playerAuthenticationService) {
         this.rolePlayService = rolePlayService;
         this.template = template;
+        this.playerAuthenticationService = playerAuthenticationService;
     }
 
     @MessageMapping("/rolePlay/{gameId}/rolePlaySettings")
@@ -82,7 +86,7 @@ public class RolePlayController {
 
     @MessageMapping("/rolePlay/{gameId}/logoutPlayer")
     public void logoutPlayer(@DestinationVariable Long gameId, String username) {
-        String id = username.substring(6);
-        template.convertAndSend("/queue/rolePlay/player/" + id + "/logout", "");
+        playerAuthenticationService.logout(username);
+//        template.convertAndSend("/queue/rolePlay/player/" + id + "/logout", "");
     }
 }

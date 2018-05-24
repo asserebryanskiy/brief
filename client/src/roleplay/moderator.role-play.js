@@ -7,8 +7,8 @@ import PlayerConnectionService from "../player-connection-service";
 let phases = GameSessionUtils.getPhases();
 const gameId = GameSessionUtils.getGameId();
 const wsService = new WsService(gameId, 'rolePlay');
-const playerConnectionService = new PlayerConnectionService(GameSessionUtils.getGameSessionId());
 const controller = new RolePlayController(wsService, phases);
+const playerConnectionService = new PlayerConnectionService(GameSessionUtils.getGameSessionId(), controller);
 // let roundIndex = GameSessionUtils.getCurrentRoundIndex();
 
 function onWsConnect() {

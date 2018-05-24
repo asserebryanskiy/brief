@@ -9,7 +9,9 @@ import java.util.Set;
 
 public interface PlayerAuthenticationService {
     Set<String> getAuthenticatedPlayersUsernames(Long gameSessionId);
+    void logout(String username);
     void logout(Player player);
+
     boolean isLoggedIn(Player player);
 
     boolean isLoggedIn(String username);

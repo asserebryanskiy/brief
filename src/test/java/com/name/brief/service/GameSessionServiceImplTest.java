@@ -39,9 +39,6 @@ public class GameSessionServiceImplTest {
     @MockBean
     private PlayerRepository playerRepository;
 
-    @MockBean
-    private PlayerAuthenticationService playerAuthenticationService;
-
     @Test(expected = GameSessionAlreadyExistsException.class)
     public void save_alreadyExistingSessionResultsInException() {
         GameSession session = new GameSession();
@@ -90,26 +87,17 @@ public class GameSessionServiceImplTest {
     }
 
     @Test
-    public void delete_expiresAllGameSessionPlayers() {
-        GameSession session = new GameSession.GameSessionBuilder("id").build();
-        when(repository.findOne(session.getId())).thenReturn(session);
-
-        service.delete(session.getId());
-
-        session.getPlayers().forEach(p -> verify(playerAuthenticationService).logout(p));
-    }
-
-    @Test
     public void addPlayer_givesPlayerUsername() {
         GameSession session = new GameSession.GameSessionBuilder("id").build();
+        Player player = new Player();
         when(repository.findOne(session.getId())).thenReturn(session);
-        when(repository.save(session)).thenAnswer((s) -> {
-            session.getPlayers().get(0).setId(1L);
+        when(playerRepository.save(player)).thenAnswer((s) -> {
+            player.setId(1L);
             return null;
         });
 
-        service.addPlayer(new PlayerLoginDto(), session);
+        service.addPlayer(player, session);
 
-        assertThat(session.getPlayers().get(0).getUsername(), is("player1"));
+        assertThat(player.getUsername(), is("player1"));
     }
 }

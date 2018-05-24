@@ -4,8 +4,6 @@ import com.name.brief.exception.GameSessionAlreadyExistsException;
 import com.name.brief.model.GameSession;
 import com.name.brief.model.Player;
 import com.name.brief.web.dto.GameSessionDto;
-import com.name.brief.web.dto.MoveToDto;
-import com.name.brief.web.dto.PlayerLoginDto;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -37,7 +35,7 @@ public interface GameSessionService {
 
     void nullPlayersAnswers(Long gameSessionId);
 
-    Player addPlayer(PlayerLoginDto dto, GameSession session);
+    Player addPlayer(Player player, GameSession session);
 
     void removePlayer(Player player);
 }

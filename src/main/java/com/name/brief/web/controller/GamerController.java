@@ -6,12 +6,14 @@ import com.name.brief.model.Player;
 import com.name.brief.model.games.roleplay.*;
 import com.name.brief.service.GameSessionService;
 import com.name.brief.service.PlayerAuthenticationService;
-import com.name.brief.utils.RolePlayUtils;
+import com.name.brief.service.PlayerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.security.Principal;
 
 import static com.name.brief.utils.RolePlayUtils.findPlayerData;
 
@@ -19,39 +21,36 @@ import static com.name.brief.utils.RolePlayUtils.findPlayerData;
 public class GamerController {
 
     private final GameSessionService service;
+    private final PlayerService playerService;
     private final PlayerAuthenticationService playerAuthenticationService;
 
     @Autowired
     public GamerController(GameSessionService service,
+                           PlayerService playerService,
                            PlayerAuthenticationService playerAuthenticationService) {
         this.service = service;
+        this.playerService = playerService;
         this.playerAuthenticationService = playerAuthenticationService;
     }
 
     @RequestMapping("/game")
-    public String startGame(Model model) {
-        Player principal = (Player) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        GameSession gameSession = service.getSession(principal.getGameSession().getId());
-        Player player = gameSession.getPlayers().stream()
-                .filter(p -> p.getId().equals(principal.getId()))
-                .findAny()
-                .orElse(null);
+    // ToDo: remove this chaos! No more logic in my controllers!
+    public String startGame(Model model, Principal principal) {
+        Player player = playerService.findByUsername(principal.getName());
+
         // if player is null it means it was deleted from gameSession object
         if (player == null) {
-            playerAuthenticationService.logout(principal);
+            // if user managed to get to this mapping, it means he can only
+            // be authenticated as Player, thus casting is justified
+            Player authenticated = (Player) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            playerAuthenticationService.logout(authenticated);
             return "redirect:/";
         }
 
-
-        Decision decision = player.getDecision(gameSession.getCurrentRoundIndex());
-        model.addAttribute("commandName", player.getCommandName());
-        model.addAttribute("gameSession", gameSession);
-        model.addAttribute("decision", decision);
         model.addAttribute("playerId", player.getId());
-        if (!gameSession.timerIsRunning()) {
-            model.addAttribute("disableAnswerSend", true);
-        }
 
+        GameSession gameSession = service.getSession(player.getGameSession().getId());
+        model.addAttribute("gameSession", gameSession);
         if (gameSession.getGame() instanceof RolePlay) {
             PlayerData data = findPlayerData(player.getId(), ((RolePlay) gameSession.getGame()).getPlayersData());
             if (data == null) {

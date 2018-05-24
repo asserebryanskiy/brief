@@ -2,11 +2,13 @@ import $ from "jquery";
 import GameSessionUtils from "./game-session-utils";
 
 export default class PlayerConnectionService {
-    constructor(gameSessionId) {
+    constructor(gameSessionId, controller) {
         this.gameSessionId = gameSessionId;
+        this.controller = controller;
     }
 
     subscribe(wsService) {
+        const service = this;
         wsService.subscribe('/queue/' + this.gameSessionId + '/connection', function (message) {
             const json = JSON.parse(message.body);
             const instruction = json['instruction'];
@@ -20,19 +22,19 @@ export default class PlayerConnectionService {
                     addLoggedInPlayer();
                     break;*/
                 case 'CONNECT':
-                    PlayerConnectionService.indicateConnection(username, identifierForModerator);
+                    service.indicateConnection(username, identifierForModerator);
                     break;
                 case 'DISCONNECT':
-                    PlayerConnectionService.indicateDisconnection(username);
+                    service.indicateDisconnection(username);
                     break;
                 case 'LOGOUT':
-                    PlayerConnectionService.removeLoggedOutPlayer(username);
+                    service.removeLoggedOutPlayer(username);
                     break;
             }
         });
     }
 
-    static indicateDisconnection(username) {
+    indicateDisconnection(username) {
         const $player = $('#' + username);
         const $playerRow = $('#player-row-' + username);
 
@@ -43,12 +45,12 @@ export default class PlayerConnectionService {
         $playerRow.removeClass('connected').addClass('disconnected');
     }
 
-    static removeLoggedOutPlayer(username) {
+    removeLoggedOutPlayer(username) {
         $('#' + username).remove();
         $('#player-row-' + username).remove();
     }
 
-    static indicateConnection(username, identifierForModerator) {
+    indicateConnection(username, identifierForModerator) {
         // noinspection JSJQueryEfficiency
         let $player = $('#' + username);
 
@@ -68,7 +70,7 @@ export default class PlayerConnectionService {
         return {$player, $playerRow};
     }
 
-    static addPlayer(username, identifierForModerator) {
+    addPlayer(username, identifierForModerator) {
         // clone template for player-row and player
         const $playerTemplate = $('.player-template');
         const $playerRowTemplate = $('.player-row-template');
@@ -84,8 +86,10 @@ export default class PlayerConnectionService {
         $both.find('.command-name').text(identifierForModerator);
 
         // set player's logout svg id (in table row also)
-        $player.find('svg').attr('id', username + '-logout');
-        $playerRow.find('svg').attr('id', username + '-logout-table');
+        $player.find('svg').attr('id', username + '-logout')
+            .click((event) => this.controller.handleLogoutPlayer(event));
+        $playerRow.find('svg').attr('id', username + '-logout-table')
+            .click((event) => this.controller.handleLogoutPlayer(event));
 
         // add player to screen after template
         $player.insertAfter($playerTemplate);
@@ -95,7 +99,7 @@ export default class PlayerConnectionService {
         $both.removeClass('player-template player-row-template hidden');
     }
 
-    static signalDisconnection($el) {
+    signalDisconnection($el) {
         $el.removeClass('connected connected-row').addClass('disconnected');
         window.setTimeout(() => $el.removeClass('disconnected'), 500);
         window.setTimeout(() => $el.addClass('disconnected'), 1000);

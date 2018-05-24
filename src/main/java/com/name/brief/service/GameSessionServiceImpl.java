@@ -4,16 +4,14 @@ import com.name.brief.exception.GameSessionAlreadyExistsException;
 import com.name.brief.exception.GameSessionNotFoundException;
 import com.name.brief.model.GameSession;
 import com.name.brief.model.Player;
-import com.name.brief.model.games.AuthenticationType;
 import com.name.brief.model.games.Game;
 import com.name.brief.model.games.roleplay.RolePlay;
 import com.name.brief.repository.GameSessionRepository;
-import com.name.brief.repository.PlayerDataRepository;
 import com.name.brief.repository.PlayerRepository;
 import com.name.brief.utils.TimeConverter;
 import com.name.brief.web.dto.GameSessionDto;
-import com.name.brief.web.dto.PlayerLoginDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,18 +23,12 @@ import java.util.List;
 public class GameSessionServiceImpl implements GameSessionService {
     private final GameSessionRepository gameSessionRepository;
     private final PlayerRepository playerRepository;
-    private PlayerAuthenticationService playerAuthenticationService;
 
     @Autowired
     public GameSessionServiceImpl(GameSessionRepository gameSessionRepository,
                                   PlayerRepository playerRepository) {
         this.gameSessionRepository = gameSessionRepository;
         this.playerRepository = playerRepository;
-    }
-
-    @Autowired
-    public void setPlayerAuthenticationService(PlayerAuthenticationService playerAuthenticationService) {
-        this.playerAuthenticationService = playerAuthenticationService;
     }
 
     @Override
@@ -116,8 +108,9 @@ public class GameSessionServiceImpl implements GameSessionService {
     public void delete(Long gameSessionId) {
         GameSession gameSession = gameSessionRepository.findOne(gameSessionId);
         if (gameSession == null) throw new GameSessionNotFoundException();
-        gameSession.getPlayers().forEach(playerAuthenticationService::logout);
+//        gameSession.getPlayers().forEach(playerAuthenticationService::logout);
         gameSessionRepository.delete(gameSessionId);
+
     }
 
     @Override
@@ -128,33 +121,15 @@ public class GameSessionServiceImpl implements GameSessionService {
     }
 
     @Override
-    public Player addPlayer(PlayerLoginDto dto, GameSession session) {
+    public Player addPlayer(Player player, GameSession session) {
         session = gameSessionRepository.findOne(session.getId());
 
-        // construct player
-        Player player = new Player();
-        player.setCommandName(dto.getCommandName());
-        player.setName(dto.getName());
-        player.setSurname(dto.getSurname());
+        if (session == null) throw new GameSessionNotFoundException();
+
         player.setGameSession(session);
-        player.setLastAdded(true);
+        playerRepository.save(player);
 
-        // update gameSession
-        session.getPlayers().add(player);
-        gameSessionRepository.save(session);
-
-        // set players username
-        // cause only gameSession's player has id
-        player = getLastAddedPlayer(session.getId());
-        player.setLastAdded(false);
-        if (session.getAuthenticationType() == AuthenticationType.COMMAND_NAME) {
-            //noinspection ConstantConditions - because we've added player four lines upper
-            player.setUsername(Player.constructUsername(
-                    session.getStrId(), session.getActiveDate(), player.getCommandName()));
-        } else {
-            //noinspection ConstantConditions - because we've added player four lines upper
-            player.setUsername("player" + player.getId());
-        }
+        player.setUsername("player" + player.getId());
         playerRepository.save(player);
 
         return player;
@@ -163,6 +138,10 @@ public class GameSessionServiceImpl implements GameSessionService {
     @Override
     public void removePlayer(Player player) {
         GameSession gameSession = gameSessionRepository.findOne(player.getGameSession().getId());
+
+        // if gameSession is null it means that it was deleted and thus player was already deleted too
+        if (gameSession == null) return;
+
         gameSession.getPlayers().removeIf(p -> p.getId().equals(player.getId()));
         Game game = gameSession.getGame();
         if (game instanceof RolePlay) {
@@ -170,12 +149,5 @@ public class GameSessionServiceImpl implements GameSessionService {
                     data.getPlayer().getId().equals(player.getId()));
         }
         gameSessionRepository.save(gameSession);
-    }
-
-    private Player getLastAddedPlayer(Long gameSessionId) {
-        return gameSessionRepository.findOne(gameSessionId).getPlayers().stream()
-                .filter(Player::isLastAdded)
-                .findAny()
-                .orElseThrow(() -> new IllegalArgumentException("no last added players found"));
     }
 }

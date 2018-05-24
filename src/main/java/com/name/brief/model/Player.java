@@ -38,7 +38,6 @@ public class Player extends BaseEntity implements UserDetails{
     private String name;
     private String surname;
     private String commandName;
-    private boolean lastAdded;
 
     public Player() {
         super();
@@ -59,6 +58,8 @@ public class Player extends BaseEntity implements UserDetails{
 
     public void setGameSession(GameSession gameSession) {
         this.gameSession = gameSession;
+        if (gameSession == null) return;
+
         for (int i = 0; i < gameSession.getGame().getNumberOfRounds(); i++) {
             decisions.add(new Decision(this, i, null));
         }

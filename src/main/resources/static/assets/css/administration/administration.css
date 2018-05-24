@@ -432,11 +432,11 @@ svg {
     color: white;
 }
 
-.player.connected:hover .player-logout-svg {
+.player:hover .player-logout-svg {
     display: block;
 }
 
-.player.connected:hover .command-name {
+.player:hover .command-name {
     display: none;
 }
 

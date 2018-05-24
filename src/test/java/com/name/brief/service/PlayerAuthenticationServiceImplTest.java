@@ -2,6 +2,7 @@ package com.name.brief.service;
 
 import com.name.brief.model.GameSession;
 import com.name.brief.model.Player;
+import com.name.brief.repository.PlayerRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,7 +34,7 @@ public class PlayerAuthenticationServiceImplTest {
     @MockBean
     private SimpMessagingTemplate template;
     @MockBean
-    private GameSessionService gameSessionService;
+    private PlayerRepository playerRepository;
 
     @Before
     public void setUp() throws Exception {

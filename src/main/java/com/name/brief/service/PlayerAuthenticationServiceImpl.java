@@ -1,23 +1,13 @@
 package com.name.brief.service;
 
-import com.name.brief.model.GameSession;
 import com.name.brief.model.Player;
+import com.name.brief.repository.PlayerRepository;
 import com.name.brief.web.dto.PlayerConnectionDto;
-import com.name.brief.web.dto.PlayerLoginDto;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationEvent;
-import org.springframework.context.ApplicationListener;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.session.SessionRegistry;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
-import org.springframework.web.socket.messaging.SessionConnectedEvent;
-import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import java.time.LocalDate;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -27,12 +17,14 @@ import static com.name.brief.web.dto.PlayerConnectionDto.*;
 public class PlayerAuthenticationServiceImpl implements PlayerAuthenticationService {
 
     private final SimpMessagingTemplate template;
+    private final PlayerRepository playerRepository;
     private SessionRegistry sessionRegistry;
-    private GameSessionService gameSessionService;
 
     @Autowired
-    public PlayerAuthenticationServiceImpl(SimpMessagingTemplate template) {
+    public PlayerAuthenticationServiceImpl(SimpMessagingTemplate template,
+                                           PlayerRepository playerRepository) {
         this.template = template;
+        this.playerRepository = playerRepository;
     }
 
     @Override
@@ -46,6 +38,12 @@ public class PlayerAuthenticationServiceImpl implements PlayerAuthenticationServ
     }
 
     @Override
+    public void logout(String username) {
+        Player player = playerRepository.findByUsername(username);
+        if (player != null) logout(player);
+    }
+
+    @Override
     public void logout(Player player) {
         sessionRegistry.getAllSessions(player, true)
                 .forEach(sessionInformation -> {
@@ -54,13 +52,12 @@ public class PlayerAuthenticationServiceImpl implements PlayerAuthenticationServ
                     }
                     sessionRegistry.removeSessionInformation(sessionInformation.getSessionId());
                 });
-        gameSessionService.removePlayer(player);
 
         // send to moderator info about player logout
         sendToClient(PlayerConnectionInstruction.LOGOUT, player);
 
         // send to player instruction (if he is still in game) to return to index page
-        template.convertAndSend("/queue/" + player.getUsername() + "/logout", "");
+        template.convertAndSend("/queue/player/" + player.getId() + "/goToIndex", "");
     }
 
     @Override
@@ -75,11 +72,6 @@ public class PlayerAuthenticationServiceImpl implements PlayerAuthenticationServ
                 .filter(p -> ((Player) p).getUsername().equals(username) && isLoggedIn((Player) p))
                 .findAny()
                 .orElse(null) != null;
-    }
-
-    @Autowired
-    public void setGameSessionService(GameSessionService gameSessionService) {
-        this.gameSessionService = gameSessionService;
     }
 
     @Override
