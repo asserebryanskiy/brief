@@ -81,8 +81,16 @@ public class RolePlayUtils {
         if (players.size() % 2 != 0) throw new OddNumberOfPlayersException();
         // create PlayerData objects for every player
         for (int i = 0; i < players.size(); i++) {
-            PlayerData data = new PlayerData(players.get(i));
+            Player player = players.get(i);
+
+            // if player already has player data skip him
+            if (findPlayerData(player.getId(), game.getPlayersData()) != null) continue;
+
+            // add new player data
+            PlayerData data = new PlayerData(player);
             data.setOrderNumber(i + 1);
+
+            // determine partner
             Player partner;
             if (i % 2 == 0) {
                 partner = players.get(i + 1);
@@ -93,7 +101,6 @@ public class RolePlayUtils {
                 data.setRole(SalesmanRole.SALESMAN_1);
             }
             data.setCurrentPartnerId(partner.getId());
-//            data.getPlayedPlayers().add(partner.getId());
             data.setLocation(new PlayerLocation(0, i / 2));
             game.getPlayersData().add(data);
         }

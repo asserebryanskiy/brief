@@ -38,6 +38,7 @@ public class Player extends BaseEntity implements UserDetails{
     private String name;
     private String surname;
     private String commandName;
+    private boolean enabled = true;
 
     public Player() {
         super();
@@ -94,11 +95,6 @@ public class Player extends BaseEntity implements UserDetails{
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
         return true;
     }
 

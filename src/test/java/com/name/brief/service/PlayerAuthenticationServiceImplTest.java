@@ -35,6 +35,8 @@ public class PlayerAuthenticationServiceImplTest {
     private SimpMessagingTemplate template;
     @MockBean
     private PlayerRepository playerRepository;
+    @MockBean
+    private GameSessionServiceImpl gameSessionService;
 
     @Before
     public void setUp() throws Exception {

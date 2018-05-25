@@ -19,12 +19,15 @@ public class PlayerAuthenticationServiceImpl implements PlayerAuthenticationServ
     private final SimpMessagingTemplate template;
     private final PlayerRepository playerRepository;
     private SessionRegistry sessionRegistry;
+    private final GameSessionServiceImpl gameSessionService;
 
     @Autowired
     public PlayerAuthenticationServiceImpl(SimpMessagingTemplate template,
-                                           PlayerRepository playerRepository) {
+                                           PlayerRepository playerRepository,
+                                           GameSessionServiceImpl gameSessionService) {
         this.template = template;
         this.playerRepository = playerRepository;
+        this.gameSessionService = gameSessionService;
     }
 
     @Override
@@ -49,12 +52,15 @@ public class PlayerAuthenticationServiceImpl implements PlayerAuthenticationServ
                 .forEach(sessionInformation -> {
                     if (!sessionInformation.isExpired()) {
                         sessionInformation.expireNow();
+                        player.setEnabled(false);
                     }
-                    sessionRegistry.removeSessionInformation(sessionInformation.getSessionId());
+//                    sessionRegistry.removeSessionInformation(sessionInformation.getSessionId());
                 });
 
+        gameSessionService.removePlayer(player);
+
         // send to moderator info about player logout
-        sendToClient(PlayerConnectionInstruction.LOGOUT, player);
+        sendToModerator(PlayerConnectionInstruction.LOGOUT, player);
 
         // send to player instruction (if he is still in game) to return to index page
         template.convertAndSend("/queue/player/" + player.getId() + "/goToIndex", "");
@@ -79,7 +85,7 @@ public class PlayerAuthenticationServiceImpl implements PlayerAuthenticationServ
         this.sessionRegistry = registry;
     }
 
-    private void sendToClient(PlayerConnectionDto.PlayerConnectionInstruction command, Player player) {
+    private void sendToModerator(PlayerConnectionDto.PlayerConnectionInstruction command, Player player) {
         Long gameSessionId = player.getGameSession().getId();
         String destination = "/queue/" + gameSessionId + "/connection";
         PlayerConnectionDto dto = new PlayerConnectionDto(command, player.getUsername());

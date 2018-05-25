@@ -25,22 +25,18 @@ import java.util.Arrays;
 public class IndexController {
 
     private final PlayerAuthenticationService playerAuthenticationService;
-    private final RememberMeServices playerRememberMeServices;
 
     @Autowired
-    public IndexController(PlayerAuthenticationService playerAuthenticationService,
-                           RememberMeServices playerRememberMeServices) {
+    public IndexController(PlayerAuthenticationService playerAuthenticationService) {
         this.playerAuthenticationService = playerAuthenticationService;
-        this.playerRememberMeServices = playerRememberMeServices;
     }
 
     @RequestMapping("/")
     public String getMain(HttpServletRequest request,
-                          HttpServletResponse response,
                           Model model,
                           Principal principal) {
         // if user is already authenticated redirect it to appropriate page
-        String redirectPath = getRedirectPathIfAuthenticated((Authentication) principal, request, response);
+        String redirectPath = getRedirectPathIfAuthenticated((Authentication) principal);
         if (redirectPath != null) return redirectPath;
 
         addFlashAttribute(PlayerAuthenticationFilter.DTO_ATTRIBUTE_NAME, model, request.getSession());
@@ -53,9 +49,7 @@ public class IndexController {
         return "index";
     }
 
-    private String getRedirectPathIfAuthenticated(Authentication authentication,
-                                                  HttpServletRequest request,
-                                                  HttpServletResponse response) {
+    private String getRedirectPathIfAuthenticated(Authentication authentication) {
         if (authentication != null) {
             Object user = authentication.getPrincipal();
             // if player is already authenticated redirect him to game

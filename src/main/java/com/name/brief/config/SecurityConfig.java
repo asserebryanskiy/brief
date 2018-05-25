@@ -165,18 +165,15 @@ public class SecurityConfig {
         private final PlayerService playerService;
         private final GameSessionService gameSessionService;
         private final PlayerAuthenticationService playerAuthenticationService;
-        private final MessageSource messageSource;
         private final String rememberMeKey = UUID.randomUUID().toString();
 
         @Autowired
         public PlayerSecurityConfig(PlayerService playerService,
                                     GameSessionService gameSessionService,
-                                    PlayerAuthenticationService playerAuthenticationService,
-                                    MessageSource messageSource) {
+                                    PlayerAuthenticationService playerAuthenticationService) {
             this.playerService = playerService;
             this.gameSessionService = gameSessionService;
             this.playerAuthenticationService = playerAuthenticationService;
-            this.messageSource = messageSource;
         }
 
         @Override
