@@ -48,6 +48,8 @@ export default class PlayerConnectionService {
     removeLoggedOutPlayer(username) {
         $('#' + username).remove();
         $('#player-row-' + username).remove();
+
+        $('.participants-number').text($('.player').not('.player-template').length);
     }
 
     indicateConnection(username, identifierForModerator) {
@@ -97,6 +99,8 @@ export default class PlayerConnectionService {
 
         // remove player's classes hidden and player-template
         $both.removeClass('player-template player-row-template hidden');
+
+        $('.participants-number').text($('.player').not('.player-template').length);
     }
 
     signalDisconnection($el) {
