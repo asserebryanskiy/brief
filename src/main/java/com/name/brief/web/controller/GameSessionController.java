@@ -43,6 +43,12 @@ public class GameSessionController {
     @RequestMapping("/moderator/gameSession/{gameSessionId}/projector")
     public String getProjectorView(@PathVariable Long gameSessionId, Model model) {
         GameSession session = gameSessionService.getSession(gameSessionId);
+
+        // if session is null it means it was deleted
+        if (session == null) {
+            return "redirect:/moderator";
+        }
+
         model.addAttribute("gameSession", session);
         model.addAttribute("projectorMode", true);
         return "game/" + session.getGame().getEnglishName();
