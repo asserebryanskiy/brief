@@ -75,7 +75,8 @@ public class RolePlayServiceImpl implements RolePlayService {
             case "SEND_ROLES":
                 List<Player> players = game.getGameSession().getPlayers();
                 if (players.size() % 2 != 0) throw new OddNumberOfPlayersException();
-                if (game.getPlayersData().size() < players.size()) addPlayers(players, game);
+                game.getPlayersData().clear();
+                addPlayers(players, game);
                 sendInstructions(game);
                 break;
             case "CROSSING":
