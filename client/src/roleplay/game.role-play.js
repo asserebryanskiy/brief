@@ -77,6 +77,7 @@ $('.drugs-distribution-send-responses-btn').click(() => controller.handleDrugsDi
 
 // on scroll
 $(window).scroll(() => RolePlayController.handleScroll());
+$('.round-results-slider').scroll(() => RolePlayController.handleResultsSliderScroll())
 
 wsService.connect(onWsConnect);
 

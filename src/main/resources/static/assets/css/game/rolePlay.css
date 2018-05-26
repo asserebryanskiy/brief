@@ -336,7 +336,7 @@ body {
     grid-auto-flow: column;
     grid-template-columns: repeat(3, 32%);
     grid-template-rows: repeat(2, auto);
-    width: calc(100vw - 40px);
+    width: calc(100vw - 50px);
     flex: 0 0 auto;
 }
 
@@ -350,6 +350,14 @@ body {
     display: flex;
     flex-wrap: nowrap;
     overflow-x: auto;
+}
+
+.scroll-icon {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0.2;
 }
 
 .error-very-high {

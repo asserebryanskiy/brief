@@ -263,6 +263,8 @@ export default class RolePlayController {
         } else {
             $('.timer').removeClass('fixed-to-top');
         }
+
+        console.log($('.round-results-slider').scrollLeft());
     }
 
     static handleTimerMessageReceived(message) {
@@ -303,5 +305,11 @@ export default class RolePlayController {
 
     handleReadyBtnClick(event) {
         $(event.currentTarget).prop('disabled', true);
+    }
+
+    static handleResultsSliderScroll() {
+        if ($('.round-results-slider').scrollLeft() > 10) {
+            $('.scroll-icon').hide();
+        }
     }
 }
