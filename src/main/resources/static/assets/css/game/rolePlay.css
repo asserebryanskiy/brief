@@ -168,14 +168,13 @@ body {
 }
 
 .send-responses-btn.change-answers {
-    background-color: transparent;
-    border-color: #4a9d61;
-    color: #4e3549;
+    background-color: transparent !important;
+    color: #4a9d61 !important;
 }
 
 .send-responses-btn.new-answers {
-    background-color: #4a9d61;
-    color: white;
+    background-color: #4a9d61 !important;
+    color: white !important;
 }
 
 /*********************************
@@ -252,11 +251,6 @@ body {
 
 .input-field textarea:focus + label {
     color: #4e3549 !important;
-}
-
-.send-responses-btn {
-    font-family: "Circe Bold", serif !important;
-    background: none;
 }
 
 /*********************************
