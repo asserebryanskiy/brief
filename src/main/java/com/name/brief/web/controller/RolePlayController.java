@@ -3,6 +3,7 @@ package com.name.brief.web.controller;
 import com.name.brief.exception.OddNumberOfPlayersException;
 import com.name.brief.exception.WrongGameTypeException;
 import com.name.brief.model.Player;
+import com.name.brief.model.games.roleplay.ReadyType;
 import com.name.brief.service.PlayerAuthenticationService;
 import com.name.brief.service.RolePlayService;
 import com.name.brief.web.dto.DoctorAnswerDto;
@@ -12,6 +13,7 @@ import com.name.brief.web.dto.SalesmanAnswerDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -88,5 +90,12 @@ public class RolePlayController {
     public void logoutPlayer(@DestinationVariable Long gameId, String username) {
         playerAuthenticationService.logout(username);
 //        template.convertAndSend("/queue/rolePlay/player/" + id + "/logout", "");
+    }
+
+    @MessageMapping("/rolePlay/{gameId}/ready")
+    public void setPlayerReady(@DestinationVariable Long gameId, Principal principal) throws WrongGameTypeException {
+        Player player = (Player) ((Authentication) principal).getPrincipal();
+        rolePlayService.setPlayerReady(player.getId(), gameId);
+        template.convertAndSend("/queue/rolePlay/" + gameId + "/playerIsReady", player.getId());
     }
 }

@@ -46,6 +46,7 @@ public class PlayerData extends BaseEntity {
     private List<RolePlayComment> comments;
     private Long currentPartnerId;
     private String role;
+    private boolean ready;  // indicates whether player has done all necessary for current phase actions
 
     public PlayerData(Player player) {
         this.player = player;

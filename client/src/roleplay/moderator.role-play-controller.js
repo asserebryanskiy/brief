@@ -12,6 +12,9 @@ export default class RolePlayController {
         // remove classes from all phases
         $('.phase').removeClass('active next previous played');
 
+        // remove ready indicator from all players
+        $('.player').removeClass('ready');
+
         // add next, active, previous and played classes
         for (let i = 0; i < phaseIndex + 2; i++) {
             const $phase = $('.phase-' + i);
@@ -73,5 +76,10 @@ export default class RolePlayController {
         console.log(id);
         const playerId = id.slice(0, id.indexOf('-logout'));
         this.wsService.sendToApp('logoutPlayer', playerId);
+    }
+
+    static handlePlayerIsReady(message) {
+        const playerId = message.body;
+        $('#player' + playerId).addClass('ready');
     }
 }

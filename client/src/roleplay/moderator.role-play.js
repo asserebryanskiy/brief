@@ -20,6 +20,10 @@ function onWsConnect() {
         RolePlayController.handleTimerMessageReceived(message);
     });
 
+    wsService.subscribe('/queue/rolePlay/' + gameId + '/playerIsReady', (message) => {
+        RolePlayController.handlePlayerIsReady(message);
+    });
+
     playerConnectionService.subscribe(wsService);
 
     $('.preloader').fadeOut();

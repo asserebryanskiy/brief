@@ -14,17 +14,8 @@
     border-bottom: #4e3549 1px solid;
 }
 
-.fork-phase-container {
-    width: 100%;
-    display: flex;
-    justify-content: space-evenly;
-    padding: 20px;
-    border-top: #4e3549 solid 0.5px;
-    border-bottom: #4e3549 solid 0.5px;
-}
-
-.fork-phase-container .phase {
-    margin: 0;
-    text-align: center;
+.ready {
+    background-color: #4a9d61 !important;
+    color: white !important;
 }
 

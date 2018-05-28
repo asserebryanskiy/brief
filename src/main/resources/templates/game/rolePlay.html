@@ -92,7 +92,8 @@
                     <div class="instruction flow-text light-font left-align"
                          th:fragment="roleInstruction"
                          th:utext="${role.instruction}"></div>
-                    <button class="btn ready-btn waves-effect right-align">Кейс прочитан</button>
+                    <button class="btn ready-btn waves-effect case-read-btn"
+                            th:disabled="${playerData.ready}">Кейс прочитан</button>
                 </div>
             </div>
 
@@ -117,7 +118,8 @@
                           th:text="${' ' + (playerData.location.room + 1)}"></span>
                 </p>
 
-                <button class="btn ready-btn waves-effect">В кабинете</button>
+                <button class="btn ready-btn waves-effect"
+                        th:disabled="${playerData.ready}">В кабинете</button>
             </div>
 
             <!-- CROSSING PHASE DOCTOR-->
@@ -140,7 +142,8 @@
                           th:text="${' ' + (playerData.location.room + 1)}"></span>
                 </p>
 
-                <button class="btn ready-btn waves-effect">В кабинете</button>
+                <button class="btn ready-btn waves-effect"
+                        th:disabled="${playerData.ready}">В кабинете</button>
             </div>
 
             <!-- GAME SALESMAN PHASE -->
@@ -258,7 +261,7 @@
                             <input class="big-font-size drugs-distribution-input" type="number" max="12" min="0">
                         </div>
                     </div>
-                    <button class="send-responses-btn drugs-distribution-send-responses-btn new-answers">Отправить</button>
+                    <button class="btn waves-effect send-responses-btn drugs-distribution-send-responses-btn new-answers">Отправить ответы</button>
                 </div>
             </div>
 

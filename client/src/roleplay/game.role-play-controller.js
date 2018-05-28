@@ -2,6 +2,8 @@ import $ from "jquery";
 import AnswerService from "./answer-service";
 import TimerUtils from "./TimerUtils";
 import * as M from "../../../src/main/resources/static/assets/materialize/js/materialize";
+import {ReadyDto} from "./ready.dto";
+import {ReadyType} from "./ready.type";
 
 export default class RolePlayController {
     constructor(wsService) {
@@ -110,6 +112,7 @@ export default class RolePlayController {
             this.sendDoctorAnswers();
             RolePlayController.addInstantMessage('Ответы отправлены', 'success');
             RolePlayController.changeSendResponsesBtn('Изменить ответы');
+            this.sendReadyMessage();
         } else {
             RolePlayController.addInstantMessage(this.TIME_HAS_ENDED_TEXT, 'failure');
         }
@@ -141,6 +144,7 @@ export default class RolePlayController {
             this.wsService.sendToApp('salesman/answer', AnswerService.createSalesmanAnswerJson());
             RolePlayController.addInstantMessage('Ответы отправлены', 'success');
             RolePlayController.changeSendResponsesBtn('Изменить ответы');
+            this.sendReadyMessage();
         } else {
             RolePlayController.addInstantMessage(this.TIME_HAS_ENDED_TEXT, 'failure');
         }
@@ -182,6 +186,7 @@ export default class RolePlayController {
         if (RolePlayController.timerIsRunning()) {
             this.sendDrugsDistribution();
             RolePlayController.changeSendResponsesBtn('Изменить ответы');
+            this.sendReadyMessage();
         } else {
             RolePlayController.addInstantMessage(this.TIME_HAS_ENDED_TEXT, 'failure');
         }
@@ -305,6 +310,11 @@ export default class RolePlayController {
 
     handleReadyBtnClick(event) {
         $(event.currentTarget).prop('disabled', true);
+        this.sendReadyMessage();
+    }
+
+    sendReadyMessage() {
+        this.wsService.sendToApp('ready', '');
     }
 
     static handleResultsSliderScroll() {

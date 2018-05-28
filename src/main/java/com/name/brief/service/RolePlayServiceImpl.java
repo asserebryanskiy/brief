@@ -69,6 +69,9 @@ public class RolePlayServiceImpl implements RolePlayService {
             timerScheduler.stopTimer(gameId);
         }
 
+        // set all players to not ready
+        game.getPlayersData().forEach(data -> data.setReady(false));
+
         // do phase specific stuff
         String phaseName = phase.getEnglishName();
         switch (phaseName) {
@@ -223,6 +226,18 @@ public class RolePlayServiceImpl implements RolePlayService {
     @Override
     public void add30sec(Long gameId) {
         timerScheduler.setUpTimer(gameId, Duration.ofSeconds(30));
+    }
+
+    @Override
+    public void setPlayerReady(Long playerId, Long gameId) throws WrongGameTypeException {
+        // ToDo: remove this ugly search for a playerData id by passing it to the client, using rolePlay API
+        Long playerDataId = findPlayerData(playerId, getRolePlayGame(gameId).getPlayersData()).getId();
+
+        PlayerData data = playerDataRepository.findOne(playerDataId);
+
+        data.setReady(true);
+
+        playerDataRepository.save(data);
     }
 
     private void sendToPlayer(String destination, Long playerId, Object payload) {
