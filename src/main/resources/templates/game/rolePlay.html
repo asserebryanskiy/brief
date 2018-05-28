@@ -65,17 +65,18 @@
                 <p th:replace=":: roleText">Ваша роль: доктор Терапевт</p>
                 <img th:src="@{/assets/image/rolePlay/doctor_1.jpeg}"
                      class="doctor-1-img role-img"
-                     th:classappend="${role.name() != 'DOCTOR_1'} ? 'hidden'"
+                     th:classappend="${role.name() != 'DOCTOR_1'} ? 'hide'"
                      alt="Доктор">
                 <img th:src="@{/assets/image/rolePlay/doctor_2.jpeg}"
                      class="doctor-2-img role-img"
-                     th:classappend="${role.name() != 'DOCTOR_2'} ? 'hidden'"
+                     th:classappend="${role.name() != 'DOCTOR_2'} ? 'hide'"
                      alt="Доктор">
                 <img th:src="@{/assets/image/rolePlay/salesman.jpg}"
                      class="salesman-img role-img"
-                     th:classappend="${role.name() != 'SALESMAN_1'} ? 'hidden'"
+                     th:classappend="${role.name() != 'SALESMAN_1'} ? 'hide'"
                      alt="Доктор">
             </div>
+
 
             <!-- SEND INSTRUCTION PHASE -->
             <div class="phase-container"
@@ -98,7 +99,7 @@
             <!-- CROSSING PHASE SALESMAN -->
             <div class="phase-container centered-phase-container container"
                  th:classappend="((${playerData} != null and ${playerData.role.class.simpleName == 'SalesmanRole'})
-                             and ${game.phaseIndex} == 4 or ${game.phaseIndex} == 7) ? 'active' : ''"
+                             and (${game.phaseIndex} == 4 or ${game.phaseIndex} == 7)) ? 'active' : ''"
                  th:with="isDoctor = ${role.class.simpleName == 'DoctorRole'}"
                  id="salesman-crossing-phase">
 
@@ -122,7 +123,7 @@
             <!-- CROSSING PHASE DOCTOR-->
             <div class="phase-container centered-phase-container container"
                  th:classappend="((${playerData} != null and ${playerData.role.class.simpleName == 'DoctorRole'})
-                             and ${game.phaseIndex} == 4 or ${game.phaseIndex} == 7) ? 'active' : ''"
+                             and (${game.phaseIndex} == 4 or ${game.phaseIndex} == 7)) ? 'active' : ''"
                  id="doctor-crossing-phase">
 
                 <p class="flow-text crossing-doctor light-font">

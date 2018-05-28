@@ -122,7 +122,7 @@ export default class RolePlayController {
             .append($.parseHTML(json['instruction']));
 
         // show proper image
-        $('.role-img').hide();
+        $('.role-img').removeClass('hide').hide();
         switch (json['englishRoleName']) {
             case 'DOCTOR_1':
                 $('.doctor-1-img').show();
