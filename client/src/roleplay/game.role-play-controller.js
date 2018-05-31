@@ -268,8 +268,6 @@ export default class RolePlayController {
         } else {
             $('.timer').removeClass('fixed-to-top');
         }
-
-        console.log($('.round-results-slider').scrollLeft());
     }
 
     static handleTimerMessageReceived(message) {

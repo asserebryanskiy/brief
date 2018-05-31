@@ -1,5 +1,5 @@
 import SockJS from "sockjs-client";
-import * as Stomp from "@stomp/stompjs/index";
+import { Stomp } from "../vendor/stomp";
 
 export default class WsService {
     constructor(gameId, gameIdentifier) {
@@ -26,8 +26,10 @@ export default class WsService {
     }
 
     connect(onConnectionCallback) {
+        console.log('I`ve updated 2!');
         let stompClient = this.stompClient;
         function reconnect() {
+            console.log('reconnecting...');
             // location.reload();
             let connected = false;
             let reconInv = setInterval(() => {
@@ -45,6 +47,9 @@ export default class WsService {
             }, 1000);
         }
 
-        this.stompClient.connect({}, onConnectionCallback, () => reconnect());
+        this.stompClient.connect({}, onConnectionCallback, () => {
+            console.log('lost connection');
+            location.reload(true);
+        });
     }
 }
