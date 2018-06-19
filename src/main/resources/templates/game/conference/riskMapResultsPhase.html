@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Title</title>
+</head>
+<body>
+    <div th:fragment="content"
+         class="phase-container"
+         th:classappend="${game.phaseIndex} == 3? 'active' : ''"
+         id="risk-map-results-phase">
+        <h2 th:unless="${projectorMode}">Вы заработали<br><span id="score-text">0</span> баллов</h2>
+        <p class="congratulation-text">Поздравляем вы вошли в 20% лучших игроков!</p>
+        <div th:fragment="answerRiskGrid" class="risk-grid"
+             th:with="correctAnswers = ${game.riskMapCorrectAnswers}">
+            <div th:each="i : ${#numbers.sequence(1,12)}"
+                 th:class="'risk-img-cell risk-img-cell-' + ${i - 1}"
+                 th:with="ca = ${correctAnswers[__${i - 1}__]}">
+                <div class="small-img-wrapper modal-trigger"
+                     th:href="${'#risk-map-answer-details-modal-' + i}">
+                    <img th:replace="game/conference/riskMapPhase :: smallImg">
+                    <div th:replace="game/conference/riskMapPhase :: riskIndicator(true)"></div>
+                    <div th:fragment="correctAnswerCover"
+                         class="correct-answer-cover hidden"
+                         th:if="${ca} >= 0"
+                         th:classappend="${ca} == 0 ? 'no-level' : (${ca} == 1 ? 'low-level' : (${ca} == 2 ? 'mid-level' : 'high-level'))">
+                        <p class="sector-score-text">0</p>
+                    </div>
+                </div>
+                <div class="modal modal-fixed-footer"
+                     th:id="${'risk-map-answer-details-modal-' + i}">
+                    <div class="modal-content">
+                        <img th:replace="game/conference/riskMapPhase :: bigImg">
+                        <div class="correct-answer-wrapper">
+                            <p>Правильный ответ: </p>
+                            <div class="correct-answer-circle" th:classappend="${ca == -1} ? 'no-answer' : (${ca} == 0 ? 'no-level' : (${ca} == 1 ? 'low-level' : (${ca} == 2 ? 'mid-level' : 'high-level')))"></div>
+                        </div>
+                        <p>Ваш ответ: </p>
+                        <div class="possible-results" th:with="possibleScores = ${game.getRiskMapPossibleScore(ca)}">
+                            <div class="correct-answer-circle no-answer">
+                                <p th:text="${possibleScores[0]}"></p>
+                            </div>
+                            <div class="correct-answer-circle no-level">
+                                <p th:text="${possibleScores[1]}"></p>
+                            </div>
+                            <div class="correct-answer-circle low-level">
+                                <p th:text="${possibleScores[2]}"></p>
+                            </div>
+                            <div class="correct-answer-circle mid-level">
+                                <p th:text="${possibleScores[3]}"></p>
+                            </div>
+                            <div class="correct-answer-circle high-level">
+                                <p th:text="${possibleScores[4]}"></p>
+                            </div>
+                        </div>
+                        <p class="correct-answer-comment" th:text="${T(com.name.brief.model.games.riskmap.RiskMapType).OFFICE.getAnswerComments()[__${i - 1}__]}"></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="modal-close btn-flat" >ОК</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <p id="show-correct-answers-btn">Показать правильные ответы</p>
+    </div>
+</body>
+</html>

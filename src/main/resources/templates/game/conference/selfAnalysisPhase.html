@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Title</title>
+</head>
+<body>
+    <div th:fragment="content"
+         class="phase-container"
+         th:with="phaseName = 'SELF_ANALYSIS'"
+         th:classappend="${game.phaseName} == ${phaseName}? 'active' : ''"
+         id="self-analysis-phase">
+        <h1 class="timer">00:00</h1>
+        <div class="card-panel secondary-color-bg">
+            <p class="middle-font-size light-font left-align">Уважаемый участник, вспомните наиболее яркие моменты прошедшей программы - те,
+                которые оставили для вас больше всего впечатлений.
+                Эти момент окрашены вашими эмоциями, а ведь именно эмоции создают потенциал
+                для трансформации в будущем. <br>
+                Пожалуйста, продолжите 3 фразы:</p>
+        </div>
+        <p class="middle-font-size light-font left-align">1. Больше всего мне запомнился момент, когда...</p>
+        <div class="input-field">
+            <textarea id="selfAnalysisQuestion1"
+                      class="materialize-textarea middle-font-size light-font self-analysis-answer-input"></textarea>
+            <!--<label for="selfAnalysisQuestion1"></label>-->
+        </div>
+
+        <p class="middle-font-size light-font left-align">2. Возможно, в связи с этим мне стоит задуматься о...</p>
+        <div class="input-field">
+            <textarea id="selfAnalysisQuestion2"
+                      class="materialize-textarea middle-font-size light-font self-analysis-answer-input"></textarea>
+            <!--<label for="selfAnalysisQuestion2">Ваш ответ</label>-->
+        </div>
+
+        <p class="middle-font-size light-font left-align">3. И стоит сделать...</p>
+        <div class="input-field">
+            <textarea id="selfAnalysisQuestion3"
+                      class="materialize-textarea middle-font-size light-font self-analysis-answer-input"></textarea>
+            <!--<label for="selfAnalysisQuestion3">Ваш ответ</label>-->
+        </div>
+
+        <p class="center-align">
+            <label>
+                <input type="checkbox" class="self-analysis-ready-to-share-checkbox"/>
+                <span>Поделиться со всеми?</span>
+            </label>
+        </p>
+
+        <input type="hidden" id="self-analysis-id-input">
+
+        <button class="ready-btn btn-large self-analysis-send-btn">Отправить</button>
+        <div class="self-analysis-preloader-wrapper hide">
+            <div class="preloader-wrapper small active">
+                <div class="spinner-layer spinner-yellow-only">
+                    <div class="circle-clipper left">
+                        <div class="circle"></div>
+                    </div><div class="gap-patch">
+                    <div class="circle"></div>
+                </div><div class="circle-clipper right">
+                    <div class="circle"></div>
+                </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="btn-pane hide">
+            <button class="btn change-btn change-self-analysis-btn">Изменить</button>
+            <button class="btn" id="self-analysis-download-pdf-btn">Скачать pdf</button>
+        </div>
+    </div>
+</body>
+</html>

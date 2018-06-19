@@ -14,6 +14,8 @@ import com.name.brief.web.dto.NextPhaseMessage;
 import com.name.brief.web.dto.PlayerLoginDto;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.ILoggerFactory;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;

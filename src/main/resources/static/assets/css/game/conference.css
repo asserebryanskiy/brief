@@ -1,0 +1,315 @@
+a {
+    color: #4e3549 !important;
+}
+
+body {
+    background: none;
+}
+
+.change-btn {
+    border: #4a9d61 1px solid !important;
+    background-color: transparent !important;
+    color: #4a9d61 !important;
+    margin: 20px 0;
+    line-height: unset !important;
+}
+
+.danger-btn {
+    background-color: tomato !important;
+    color: white !important;
+    margin: 20px 0;
+    line-height: unset !important;
+    border: none !important;
+}
+
+.minor-danger-btn {
+    background-color: transparent;
+    /*border: tomato 1px solid;*/
+    color: tomato;
+}
+
+.minor-danger-btn:focus {
+    background-color: tomato;
+    color: white;
+}
+
+.btn {
+    color: #4E3549;
+    border: #4E3549 1px solid;
+    background-color: transparent;
+}
+
+.btn:focus, .btn:hover {
+    background-color: #4E3549;
+    color: white;
+}
+
+.page-content-wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.phase-container {
+    display: none;
+    margin-top: 100px;
+    /*max-width: 95%;*/
+}
+
+.phase-container.active {
+    display: block;
+}
+
+.centered-phase-container {
+    margin: auto;
+}
+
+.header {
+    top: 15px;
+}
+
+.header img {
+    left: 15px;
+}
+
+.header .header-text-box {
+    right: 15px;
+}
+
+.timer {
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+}
+
+.last-ten-seconds {
+    color: tomato;
+}
+
+.fixed-to-top {
+    min-width: 100vw;
+    text-align: center;
+    background-color: #f3eaf1;
+    top: 0;
+    margin: 0;
+    padding: 20px !important;
+}
+
+.instant-message {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 10px 10px;
+    z-index: 3;
+    text-align: left;
+    background-color: #bcb3bb;
+}
+
+.instant-message.success {
+    background-color: #4a9d61;
+    color: white;
+}
+
+.instant-message.failure {
+    background-color: tomato;
+    color: white;
+}
+
+.ready-btn {
+    background-color: #4a9d61 !important;
+    color: white !important;
+    margin: 20px 0;
+    display: block;
+    line-height: 0 !important;
+}
+
+.input-field textarea:focus {
+    border-bottom: 1px solid #4e3549 !important;
+    box-shadow: 0 1px 0 0 #4e3549 !important;
+}
+
+.input-field textarea:focus + label {
+    color: #4e3549 !important;
+}
+
+/*********************************
+*         GREETING PHASE         *
+**********************************/
+
+#greeting-phase,
+#self-analysis-phase {
+    width: 100%;
+    height: fit-content;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+#greeting-phase .heading {
+    margin-bottom: 10px;
+}
+
+.images-container {
+    margin: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+}
+
+.images-container > .img-wrapper {
+    width: 25%;
+    height: auto;
+    margin: 2px;
+}
+
+.img-wrapper > img {
+    width: 100%;
+    height: auto;
+}
+
+#greeting-phase .modal {
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+}
+
+.images-container .modal-content {
+    height: fit-content;
+}
+
+.images-container .modal-content img {
+    width: 100%;
+}
+
+.chosen-img-wrapper > img {
+    max-width: 100%;
+}
+
+/*********************************
+*          RISK MAP PHASE        *
+**********************************/
+
+.answer-input {
+    margin: 2px;
+}
+
+#risk-map-results-phase > h2 {
+    margin: 0 auto;
+}
+
+/*********************************
+*       BEST PRACTICES PHASE     *
+**********************************/
+
+#best-practices-phase {
+    width: 100%;
+}
+
+.best-practice-phase-wrapper {
+    height: calc(100vh - 100px);
+    width: 100%;
+    padding: 0 5px;
+}
+
+#best-practices-phase .best-practices-send-btn,
+.edit-best-practice-buttons-wrapper {
+    justify-self: flex-end;
+}
+
+#best-practices-phase .sent-best-practices {
+    flex-grow: 1;
+}
+
+.sent-best-practices > ul {
+    overflow-y: auto;
+}
+
+.best-practice-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 20px;
+    grid-column-gap: 5px;
+    align-items: start;
+}
+
+#edit-best-practice-hint {
+    border-top: #4E3549 1px solid;
+    padding-top: 5px;
+}
+
+.sent-best-practices .sending-preloader-wrapper {
+    margin: auto;
+}
+
+.sent-best-practices button.dropdown-trigger,
+.sent-best-practices button.dropdown-trigger:focus {
+    background-color: transparent !important;
+    border: none;
+}
+
+.sent-best-practices .dropdown-content li {
+    display: flex;
+    flex-wrap: nowrap;
+}
+
+.sent-best-practices .dropdown-content li span {
+    color: #4E3549 !important;
+}
+
+.sent-best-practices .dropdown-content li i {
+    margin: auto 2px;
+}
+
+.edit-best-practice-buttons-wrapper {
+    display: flex;
+}
+
+.edit-best-practice-buttons-wrapper > * {
+    width: 50%;
+    margin: 20px 5px;
+}
+
+/*********************************
+*   BEST PRACTICES VOTING PHASE  *
+**********************************/
+
+.suggestions-container {
+    display: grid;
+    grid-template-columns: 1fr 30px;
+    grid-column-gap: 5px;
+}
+
+#best-practices-voting-phase > .task {
+    margin: 0 auto 10px auto;
+}
+
+/*********************************
+*       SELF ANALYSIS PHASE      *
+**********************************/
+
+#self-analysis-phase .ready-btn {
+    margin: 20px auto;
+}
+
+.btn-pane {
+    display: flex;
+}
+
+.btn-pane > * {
+    width: 50%;
+    margin: 20px 5px;
+}
+
+/*********************************
+*              INPUT             *
+**********************************/
+
+input[type=text]:focus {
+    border-bottom: #4E3549 1px solid !important;
+    box-shadow: 0 1px 0 0 #4E3549 !important;
+}
+
+/*********************************
+*          MEDIA QUERIES         *
+**********************************/

@@ -1,11 +1,8 @@
 package com.name.brief.web.dto;
 
 import com.name.brief.model.GameSession;
-import com.name.brief.model.games.AuthenticationType;
-import com.name.brief.model.games.Brief;
-import com.name.brief.model.games.Game;
+import com.name.brief.model.games.*;
 import com.name.brief.model.games.roleplay.RolePlay;
-import com.name.brief.model.games.RiskMap;
 import com.name.brief.model.games.riskmap.RiskMapType;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,7 +20,7 @@ import java.util.Map;
 public class GameSessionDto {
     public static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("ddMMyyyy");
 
-    private final String[] gameTypes = new String[]{"Ролевая игра"};
+    private final String[] gameTypes = new String[]{"Ролевая игра", "Конференция"};
 //    private final String[] gameTypes = new String[]{"Бриф", "Карта рисков", "Ролевая игра"};
     private final String[] authenticationTypes = Arrays.stream(AuthenticationType.values())
             .map(AuthenticationType::getRussianName)
@@ -68,6 +65,8 @@ public class GameSessionDto {
             }
             case "Ролевая игра":
                 return new RolePlay();
+            case "Конференция":
+                return new Conference();
         }
         return new Brief();
     }

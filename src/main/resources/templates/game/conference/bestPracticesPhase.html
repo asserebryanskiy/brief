@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Title</title>
+</head>
+<body>
+    <div th:fragment="content"
+         class="phase-container"
+         th:with="phaseName = 'BEST_PRACTICES'"
+         th:classappend="${game.phaseName} == ${phaseName}? 'active' : ''"
+         id="best-practices-phase">
+
+        <div class="flex-container flex-start flex-col best-practice-phase-wrapper">
+            <h1 class="timer">00:00</h1>
+            <p class="middle-font-size light-font">Поделитесь своими мыслями</p>
+            <div class="input-field">
+                <textarea id="best-practices-input" class="materialize-textarea middle-font-size light-font"></textarea>
+                <label for="best-practices-input">Лучшие практики</label>
+                <input type="hidden" id="best-practice-id-input">
+            </div>
+
+            <div class="sent-best-practices flex-container flex-col">
+                <i class="middle-font-size light-font pale"
+                   id="best-practices-list-placeholder">Здесь будут отправленные вами лучшие практики..</i>
+                <ul class="collection hide-on-sending best-practices-list">
+                    <li class="collection-item hide best-practice-template best-practice-wrapper">
+                        <p class="light-font left-align middle-font-size best-practice-text"></p>
+                        <button class="dropdown-trigger" data-target="">
+                            <i class="material-icons">menu</i></button>
+                        <ul class="dropdown-content">
+                            <li class="edit-best-practice-btn">
+                                <i class="material-icons">edit</i>
+                                <span>Редактировать</span>
+                            </li>
+                            <li class="delete-best-practice-btn">
+                                <i class="material-icons">delete</i>
+                                <span>Удалить</span>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+
+
+                <div class="sending-preloader-wrapper hide">
+                    <div class="preloader-wrapper small active">
+                        <div class="spinner-layer spinner-yellow-only">
+                            <div class="circle-clipper left">
+                                <div class="circle"></div>
+                            </div><div class="gap-patch">
+                            <div class="circle"></div>
+                        </div><div class="circle-clipper right">
+                            <div class="circle"></div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <i id="edit-best-practice-hint" class="middle-font-size pale hide-on-sending hide">
+                Вы готовы показать его всем. Пожалуйста, проверьте Ваш текст.
+            </i>
+
+            <button class="btn-large ready-btn best-practices-send-btn">Отправить</button>
+            <div class="hide edit-best-practice-buttons-wrapper">
+                <button class="btn-large minor-danger-btn cancel-best-practice-change-btn">Отмена</button>
+                <button class="btn-large ready-btn best-practices-change-btn">Изменить</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

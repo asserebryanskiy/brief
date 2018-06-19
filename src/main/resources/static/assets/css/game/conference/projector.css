@@ -1,0 +1,20 @@
+.header img {
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+#best-practices-phase {
+    height: fit-content;
+    margin: 120px auto 20px
+}
+
+.best-practices-wrapper {
+    width: 80%;
+    margin: auto;
+}
+
+.best-practice-wrapper {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-column-gap: 50px;
+}

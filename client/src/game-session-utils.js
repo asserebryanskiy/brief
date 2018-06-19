@@ -38,6 +38,10 @@ export default class GameSessionUtils {
     }
 
     static getPlayerId() {
-        return parseInt($('#player-id').text());;
+        return parseInt($('#player-id').text());
+    }
+
+    static getPhaseName($phase) {
+        return $phase.find('.english-name').text();
     }
 }

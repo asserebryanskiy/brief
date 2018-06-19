@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Title</title>
+</head>
+<body>
+    <div th:fragment="content"
+         class="phase-container"
+         th:with="phaseName = 'GREETING'"
+         th:classappend="${game.phaseName} == ${phaseName}? 'active' : ''"
+         id="greeting-phase">
+        <h2 class="timer">00:00</h2>
+        <div class="card-panel secondary-color-bg">
+            <p class="middle-font-size light-font left-align">Ответьте на вопросы сначала индивидуально,
+                а как будете готовы - поделитесь ответами с коллегами, сидящими рядом</p>
+        </div>
+        <p class="middle-font-size left-align light-font">1. Как вас зовут?</p>
+        <p class="middle-font-size left-align light-font">2. Кем и в какой компании вы работаете?</p>
+        <p class="middle-font-size left-align light-font">3. Выберите из изображений то, которое наибольшим
+            образом ассоциируется с вашей работой и поясните, почему.</p>
+        <input type="text" placeholder="Почему?">
+        
+        <div class="carousel">
+            <a th:each="i : ${#numbers.sequence(1,10)}"
+               th:href="${'#pict' + i}"
+               class="greeting-gallery-popup-trigger carousel-item">
+                <img th:src="@{'/assets/image/conference/pict' + ${i} + '.png'}"
+                 class="" alt=""></a>
+        </div>
+
+        <div class="carousel-popup-wrapper">
+            <div class="carousel-background">
+
+            </div>
+        </div>
+
+        <!--<div class="images-container">
+            <div class="img-wrapper" th:each="i : ${#numbers.sequence(1,12)}">
+                <img th:src="@{|/assets/image/riskMap/hotel/low_2000/low_2000_${#numbers.formatInteger(i, 2)}.jpg|}"
+                     class="modal-trigger"
+                     th:href="${'#modal' + i}"
+                     alt="">
+                <div class="modal"
+                     th:id="${'modal' + i}">
+                    <div class="modal-content">
+                        <img th:src="@{|/assets/image/riskMap/office/big_with_sectors/${i}.jpg|}"
+                             alt="">
+                    </div>
+                    <div class="modal-fixed-footer">
+                        <button class="btn ready-btn choose-greeting-img-btn">Выбрать</button>
+                    </div>
+                </div>
+            </div>
+        </div>-->
+
+        <div class="hide chosen-img-wrapper">
+            <button class="btn change-btn greeting-change-choice-btn">Изменить выбор</button>
+        </div>
+    </div>
+</body>
+</html>

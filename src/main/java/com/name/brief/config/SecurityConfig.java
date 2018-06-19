@@ -229,7 +229,7 @@ public class SecurityConfig {
             );
             rememberMeServices.setAlwaysRemember(true);
             rememberMeServices.setUseSecureCookie(false);
-            rememberMeServices.setTokenValiditySeconds(3600);
+            rememberMeServices.setTokenValiditySeconds(172800);
             return rememberMeServices;
         }
 
@@ -254,6 +254,7 @@ public class SecurityConfig {
                     .invalidateHttpSession(true)
                     .deleteCookies("JSESSIONID")
                     .and()
+                .csrf().disable()
                 .addFilterBefore(playerAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(rememberMeAuthenticationFilter(), AnonymousAuthenticationFilter.class);
 

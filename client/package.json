@@ -4,7 +4,7 @@
   "description": "",
   "private": true,
   "scripts": {
-    "test": "ava",
+    "test": "karma start my.conf.js",
     "watch": "webpack --watch",
     "start": "webpack-dev-server --open",
     "build": "webpack"

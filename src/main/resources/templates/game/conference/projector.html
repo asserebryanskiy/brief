@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:include="appFragments :: headContent" th:remove="tag"></div>
+    <link rel="stylesheet" th:href="@{/assets/materialize/css/materialize.min.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/game/game.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/game/projector.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/game/conference/projector.css}">
+    <title>Title</title>
+</head>
+<body th:with="game = ${gameSession.game}">
+    <div th:replace="appFragments :: preloader"></div>
+    <div class="page-content-wrapper">
+
+        <div class="header">
+            <img th:src="@{/assets/image/logo.png}" alt="logo">
+            <div class="header-text-box">
+            </div>
+        </div>
+
+        <div class="phase-container centered-phase-container"
+             th:with="phaseName = 'CONNECT_PLAYERS'"
+             th:classappend="${game.phaseName} == ${phaseName}? 'active' : ''"
+             id="connect-phase">
+            <div class="projector-wrapper">
+                <img th:src="@{'/assets/image/role_big-qr.gif'}" alt="">
+                <div class="strId" th:if="${projectorMode}">
+                    <!--<svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M19 2c0-1.104-.896-2-2-2h-10c-1.104 0-2 .896-2 2v20c0 1.104.896 2 2 2h10c1.104 0 2-.896 2-2v-20zm-8.5 0h3c.276 0 .5.224.5.5s-.224.5-.5.5h-3c-.276 0-.5-.224-.5-.5s.224-.5.5-.5zm1.5 20c-.553 0-1-.448-1-1s.447-1 1-1c.552 0 .999.448.999 1s-.447 1-.999 1zm5-3h-10v-14.024h10v14.024z"></path></svg>-->
+                    <h1>role.igrator.org</h1>
+                    <h2>Код игры: <span class="bold" th:text="${gameSession.strId}"></span></h2>
+                </div>
+            </div>
+        </div>
+
+        <div  class="phase-container centered-phase-container"
+              th:with="phaseName = 'GREETING'"
+              th:classappend="${game.phaseName} == ${phaseName}? 'active' : ''"
+              id="greeting-phase">
+            <p>Greeting phase</p>
+        </div>
+
+        <div  class="phase-container centered-phase-container"
+              th:with="phaseName = 'RISK_MAP'"
+              th:classappend="${game.phaseName} == ${phaseName}? 'active' : ''"
+              id="risk-map-phase">
+            <p>Risk map phase</p>
+        </div>
+
+        <div  class="phase-container centered-phase-container"
+              th:with="phaseName = 'RISK_MAP_RESULTS'"
+              th:classappend="${game.phaseName} == ${phaseName}? 'active' : ''"
+              id="risk-map-results-phase">
+            <p>Risk map results phase</p>
+        </div>
+
+        <div  class="phase-container"
+              th:with="phaseName = 'BEST_PRACTICES'"
+              th:classappend="${game.phaseName} == ${phaseName}? 'active' : ''"
+              id="best-practices-phase">
+            <div class="best-practices-wrapper collection">
+                <div class="hide best-practice-template best-practice-wrapper collection-item">
+                    <p class="best-practice-text middle-font-size light-font left-align"></p>
+                    <p class="middle-font-size light-font left-align">Участник <span class="best-practice-participant-identifier middle-font-size bold"></span></p>
+                </div>
+            </div>
+        </div>
+
+        <div  class="phase-container centered-phase-container"
+              th:with="phaseName = 'BEST_PRACTICES_VOTING'"
+              th:classappend="${game.phaseName} == ${phaseName}? 'active' : ''"
+              id="best-practices-voting-phase">
+            <p>Best practices phase</p>
+        </div>
+
+        <div  class="phase-container centered-phase-container"
+              th:with="phaseName = 'SELF_ANALYSIS'"
+              th:classappend="${game.phaseName} == ${phaseName}? 'active' : ''"
+              id="self-analysis-phase">
+            <p>Self analysis phase</p>
+        </div>
+    </div>
+
+    <div class="hidden">
+        <p id="game-id" th:text="${gameSession.game.id}"></p>
+    </div>
+    <script th:src="@{/assets/js/projector.conference-bundle.js}"></script>
+
+</body>
+</html>

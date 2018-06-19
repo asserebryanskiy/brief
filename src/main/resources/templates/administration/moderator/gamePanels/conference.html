@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:include="appFragments :: headContent" th:remove="tag"></div>
+    <link rel="stylesheet" th:href="@{/assets/css/administration/administration.css}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>МОЗ | Конференция</title>
+</head>
+<body th:with="game = ${gameSession.game}">
+    <div th:replace="appFragments :: preloader"></div>
+    <div th:replace="administration/fragments :: game-session-header"></div>
+    <div class="main-content">
+        <div class="round-nav-and-commands">
+            <h2 class="bold">Фазы раунда</h2>
+            <div class="round-nav" th:with="currentPhase = ${game.phaseIndex}">
+
+                <div th:each="phase,iter : ${game.phases}" class="phase-wrapper">
+                    <div th:class="'phase animated ' + 'phase-' + ${phase.orderIndex}"
+                         th:classappend="(${iter.index} == ${currentPhase} - 1? 'previous':(${iter.index} < ${currentPhase}? 'played':(${iter.index} == ${currentPhase}? 'active':(${iter.index} == ${currentPhase + 1}? 'next'))))">
+                        <p class="phase-name" th:text="${phase.name}"></p>
+                        <p class="timer" th:if="${phase.hasTimer}" th:text="${phase.getStrTimerDuration()}"></p>
+                        <button class="add-30-sec-btn hidden" th:if="${phase.hasTimer}">+ 30с</button>
+                        <p class="english-name hidden" th:text="${phase.englishName}"></p>
+                    </div>
+                    <div th:replace="administration/fragments :: confirmation-popup('Вернуться на предыдущую фазу?', 'previous-phase-popup-' + ${iter.index}, 'previous-phase-popup-btn')"></div>
+                </div>
+            </div>
+            <div class="players-wrapper">
+                <h2 class="bold">Участники (<span th:text="${gameSession.players.size()}" class="participants-number bold"></span>)</h2>
+                <div class="players">
+                    <div class="player v-centered connected player-template hidden">
+                        <div class="player-info">
+                            <p class="command-name bold"></p>
+                            <svg class="player-logout-svg" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M14 12h-4v-12h4v12zm4.213-10.246l-1.213 1.599c2.984 1.732 5 4.955 5 8.647 0 5.514-4.486 10-10 10s-10-4.486-10-10c0-3.692 2.016-6.915 5-8.647l-1.213-1.599c-3.465 2.103-5.787 5.897-5.787 10.246 0 6.627 5.373 12 12 12s12-5.373 12-12c0-4.349-2.322-8.143-5.787-10.246z"></path></svg>
+                        </div>
+                    </div>
+                    <div class="player animated"
+                         th:each="player : ${gameSession.players}"
+                         th:id="${player.username}"
+                         th:classappend="${loggedInPlayers.contains(player.username)?'connected':''}">
+                        <div class="player-info">
+                            <p th:id="${player.username} + '-command-name'" class="command-name bold" th:text="${player.id}"></p>
+                            <svg th:id="${player.username} + '-logout'" class="player-logout-svg" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M14 12h-4v-12h4v12zm4.213-10.246l-1.213 1.599c2.984 1.732 5 4.955 5 8.647 0 5.514-4.486 10-10 10s-10-4.486-10-10c0-3.692 2.016-6.915 5-8.647l-1.213-1.599c-3.465 2.103-5.787 5.897-5.787 10.246 0 6.627 5.373 12 12 12s12-5.373 12-12c0-4.349-2.322-8.143-5.787-10.246z"></path></svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <p class="hidden" id="game-id" th:text="${game.id}"></p>
+
+    <script th:src="@{/assets/js/moderator.conference-bundle.js}"></script>
+</body>
+</html>

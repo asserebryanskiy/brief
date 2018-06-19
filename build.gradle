@@ -30,8 +30,6 @@ repositories {
     mavenCentral()
 }
 
-def developmentMode = true
-
 dependencies {
     // spring boot
     compile 'org.springframework.boot:spring-boot-devtools'
@@ -60,12 +58,14 @@ dependencies {
     compile 'org.thymeleaf.extras:thymeleaf-extras-java8time:2.1.0.RELEASE'
 
     // database
-    if (developmentMode) {
-        compile 'com.h2database:h2'
-    } else {
-        testCompile 'com.h2database:h2'
-        compile 'org.postgresql:postgresql:42.2.1'
-    }
+    compile 'com.h2database:h2'
+    compile 'org.postgresql:postgresql:42.2.1'
+
+    // itext
+    compile 'com.itextpdf:kernel:7.0.3'
+    compile 'com.itextpdf:layout:7.0.2'
+    compile 'com.itextpdf:io:7.0.3'
+//    compile 'org.slf4j:slf4j-log4j12:1.7.18'
 
     runtime 'javax.transaction:jta:1.1'
     runtime 'org.aspectj:aspectjweaver:1.8.7'

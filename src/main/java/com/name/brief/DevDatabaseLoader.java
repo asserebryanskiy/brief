@@ -4,7 +4,9 @@ import com.name.brief.config.SecurityConfig;
 import com.name.brief.model.*;
 import com.name.brief.model.games.AuthenticationType;
 import com.name.brief.model.games.Brief;
+import com.name.brief.model.games.Conference;
 import com.name.brief.model.games.RiskMap;
+import com.name.brief.model.games.conference.BestPractice;
 import com.name.brief.model.games.roleplay.RolePlay;
 import com.name.brief.repository.GameRepository;
 import com.name.brief.repository.UserRepository;
@@ -48,28 +50,30 @@ public class DevDatabaseLoader implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        List<User> users = new ArrayList<>(2);
         String password = SecurityConfig.passwordEncoder.encode("password");
         User moderator1 = new User("moderator1", password, Role.MODERATOR.getRole());
-        User moderator2 = new User("moderator2", password, Role.MODERATOR.getRole());
-        users.add(moderator1);
-        users.add(moderator2);
-        users.add(new User("admin", password, Role.ADMIN.getRole()));
-        userRepository.save(users);
+        userRepository.save(moderator1);
 
+        Conference conf = new Conference();
+        for (int i = 0; i < 7; i++) {
+            String text = "Очень длинный текст лучшей практики, который наверняка будет распространсяться на несколько строк номер " + i;
+            conf.getBestPractices().add(new BestPractice(conf, 0L, text));
+        }
+
+        gameSessionService.save(
+            new GameSession.GameSessionBuilder("conf")
+                .withUser(moderator1)
+                .withGame(conf)
+                .withAuthenticationType(AuthenticationType.CREATE_NEW)
+                .build()
+        );
+    }
+
+    private void createDefaultSessions(User moderator1, User moderator2) {
         GameSession session = new GameSession.GameSessionBuilder("brief")
                 .withAuthenticationType(AuthenticationType.COMMAND_NAME)
                 .withUser(moderator1)
                 .build();
-
-        session.getPlayers().forEach(p -> {
-            String[] correctAnswers = ((Brief) session.getGame()).getCorrectAnswers();
-            String[] additions = {"", "A2", "A2A4", "A2A4B4", "A2A4B4C4"};
-            for (int i = 0; i < p.getDecisions().size(); i++) {
-                p.getDecisions().get(i).setAnswer(
-                        correctAnswers[i] + additions[new Random().nextInt(additions.length)]);
-            }
-        });
 
         GameSession session2 = new GameSession.GameSessionBuilder("testtest")
                 .withUser(moderator1)
@@ -98,22 +102,18 @@ public class DevDatabaseLoader implements ApplicationRunner {
         gameSessionService.save(pastSession);
         gameSessionService.save(riskMap);
         gameSessionService.save(rolePlay);
+    }
 
-//        PlayerLoginDto dto = new PlayerLoginDto();
-//        dto.setGameSessionStrId(session.getStrId());
-//        gameSessionService.addPlayer(dto, rolePlay);
-//        gameSessionService.addPlayer(dto, rolePlay);
-////
-//        rolePlayService.changePhase(2, rolePlay.getGame().getId());
-//        gameSessionService.delete(rolePlay.getId());
-//        rolePlayService.changePhase(3, rolePlay.getGame().getId());
-//        DoctorAnswerDto doctorAnswerDto = new DoctorAnswerDto();
-//        doctorAnswerDto.getExpertiseEstimations().put(SalesmanCompetency.KNOWLEDGE.getCssClassName(), "high");
-//        rolePlayService.saveDoctorAnswers(
-//                rolePlay.getGame().getId(),
-//                doctorAnswerDto,
-//                gameSessionService.getSession(rolePlay.getId()).getPlayers().get(0).getId()
-//        );
+    private void addBriefAnswers(GameSession session) {
+        assert session.getGame() instanceof Brief;
 
+        session.getPlayers().forEach(p -> {
+            String[] correctAnswers = ((Brief) session.getGame()).getCorrectAnswers();
+            String[] additions = {"", "A2", "A2A4", "A2A4B4", "A2A4B4C4"};
+            for (int i = 0; i < p.getDecisions().size(); i++) {
+                p.getDecisions().get(i).setAnswer(
+                        correctAnswers[i] + additions[new Random().nextInt(additions.length)]);
+            }
+        });
     }
 }

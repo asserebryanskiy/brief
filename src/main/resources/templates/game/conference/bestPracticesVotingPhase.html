@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Title</title>
+</head>
+<body>
+    <div th:fragment="content"
+         class="phase-container"
+         th:classappend="${game.phaseIndex} == 5? 'active' : ''"
+         id="best-practices-voting-phase">
+        <p class="middle-font-size left-align bold task">Проголосуйте за лучшие практики:</p>
+        <div class="suggestions-container">
+            <p class="middle-font-size left-align light-font">Ответ с большим количеством текста,
+                который точно перенесется на несколько строк</p>
+            <i class="material-icons">favorite_border</i>
+            <p class="middle-font-size left-align light-font">Answer</p>
+            <i class="material-icons">favorite_border</i>
+            <p class="middle-font-size left-align light-font">Answer</p>
+            <i class="material-icons">favorite_border</i>
+            <p class="middle-font-size left-align light-font">Answer</p>
+            <i class="material-icons">favorite_border</i>
+        </div>
+
+    </div>
+
+</body>
+</html>

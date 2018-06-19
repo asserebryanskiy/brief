@@ -1,6 +1,7 @@
 package com.name.brief.web.controller;
 
 import com.name.brief.model.GameSession;
+import com.name.brief.model.games.Conference;
 import com.name.brief.service.GameSessionService;
 import com.name.brief.service.PlayerAuthenticationService;
 import com.name.brief.web.dto.GameSessionDto;
@@ -51,12 +52,10 @@ public class GameSessionController {
 
         model.addAttribute("gameSession", session);
         model.addAttribute("projectorMode", true);
+
+        if (session.getGame() instanceof Conference) {
+            return "game/conference/projector";
+        }
         return "game/" + session.getGame().getEnglishName();
-    }
-
-    @RequestMapping(value = "/moderator/gameSession/{gameSessionId}", method = RequestMethod.PUT)
-    public String changeSessionSettings(@PathVariable Long gameSessionId) {
-
-        return null;
     }
 }

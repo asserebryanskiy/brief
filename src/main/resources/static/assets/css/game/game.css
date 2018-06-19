@@ -10,6 +10,16 @@ h1 {
     font-size: 2em;
 }
 
+.phase-container.active {
+    display: block;
+}
+
+.page-content-wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
 /*.container {
     flex-direction: column;
     align-content: center;
