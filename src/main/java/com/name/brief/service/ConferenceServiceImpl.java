@@ -5,12 +5,14 @@ import com.name.brief.model.games.Game;
 import com.name.brief.model.games.Phase;
 import com.name.brief.model.games.conference.SelfAnalysis;
 import com.name.brief.repository.GameRepository;
-import com.name.brief.utils.GameUtils;
 import com.name.brief.utils.TimerTaskScheduler;
+import com.name.brief.web.dto.ChangePhaseDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
+
+import java.time.Duration;
 
 @Service
 public class ConferenceServiceImpl implements ConferenceService {
@@ -47,7 +49,7 @@ public class ConferenceServiceImpl implements ConferenceService {
 
         // notify subscribers
         template.convertAndSend("/topic/conference/" + gameId + "/changePhase",
-                phase.getEnglishName());
+                new ChangePhaseDto(phase));
 
         // update persistent item
         repository.save(game);
@@ -88,5 +90,10 @@ public class ConferenceServiceImpl implements ConferenceService {
         }
 
         return selfAnalysis;
+    }
+
+    @Override
+    public void add30sec(Long gameId) {
+        scheduler.setUpTimer(gameId, Duration.ofSeconds(30));
     }
 }

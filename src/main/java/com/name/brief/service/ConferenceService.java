@@ -11,4 +11,6 @@ public interface ConferenceService {
     void removeBestPractice(Long conferenceId, Long bestPracticeId);
 
     SelfAnalysis addSelfAnalysis(Long conferenceId, SelfAnalysis obj);
+
+    void add30sec(Long gameId);
 }

@@ -62,6 +62,8 @@ body {
 
 .centered-phase-container {
     margin: auto;
+    width: 100%;
+    padding: 10px;
 }
 
 .header {
@@ -120,18 +122,19 @@ body {
 
 .ready-btn {
     background-color: #4a9d61 !important;
+    border: #4a9d61 1px solid !important;
     color: white !important;
     margin: 20px 0;
     display: block;
     line-height: 0 !important;
 }
 
-.input-field textarea:focus {
+textarea:focus {
     border-bottom: 1px solid #4e3549 !important;
     box-shadow: 0 1px 0 0 #4e3549 !important;
 }
 
-.input-field textarea:focus + label {
+textarea:focus + label {
     color: #4e3549 !important;
 }
 
@@ -151,40 +154,29 @@ body {
     margin-bottom: 10px;
 }
 
-.images-container {
-    margin: 10px;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-}
-
-.images-container > .img-wrapper {
-    width: 25%;
-    height: auto;
-    margin: 2px;
-}
-
-.img-wrapper > img {
-    width: 100%;
-    height: auto;
-}
-
-#greeting-phase .modal {
-    top: 50% !important;
-    transform: translateY(-50%) !important;
-}
-
-.images-container .modal-content {
-    height: fit-content;
-}
-
-.images-container .modal-content img {
+.swiper-container {
     width: 100%;
 }
 
-.chosen-img-wrapper > img {
-    max-width: 100%;
+#greeting-phase .swiper-slide img {
+    width: 100%;
+}
+
+#greeting-phase .swiper-slide {
+    position: relative;
+}
+
+#greeting-phase .btn-pane > * {
+    height: 50px;
+}
+
+.greeting-choose-btn {
+    position: absolute;
+    bottom: 16px;
+    right: 5px;
+    background-color: rgba(255,255,255,0.5);
+    color: white !important;
+    border: 1px white solid !important;
 }
 
 /*********************************
@@ -299,6 +291,29 @@ body {
 .btn-pane > * {
     width: 50%;
     margin: 20px 5px;
+}
+
+/*********************************
+*           FINAL PHASE          *
+**********************************/
+
+.contacts-wrapper {
+    display: grid;
+    grid-template-columns: 30px auto;
+    grid-column-gap: 10px;
+    grid-row-gap: 20px;
+    justify-content: center;
+    margin: auto;
+}
+
+.contacts-wrapper .material-icons {
+    background-color: #ff8302;
+    border-radius: 15px;
+    width: 30px;
+    height: 30px;
+    color: white;
+    display: block;
+    line-height: 1.2;
 }
 
 /*********************************

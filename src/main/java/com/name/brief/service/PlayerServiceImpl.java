@@ -1,5 +1,6 @@
 package com.name.brief.service;
 
+import com.name.brief.model.GameSession;
 import com.name.brief.model.Player;
 import com.name.brief.repository.PlayerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,5 +55,15 @@ public class PlayerServiceImpl implements PlayerService {
     @Override
     public void delete(List<Player> players) {
         playerRepository.delete(players);
+    }
+
+    @Override
+    public Player addPlayer(GameSession session) {
+        Player player = new Player();
+        player.setGameSession(session);
+        playerRepository.save(player);
+        player.setUsername("player" + player.getId());
+        playerRepository.save(player);
+        return player;
     }
 }

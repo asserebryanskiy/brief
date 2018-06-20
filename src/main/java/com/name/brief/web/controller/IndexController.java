@@ -1,5 +1,6 @@
 package com.name.brief.web.controller;
 
+import com.name.brief.config.authentication.ParticipantPreAuthenticationFilter;
 import com.name.brief.config.authentication.PlayerAuthenticationFilter;
 import com.name.brief.model.Player;
 import com.name.brief.model.Role;
@@ -39,8 +40,8 @@ public class IndexController {
         String redirectPath = getRedirectPathIfAuthenticated((Authentication) principal);
         if (redirectPath != null) return redirectPath;
 
-        addFlashAttribute(PlayerAuthenticationFilter.DTO_ATTRIBUTE_NAME, model, request.getSession());
-        addFlashAttribute(PlayerAuthenticationFilter.ERRORS_ATTRIBUTE_NAME, model, request.getSession());
+        addFlashAttribute(ParticipantPreAuthenticationFilter.CODE_ERROR_ATTR_NAME, model, request.getSession());
+//        addFlashAttribute(PlayerAuthenticationFilter.ERRORS_ATTRIBUTE_NAME, model, request.getSession());
 
         if (!model.containsAttribute("playerLoginDto")) {
             model.addAttribute("playerLoginDto", new PlayerLoginDto());

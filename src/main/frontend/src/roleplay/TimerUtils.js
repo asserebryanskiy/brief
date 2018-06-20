@@ -1,3 +1,5 @@
+import $ from 'jquery'
+
 export default class TimerUtils {
     static convertToTimerString(min, sec) {
         min = min < 10 ? '0' + min : min;
@@ -12,5 +14,9 @@ export default class TimerUtils {
 
     static getSeconds(text) {
         return parseInt(text) % 60;
+    }
+
+    static playerTimerIsRunning() {
+        return $('.phase-container.active').find('.timer').text() !== '00:00';
     }
 }

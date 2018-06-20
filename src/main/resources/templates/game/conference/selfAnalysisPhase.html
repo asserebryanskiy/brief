@@ -12,6 +12,7 @@
          th:classappend="${game.phaseName} == ${phaseName}? 'active' : ''"
          id="self-analysis-phase">
         <h1 class="timer">00:00</h1>
+
         <div class="card-panel secondary-color-bg">
             <p class="middle-font-size light-font left-align">Уважаемый участник, вспомните наиболее яркие моменты прошедшей программы - те,
                 которые оставили для вас больше всего впечатлений.
@@ -19,6 +20,7 @@
                 для трансформации в будущем. <br>
                 Пожалуйста, продолжите 3 фразы:</p>
         </div>
+
         <p class="middle-font-size light-font left-align">1. Больше всего мне запомнился момент, когда...</p>
         <div class="input-field">
             <textarea id="selfAnalysisQuestion1"
@@ -68,6 +70,7 @@
             <button class="btn change-btn change-self-analysis-btn">Изменить</button>
             <button class="btn" id="self-analysis-download-pdf-btn">Скачать pdf</button>
         </div>
+
     </div>
 </body>
 </html>

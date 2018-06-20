@@ -38,11 +38,6 @@ public class PlayerAuthenticationServiceImplTest {
     @MockBean
     private GameSessionServiceImpl gameSessionService;
 
-    @Before
-    public void setUp() throws Exception {
-        service.setSessionRegistry(registry);
-    }
-
     @Test
     public void getCurrentlyLoggedPlayers_returnsOnlyPlayersOfProvidedSession() {
         // initialize gameSessions

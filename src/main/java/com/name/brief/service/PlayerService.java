@@ -1,5 +1,6 @@
 package com.name.brief.service;
 
+import com.name.brief.model.GameSession;
 import com.name.brief.model.Player;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -16,4 +17,6 @@ public interface PlayerService extends UserDetailsService {
     void delete(Player player);
 
     void delete(List<Player> players);
+
+    Player addPlayer(GameSession session);
 }

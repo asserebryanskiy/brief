@@ -4,6 +4,7 @@ import com.name.brief.model.Player;
 import com.name.brief.repository.PlayerRepository;
 import com.name.brief.web.dto.PlayerConnectionDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.stereotype.Service;
@@ -18,15 +19,18 @@ public class PlayerAuthenticationServiceImpl implements PlayerAuthenticationServ
 
     private final SimpMessagingTemplate template;
     private final PlayerRepository playerRepository;
-    private SessionRegistry sessionRegistry;
+    @Qualifier("playerSessionRegistry")
+    private final SessionRegistry sessionRegistry;
     private final GameSessionServiceImpl gameSessionService;
 
     @Autowired
     public PlayerAuthenticationServiceImpl(SimpMessagingTemplate template,
                                            PlayerRepository playerRepository,
+                                           SessionRegistry registry,
                                            GameSessionServiceImpl gameSessionService) {
         this.template = template;
         this.playerRepository = playerRepository;
+        this.sessionRegistry = registry;
         this.gameSessionService = gameSessionService;
     }
 
@@ -78,11 +82,6 @@ public class PlayerAuthenticationServiceImpl implements PlayerAuthenticationServ
                 .filter(p -> ((Player) p).getUsername().equals(username) && isLoggedIn((Player) p))
                 .findAny()
                 .orElse(null) != null;
-    }
-
-    @Override
-    public void setSessionRegistry(SessionRegistry registry) {
-        this.sessionRegistry = registry;
     }
 
     private void sendToModerator(PlayerConnectionDto.PlayerConnectionInstruction command, Player player) {

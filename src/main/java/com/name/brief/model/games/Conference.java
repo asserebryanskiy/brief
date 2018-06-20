@@ -2,6 +2,7 @@ package com.name.brief.model.games;
 
 import com.name.brief.model.Decision;
 import com.name.brief.model.games.conference.BestPractice;
+import com.name.brief.model.games.conference.GreetingAnswer;
 import com.name.brief.model.games.conference.SelfAnalysis;
 import com.name.brief.model.games.riskmap.RiskMapType;
 import lombok.Data;
@@ -21,7 +22,7 @@ import java.util.List;
 @Entity
 @Data
 @NoArgsConstructor
-@ToString(exclude = {"bestPractices", "selfAnalyses"})
+@ToString(exclude = {"bestPractices", "selfAnalyses", "greetingAnswers"})
 public class Conference extends Game {
     @Transient
     private final String russianName = "Конференция";
@@ -40,6 +41,10 @@ public class Conference extends Game {
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<SelfAnalysis> selfAnalyses = new ArrayList<>();
 
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "conference")
+    @LazyCollection(LazyCollectionOption.FALSE)
+    private List<GreetingAnswer> greetingAnswers = new ArrayList<>();
+
     private static List<Phase> formPhases() {
         List<Phase> phases = new ArrayList<>(Arrays.asList(
             new Phase("Подключение участников", "CONNECT_PLAYERS", false),
@@ -48,9 +53,11 @@ public class Conference extends Game {
 //            new Phase("Карта рисков", "RISK_MAP", true, Duration.ofMinutes(10)),
 //            new Phase("Результаты", "RISK_MAP_RESULTS", false),
             new Phase("Лучшие практики", "BEST_PRACTICES", true, Duration.ofMinutes(5)),
+            new Phase("Заплатка", "PLACEHOLDER", false),
 //            new Phase("Заплатка", "PLACEHOLDER", false),
 //            new Phase("Голосование", "BEST_PRACTICES_VOTING", false),
             new Phase("Заподырки", "SELF_ANALYSIS", true, Duration.ofMinutes(5)),
+            new Phase("Заплатка", "PLACEHOLDER", false),
             new Phase("Завершение", "FINAL", false),
             new Phase("Еще раз", "AGAIN", false)
         ));

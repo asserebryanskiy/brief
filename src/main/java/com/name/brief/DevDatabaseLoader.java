@@ -1,6 +1,6 @@
 package com.name.brief;
 
-import com.name.brief.config.SecurityConfig;
+import com.name.brief.config.ModeratorSecurityConfig;
 import com.name.brief.model.*;
 import com.name.brief.model.games.AuthenticationType;
 import com.name.brief.model.games.Brief;
@@ -12,6 +12,7 @@ import com.name.brief.repository.GameRepository;
 import com.name.brief.repository.UserRepository;
 import com.name.brief.service.GameSessionService;
 import com.name.brief.service.RolePlayService;
+import com.name.brief.utils.GameUtils;
 import com.name.brief.utils.TimerTaskScheduler;
 import com.name.brief.web.dto.PlayerLoginDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,7 +51,7 @@ public class DevDatabaseLoader implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        String password = SecurityConfig.passwordEncoder.encode("password");
+        String password = ModeratorSecurityConfig.passwordEncoder.encode("password");
         User moderator1 = new User("moderator1", password, Role.MODERATOR.getRole());
         userRepository.save(moderator1);
 
@@ -59,6 +60,7 @@ public class DevDatabaseLoader implements ApplicationRunner {
             String text = "Очень длинный текст лучшей практики, который наверняка будет распространсяться на несколько строк номер " + i;
             conf.getBestPractices().add(new BestPractice(conf, 0L, text));
         }
+        conf.setPhaseIndex(GameUtils.getPhaseIndexByName(conf, "SELF_ANALYSIS"));
 
         gameSessionService.save(
             new GameSession.GameSessionBuilder("conf")

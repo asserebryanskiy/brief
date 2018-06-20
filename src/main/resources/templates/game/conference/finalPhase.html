@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Title</title>
+</head>
+<body>
+    <div th:fragment="content"
+         class="phase-container centered-phase-container"
+         th:with="phaseName = 'FINAL'"
+         th:classappend="${game.phaseName} == ${phaseName}? 'active' : ''"
+         id="final-phase">
+        <svg height='200' width='200' fill="#000000" xmlns="http://www.w3.org/2000/svg" version="1.1" x="0px" y="0px" viewBox="0 0 100 100" enable-background="new 0 0 100 100" xml:space="preserve"><g><path d="M79.708,51.334L66.149,29.065c-0.696-1.143-1.924-1.855-3.262-1.891l-0.062-0.002c-0.413-0.147-0.855-0.23-1.318-0.23   h-7.149l-7.617-0.208L26.158,9.893c-1.687-1.379-4.171-1.131-5.551,0.555c-1.379,1.687-1.131,4.171,0.555,5.551l21.626,17.695   c0.236,0.192,0.497,0.345,0.766,0.477v56.191c0,2.178,1.766,3.943,3.944,3.943c2.179,0,3.945-1.766,3.945-3.943v-28.49   c0.35,0.068,0.714,0.117,1.108,0.117h4.639c0.129,0,0.247-0.016,0.372-0.025v28.398c0,2.178,1.766,3.943,3.944,3.943   s3.943-1.766,3.943-3.943V43.086l7.521,12.349c0.742,1.221,2.042,1.895,3.372,1.895c0.7,0,1.408-0.186,2.049-0.576   C80.252,55.621,80.841,53.195,79.708,51.334z"></path><path d="M54.625,5.695c-5.082,0-9.216,4.135-9.216,9.216c0,5.082,4.134,9.217,9.216,9.217c5.083,0,9.217-4.135,9.217-9.217   C63.842,9.83,59.708,5.695,54.625,5.695z M60.512,18.361c-1.301,1.894-3.481,3.024-5.832,3.024c-2.352,0-4.532-1.13-5.833-3.024   c-0.128-0.186-0.142-0.427-0.036-0.626c0.104-0.2,0.311-0.324,0.537-0.324h10.665c0.226,0,0.432,0.125,0.536,0.324   C60.653,17.935,60.639,18.176,60.512,18.361z"></path></g></svg>
+        <p class="middle-font-size ">Спасибо за участие!</p>
+        <br>
+        <br>
+        <p class="middle-font-size light-font">Хотите узнать больше
+            <br>
+            <span class="bold"> о платформе "Цифровой тренер"</span>
+            <br> и Мастерской Олега Замышляева? </p>
+        <br>
+        <div class="contacts-wrapper">
+            <i class="material-icons">language</i>
+            <a href="http://zamyshlyaev.com"
+               target="_blank"
+            class="middle-font-size light-font left-align">zamyshlyaev.com</a>
+            <i class="material-icons">call</i>
+            <a href="tel:+7 (495) 532-22-55" class="middle-font-size light-font left-align">+7 (495) 532-22-55</a>
+            <i class="material-icons">mail</i>
+            <a href="mailto:info@zamyshlyaev.com" class="middle-font-size light-font left-align">info@zamyshlyaev.com</a>
+        </div>
+    </div>
+</body>
+</html>

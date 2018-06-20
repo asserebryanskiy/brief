@@ -12,6 +12,6 @@ module.exports = {
     // },
     output: {
         filename: '[name]-bundle.js',
-        path: path.resolve(__dirname, '../src/main/resources/static/assets/js')
+        path: path.resolve(__dirname, '../resources/static/assets/js')
     }
 };

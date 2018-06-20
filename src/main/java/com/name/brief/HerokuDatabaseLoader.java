@@ -1,6 +1,6 @@
 package com.name.brief;
 
-import com.name.brief.config.SecurityConfig;
+import com.name.brief.config.ModeratorSecurityConfig;
 import com.name.brief.model.User;
 import com.name.brief.repository.GameSessionRepository;
 import com.name.brief.repository.UserRepository;
@@ -28,7 +28,7 @@ public class HerokuDatabaseLoader implements ApplicationRunner{
     public void run(ApplicationArguments args) throws Exception {
         String username = "masterskaya";
         if (userRepository.findByUsername(username) == null) {
-            String password = SecurityConfig.passwordEncoder.encode("slozhniyparol");
+            String password = ModeratorSecurityConfig.passwordEncoder.encode("slozhniyparol");
             userRepository.save(new User(username, password, "ROLE_MODERATOR"));
         }
 

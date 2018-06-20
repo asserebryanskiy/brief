@@ -20,14 +20,33 @@
         <p class="middle-font-size left-align light-font">2. Кем и в какой компании вы работаете?</p>
         <p class="middle-font-size left-align light-font">3. Выберите из изображений то, которое наибольшим
             образом ассоциируется с вашей работой и поясните, почему.</p>
-        <input type="text" placeholder="Почему?">
+
+        <div class="hide show-after-chose">
+            <textarea type="text"
+                      class="materialize-textarea middle-font-size light-font"
+                      placeholder="Почему?"
+                      id="greeting-why-img-input"></textarea>
+            <input type="hidden" id="greeting-answer-id-input">
+            <div class="btn-pane">
+                <button class="btn change-btn greeting-change-chose-btn">Изменить выбор</button>
+                <button class="btn ready-btn greeting-send-btn">Отправить</button>
+            </div>
+        </div>
         
-        <div class="carousel">
-            <a th:each="i : ${#numbers.sequence(1,10)}"
-               th:href="${'#pict' + i}"
-               class="greeting-gallery-popup-trigger carousel-item">
-                <img th:src="@{'/assets/image/conference/pict' + ${i} + '.png'}"
-                 class="" alt=""></a>
+        <div class="swiper-container">
+            <div class="swiper-wrapper">
+                <div th:each="i : ${#numbers.sequence(1,10)}" class="swiper-slide">
+                    <img th:src="@{'/assets/image/conference/pict' + ${i} + '.png'}"
+                         th:id="${'greeting-img-' + (i - 1)}"
+                         alt="">
+                    <button class="btn greeting-choose-btn hide-after-chose">ВЫБРАТЬ</button>
+                </div>
+            </div>
+            <div class="swiper-pagination swiper-pagination-white hide-after-chose"></div>
+
+            <!-- If we need navigation buttons -->
+            <div class="swiper-button-prev swiper-button-white hide-after-chose"></div>
+            <div class="swiper-button-next swiper-button-white hide-after-chose"></div>
         </div>
 
         <div class="carousel-popup-wrapper">

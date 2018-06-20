@@ -1,7 +1,7 @@
 import $ from "jquery";
 import AnswerService from "./answer-service";
 import TimerUtils from "./TimerUtils";
-import * as M from "../../../src/main/resources/static/assets/materialize/js/materialize";
+import * as M from "../../../resources/static/assets/materialize/js/materialize";
 import {ReadyDto} from "./ready.dto";
 import {ReadyType} from "./ready.type";
 

@@ -12,7 +12,7 @@ const playerConnectionService = new PlayerConnectionService(GameSessionUtils.get
 
 function onWsConnect() {
     wsService.subscribe('/topic/conference/' + gameId + '/changePhase', (message) => {
-        ConferenceController.changePhase(phases[message.body]);
+        ConferenceController.changePhase(message);
     });
 
     wsService.subscribe('/topic/game/' + gameId + '/timer', (message) => {
@@ -35,3 +35,8 @@ function onWsConnect() {
 wsService.connect(onWsConnect);
 
 $('.phase').click((event) => controller.handlePhaseClick(event));
+$('.add-30-sec-btn').click((event) => controller.handle30secBtnClick(event));
+// on click on logout btn logout player and push him to an index page
+$('.player-logout-svg').click((event) => {
+    controller.handleLogoutPlayer(event);
+});

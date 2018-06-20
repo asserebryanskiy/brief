@@ -3,6 +3,7 @@ import {PlayerUtils} from "../player.utils";
 import GameSessionUtils from "../game-session-utils";
 import {InstantMessageService} from "./instant-message.service";
 import * as M from "../../vendor/materialize";
+import TimerUtils from "../roleplay/TimerUtils";
 
 export class BestPracticesComponent {
 
@@ -16,25 +17,29 @@ export class BestPracticesComponent {
     }
 
     handleSendBtnClicked(event) {
-        const $input = $('#best-practices-input');
-        const text = $input.val();
-        if (!text.length) return;
+        if (TimerUtils.playerTimerIsRunning()) {
+            const $input = $('#best-practices-input');
+            const text = $input.val();
+            if (!text.length) return;
 
-        const bestPracticeDto = JSON.stringify({
-            text: text,
-            participantId: PlayerUtils.getPlayerId(),
-        });
+            const bestPracticeDto = JSON.stringify({
+                text: text,
+                participantId: PlayerUtils.getPlayerId(),
+            });
 
-        // this.sendBestPractice(text);
-        this.post('', bestPracticeDto, (data) => {
-            this.addBestPractice(data);
-            $('.best-practices-send-btn').removeClass('ready-btn')
-                .addClass('change-btn')
-                .text('Отправить еще одну');
-            $input.val('');
-            M.textareaAutoResize($input);
-            InstantMessageService.addInstantMessage('Отправлено!', 'success');
-        })
+            // this.sendBestPractice(text);
+            this.post('', bestPracticeDto, (data) => {
+                this.addBestPractice(data);
+                $('.best-practices-send-btn').removeClass('ready-btn')
+                    .addClass('change-btn')
+                    .text('Отправить еще одну');
+                $input.val('');
+                M.textareaAutoResize($input);
+                InstantMessageService.addInstantMessage('Отправлено!', 'success');
+            })
+        } else {
+            InstantMessageService.addInstantMessage('Время вышло. Невозможно отправить ответы.', 'failure')
+        }
     }
 
     addBestPractice(dto) {
@@ -88,19 +93,23 @@ export class BestPracticesComponent {
     }
 
     handleChangeBtnClicked(event) {
-        const $input = $('#best-practices-input');
-        const text = $input.val();
+        if (TimerUtils.playerTimerIsRunning()) {
+            const $input = $('#best-practices-input');
+            const text = $input.val();
 
-        this.post('/' + $('#best-practice-id-input').text(), JSON.stringify({text: text}), (data) => {
-            $('#best-practice-text-' + data.id).text(data.text);
-            const $btnWrapper = $('.edit-best-practice-buttons-wrapper');
-            $btnWrapper.hide();
-            $btnWrapper.siblings('.best-practices-send-btn').show();
-            $input.siblings('label').removeClass('active');
-            $input.val('');
-            M.textareaAutoResize($input);
-            InstantMessageService.addInstantMessage('Лучшая практика успешно изменена', 'success');
-        })
+            this.post('/' + $('#best-practice-id-input').text(), JSON.stringify({text: text}), (data) => {
+                $('#best-practice-text-' + data.id).text(data.text);
+                const $btnWrapper = $('.edit-best-practice-buttons-wrapper');
+                $btnWrapper.hide();
+                $btnWrapper.siblings('.best-practices-send-btn').show();
+                $input.siblings('label').removeClass('active');
+                $input.val('');
+                M.textareaAutoResize($input);
+                InstantMessageService.addInstantMessage('Лучшая практика успешно изменена', 'success');
+            })
+        } else {
+            InstantMessageService.addInstantMessage('Время вышло. Невозможно отправить ответы.', 'failure')
+        }
     }
 
     post(uri, bestPracticeDto, successHandler) {

@@ -8,7 +8,10 @@ export class ConferenceController {
         this.phases = phases;
     }
 
-    static changePhase(phaseIndex) {
+    static changePhase(message) {
+        const dto = JSON.parse(message.body);
+        const phaseIndex = dto.phaseIndex;
+
         // remove classes from all phases
         $('.phase').removeClass('active next previous played');
 
@@ -63,5 +66,18 @@ export class ConferenceController {
 
         // change timer text
         $timer.text(TimerUtils.convertToTimerString(min, sec));
+    }
+
+    handle30secBtnClick(event) {
+        if ($(event.currentTarget).parents('.phase').hasClass('active')) {
+            this.wsService.sendToApp('add30sec', '');
+        }
+    }
+
+    handleLogoutPlayer(event) {
+        const id = event.currentTarget.id;
+        console.log(id);
+        const playerId = id.slice(0, id.indexOf('-logout'));
+        this.wsService.sendToApp('logoutPlayer', playerId);
     }
 }

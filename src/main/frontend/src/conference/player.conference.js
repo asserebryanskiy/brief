@@ -5,32 +5,20 @@ import {PlayerConferenceController} from "./player.conference.controller";
 import * as M from "../../vendor/materialize";
 import {RiskMapService} from "./risk-map.service";
 import {BestPracticesComponent} from "./best-practices.component";
-import {TimerService} from "./timer.service";
-import {SelfAnalysisService} from "./self-analysis.service";
 import {GreetingComponent} from "./greeting/greeting.component";
 import {SelfAnalysisComponent} from "./self-analysis/self-analysis.component";
+import Swiper from "swiper";
 
 const gameId = GameSessionUtils.getGameId();
 const wsService = new WsService(gameId, 'conference');
-const riskMapService = new RiskMapService();
 const bestPracticesComponent = new BestPracticesComponent(wsService);
-const selfAnalysisService = new SelfAnalysisService();
-const selfAnalysisComponent = new SelfAnalysisComponent();
-const greetingComponent = new GreetingComponent();
-const timerService = new TimerService();
+const riskMapService = new RiskMapService();
 
-const controller = new PlayerConferenceController(
-    riskMapService,
-    bestPracticesComponent,
-    selfAnalysisService,
-    timerService
-);
+const controller = new PlayerConferenceController();
 function onWsConnect() {
 
-    $('.preloader').hide();
-
     wsService.subscribe('/topic/conference/' + gameId + '/changePhase', (message) => {
-        controller.changePhaseByName(message.body);
+        controller.changePhaseByName(JSON.parse(message.body).phaseName);
     });
     wsService.subscribe('/topic/game/' + gameId + '/timer', (message) => {
         controller.handleTimerMessageReceived(message);
@@ -39,12 +27,6 @@ function onWsConnect() {
 }
 
 wsService.connect(onWsConnect);
-// greeting actions
-$('#greeting-phase .carousel-trigger').click(event => PlayerConferenceController.handleGreetingCarouselTriggerClicked(event));
-$('.choose-greeting-img-btn').click(event => GreetingComponent.handleImageChosen(event));
-$('.greeting-change-choice-btn').click(event => GreetingComponent.handleChangeChoice(event));
-$('.greeting-gallery-popup-trigger').click(event => greetingComponent.openGalleryPopup(event));
-
 // risk-map actions
 $('.small-img-wrapper').click((event) => RiskMapService.handleSmallImgClicked(event));
 $('.answer-input').click((event) => riskMapService.handleAnswerInputClicked(event));
@@ -57,7 +39,7 @@ $('.cancel-best-practice-change-btn').click(event => BestPracticesComponent.canc
 
 // self analysis
 $('.self-analysis-send-btn').click(event => SelfAnalysisComponent.handleSendAnswersClicked());
-$('.change-self-analysis-btn').click(event => SelfAnalysisComponent.handleChangeAnswersClicked());
+$('.change-self-analysis-btn').click(event => SelfAnalysisComponent.handleChangeAnswersClicked(event));
 $('#self-analysis-download-pdf-btn').click(event => SelfAnalysisComponent.getPdf());
 
 // logout
@@ -67,8 +49,24 @@ $('.confirm-logout-btn').click(event => controller.handleLogout());
 $(document).ready(event => {
     var modals = document.querySelectorAll('.modal');
     M.Modal.init(modals);
-    var carousels = document.querySelectorAll('.carousel');
-    M.Carousel.init(carousels);
+
+    const swiper = new Swiper('.swiper-container', {
+        loop: true,
+        autoHeight: true,
+        initialSlide: 0,
+        navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+        },
+        pagination: {
+            el: '.swiper-pagination'
+        },
+    });
+
+    new GreetingComponent(swiper);
+
+    $('.preloader').hide();
+    // var carousels = document.querySelectorAll('.carousel');
     // var dropdowns = document.querySelectorAll('.dropdown-trigger');
     // M.Dropdown.init(dropdowns);
 });

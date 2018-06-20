@@ -8,7 +8,7 @@
     <link rel="stylesheet" th:href="@{/assets/css/game/riskMap.css}">
     <link rel="stylesheet" th:href="@{/assets/css/game/riskMap-office.css}">
     <link rel="stylesheet" th:href="@{/assets/css/game/projector.css}" th:if="${projectorMode}">
-    <link rel="stylesheet" th:href="@{/assets/css/vendor/photoswipe.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.3.3/css/swiper.min.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <title>МОЗ | Конференция</title>
 </head>
@@ -36,6 +36,7 @@
         <div th:replace="game/conference/bestPracticesPhase :: content"></div>
         <!--<div th:replace="game/conference/bestPracticesVotingPhase :: content"></div>-->
         <div th:replace="game/conference/selfAnalysisPhase :: content"></div>
+        <div th:replace="game/conference/finalPhase :: content"></div>
     </div>
 
     <div class="hidden">

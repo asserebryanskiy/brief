@@ -10,11 +10,13 @@ import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 @SpringBootApplication
+@EnableWebSecurity
 public class Application {
 
     private static final Logger log = LoggerFactory.getLogger(Application.class);
