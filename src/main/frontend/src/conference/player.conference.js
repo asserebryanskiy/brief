@@ -53,17 +53,19 @@ $(document).ready(event => {
     const swiper = new Swiper('.swiper-container', {
         loop: true,
         autoHeight: true,
-        initialSlide: 0,
+        initialSlide: 1,
         navigation: {
             nextEl: '.swiper-button-next',
             prevEl: '.swiper-button-prev',
         },
         pagination: {
-            el: '.swiper-pagination'
+            el: '.swiper-pagination',
+            dynamicBullets: true
         },
     });
 
     new GreetingComponent(swiper);
+    new SelfAnalysisComponent();
 
     $('.preloader').hide();
     // var carousels = document.querySelectorAll('.carousel');

@@ -35,44 +35,19 @@
         
         <div class="swiper-container">
             <div class="swiper-wrapper">
-                <div th:each="i : ${#numbers.sequence(1,10)}" class="swiper-slide">
-                    <img th:src="@{'/assets/image/conference/pict' + ${i} + '.png'}"
+                <div th:each="i : ${#numbers.sequence(1,25)}" class="swiper-slide">
+                    <img th:src="@{'/assets/image/conference/small/pict' + ${i} + '.jpg'}"
                          th:id="${'greeting-img-' + (i - 1)}"
                          alt="">
                     <button class="btn greeting-choose-btn hide-after-chose">ВЫБРАТЬ</button>
                 </div>
             </div>
+
             <div class="swiper-pagination swiper-pagination-white hide-after-chose"></div>
 
-            <!-- If we need navigation buttons -->
             <div class="swiper-button-prev swiper-button-white hide-after-chose"></div>
             <div class="swiper-button-next swiper-button-white hide-after-chose"></div>
         </div>
-
-        <div class="carousel-popup-wrapper">
-            <div class="carousel-background">
-
-            </div>
-        </div>
-
-        <!--<div class="images-container">
-            <div class="img-wrapper" th:each="i : ${#numbers.sequence(1,12)}">
-                <img th:src="@{|/assets/image/riskMap/hotel/low_2000/low_2000_${#numbers.formatInteger(i, 2)}.jpg|}"
-                     class="modal-trigger"
-                     th:href="${'#modal' + i}"
-                     alt="">
-                <div class="modal"
-                     th:id="${'modal' + i}">
-                    <div class="modal-content">
-                        <img th:src="@{|/assets/image/riskMap/office/big_with_sectors/${i}.jpg|}"
-                             alt="">
-                    </div>
-                    <div class="modal-fixed-footer">
-                        <button class="btn ready-btn choose-greeting-img-btn">Выбрать</button>
-                    </div>
-                </div>
-            </div>
-        </div>-->
 
         <div class="hide chosen-img-wrapper">
             <button class="btn change-btn greeting-change-choice-btn">Изменить выбор</button>

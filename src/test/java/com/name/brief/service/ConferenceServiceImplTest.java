@@ -7,6 +7,7 @@ import com.name.brief.model.games.conference.ConferenceParticipantData;
 import com.name.brief.repository.ConferenceParticipantDataRepository;
 import com.name.brief.repository.GameRepository;
 import com.name.brief.utils.TimerTaskScheduler;
+import com.name.brief.web.dto.ChangePhaseDto;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -80,8 +81,9 @@ public class ConferenceServiceImplTest {
     public void changePhase_shouldSendChangePhaseMessageToSubscribers() {
         service.changePhase(CORRECT_ID, 1);
 
+        ChangePhaseDto payload = new ChangePhaseDto(Conference.phases.get(1));
         verify(template, times(1))
-                .convertAndSend("/topic/conference/" + CORRECT_ID + "/changePhase", "GREETING");
+                .convertAndSend("/topic/conference/" + CORRECT_ID + "/changePhase", payload);
     }
 
     private Phase getFirstTimerPhase() {

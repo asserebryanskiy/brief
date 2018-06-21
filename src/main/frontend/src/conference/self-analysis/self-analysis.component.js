@@ -29,8 +29,11 @@ export class SelfAnalysisComponent {
                 dataType: 'json',
                 contentType: 'application/json',
                 success: (data) => {
+                    // block inputs
+                    $('.self-analysis-answer-input').prop('disabled', true);
+
                     // show instant message
-                    InstantMessageService.addInstantMessage('Ваши ответы отправлены', 'success');
+                    InstantMessageService.addInstantMessage('Ваши ответы сохранены', 'success');
 
                     // hide preloader
                     $('.self-analysis-preloader-wrapper').hide();

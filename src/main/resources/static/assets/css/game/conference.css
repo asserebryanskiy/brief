@@ -293,6 +293,18 @@ textarea:focus + label {
     margin: 20px 5px;
 }
 
+#self-analysis-phase .change-self-analysis-btn {
+    margin: 20px auto;
+}
+
+/*********************************
+*        PLACEHOLDER PHASE       *
+**********************************/
+
+.material-icons {
+    color: #4e3549;
+}
+
 /*********************************
 *           FINAL PHASE          *
 **********************************/
@@ -328,3 +340,9 @@ input[type=text]:focus {
 /*********************************
 *          MEDIA QUERIES         *
 **********************************/
+
+@media (min-width: 769px) {
+    .phase-container {
+        width: 80% !important;
+    }
+}

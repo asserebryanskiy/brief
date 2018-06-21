@@ -47,7 +47,7 @@ export class GreetingComponent {
             }),
             success: (id) => {
                 $('#greeting-answer-id-input').text(id);
-                InstantMessageService.addInstantMessage('Ваш ответ успешно отправлен.', 'success')
+                InstantMessageService.addInstantMessage('Ваш ответ сохранен.', 'success')
             }
         })
     }
@@ -67,7 +67,7 @@ export class GreetingComponent {
                 console.log(err);
                 InstantMessageService.addInstantMessage('Произошла ошибка. Не удалось обновить ответы', 'failure');
             },
-            success: () => InstantMessageService.addInstantMessage('Ваш ответ успешно обновлен.', 'success')
+            success: () => InstantMessageService.addInstantMessage('Ваш ответ успешно обновлены.', 'success')
         })
     }
 

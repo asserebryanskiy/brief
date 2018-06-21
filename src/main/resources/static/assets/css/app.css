@@ -48,6 +48,10 @@ body {
     color: white !important;
 }
 
+.secondary-color {
+    color: #ff8302;
+}
+
 .flex-container {
     display: flex;
 }

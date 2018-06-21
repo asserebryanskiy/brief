@@ -13,45 +13,49 @@
          id="self-analysis-phase">
         <h1 class="timer">00:00</h1>
 
-        <div class="card-panel secondary-color-bg">
-            <p class="middle-font-size light-font left-align">Уважаемый участник, вспомните наиболее яркие моменты прошедшей программы - те,
-                которые оставили для вас больше всего впечатлений.
-                Эти момент окрашены вашими эмоциями, а ведь именно эмоции создают потенциал
-                для трансформации в будущем. <br>
-                Пожалуйста, продолжите 3 фразы:</p>
-        </div>
+        <p class="middle-font-size light-font left-align">Уважаемый участник,
+            вспомните наиболее яркие моменты прошедшей программы - те,
+            которые оставили для вас больше всего впечатлений.
+            <br>
+            Эти момент окрашены вашими эмоциями, а ведь именно эмоции создают потенциал
+            для трансформации в будущем.
+            <br>
+            <span class="bold">Пожалуйста, продолжите 2 фразы:</span></p>
+        <!--<div class="card-panel secondary-color-bg">
 
-        <p class="middle-font-size light-font left-align">1. Больше всего мне запомнился момент, когда...</p>
+        </div>-->
+
+        <p class="middle-font-size light-font left-align">Сегодня я ухожу с ...</p>
         <div class="input-field">
             <textarea id="selfAnalysisQuestion1"
                       class="materialize-textarea middle-font-size light-font self-analysis-answer-input"></textarea>
             <!--<label for="selfAnalysisQuestion1"></label>-->
         </div>
 
-        <p class="middle-font-size light-font left-align">2. Возможно, в связи с этим мне стоит задуматься о...</p>
+        <p class="middle-font-size light-font left-align">От завтрашнего дня жду …</p>
         <div class="input-field">
             <textarea id="selfAnalysisQuestion2"
                       class="materialize-textarea middle-font-size light-font self-analysis-answer-input"></textarea>
             <!--<label for="selfAnalysisQuestion2">Ваш ответ</label>-->
         </div>
 
-        <p class="middle-font-size light-font left-align">3. И стоит сделать...</p>
+        <!--<p class="middle-font-size light-font left-align">3. И стоит сделать...</p>
         <div class="input-field">
             <textarea id="selfAnalysisQuestion3"
                       class="materialize-textarea middle-font-size light-font self-analysis-answer-input"></textarea>
-            <!--<label for="selfAnalysisQuestion3">Ваш ответ</label>-->
-        </div>
+            &lt;!&ndash;<label for="selfAnalysisQuestion3">Ваш ответ</label>&ndash;&gt;
+        </div>-->
 
-        <p class="center-align">
+        <!--<p class="center-align">
             <label>
                 <input type="checkbox" class="self-analysis-ready-to-share-checkbox"/>
                 <span>Поделиться со всеми?</span>
             </label>
-        </p>
+        </p>-->
 
         <input type="hidden" id="self-analysis-id-input">
 
-        <button class="ready-btn btn-large self-analysis-send-btn">Отправить</button>
+        <button class="ready-btn btn-large self-analysis-send-btn">Готов</button>
         <div class="self-analysis-preloader-wrapper hide">
             <div class="preloader-wrapper small active">
                 <div class="spinner-layer spinner-yellow-only">
@@ -68,7 +72,7 @@
 
         <div class="btn-pane hide">
             <button class="btn change-btn change-self-analysis-btn">Изменить</button>
-            <button class="btn" id="self-analysis-download-pdf-btn">Скачать pdf</button>
+            <!--<button class="btn" id="self-analysis-download-pdf-btn">Скачать pdf</button>-->
         </div>
 
     </div>
