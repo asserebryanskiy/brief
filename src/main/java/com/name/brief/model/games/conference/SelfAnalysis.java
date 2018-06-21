@@ -9,6 +9,7 @@ import lombok.ToString;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
+import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
@@ -25,6 +26,7 @@ public class SelfAnalysis extends BaseEntity {
     private Long participantId;
     @ElementCollection
     @LazyCollection(LazyCollectionOption.FALSE)
+    @Column(length = 2048)
     private List<String> answers;
     private boolean readyToShare;
 

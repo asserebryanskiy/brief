@@ -2,9 +2,6 @@ package com.name.brief.service;
 
 import com.name.brief.model.games.Conference;
 import com.name.brief.model.games.Phase;
-import com.name.brief.model.games.conference.BestPractice;
-import com.name.brief.model.games.conference.ConferenceParticipantData;
-import com.name.brief.repository.ConferenceParticipantDataRepository;
 import com.name.brief.repository.GameRepository;
 import com.name.brief.utils.TimerTaskScheduler;
 import com.name.brief.web.dto.ChangePhaseDto;

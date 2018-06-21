@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 
@@ -18,5 +19,6 @@ public class GreetingAnswer extends BaseEntity {
     private Conference conference;
     private Long participantId;
     private int imgIndex;
+    @Column(length = 2048)
     private String comment;
 }
