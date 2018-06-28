@@ -6,6 +6,19 @@ export class ProjectorBestPracticeComponent {
         $.getJSON('/api/conference/bestPractice/' + GameSessionUtils.getGameId(), (data) => {
             for (let practice of data) ProjectorBestPracticeComponent.addBestPractice(practice);
         });
+
+        $('#best-practices-copy-icon').click(() => {
+            let allBestPractices = '';
+            $('.best-practice-text').each((i, el) => {
+                allBestPractices += $(el).text() + '\n';
+            });
+            navigator.clipboard.writeText(allBestPractices);
+            $('#best-practices-text-copied-text')
+                .removeClass('hide')
+                .show()
+                .delay(1000)
+                .fadeOut();
+        })
     }
 
     static addBestPractice(practice) {

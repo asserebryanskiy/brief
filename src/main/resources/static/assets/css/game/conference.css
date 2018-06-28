@@ -306,6 +306,22 @@ textarea:focus + label {
 }
 
 /*********************************
+*            FUN PHASE           *
+**********************************/
+
+#fun-phase .ready-btn {
+    margin: 20px auto;
+}
+
+#fun-phase-slider {
+    margin: 50px 20px 10px;
+}
+
+#fun-phase .noUi-connect {
+    background-color: #4e3549;
+}
+
+/*********************************
 *           FINAL PHASE          *
 **********************************/
 

@@ -13,6 +13,9 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
 
 @Service
 public class ConferenceServiceImpl implements ConferenceService {
@@ -95,5 +98,16 @@ public class ConferenceServiceImpl implements ConferenceService {
     @Override
     public void add30sec(Long gameId) {
         scheduler.setUpTimer(gameId, Duration.ofSeconds(30));
+    }
+
+    @Override
+    public String getFunPhrase(Long gameId, Long participantId) {
+        String[] phrases = new String[]{
+            "вариант 1",
+            "вариант 2",
+            "вариант 3",
+        };
+
+        return phrases[new Random().nextInt(phrases.length)];
     }
 }

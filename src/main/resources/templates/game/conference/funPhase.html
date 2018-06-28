@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Title</title>
+</head>
+<body>
+    <div th:fragment="content"
+         class="phase-container centered-phase-container"
+         th:with="phaseName = 'FUN'"
+         th:classappend="${game.phaseName} == ${phaseName}? 'active' : ''"
+         id="fun-phase">
+
+        <div class="preloader-wrapper big active hide">
+            <div class="spinner-layer spinner-yellow-only">
+                <div class="circle-clipper left">
+                    <div class="circle"></div>
+                </div><div class="gap-patch">
+                <div class="circle"></div>
+            </div><div class="circle-clipper right">
+                <div class="circle"></div>
+            </div>
+            </div>
+        </div>
+
+        <div class="fun-content">
+            <p class="middle-font-size light-font">Я считаю, что мы все, как команда, поработали на этой конференции на </p>
+            <div id="fun-phase-slider"></div>
+            <button class="btn ready-btn fun-phase-send-btn">Отправить</button>
+            <p class="middle-font-size light-font hide fun-phrase-p card-panel secondary-color-bg">Собирая данные и работая с аналитикой, важно помнить, что искусственный разум не дремлет.
+                Мы проанализировали вашу активность на этой конференции и уверены <span class="fun-phrase light-font"></span></p>
+        </div>
+
+    </div>
+</body>
+</html>

@@ -8,6 +8,7 @@ import {BestPracticesComponent} from "./best-practices.component";
 import {GreetingComponent} from "./greeting/greeting.component";
 import {SelfAnalysisComponent} from "./self-analysis/self-analysis.component";
 import Swiper from "swiper";
+import {FunComponent} from "./fun/fun.component";
 
 const gameId = GameSessionUtils.getGameId();
 const wsService = new WsService(gameId, 'conference');
@@ -66,6 +67,7 @@ $(document).ready(event => {
 
     new GreetingComponent(swiper);
     new SelfAnalysisComponent();
+    new FunComponent();
 
     $('.preloader').hide();
     // var carousels = document.querySelectorAll('.carousel');

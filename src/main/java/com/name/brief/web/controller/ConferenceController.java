@@ -23,12 +23,12 @@ public class ConferenceController {
         this.conferenceService.changePhase(gameId, phaseIndex);
     }
 
-    @MessageMapping("/rolePlay/{gameId}/add30sec")
+    @MessageMapping("/{gameId}/add30sec")
     public void add30secondsToTimer(@DestinationVariable Long gameId) {
         conferenceService.add30sec(gameId);
     }
 
-    @MessageMapping("/rolePlay/{gameId}/logoutPlayer")
+    @MessageMapping("/{gameId}/logoutPlayer")
     public void logoutPlayer(@DestinationVariable Long gameId, String username) {
         playerAuthenticationService.logout(username);
 //        template.convertAndSend("/queue/rolePlay/player/" + id + "/logout", "");

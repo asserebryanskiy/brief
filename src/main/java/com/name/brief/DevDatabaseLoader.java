@@ -60,7 +60,7 @@ public class DevDatabaseLoader implements ApplicationRunner {
             String text = "Очень длинный текст лучшей практики, который наверняка будет распространсяться на несколько строк номер " + i;
             conf.getBestPractices().add(new BestPractice(conf, 0L, text));
         }
-        conf.setPhaseIndex(GameUtils.getPhaseIndexByName(conf, "SELF_ANALYSIS"));
+//        conf.setPhaseIndex(GameUtils.getPhaseIndexByName(conf, "FUN"));
 
         gameSessionService.save(
             new GameSession.GameSessionBuilder("conf")

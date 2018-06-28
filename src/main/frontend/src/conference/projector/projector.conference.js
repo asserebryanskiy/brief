@@ -13,7 +13,7 @@ function onWsConnect() {
     $('.preloader').hide();
 
     wsService.subscribe('/topic/conference/' + gameId + '/changePhase', (message) => {
-        controller.changePhaseByName(message.body);
+        controller.changePhaseByName(JSON.parse(message.body).phaseName);
     });
 
     wsService.subscribe('/queue/conference/' + gameId + '/bestPractice', (message) => {

@@ -1,6 +1,7 @@
 package com.name.brief.web.controller;
 
 import com.name.brief.service.BestPracticeService;
+import com.name.brief.service.ConferenceService;
 import com.name.brief.web.dto.BestPracticeDto;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,9 +11,11 @@ import java.util.List;
 @RequestMapping("/api/conference")
 public class ConferenceRestController {
     private final BestPracticeService bestPracticeService;
+    private final ConferenceService conferenceService;
 
-    public ConferenceRestController(BestPracticeService bestPracticeService) {
+    public ConferenceRestController(BestPracticeService bestPracticeService, ConferenceService conferenceService) {
         this.bestPracticeService = bestPracticeService;
+        this.conferenceService = conferenceService;
     }
 
     @GetMapping("/bestPractice/participant/{participantId}")
@@ -44,5 +47,11 @@ public class ConferenceRestController {
     public void deleteBestPractice(@PathVariable Long gameId,
                                    @PathVariable Long bestPracticeId) {
         bestPracticeService.delete(gameId, bestPracticeId);
+    }
+
+    @GetMapping("{gameId}/fun/{participantId}")
+    public String getFunPhrase(@PathVariable Long gameId,
+                             @PathVariable Long participantId) {
+        return conferenceService.getFunPhrase(gameId, participantId);
     }
 }

@@ -54,6 +54,8 @@ public class Conference extends Game {
 //            new Phase("Результаты", "RISK_MAP_RESULTS", false),
             new Phase("Лучшие практики", "BEST_PRACTICES", true, Duration.ofMinutes(5)),
             new Phase("Заплатка", "PLACEHOLDER", false),
+//            new Phase("Фан", "FUN", false),
+//            new Phase("Кейс", "CASE", false),
 //            new Phase("Заплатка", "PLACEHOLDER", false),
 //            new Phase("Голосование", "BEST_PRACTICES_VOTING", false),
             new Phase("Заподырки", "SELF_ANALYSIS", true, Duration.ofMinutes(5)),

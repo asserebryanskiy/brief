@@ -19,3 +19,20 @@
     grid-template-columns: 1fr auto;
     grid-column-gap: 50px;
 }
+
+#best-practices-copy-icon {
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+}
+
+#best-practices-text-copied-text {
+    padding: 10px 20px;
+    background-color: rgba(0,0,0,0.1);
+    border-radius: 2px;
+    position: absolute;
+    bottom: 50px;
+    right: 5px;
+}

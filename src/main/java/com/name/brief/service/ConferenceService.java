@@ -13,4 +13,6 @@ public interface ConferenceService {
     SelfAnalysis addSelfAnalysis(Long conferenceId, SelfAnalysis obj);
 
     void add30sec(Long gameId);
+
+    String getFunPhrase(Long gameId, Long participantId);
 }

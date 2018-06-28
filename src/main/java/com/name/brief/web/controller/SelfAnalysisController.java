@@ -1,13 +1,17 @@
 package com.name.brief.web.controller;
 
 import com.name.brief.service.SelfAnalysisService;
-import com.name.brief.utils.SelfAnalysisUtils;
 import com.name.brief.web.dto.SelfAnalysisDto;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 @RestController
 @RequestMapping("/api/conference")
@@ -41,14 +45,15 @@ public class SelfAnalysisController {
 
     @GetMapping("/{conferenceId}/selfAnalysis/participant/{participantId}/pdf")
     public ResponseEntity<byte[]> getPdf(@PathVariable Long conferenceId,
-                                         @PathVariable Long participantId) {
-        byte[] content = SelfAnalysisUtils.createPdf(selfAnalysisService.getFor(participantId));
+                                         @PathVariable Long participantId,
+                                         HttpServletResponse response) throws IOException {
+        byte[] content = Files.readAllBytes(Paths.get("test.pdf"));
+//        byte[] content = Files.readAllBytes(Paths.get(System.getProperty("user.home") + "/Downloads/page229.pdf"));
+//        byte[] content = SelfAnalysisUtils.createPdf(selfAnalysisService.getFor(participantId));
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_PDF);
-        String filename = "output.pdf";
-        headers.setContentDispositionFormData(filename, filename);
-        headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
+        headers.set("Content-disposition", "attachment; filename=" + "\"report.pdf\"");
         return new ResponseEntity<>(content, headers, HttpStatus.OK);
     }
 }
