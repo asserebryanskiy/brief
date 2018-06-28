@@ -172,11 +172,12 @@ export default class RolePlayController {
             const inputVal = $(el).val();
             total += inputVal.length === 0 ? 0 : parseInt(inputVal);
         });
-        if (total > 12) {
-            const diff = total - 12;
+        const maxNumberOfRecipes = 11;
+        if (total > maxNumberOfRecipes) {
+            const diff = total - maxNumberOfRecipes;
             $input.val(val - diff);
             RolePlayController.addInstantMessage(
-                'Невозможно распределить более 12 упаковок. Установлено максимально возможное значение',
+                'Невозможно распределить более 11 упаковок. Установлено максимально возможное значение',
                 'failure'
             );
         }
